@@ -370,6 +370,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     if (regDateBegin != null && regDateEnd != null) {
                         predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), regDateBegin, regDateEnd));
                     }
+                    Date deadlineDate = DateParser.TryParse(filterDto.getDeadlineDate(), Common.uzbekistanDateFormat);
+
+                    if (deadlineDate != null) {
+                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate").as(Date.class),deadlineDate));
+                    }
 
                     Date dateBegin = DateParser.TryParse(filterDto.getDateBegin(), Common.uzbekistanDateFormat);
                     Date dateEnd = DateParser.TryParse(filterDto.getDateEnd(), Common.uzbekistanDateFormat);

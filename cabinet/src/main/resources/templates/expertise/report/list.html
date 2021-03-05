@@ -22,13 +22,37 @@
             -webkit-transform: rotate(-90.0deg);
             /* Standard */
             transform: rotate(-90.0deg);
-
+            border: 1px solid grey;
         }
         table.dataTable{
             border-collapse: collapse !important;
         }
         .table thead th{
             vertical-align: middle !important;
+        }
+        .select2-container--default .select2-selection--multiple {
+            background-color: rgb(244, 247, 250);
+            padding: 5px 10px;
+            border: 1px solid #ced4da;
+        }
+
+        .select2-container .select2-search--inline .select2-search__field {
+            /* margin: 0 !important; */
+            /* height: 23px; */
+        }
+
+        .select2-container--default.select2-container--focus .select2-selection--multiple {
+            border: solid #62c462 1px;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: #62c462;
+            color: white;
+            border: 1px solid #aaa;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: white;
         }
     </style>
 </head>
@@ -75,6 +99,11 @@
                                                         <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
                                                     </select>
                                                 </div>
+                                                <div class="form-group col-sm-2 subRegion">
+                                                    <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>
+                                                    <select id="subRegionId" class="form-control" multiple="multiple">
+                                                    </select>
+                                                </div>
 
                                                 <div class="form-group col-sm-4" >
                                                     <label for="dateBegin" class="control-label" th:text="#{reg_application_log.createdAt}"></label>
@@ -88,14 +117,6 @@
                                                     </div>
                                                 </div>
 
-
-
-                                                <div class="form-group col-sm-2">
-                                                    <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>
-                                                    <select id="subRegionId" class="form-control" multiple="multiple">
-
-                                                    </select>
-                                                </div>
                                                 <div class="form-group col-sm-3">
                                                     <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
                                                     <select id="organizationId" style="padding: 10px 20px;height: auto;width: 100%;" class="form-control" multiple="multiple">
@@ -126,43 +147,43 @@
                                                 <thead>
                                                 <tr>
                                                     <th rowspan="2" style="border: 1px solid grey;text-align: center" >Regions</th>
-                                                    <th colspan="5" style="border: 1px solid grey;text-align: center">1-toifa</th>
-                                                    <th colspan="5" style="border: 1px solid grey;text-align: center">2-toifa</th>
-                                                    <th colspan="5" style="border: 1px solid grey;text-align: center">3-toifa</th>
-                                                    <th colspan="5" style="border: 1px solid grey;text-align: center">4-toifa</th>
-                                                    <th colspan="5" style="border: 1px solid grey;text-align: center">Barcha toifa</th>
+                                                    <th colspan="5" style="border: 1px solid grey;text-align: center" th:text="#{sys_category1}">1-toifa</th>
+                                                    <th colspan="5" style="border: 1px solid grey;text-align: center" th:text="#{sys_category2}">2-toifa</th>
+                                                    <th colspan="5" style="border: 1px solid grey;text-align: center" th:text="#{sys_category3}">3-toifa</th>
+                                                    <th colspan="5" style="border: 1px solid grey;text-align: center" th:text="#{sys_category4}">4-toifa</th>
+                                                    <th colspan="5" style="border: 1px solid grey;text-align: center" th:text="#{sys_categoryAll}">Barcha toifa</th>
                                                 </tr>
                                                 <tr>
 
-                                                    <th class="rotate">Umuniy</th>
-                                                    <th class="rotate">Jarayonda</th>
-                                                    <th class="rotate">Ijobiy</th>
-                                                    <th class="rotate">Salbiy</th>
-                                                    <th class="rotate">Qayta ishlash uchun yuborilgan</th>
+                                                    <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}">Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}">Qayta ishlash uchun yuborilgan</th>
 
-                                                    <th class="rotate">Umuniy</th>
-                                                    <th class="rotate">Jarayonda</th>
-                                                    <th class="rotate">Ijobiy</th>
-                                                    <th class="rotate">Salbiy</th>
-                                                    <th class="rotate">Qayta ishlash uchun yuborilgan</th>
+                                                    <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}">Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}">Qayta ishlash uchun yuborilgan</th>
 
-                                                    <th class="rotate">Umuniy</th>
-                                                    <th class="rotate">Jarayonda</th>
-                                                    <th class="rotate">Ijobiy</th>
-                                                    <th class="rotate">Salbiy</th>
-                                                    <th class="rotate">Qayta ishlash uchun yuborilgan</th>
+                                                    <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}">Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}">Qayta ishlash uchun yuborilgan</th>
 
-                                                    <th class="rotate">Umuniy</th>
-                                                    <th class="rotate">Jarayonda</th>
-                                                    <th class="rotate">Ijobiy</th>
-                                                    <th class="rotate">Salbiy</th>
-                                                    <th class="rotate">Qayta ishlash uchun yuborilgan</th>
+                                                    <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}">Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}">Qayta ishlash uchun yuborilgan</th>
 
-                                                    <th class="rotate">Umuniy</th>
-                                                    <th class="rotate">Jarayonda</th>
-                                                    <th class="rotate">Ijobiy</th>
-                                                    <th class="rotate">Salbiy</th>
-                                                    <th class="rotate">Qayta ishlash uchun yuborilgan</th>
+                                                    <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}">Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}">Qayta ishlash uchun yuborilgan</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -201,12 +222,20 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+
+
+    var regionId;
+    $('#regionId').on('change', function() {
+        regionId=this.value ;
+    });
+
+
     $('#subRegionId').select2({
         ajax: {
             url: [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ReportSoato}]],
             type: "POST",
             data: function (params) {
-                return {search: params.term, page: params.page || 1, _csrf: $('#global_csrf').val()};
+                return {search: params.term,regionId:regionId, page: params.page || 1, _csrf: $('#global_csrf').val()};
             }, cache: true
         }
     });

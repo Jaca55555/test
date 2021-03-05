@@ -36,34 +36,27 @@
                 <div class="main-body">
                     <div id="billing-view" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalLiveLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title col-md-11" id="exampleModalLiveLabel"><span style="color: #73869A;"><span th:text="#{invoice}">Инвойс</span> #<span class="invoice-number">47239949861205</span>#</span> <span style="color: #937E7E;font-size: 14px;" class="payer-name">BEKMURODOV ORZUMURODJON ABDUMAJIT O'G'LI</span>
-                                        <span style="margin-left: 50px" th:text="#{reg_application_number}"></span>
-                                        <span class="regApplication-id"></span>
-                                    </h5>
+                            <div class="modal-content" style="width: 150% !important;left: -30%">
 
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                </div>
                                 <div class="modal-body">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h5 th:text="#{sys_menu.forwardingList}"></h5>
+                                            <span id="user-title">Инвойс</span>
+                                            <span id="user-name" style="float: right"></span>
                                         </div>
                                         <div class="card-body">
-                                            <div class="table-responsive break-word" id="result" >
-                                                <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%">
+                                            <div class="table-responsive break-word" id="forward" >
+                                                <table id="data-table2" class="table table-striped table-hover dataTable" style="width: 100%">
                                                     <thead>
                                                     <tr>
                                                         <th th:text="#{reg_application.number}"></th>
                                                         <th th:text="#{sys_tin}"></th>
                                                         <th th:text="#{sys_legal_entity_name}"></th>
                                                         <th th:text="#{sys_about.material}"></th>
-                                                        <th th:text="#{sys_about.activity}"></th>
+                                                        <th th:text="#{reg_application_category_type}"></th>
                                                         <th th:text="#{sys_list.registration_date}"></th>
                                                         <th th:text="#{sys_list.deadline_date}"></th>
                                                         <th th:text="#{sys_conclusion_status}"></th>
-                                                        <th th:text="#{sys_status}"></th>
                                                         <th ></th>
                                                     </tr>
                                                     </thead>
@@ -221,51 +214,39 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+    var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).EmployeeControlListForward}]];
     var viewLinkModal = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingView}]];
+    var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ForwardingView}]];
+    var leftDay = [[#{left_day}]];
+    var haveDay = [[#{have_day}]];
+    var totalReg = [[#{sys_employee.application_total}]];
+    var processReg = [[#{sys_application_status.Initial}]];
+    var doneReg = [[#{sys_employee.application_status_closed}]];
+    var doneOverReg = [[#{sys_application_deadline.overdue}]];
+
 </script>
 <script th:inline="none">
     /*<![CDATA[*/
     var labelView = "View";
     var dataDatatableSelector;
     var thead;
-    function billingView(id) {
-        $.ajax({
-            url: viewLinkModal,
-            data: {
-                id: id
-            },
-            success: function (response) {
-                $('.invoice-number').html(response.invoiceNumber);
-                $('.payer-name').html(response.payerName);
-                $('.regApplication-id').html(response.regApplicationId);
+    function billingView(name,id,statusId) {
+        $('#billing-view').modal('show');
+        $('#user-name').html(name);
+        if(statusId==4){
+            $('#user-title').html(processReg);
+        }else if(statusId==6){
+            $('#user-title').html(doneReg);
+        }else if(statusId==9){
+            $('#user-title').html(doneOverReg);
+        } else {
+            $('#user-title').html(totalReg);
+        }
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead1);
+        datatableConnectUz(id,statusId);
 
 
-
-                $('#date').html(response.invoiceDate);
-                $('#payee-name').html(response.payeeName);
-                $('#payee-tin').html(response.payeeTin);
-                $('#payee-account').html(response.payeeAccount);
-                $('#payee-address').html(response.payeeAddress);
-
-                $('#payer-type').html(response.payerType);
-                $('#payer-tin').html(response.payerTin);
-                $('#payer-passport').html(response.payerPassport);
-                $('#payer-phone').html(response.payerPhone);
-                $('#payer-mail').html(response.payerEmail);
-                $('#payer-bank').html(response.payerBank);
-                $('#payer-bank-account').html(response.payerBankAccount);
-
-                $('#expiry-at').html(response.invoiceExpiryAt);
-                $('#invoice-detail').html(response.invoiceDetail);
-                $('#invoice-qty').html(response.invoiceQty);
-                $('#invoice-amount').html(response.invoiceAmount);
-
-
-                $('.payment-tr').remove();
-
-                $('#billing-view').modal('show');
-            }
-        });
     }
     function renderStatusColumn(data, type, row, meta) {
         var proccess1 = 0;
@@ -286,28 +267,28 @@
     function renderAllColumn(data, type, row, meta) {
         var html = '';
         html = '<div class="btn-group btn-group-sm" role="group" aria-label="button groups sm">'+
-            '           <button class="" style="border: none;background: transparent" onclick="billingView('+row[0]+')">'+row[2]+'</button>';
+            '           <button class="" style="border: none;background: transparent" onclick="billingView(`'+row[1]+'`,'+row[0]+')">'+row[2]+'</button>';
         html+='</div>';
         return html;
     }
     function renderProcessColumn(data, type, row, meta) {
         var html = '';
         html = '<div class="btn-group btn-group-sm" role="group" aria-label="button groups sm">'+
-            '           <button class="" style="border: none;background: transparent">'+row[3]+'</button>';
+            '           <button class="" style="border: none;background: transparent" onclick="billingView(`'+row[1]+'`,'+row[0]+',4)">'+row[3]+'</button>';
         html+='</div>';
         return html;
     }
     function renderLateDoneColumn(data, type, row, meta) {
         var html = '';
         html = '<div class="btn-group btn-group-sm" role="group" aria-label="button groups sm">'+
-            '           <button class="" style="border: none;background: transparent">'+row[4]+'</button>';
+            '           <button class="" style="border: none;background: transparent" onclick="billingView(`'+row[1]+'`,'+row[0]+',9)">'+row[4]+'</button>';
         html+='</div>';
         return html;
     }
     function renderDoneColumn(data, type, row, meta) {
         var html = '';
         html = '<div class="btn-group btn-group-sm" role="group" aria-label="button groups sm">'+
-            '           <button class="" style="border: none;background: transparent">'+row[5]+'</button>';
+            '           <button class="" style="border: none;background: transparent" onclick="billingView(`'+row[1]+'`,'+row[0]+',6)">'+row[5]+'</button>';
         html+='</div>';
         return html;
     }
@@ -360,11 +341,126 @@
         dataDatatableSelector.html(thead);
         datatableConnect();
     }
+    function datatableConnectUz(id,statusId) {
+        console.log("Hello world");
+        console.log(id);
+        dataDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 25,
+            lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
+            order: [[5, 'desc']],
+            dom: 'lrtip',
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                var jqTable = $(api.table().node());
 
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+                dataToSend.tin = $('#tin').val();
+                dataToSend.name = $('#name').val();
+                dataToSend.contractNumber = "";
+                dataToSend.applicationId = $('#applicationId').val();
+                dataToSend.regionId = $('#regionId').val();
+                dataToSend.subRegionId = $('#subRegionId').val();
+                dataToSend.regDateBegin = $('#regDateBegin').val();
+                dataToSend.regDateEnd = $('#regDateEnd').val();
+                dataToSend.activityId = $('#activityId').val();
+                dataToSend.objectId = $('#objectId').val();
+                dataToSend.deadlineDateBegin = $('#deadlineDateBegin').val();
+                dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
+                dataToSend.status = $('#status').val();
+                dataToSend.statusId=statusId;
+                dataToSend.performerId=id;
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+
+                $.get(ajaxRequestLink, dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            columns: [
+                {data: 0, name: 'id',className:"w-10"},
+                {data: 1, name: 'applicant.tin',className:"w-10"},
+                {data: 2, name: 'applicant.name',className:"w-15"},
+                {data: 3, orderable:false,className:"w-10"},
+                {data: 4, name: 'category',className:"w-10"},
+                {data: 5, name: 'registrationDate',className:"w-15"},
+                {render:renderDeadlineDateColumn, name: 'deadlineDate',className:"w-10"},
+                {data: 7, render:renderStatusesColumn, orderable:false,className:"w-10"},
+                {render: renderActionsColumn, orderable: false}
+            ],
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+    }
+    function renderActionsColumn(data, type, row, meta) {
+        var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
+        var html = '';
+        html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
+        return html;
+    }
+    function renderStatusesColumn(data, type, row, meta) {
+        var statusLabel = '';
+        if (row[8]===3)statusLabel += '<span class="badge badge-warning">'+row[7]+'</span>';
+        if (row[8]===4)statusLabel +='<span class="badge badge-success">'+row[7]+'</span>';
+        if (row[8]===5)statusLabel +='<span class="badge badge-danger">'+row[7]+'</span>';
+        return statusLabel;
+    }
+    function renderLogStatusColumn(data, type, row, meta) {
+        var statusLabel = '';
+        if (row[10]===0)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
+        if (row[10]===1)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
+        if (row[10]===2)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
+        if (row[10]===3)statusLabel += '<span class="badge badge-warning">'+row[9]+'</span>';
+        if (row[10]===4)statusLabel +='<span class="badge badge-success">'+row[9]+'</span>';
+        if (row[10]===5)statusLabel +='<span class="badge badge-danger">'+row[9]+'</span>';
+        return statusLabel;
+    }
+    function renderDeadlineDateColumn(data, type, row, meta) {
+        var html='';
+        var deadlineDate1 = row[6];
+        var complete = row[11];
+        if (deadlineDate1!='' && deadlineDate1!=null){
+            if (complete!=null){
+                if (complete){
+                    html='<span class="badge badge-info">'+deadlineDate1+'</span>'
+                }else{
+                    html='<span class="badge badge-danger">'+deadlineDate1+'</span>'
+                }
+            }else{
+                var parts = deadlineDate1.split('.');
+                var nowDate = new Date();
+                nowDate.setHours(0,0,0,0);
+                var deadlineDate = new Date(parts[2],parts[1]-1,parts[0]);
+                var nearDate = new Date(parts[2],parts[1]-1,parts[0]);
+                nearDate.setDate(nearDate.getDate()-3);
+                nearDate.setHours(0,0,0,0);
+
+                if (nearDate > nowDate){
+                    html='<span class="badge badge-info" data-toggle="tooltip" data-placement="top" title="'+(deadlineDate.getTime()-nowDate.getTime())/(1000*3600*24)+haveDay+'">'+deadlineDate1+'</span>'
+                }else{
+                    if (deadlineDate>=nowDate && nearDate<=nowDate){
+                        html='<span class="badge badge-warning" data-toggle="tooltip" data-placement="top" title="'+(deadlineDate.getTime()-nowDate.getTime())/(1000*3600*24)+haveDay+'">'+deadlineDate1+'</span>'
+                    }else{
+                        html='<span class="badge badge-danger" data-toggle="tooltip" data-placement="top" title="'+(nowDate.getTime()-deadlineDate.getTime())/(1000*3600*24)+leftDay+'">'+deadlineDate1+'</span>'
+                    }
+                }
+            }
+
+        }
+
+        return html;
+    }
     $(document).ready(function () {
         dataDatatableSelector = $('#data-table');
         thead = dataDatatableSelector.html();
         datatableConnect();
+        dataDatatableSelector = $('#data-table2');
+        thead1 = dataDatatableSelector.html();
+        datatableConnectUz();
     });
 
     function getUserId(id) {

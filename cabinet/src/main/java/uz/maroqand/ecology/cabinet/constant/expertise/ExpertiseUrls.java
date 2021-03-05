@@ -104,6 +104,7 @@ public class ExpertiseUrls {
     private static final String EmployeeControl= Prefix + "/employee_control";
     public static final String EmployeeControls= EmployeeControl + "s";
     public static final String EmployeeControlList = EmployeeControl + "/list";
+    public static final String EmployeeControlListForward = EmployeeControl + "/list_forward";
 
     //Coordinate
     private static final String Coordinate = Prefix + "/coordinate";

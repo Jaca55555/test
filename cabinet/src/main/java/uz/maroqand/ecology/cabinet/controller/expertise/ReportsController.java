@@ -77,10 +77,7 @@ public class ReportsController {
 //        System.out.println("SubRegionId="+filterDto.getSubRegionId());
         System.out.println("organizationId="+organizationIds);
         Set<Integer> subRegions = new HashSet<>();
-        if (subRegionIds==null||regionId==null){
-            subRegions.add(1);
-        }
-        Page<Soato> soatoPage = soatoService.getFiltered(regionId,subRegionIds!=null||regionId!=null?subRegionIds:subRegions,null,pageable);
+        Page<Soato> soatoPage = soatoService.getFiltered(regionId,subRegionIds,null,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", soatoPage.getTotalElements()); //Total elements
@@ -130,11 +127,14 @@ public class ReportsController {
     @ResponseBody
     public HashMap<String,Object> getSoatoListAjax(
             @RequestParam(name = "search", required = false) String search,
-            @RequestParam(name = "page") Integer page
+            @RequestParam(name = "page") Integer page,
+            @RequestParam(name = "regionId") Integer regionId
     ){
+        System.out.println("regionId="+regionId);
+
         search = StringUtils.trimToNull(search);
         PageRequest pageRequest = PageRequest.of(page-1, 15, Sort.Direction.ASC, "id");
-        Page<Soato> soatoPage = soatoService.getFiltered(null,null,null,pageRequest);
+        Page<Soato> soatoPage = soatoService.findFiltered(regionId!=null?regionId:1,null,null,pageRequest);
         HashMap<String,Object> result = new HashMap<>();
         List<Select2Dto> select2DtoList = new ArrayList<>();
         for (Soato soato :soatoPage.getContent()) {

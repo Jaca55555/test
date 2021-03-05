@@ -30,6 +30,7 @@ public class FilterDto {
     private Integer activityId;
     private Integer objectId;
     private String deadlineDateBegin;
+    private String deadlineDate;
     private String deadlineDateEnd;
     private Integer status;
     private RegApplicationStatus regApplicationStatus;

@@ -54,6 +54,9 @@ public class SoatoServiceImpl implements SoatoService {
     public Page<Soato> getFiltered(Integer regionId, Set<Integer> subRegionIds,Set <Integer> organizationIds, Pageable pageable){
         return soatoRepository.findAll(getFilteringSpecification(regionId,subRegionIds,organizationIds),pageable);
     }
+    public Page<Soato> findFiltered(Integer regionId, Set<Integer> subRegionIds,Set <Integer> organizationIds, Pageable pageable){
+        return soatoRepository.findAll(getFilterSpecification(regionId,subRegionIds,organizationIds),pageable);
+    }
     private static Specification<Soato> getFilteringSpecification(
             final Integer regionId,
             final Set<Integer> subRegionIds,
@@ -65,7 +68,7 @@ public class SoatoServiceImpl implements SoatoService {
                 List<Predicate> predicates = new LinkedList<>();
 
                 if(regionId!=null){
-                    predicates.add(criteriaBuilder.equal(root.get("id"),regionId));
+                    predicates.add(criteriaBuilder.or(criteriaBuilder.equal(root.get("id"),regionId),criteriaBuilder.equal(root.get("parentId"),regionId)));
                 }
                 if(root.get("parentId")!=null) {
                     if (subRegionIds != null) {
@@ -80,5 +83,30 @@ public class SoatoServiceImpl implements SoatoService {
             }
         };
     }
+    private static Specification<Soato> getFilterSpecification(
+            final Integer regionId,
+            final Set<Integer> subRegionIds,
+            final Set<Integer> organizationIds
+    ) {
+        return new Specification<Soato>() {
+            @Override
+            public Predicate toPredicate(Root<Soato> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new LinkedList<>();
 
+                if(regionId!=null){
+                    predicates.add(criteriaBuilder.equal(root.get("parentId"),regionId));
+                }
+                if(root.get("parentId")!=null) {
+                    if (subRegionIds != null) {
+                        predicates.add(criteriaBuilder.in(root.get("id")).value(subRegionIds));
+                    }
+                }
+
+
+
+
+                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            }
+        };
+    }
 }
