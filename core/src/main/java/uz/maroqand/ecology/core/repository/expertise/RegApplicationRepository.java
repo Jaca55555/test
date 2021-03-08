@@ -11,6 +11,8 @@ import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.client.Client;
+
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -34,9 +36,16 @@ public interface RegApplicationRepository extends DataTablesRepository<RegApplic
     List<RegApplication> findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
 
     List<RegApplication> findAllByPerformerIdAndDeletedFalseOrderByIdDesc(Integer performerId);
-    @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.status=:status and r.applicant.regionId=:regionId and r.reviewId in :organizationIds")
-    Integer countByCategoryAndStatusAndRegionId(@Param("category")Category category,@Param("status")RegApplicationStatus status,@Param("regionId")Integer regionId, @Param("organizationIds")Set<Integer> organizationIds);
-    @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.status=:status and r.applicant.subRegionId=:subRegionId and r.reviewId in :organizationIds")
-    Integer countByCategoryAndStatusAndSubRegionId(@Param("category")Category category,@Param("status")RegApplicationStatus status,@Param("subRegionId")Integer subRegionId, @Param("organizationIds")Set<Integer> organizationIds);
+    @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd and r.status=:status and r.applicant.regionId=:regionId and r.reviewId in :organizationIds")
+    Integer countByCategoryAndStatusAndRegionId(@Param("category")Category category, @Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd, @Param("status")RegApplicationStatus status, @Param("regionId")Integer regionId, @Param("organizationIds")Set<Integer> organizationIds);
+    @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd and r.status=:status and r.applicant.subRegionId=:subRegionId and r.reviewId in :organizationIds")
+    Integer countByCategoryAndStatusAndSubRegionId(@Param("category")Category category,@Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd,@Param("status")RegApplicationStatus status,@Param("subRegionId")Integer subRegionId, @Param("organizationIds")Set<Integer> organizationIds);
+
+    @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd  and r.applicant.regionId=:regionId and r.reviewId in :organizationIds")
+    Integer countByCategoryAndRegionId(@Param("category")Category category, @Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd, @Param("regionId")Integer regionId, @Param("organizationIds")Set<Integer> organizationIds);
+    @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd and r.applicant.subRegionId=:subRegionId and r.reviewId in :organizationIds")
+    Integer countByCategoryAndSubRegionId(@Param("category")Category category,@Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd,@Param("subRegionId")Integer subRegionId, @Param("organizationIds")Set<Integer> organizationIds);
+
+
     RegApplication findByIdAndCreatedByIdAndDeletedFalse(Integer id, Integer createdBy);
 }

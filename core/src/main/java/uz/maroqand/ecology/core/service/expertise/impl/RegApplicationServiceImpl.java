@@ -279,13 +279,21 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
-    public Integer countByCategoryAndStatusAndRegionId(Category category, RegApplicationStatus status, Integer regionId,Set<Integer> organizationIds) {
-        return regApplicationRepository.countByCategoryAndStatusAndRegionId(category,status,regionId,organizationIds);
+    public Integer countByCategoryAndStatusAndRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status, Integer regionId,Set<Integer> organizationIds) {
+        if(status!=null){
+            return regApplicationRepository.countByCategoryAndStatusAndRegionId(category,dateBegin,dateEnd,status,regionId,organizationIds);
+        }else {
+            return regApplicationRepository.countByCategoryAndRegionId(category,dateBegin,dateEnd,regionId,organizationIds);
+        }
     }
 
     @Override
-    public Integer countByCategoryAndStatusAndSubRegionId(Category category, RegApplicationStatus status, Integer subRegionId,Set<Integer> organizationIds) {
-        return regApplicationRepository.countByCategoryAndStatusAndSubRegionId(category,status,subRegionId,organizationIds);
+    public Integer countByCategoryAndStatusAndSubRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status, Integer subRegionId,Set<Integer> organizationIds) {
+        if(status!=null){
+            return regApplicationRepository.countByCategoryAndStatusAndSubRegionId(category,dateBegin,dateEnd,status,subRegionId,organizationIds);
+        }else {
+            return regApplicationRepository.countByCategoryAndSubRegionId(category,dateBegin,dateEnd,subRegionId,organizationIds);
+        }
     }
 
     private static Specification<RegApplication> getFilteringSpecification(

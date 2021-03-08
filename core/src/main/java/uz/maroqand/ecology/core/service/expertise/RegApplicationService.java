@@ -52,6 +52,6 @@ public interface RegApplicationService {
     Boolean beforeOrEqualsTrue(RegApplication regApplication);
 
     Page<RegApplication> findFiltered(FilterDto filterDto, Integer reviewId, LogType logType, Integer performerId, Integer userId, RegApplicationInputType regApplicationInputType,Pageable pageable);
-    Integer countByCategoryAndStatusAndRegionId(Category category, RegApplicationStatus status, Integer regionId, Set<Integer> organizationIds);
-    Integer countByCategoryAndStatusAndSubRegionId(Category category, RegApplicationStatus status,Integer subRegionId,Set<Integer> organizationIds);
+    Integer countByCategoryAndStatusAndRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status, Integer regionId, Set<Integer> organizationIds);
+    Integer countByCategoryAndStatusAndSubRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status,Integer subRegionId,Set<Integer> organizationIds);
 }
