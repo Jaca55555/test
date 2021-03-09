@@ -14,14 +14,6 @@
             display: block;
         }
         .rotate {
-            /* FF3.5+ */
-            -moz-transform: rotate(-90.0deg);
-            /* Opera 10.5 */
-            -o-transform: rotate(-90.0deg);
-            /* Saf3.1+, Chrome */
-            -webkit-transform: rotate(-90.0deg);
-            /* Standard */
-            transform: rotate(-90.0deg);
             border: 1px solid grey;
         }
         table.dataTable{
@@ -141,6 +133,7 @@
                                     <div class="card-header">
                                         <h5 th:text="#{report_list}"></h5>
                                     </div>
+                                    <input type="button" id="btnExport" value="Export" onclick="Export()" />
                                     <div class="card-body">
                                         <div class="table-responsive break-word" id="result" >
                                             <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%" >
@@ -156,34 +149,34 @@
                                                 <tr>
 
                                                     <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
-                                                    <th class="rotate" th:text="#{task_status.inProgress}"> Jarayonda</th>
-                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}">Ijobiy</th>
-                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}">Salbiy</th>
-                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}">Qayta ishlash uchun yuborilgan</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}" style="background-color: #23b7e5;color: white"> Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}" style="background-color: #28a745;color: white">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}" style="background-color: #dc3545;color: white">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}"style="background-color: #ffc107;color: #212529" >Qayta ishlash uchun yuborilgan</th>
 
                                                     <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
-                                                    <th class="rotate" th:text="#{task_status.inProgress}">Jarayonda</th>
-                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}">Ijobiy</th>
-                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}">Salbiy</th>
-                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}">Qayta ishlash uchun yuborilgan</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}" style="background-color: #23b7e5;color: white"> Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}" style="background-color: #28a745;color: white">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}" style="background-color: #dc3545;color: white">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}"style="background-color: #ffc107;color: #212529" >Qayta ishlash uchun yuborilgan</th>
 
                                                     <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
-                                                    <th class="rotate" th:text="#{task_status.inProgress}">Jarayonda</th>
-                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}">Ijobiy</th>
-                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}">Salbiy</th>
-                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}">Qayta ishlash uchun yuborilgan</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}" style="background-color: #23b7e5;color: white"> Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}" style="background-color: #28a745;color: white">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}" style="background-color: #dc3545;color: white">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}"style="background-color: #ffc107;color: #212529" >Qayta ishlash uchun yuborilgan</th>
 
                                                     <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
-                                                    <th class="rotate" th:text="#{task_status.inProgress}">Jarayonda</th>
-                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}">Ijobiy</th>
-                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}">Salbiy</th>
-                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}">Qayta ishlash uchun yuborilgan</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}" style="background-color: #23b7e5;color: white"> Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}" style="background-color: #28a745;color: white">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}" style="background-color: #dc3545;color: white">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}"style="background-color: #ffc107;color: #212529" >Qayta ishlash uchun yuborilgan</th>
 
-                                                    <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
-                                                    <th class="rotate" th:text="#{task_status.inProgress}">Jarayonda</th>
-                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}">Ijobiy</th>
-                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}">Salbiy</th>
-                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}">Qayta ishlash uchun yuborilgan</th>
+                                                    <   <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}" style="background-color: #23b7e5;color: white"> Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}" style="background-color: #28a745;color: white">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}" style="background-color: #dc3545;color: white">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}"style="background-color: #ffc107;color: #212529" >Qayta ishlash uchun yuborilgan</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -209,6 +202,7 @@
 <script th:src="@{/static/datatables/input.js}"></script>
 <script th:src="@{/static/datatables/buttons.print.min.js}"></script>
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+<script type="text/javascript" src="/static/js/table2excel.js"></script>
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
 <script type="text/javascript">
@@ -216,6 +210,13 @@
         $('.rotate').css('height', $('.rotate').width());
 
     });
+</script>
+<script type="text/javascript">
+    function Export() {
+        $("#result").table2excel({
+            filename: "Table.xls"
+        });
+    }
 </script>
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ReportListAjax}]];
@@ -239,6 +240,7 @@
             }, cache: true
         }
     });
+
     $('#organizationId').select2({
         ajax: {
             url: [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ReportOrganization}]],
