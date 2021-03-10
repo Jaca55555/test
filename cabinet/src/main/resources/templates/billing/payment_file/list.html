@@ -272,6 +272,7 @@
     var viewLinkModal = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).BillingView}]];
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileEdit}]];
     var connectInvoiceLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileConnectInvoice}]];
+    var deleteInvoiceLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileDelete}]];
 
     function getCurrentLanguage() {
         return [[__${#locale}__]];
@@ -287,9 +288,13 @@
         var html ='';
         html+='<a class="btn btn-info btn-sm mr-1" href="'+viewLink+'/'+row[0]+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a>';
         console.log(row[1]);
+        if (row[13]==null&&row[14]===true){
+            html+='<a class="btn btn-warning btn-sm mr-1" href="'+deleteInvoiceLink+'?id='+row[0]+'"><i class="feather icon-trash" style="margin-right: 0px;"></i></a>';
+        }
         if (row[1]==""){
             html+='<a class="btn btn-warning btn-sm mr-1" href="'+connectInvoiceLink+'?id='+row[0]+'"><i class="feather icon-settings" style="margin-right: 0px;"></i></a>';
         }
+
         return html;
     }
     function renderInvoiceColumn(data, type, row, meta) {

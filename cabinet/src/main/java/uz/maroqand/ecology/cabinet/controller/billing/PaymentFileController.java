@@ -160,7 +160,8 @@ public class PaymentFileController {
                 paymentFile.getReceiverInn(),
                 paymentFile.getReceiverMfo(),
                 paymentFile.getInvoice()!=null? invoiceService.getInvoice(paymentFile.getInvoice())!=null ? invoiceService.getInvoice(paymentFile.getInvoice()).getId():null:null,
-
+                paymentFile.getPaymentId(),
+                    userService.isAdmin()
             });
         }
 
@@ -188,6 +189,24 @@ public class PaymentFileController {
 
         model.addAttribute("paymentFile", paymentFile);
         return BillingTemplates.PaymentFileView;
+    }
+
+    @RequestMapping(BillingUrls.PaymentFileDelete+"/{id}")
+    public String getPaymentFileViewPageAndDelete(@PathVariable("id") Integer id, Model model ){
+        PaymentFile paymentFile = paymentFileService.getById(id);
+        User user = userService.getCurrentUserFromContext();
+        if (user.getOrganizationId()==null || paymentFile==null){
+            return "redirect: " + BillingUrls.PaymentFileList;
+        }
+        Payment payment = paymentService.getById(paymentFile.getPaymentId());
+        if(payment!=null){
+            payment.setDeleted(true);
+            paymentService.save(payment);
+            paymentFile.setInvoice(null);
+            paymentFile.setPaymentId(null);
+            paymentFileService.save(paymentFile);
+        }
+        return "redirect:" + BillingUrls.PaymentFileList;
     }
 
     @RequestMapping(BillingUrls.PaymentFileEdit)
