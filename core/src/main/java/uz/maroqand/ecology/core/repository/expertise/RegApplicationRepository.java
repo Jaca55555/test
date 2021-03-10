@@ -36,15 +36,29 @@ public interface RegApplicationRepository extends DataTablesRepository<RegApplic
     List<RegApplication> findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
 
     List<RegApplication> findAllByPerformerIdAndDeletedFalseOrderByIdDesc(Integer performerId);
+//    Status!=null
     @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd and r.status=:status and r.applicant.regionId=:regionId and r.reviewId in :organizationIds")
     Integer countByCategoryAndStatusAndRegionId(@Param("category")Category category, @Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd, @Param("status")RegApplicationStatus status, @Param("regionId")Integer regionId, @Param("organizationIds")Set<Integer> organizationIds);
     @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd and r.status=:status and r.applicant.subRegionId=:subRegionId and r.reviewId in :organizationIds")
     Integer countByCategoryAndStatusAndSubRegionId(@Param("category")Category category,@Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd,@Param("status")RegApplicationStatus status,@Param("subRegionId")Integer subRegionId, @Param("organizationIds")Set<Integer> organizationIds);
+//    Category!=null
+    @Query("SELECT COUNT(r) FROM RegApplication r where  r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd and r.status=:status and r.applicant.regionId=:regionId and r.reviewId in :organizationIds")
+    Integer countByStatusAndRegionId( @Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd, @Param("status")RegApplicationStatus status, @Param("regionId")Integer regionId, @Param("organizationIds")Set<Integer> organizationIds);
+    @Query("SELECT COUNT(r) FROM RegApplication r where r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd and r.status=:status and r.applicant.subRegionId=:subRegionId and r.reviewId in :organizationIds")
+    Integer countByStatusAndSubRegionId(@Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd,@Param("status")RegApplicationStatus status,@Param("subRegionId")Integer subRegionId, @Param("organizationIds")Set<Integer> organizationIds);
 
+
+
+    //    Status==null
     @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd  and r.applicant.regionId=:regionId and r.reviewId in :organizationIds")
     Integer countByCategoryAndRegionId(@Param("category")Category category, @Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd, @Param("regionId")Integer regionId, @Param("organizationIds")Set<Integer> organizationIds);
     @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd and r.applicant.subRegionId=:subRegionId and r.reviewId in :organizationIds")
     Integer countByCategoryAndSubRegionId(@Param("category")Category category,@Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd,@Param("subRegionId")Integer subRegionId, @Param("organizationIds")Set<Integer> organizationIds);
+//    Category!=null
+    @Query("SELECT COUNT(r) FROM RegApplication r where r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd  and r.applicant.regionId=:regionId and r.reviewId in :organizationIds")
+    Integer countByRegionId( @Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd, @Param("regionId")Integer regionId, @Param("organizationIds")Set<Integer> organizationIds);
+    @Query("SELECT COUNT(r) FROM RegApplication r where r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd and r.applicant.subRegionId=:subRegionId and r.reviewId in :organizationIds")
+    Integer countBySubRegionId(@Param("dateBegin") Date dateBegin,@Param("dateEnd") Date dateEnd,@Param("subRegionId")Integer subRegionId, @Param("organizationIds")Set<Integer> organizationIds);
 
 
     RegApplication findByIdAndCreatedByIdAndDeletedFalse(Integer id, Integer createdBy);

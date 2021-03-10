@@ -281,18 +281,35 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     @Override
     public Integer countByCategoryAndStatusAndRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status, Integer regionId,Set<Integer> organizationIds) {
         if(status!=null){
-            return regApplicationRepository.countByCategoryAndStatusAndRegionId(category,dateBegin,dateEnd,status,regionId,organizationIds);
+            if (category!=null){
+                return regApplicationRepository.countByCategoryAndStatusAndRegionId(category,dateBegin,dateEnd,status,regionId,organizationIds);
+            }else{
+                return regApplicationRepository.countByStatusAndRegionId(dateBegin,dateEnd,status,regionId,organizationIds);
+            }
         }else {
-            return regApplicationRepository.countByCategoryAndRegionId(category,dateBegin,dateEnd,regionId,organizationIds);
+            if (category!=null){
+                return regApplicationRepository.countByCategoryAndRegionId(category,dateBegin,dateEnd,regionId,organizationIds);
+            }else{
+                return regApplicationRepository.countByRegionId(dateBegin,dateEnd,regionId,organizationIds);
+            }
         }
     }
 
     @Override
     public Integer countByCategoryAndStatusAndSubRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status, Integer subRegionId,Set<Integer> organizationIds) {
         if(status!=null){
-            return regApplicationRepository.countByCategoryAndStatusAndSubRegionId(category,dateBegin,dateEnd,status,subRegionId,organizationIds);
-        }else {
-            return regApplicationRepository.countByCategoryAndSubRegionId(category,dateBegin,dateEnd,subRegionId,organizationIds);
+            if(category!=null){
+                return regApplicationRepository.countByCategoryAndStatusAndSubRegionId(category,dateBegin,dateEnd,status,subRegionId,organizationIds);
+            }else {
+                return regApplicationRepository.countByStatusAndSubRegionId(dateBegin,dateEnd,status,subRegionId,organizationIds);
+            }
+        }
+        else {
+            if (category!=null){
+                return regApplicationRepository.countByCategoryAndSubRegionId(category,dateBegin,dateEnd,subRegionId,organizationIds);
+            }else {
+                return regApplicationRepository.countBySubRegionId(dateBegin,dateEnd,subRegionId,organizationIds);
+            }
         }
     }
 
