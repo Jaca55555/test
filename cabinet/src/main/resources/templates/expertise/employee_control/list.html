@@ -205,6 +205,7 @@
 <!-- [ Main Content ] end -->
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
 <script th:src="@{/static/datatables/datatables.min.js}"></script>
+<script th:src="@{/static/datatables/buttons.print.min.js}"></script>
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
@@ -351,7 +352,12 @@
             pageLength: 25,
             lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
             order: [[5, 'desc']],
-            dom: 'lrtip',
+            dom: 'lBrtip',
+            buttons: [
+
+                'copy', 'csv', 'excel', 'pdf','print'
+
+            ],
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
                 var jqTable = $(api.table().node());
