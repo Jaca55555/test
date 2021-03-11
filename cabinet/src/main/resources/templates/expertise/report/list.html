@@ -80,7 +80,7 @@
                                             <h5 class="mb-0"><a href="#!" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed" th:text="#{reg_application.filters}"></a></h5>
                                         </div>
                                         <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
-                                            <form class="row">
+                                            <form class="row" autocomplete="off">
 
 
 
@@ -133,6 +133,8 @@
                                     <div class="card-header">
                                         <h5 th:text="#{report_list}"></h5>
                                     </div>
+                                    <button onclick="exportTableToExcel('result','hisobot')"> XLS</button>
+                                    <input type="button" onclick="tableToExcel('result', 'Hisobot')" value="Export to Excel">
                                     <div class="card-body">
                                         <div class="table-responsive break-word" id="result" >
                                             <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%" >
@@ -143,6 +145,7 @@
                                                     <th colspan="5" style="border: 1px solid grey;text-align: center" th:text="#{sys_category2}">2-toifa</th>
                                                     <th colspan="5" style="border: 1px solid grey;text-align: center" th:text="#{sys_category3}">3-toifa</th>
                                                     <th colspan="5" style="border: 1px solid grey;text-align: center" th:text="#{sys_category4}">4-toifa</th>
+                                                    <th colspan="5" style="border: 1px solid grey;text-align: center" th:text="#{sys_categoryNot}">4-toifa</th>
                                                     <th colspan="5" style="border: 1px solid grey;text-align: center" th:text="#{sys_categoryAll}">Barcha toifa</th>
                                                 </tr>
                                                 <tr>
@@ -171,7 +174,13 @@
                                                     <th class="rotate" th:text="#{sys_performerStatus.denied}" style="background-color: #dc3545;color: white">Salbiy</th>
                                                     <th class="rotate" th:text="#{sys_confirmStatus.modification}"style="background-color: #ffc107;color: #212529" >Qayta ishlash uchun yuborilgan</th>
 
-                                                    <   <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
+                                                    <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
+                                                    <th class="rotate" th:text="#{task_status.inProgress}" style="background-color: #23b7e5;color: white"> Jarayonda</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.approved}" style="background-color: #28a745;color: white">Ijobiy</th>
+                                                    <th class="rotate" th:text="#{sys_performerStatus.denied}" style="background-color: #dc3545;color: white">Salbiy</th>
+                                                    <th class="rotate" th:text="#{sys_confirmStatus.modification}"style="background-color: #ffc107;color: #212529" >Qayta ishlash uchun yuborilgan</th>
+
+                                                    <th class="rotate" th:text="#{front.all_statistic_title}">Umuniy</th>
                                                     <th class="rotate" th:text="#{task_status.inProgress}" style="background-color: #23b7e5;color: white"> Jarayonda</th>
                                                     <th class="rotate" th:text="#{sys_performerStatus.approved}" style="background-color: #28a745;color: white">Ijobiy</th>
                                                     <th class="rotate" th:text="#{sys_performerStatus.denied}" style="background-color: #dc3545;color: white">Salbiy</th>
@@ -209,6 +218,56 @@
         $('.rotate').css('height', $('.rotate').width());
 
     });
+    var d = new Date();
+    var currMonth = d.getMonth();
+    var currYear = d.getFullYear();
+    var startDate = new Date(currYear, currMonth, 1);
+
+    $("#dateBegin").datepicker();
+    $("#dateBegin").datepicker("setDate", startDate);
+    $("#dateEnd").datepicker();
+    $("#dateEnd").datepicker("setDate", d);
+    var tableToExcel = (function() {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+            , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+            , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+            , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+        return function(table, name) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+            window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
+    // function exportTableToExcel(tableID, filename = ''){
+    //     var downloadLink;
+    //     var dataType = 'application/vnd.ms-excel';
+    //     var tableSelect = document.getElementById(tableID);
+    //     var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+    //
+    //     // Specify file name
+    //     filename = filename?filename+'.xls':'excel_data.xls';
+    //
+    //     // Create download link element
+    //     downloadLink = document.createElement("a");
+    //
+    //     document.body.appendChild(downloadLink);
+    //
+    //     if(navigator.msSaveOrOpenBlob){
+    //         var blob = new Blob(['\ufeff', tableHTML], {
+    //             type: dataType
+    //         });
+    //         navigator.msSaveOrOpenBlob( blob, filename);
+    //     }else{
+    //         // Create a link to the file
+    //         downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+    //
+    //         // Setting the file name
+    //         downloadLink.download = filename;
+    //
+    //         //triggering the function
+    //         downloadLink.click();
+    //     }
+    // }
 </script>
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ReportListAjax}]];
@@ -258,12 +317,7 @@
             pageLength: 25,
             lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
             order: [[0, 'desc']],
-            dom: 'lBrtip',
-            buttons: [
-
-                'copy', 'csv', 'excel', 'pdf','print'
-
-            ],
+            dom: 'rtip',
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
 
@@ -272,6 +326,8 @@
                 dataToSend.regionId = $('#regionId').val();
                 dataToSend.organizationId = $('#organizationId').val();
                 dataToSend.subRegionId = $('#subRegionId').val();
+                console.log($('#dateBegin').val());
+                console.log($('#dateEnd').val());
                 dataToSend.dateBegin = $('#dateBegin').val();
                 dataToSend.dateEnd = $('#dateEnd').val();
 
@@ -308,7 +364,12 @@
                 {data: 22, orderable:false,className:'text-center'},
                 {data: 23, orderable:false,className:'text-center'},
                 {data: 24, orderable:false,className:'text-center'},
-                {data: 25, orderable:false,className:'text-center'}
+                {data: 25, orderable:false,className:'text-center'},
+                {data: 26, orderable:false,className:'text-center'},
+                {data: 27, orderable:false,className:'text-center'},
+                {data: 28, orderable:false,className:'text-center'},
+                {data: 29, orderable:false,className:'text-center'},
+                {data: 30, orderable:false,className:'text-center'}
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

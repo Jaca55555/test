@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import com.google.inject.internal.cglib.core.$Local;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -131,6 +132,13 @@ public class ReportsController {
                     soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, dateBegin,dateEnd, RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4, dateBegin,dateEnd,RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds),
                     soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.Category4, dateBegin,dateEnd, RegApplicationStatus.Modification,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.Category4, dateBegin,dateEnd,RegApplicationStatus.Modification,soato.getId(),organizationIds),
 
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, dateBegin,dateEnd, null,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll, dateBegin,dateEnd,null,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, dateBegin,dateEnd, RegApplicationStatus.Process,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll, dateBegin,dateEnd,RegApplicationStatus.Process,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, dateBegin,dateEnd, RegApplicationStatus.Approved,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll, dateBegin,dateEnd,RegApplicationStatus.Approved,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, dateBegin,dateEnd, RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll, dateBegin,dateEnd,RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds),
+                    soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(Category.CategoryAll, dateBegin,dateEnd, RegApplicationStatus.Modification,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(Category.CategoryAll, dateBegin,dateEnd,RegApplicationStatus.Modification,soato.getId(),organizationIds),
+
+
                     soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(null,  dateBegin,dateEnd,null,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(null, dateBegin,dateEnd,null,soato.getId(),organizationIds),
                     soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(null, dateBegin,dateEnd, RegApplicationStatus.Process,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(null, dateBegin,dateEnd,RegApplicationStatus.Process,soato.getId(),organizationIds),
                     soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(null, dateBegin,dateEnd, RegApplicationStatus.Approved,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(null, dateBegin,dateEnd,RegApplicationStatus.Approved,soato.getId(),organizationIds),
@@ -150,14 +158,14 @@ public class ReportsController {
             @RequestParam(name = "regionId") Integer regionId
     ){
         System.out.println("regionId="+regionId);
-
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         search = StringUtils.trimToNull(search);
         PageRequest pageRequest = PageRequest.of(page-1, 15, Sort.Direction.ASC, "id");
         Page<Soato> soatoPage = soatoService.findFiltered(regionId!=null?regionId:1,null,null,pageRequest);
         HashMap<String,Object> result = new HashMap<>();
         List<Select2Dto> select2DtoList = new ArrayList<>();
         for (Soato soato :soatoPage.getContent()) {
-            select2DtoList.add(new Select2Dto(soato.getId(), soato.getName()));
+            select2DtoList.add(new Select2Dto(soato.getId(), soato.getNameTranslation(locale)));
         }
 
         Select2PaginationDto paginationDto = new Select2PaginationDto();
@@ -177,12 +185,13 @@ public class ReportsController {
             @RequestParam(name = "page") Integer page
     ){
         search = StringUtils.trimToNull(search);
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         PageRequest pageRequest = PageRequest.of(page-1, 15, Sort.Direction.ASC, "id");
         Page<Organization> organizationPage = organizationService.getFiltered(search,null,null,pageRequest);
         HashMap<String,Object> result = new HashMap<>();
         List<Select2Dto> select2DtoList = new ArrayList<>();
         for (Organization organization :organizationPage.getContent()) {
-            select2DtoList.add(new Select2Dto(organization.getId(), organization.getName()));
+            select2DtoList.add(new Select2Dto(organization.getId(), organization.getNameTranslation(locale)));
         }
 
         Select2PaginationDto paginationDto = new Select2PaginationDto();
