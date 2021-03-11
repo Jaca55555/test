@@ -160,8 +160,7 @@ public class PaymentFileController {
                 paymentFile.getReceiverInn(),
                 paymentFile.getReceiverMfo(),
                 paymentFile.getInvoice()!=null? invoiceService.getInvoice(paymentFile.getInvoice())!=null ? invoiceService.getInvoice(paymentFile.getInvoice()).getId():null:null,
-                paymentFile.getPaymentId(),
-                    userService.isAdmin()
+
             });
         }
 
@@ -191,22 +190,22 @@ public class PaymentFileController {
         return BillingTemplates.PaymentFileView;
     }
 
-    @RequestMapping(BillingUrls.PaymentFileDelete+"/{id}")
+    @RequestMapping(BillingUrls.PaymentFileAllDelete+"/{id}")
     public String getPaymentFileViewPageAndDelete(@PathVariable("id") Integer id, Model model ){
         PaymentFile paymentFile = paymentFileService.getById(id);
         User user = userService.getCurrentUserFromContext();
-        if (user.getOrganizationId()==null || paymentFile==null){
-            return "redirect: " + BillingUrls.PaymentFileList;
-        }
         Payment payment = paymentService.getById(paymentFile.getPaymentId());
         if(payment!=null){
             payment.setDeleted(true);
             paymentService.save(payment);
+            System.out.println("payment saqlandi");
             paymentFile.setInvoice(null);
             paymentFile.setPaymentId(null);
             paymentFileService.save(paymentFile);
+            System.out.println("paymentFile saqlandi");
         }
-        return "redirect:" + BillingUrls.PaymentFileList;
+        model.addAttribute("paymentFile", paymentFile);
+        return BillingTemplates.PaymentFileAllView;
     }
 
     @RequestMapping(BillingUrls.PaymentFileEdit)
@@ -345,7 +344,9 @@ public class PaymentFileController {
                     accountString!=null?accountString.toString():"",
                     paymentFile.getReceiverName(),
                     paymentFile.getReceiverInn(),
-                    paymentFile.getReceiverMfo()
+                    paymentFile.getReceiverMfo(),
+                    paymentFile.getPaymentId(),
+                    userService.isAdmin()
             });
         }
 

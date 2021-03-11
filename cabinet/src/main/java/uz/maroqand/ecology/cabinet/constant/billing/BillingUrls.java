@@ -13,7 +13,6 @@ public class BillingUrls {
     public static final String PaymentFileList = PaymentFile + "/list";
     public static final String PaymentFileListAjax = PaymentFile + "/ajax";
     public static final String PaymentFileView = PaymentFile + "/view";
-    public static final String PaymentFileDelete = PaymentFile + "/delete";
     public static final String PaymentFileEdit = PaymentFile + "/edit";
     public static final String PaymentFileEditSubmit = PaymentFile + "/edit_submit";
 
@@ -21,6 +20,7 @@ public class BillingUrls {
     private static final String PaymentFileAll = Prefix + "/payment_file_all";
     public static final String PaymentFileAllList = PaymentFileAll + "/list";
     public static final String PaymentFileAllListAjax = PaymentFileAll + "/ajax";
+    public static final String PaymentFileAllDelete = PaymentFileAll + "/delete";
     public static final String PaymentFileAllView = PaymentFileAll + "/view";
     public static final String PaymentFilIsRemoveInvoiceView = PaymentFileAll + "/is_remove_invoice";
     public static final String PaymentFileAllEdit = PaymentFileAll + "/edit";
