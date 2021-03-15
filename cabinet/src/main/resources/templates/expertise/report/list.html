@@ -88,7 +88,7 @@
                                                     <label for="regionId" class="control-label" th:text="#{sys_region}"></label>
                                                     <select id="regionId" class="form-control">
                                                         <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
+                                                        <option th:each="region : ${regions}" th:if="${region.id!=1700}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-2 subRegion">
@@ -133,8 +133,7 @@
                                     <div class="card-header">
                                         <h5 th:text="#{report_list}"></h5>
                                     </div>
-                                    <button onclick="exportTableToExcel('result','hisobot')"> XLS</button>
-                                    <input type="button" onclick="tableToExcel('result', 'Hisobot')" value="Export to Excel">
+                                    <input type="button" class="btn btn-primary w-10 ml-5 mt-3" onclick="tableToExcel('result', 'Hisobot')" value="Export to Excel">
                                     <div class="card-body">
                                         <div class="table-responsive break-word" id="result" >
                                             <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%" >
