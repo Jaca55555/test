@@ -587,8 +587,9 @@ public class PaymentFileController {
         }
 
         paymentFile.setInvoice(invoice.getInvoice());
-        paymentFileService.update(paymentFile,user.getId());
         Payment payment  = paymentService.pay(invoice.getId(), paymentFile.getAmount(), paymentFile.getPaymentDate(), paymentFile.getDetails(), PaymentType.BANK);
+        paymentFile.setPaymentId(payment.getId());
+        paymentFileService.update(paymentFile,user.getId());
         payment.setMessage("qo'lda biriktirildi. Invoice kelmagan yoki norog'tri kelgan update userId=" + user.getId().toString());
         paymentService.save(payment);
         invoiceService.checkInvoiceStatus(invoice);

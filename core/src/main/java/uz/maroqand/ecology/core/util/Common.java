@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 public class Common {
 
     public static SimpleDateFormat uzbekistanDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    public static SimpleDateFormat uzbekistanDateFormatUz = new SimpleDateFormat("MM/dd/yyyy");
     public static SimpleDateFormat uzbekistanDateAndTimeFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
     public static SimpleDateFormat uzbekistanDateAndTimeFormatBank = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     private static String pattern = "######.###";

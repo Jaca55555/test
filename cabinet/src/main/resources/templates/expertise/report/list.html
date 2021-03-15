@@ -217,10 +217,11 @@
         $('.rotate').css('height', $('.rotate').width());
 
     });
+
     var d = new Date();
-    var currMonth = d.getMonth();
+    var currMonth = d.getMonth()+1;
     var currYear = d.getFullYear();
-    var startDate = new Date(currYear, currMonth, 1);
+    var startDate = 1+'.'+currMonth+'.'+currYear;
 
     $("#dateBegin").datepicker();
     $("#dateBegin").datepicker("setDate", startDate);

@@ -64,8 +64,8 @@ public class ReportsController {
     ) {
         System.out.println("OrganizationIds="+organizationIds);
         System.out.println("SubRegionIds="+subRegionIds);
-        Date dateBegin= DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
-        Date dateEnd= DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
+        Date dateBegin= DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormatUz);
+        Date dateEnd= DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormatUz);
         if(organizationIds==null){
             Set<Integer>organizations=new HashSet<>();
             for (int i=1;i<=19;i++){
