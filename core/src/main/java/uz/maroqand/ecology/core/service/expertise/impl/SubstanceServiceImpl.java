@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.expertise.SubstanceType;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.entity.expertise.Substance;
 import uz.maroqand.ecology.core.repository.expertise.SubstanceRepository;
@@ -39,8 +40,8 @@ public class SubstanceServiceImpl implements SubstanceService {
     }
 
     @Override
-    public Page<Substance> getAll(Pageable pageable) {
-        return this.getAll(pageable, false);
+    public Page<Substance> getAll(Pageable pageable, SubstanceType type) {
+        return this.getAll(pageable,type, false);
     }
 
     @Override
@@ -50,11 +51,14 @@ public class SubstanceServiceImpl implements SubstanceService {
     }
 
 
-    public Page<Substance> getAll(Pageable pageable, Boolean deleted){
+    public Page<Substance> getAll(Pageable pageable,SubstanceType type, Boolean deleted){
         Specification spec = new Specification<Substance>() {
             @Override
             public Predicate toPredicate(Root<Substance> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
                 List<Predicate> predicates = new LinkedList<>();
+                if(type!=null){
+                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
+                }
 
                 predicates.add(criteriaBuilder.equal(root.get("deleted"), deleted));
                 return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

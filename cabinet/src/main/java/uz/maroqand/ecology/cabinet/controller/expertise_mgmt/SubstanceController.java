@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise_mgmt;
 
+import org.apache.xpath.operations.Mod;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -33,16 +34,20 @@ public class SubstanceController {
 
 
     @RequestMapping(ExpertiseMgmtUrls.SubstanceList)
-    public String substanceList(){
+    public String substanceList(Model model){
+        model.addAttribute("substanceType",SubstanceType.getSubstanceTypeList());
         return ExpertiseMgmtTemplates.SubstanceList;
     }
 
     @RequestMapping(value = ExpertiseMgmtUrls.SubstanceListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public HashMap<String,Object> substanceListAjax(Pageable pageable){
+    public HashMap<String,Object> substanceListAjax(
+            Pageable pageable,
+            @RequestParam(name = "type", required = false) SubstanceType type
+    ){
 
         HashMap<String, Object> result = new HashMap<>();
-        Page<Substance> substancePage = substanceService.getAll(pageable);
+        Page<Substance> substancePage = substanceService.getAll(pageable,type);
         result.put("recordsTotal", substancePage.getTotalElements()); //Total elements
         result.put("recordsFiltered", substancePage.getTotalElements()); //Filtered elements
 

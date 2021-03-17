@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.service.expertise;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import uz.maroqand.ecology.core.constant.expertise.SubstanceType;
 import uz.maroqand.ecology.core.entity.expertise.Material;
 import uz.maroqand.ecology.core.entity.expertise.Substance;
 
@@ -13,7 +14,7 @@ public interface SubstanceService {
 
     Substance getById(Integer id);
 
-    Page<Substance> getAll(Pageable pageable);
+    Page<Substance> getAll(Pageable pageable, SubstanceType type);
 
     List<Substance> getList();
 
