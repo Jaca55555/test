@@ -54,6 +54,7 @@
                                                         <th th:text="#{substance.nameOz}"></th>
                                                         <th th:text="#{substance.nameEn}"></th>
                                                         <th th:text="#{substance.name_ru}"></th>
+                                                        <th th:text="#{substanceType.name}"></th>
                                                         <th></th>
                                                     </tr>
                                                     </thead>
@@ -128,9 +129,6 @@
         var currentViewLink = ajaxRequestViewLink + '?id=' + row[0];
         var html = '';
         html += '<div class="btn-group mr-2" role="group" aria-label="First group">\n' +
-            '             <a  href="'+currentViewLink+'" class="btn btn-sm btn-info mr-1">\n' +
-            '                    <i class="feather icon-eye" style="margin: 0px"></i>\n' +
-            '            </a>\n' +
             '            <a href="'+currentEditLink+'"  class="btn btn-sm btn-success mr-1">\n' +
             '                   <i class="feather icon-edit" style="margin: 0px"></i>\n' +
             '            </a>\n' +
@@ -170,6 +168,7 @@
                 {data: 2, name: 'nameOz'},
                 {data: 3, name: 'nameEn'},
                 {data: 4, name: 'nameRu'},
+                {data: 5, name: 'type'},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {

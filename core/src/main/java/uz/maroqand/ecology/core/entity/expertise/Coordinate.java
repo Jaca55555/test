@@ -79,6 +79,14 @@ public class Coordinate {
     @Column(name = "sub_region_id")
     private Integer subRegionId;
 
+//    Object location
+    @Column(name = "object_region_id")
+    private Integer objectRegionId;
+
+
+    @Column(name = "object_sub_region_id")
+    private Integer objectSubRegionId;
+
     //Object name
     @Column
     private String name;

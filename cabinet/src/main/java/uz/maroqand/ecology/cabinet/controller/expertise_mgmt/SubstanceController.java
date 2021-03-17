@@ -54,7 +54,8 @@ public class SubstanceController {
                     substance.getName(),
                     substance.getNameOz(),
                     substance.getNameEn(),
-                    substance.getNameRu()
+                    substance.getNameRu(),
+                    substance.getType()!=null?substance.getType().getName():""
             });
         }
         result.put("data",convenientForJSONArray);
@@ -70,7 +71,6 @@ public class SubstanceController {
         if(substance == null) return "redirect:" + ExpertiseMgmtUrls.SubstanceList;
         model.addAttribute("substance", substance);
         model.addAttribute("substanceType", SubstanceType.getSubstanceTypeList());
-        System.out.println("substanceType"+SubstanceType.getSubstanceTypeList());
         return ExpertiseMgmtTemplates.SubstanceNew;
     }
 
@@ -103,6 +103,7 @@ public class SubstanceController {
     public String substanceNew(Model model){
         Substance substance = new Substance();
         model.addAttribute("substance", substance);
+        model.addAttribute("substanceType",SubstanceType.getSubstanceTypeList());
         return ExpertiseMgmtTemplates.SubstanceNew;
     }
 

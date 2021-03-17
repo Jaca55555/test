@@ -96,7 +96,15 @@ public class RegApplication {
 
     //Наименование объекта
     private String name;
+    //    Object location
+    @Column(name = "object_region_id")
+    private Integer objectRegionId;
 
+
+    @Column(name = "object_sub_region_id")
+    private Integer objectSubRegionId;
+
+    private String individualPhone;
     //разработчика проекта
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "developer_id", insertable = false, updatable = false)
