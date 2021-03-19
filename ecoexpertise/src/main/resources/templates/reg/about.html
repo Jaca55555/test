@@ -135,6 +135,59 @@
             background-position: center center;
             display: none;
         }*/
+        .custom-progress-modal .modal-header {
+            position: relative;
+        }
+
+        .custom-progress-modal .modal-header .modal-title::before {
+            content: "";
+            position: absolute;
+            width: 5px;
+            height: 30px;
+            background-color: #007bff;
+            left: 0;
+            top: 15px;
+        }
+
+        .custom-progress-modal .modal-body .top-content .top-item p {
+            text-align: justify;
+        }
+
+        .custom-progress-modal .modal-body .top-content .top-item .icon-box {
+            width: 40px;
+            height: 40px;
+            background-color: orange;
+        }
+
+        .custom-progress-modal .modal-body .top-content .top-item .icon-box i {
+            color: white;
+        }
+        .custom-progress-modal .modal-body .top-content .top-item .icon-box i::before {
+            content: none !important;
+        }
+
+
+        .custom-progress-modal .modal-body .top-content .under-item p {
+            text-align: justify;
+        }
+
+        .custom-progress-box .left-content .left-item .top-item p {
+            text-align: justify;
+        }
+
+        .custom-progress-box .left-content .left-item .top-item .icon-box {
+            width: 40px;
+            height: 40px;
+            background-color: orange;
+        }
+
+        .custom-progress-box .left-content .left-item .top-item .icon-box i {
+            color: white;
+        }
+
+        .custom-progress-box .left-content .left-item .under-item p {
+            text-align: justify;
+        }
     </style>
 </head>
 <body class="layout-6">
@@ -170,7 +223,151 @@
                                             </h5>
                                         </div>
                                         <div class="card-body">
+                                            <div class="modal fade custom-progress-modal" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-xl">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
 
+                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body p-5">
+
+
+
+                                                            <div class="top-content shadow rounded p-3 mb-5">
+                                                                <div class="top-item d-flex align-items-center mb-2">
+                                                                    <div class="icon-box  rounded d-flex  justify-content-center align-items-center">
+                                                                        <i class="fas fa-exclamation-triangle"></i>
+                                                                    </div>
+
+                                                                    <div class="ml-3">
+                                                                        <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
+                                                                            Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
+                                                                        </p>
+                                                                        <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
+                                                                            Qo'shimcha moddalar qo'shish uchun " <span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+
+
+                                                            </div>
+
+
+                                                            <div class="under-content mb-3">
+                                                                <table class="table top-table">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th scope="col">#</th>
+                                                                        <th scope="col">First</th>
+                                                                        <th scope="col">Last</th>
+                                                                        <th colspan="2" scope="col">Handle</th>
+                                                                        <!-- <th scope="col">action</th> -->
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr class="table-tr">
+                                                                        <th scope="row">1</th>
+                                                                        <td>Mark</td>
+                                                                        <td>Otto</td>
+                                                                        <td>@mdo</td>
+                                                                        <td class="d-flex justify-content-end"> <button type="button" class="btn btn-primary mr-2">
+                                                                            <i class="far fa-edit color-white font-weight-bold"></i>
+                                                                        </button>
+                                                                            <button type="button" class="btn btn-primary btn-remove">
+                                                                                <i class="fas fa-times color-white font-weight-bold "></i>
+                                                                            </button> </td>
+                                                                    </tr>
+                                                                    <tr class="table-tr">
+                                                                        <th scope="row">2</th>
+                                                                        <td>Jacob</td>
+                                                                        <td>Thornton</td>
+                                                                        <td>@fat</td>
+                                                                        <td class="d-flex justify-content-end"> <button type="button" class="btn btn-primary mr-2">
+                                                                            <i class="far fa-edit color-white font-weight-bold"></i>
+                                                                        </button>
+                                                                            <button type="button" class="btn btn-primary btn-remove">
+                                                                                <i class="fas fa-times color-white font-weight-bold "></i>
+                                                                            </button> </td>
+                                                                    </tr>
+                                                                    <tr class="table-tr">
+                                                                        <th scope="row">3</th>
+                                                                        <td>Larry</td>
+                                                                        <td>the Bird</td>
+                                                                        <td>@twitter</td>
+                                                                        <td class="d-flex justify-content-end"> <button type="button" class="btn btn-primary mr-2">
+                                                                            <i class="far fa-edit color-white font-weight-bold"></i>
+                                                                        </button>
+                                                                            <button type="button" class="btn btn-primary btn-remove">
+                                                                                <i class="fas fa-times color-white font-weight-bold "></i>
+                                                                            </button> </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+
+                                                            <div class="under-add-content ">
+
+                                                                <table class="table">
+
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <th scope="row"></th>
+                                                                        <td>
+                                                                            <div class="form-group">
+
+                                                                                <select class="form-control w-100 modal-table-input">
+                                                                                    <option>1</option>
+                                                                                    <option>2</option>
+                                                                                    <option>3</option>
+                                                                                    <option>4</option>
+                                                                                    <option>5</option>
+                                                                                </select>
+
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group">
+
+                                                                                <input type="text" class="form-control w-50 modal-table-input" id="input-2" aria-describedby="input-2">
+
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group">
+
+                                                                                <input type="text" class="form-control w-25 modal-table-input" id="input-3" aria-describedby="input-3">
+
+                                                                            </div>
+                                                                        </td>
+                                                                        <td> <button type="button" class="btn btn-primary add-btn">
+                                                                            <i class="far fa-plus color-white font-weight-bold"></i>
+                                                                        </button>
+                                                                        </td>
+                                                                    </tr>
+
+                                                                    </tbody>
+                                                                </table>
+
+
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                                Close
+                                                            </button>
+                                                            <button type="button" class="btn btn-primary">
+                                                                Save changes
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
 
@@ -348,21 +545,59 @@
                                                                     <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
                                                                 </select>
                                                             </div>
-
-                                                        </div>
+                                                            </div>
                                                         <div class="form-group row">
                                                             <div class="col-md-3 text-right">
                                                                 <label class="col-form-label" th:text="#{sys_subregion}">Наименование объекта</label>
                                                                 <span class="required">*</span>
                                                             </div>
-<!--                                                            <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>-->
+                                                            <!--                                                            <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>-->
                                                             <div class="col-md-6">
                                                                 <select id="subRegionId" class="form-control" th:field="*{objectSubRegionId}">
                                                                     <option value="" th:text="#{sys_select}"></option>
                                                                     <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
                                                                 </select>
                                                             </div>
+                                                            <div class="form-group row mx-auto mt-4 custom-progress-box">
+                                                                <div class="col-md-3  left-content">
+                                                                    <div class="left-item shadow rounded p-3">
+                                                                        <div class="top-item d-flex align-items-center mb-2">
+                                                                            <div class="icon-box  rounded d-flex  justify-content-center align-items-center">
+                                                                                <i class="fas fa-exclamation-triangle"></i>
+                                                                            </div>
 
+                                                                            <p class=" ml-2 text-muted w-75 p-0 font-weight-bold ">
+                                                                                Barcha ifloslantruvchi moddalarni kiritish majburiy
+                                                                            </p>
+
+                                                                        </div>
+                                                                        <div class="under-item">
+                                                                            <p class="p-0 m-0 text-muted">
+                                                                                Kritilgan ma'lumotlar va loyohadagi ma'lumotlar o'rtasida farq aniqlansa sizning arizangiz rad etiladi
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6 right-content">
+                                                                    <div class="right-item shadow p-3">
+                                                                        <h3 class="text-center  my-3 text-muted w-100 font-weight-bold ">
+                                                                            Atrof muhitga ta'sir
+                                                                        </h3>
+
+                                                                        <div class="right-under-item d-flex justify-content-between">
+                                                                            <div  class="btn w-25 btn-primary text-center" onclick="modalShow()">
+                                                                                atmosfera havosiga chiqariladigan ifloslantruvchi moddalar
+                                                                            </div>
+                                                                            <div class="btn w-25 btn-primary text-center">
+                                                                                atmosfera havosiga chiqariladigan ifloslantruvchi moddalar
+                                                                            </div>
+                                                                            <div class="btn w-25 btn-primary text-center">
+                                                                                atmosfera havosiga chiqariladigan ifloslantruvchi moddalar
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="form-group row" >
                                                             <div class="col-md-3 text-right">
@@ -526,6 +761,9 @@
         if([[${regApplication.category}]]!=null){
          regCategory =  getCategoryId([[${regApplication.category}]]);
         }
+        function modalShow(){
+            $('#exampleModal2').modal('show');
+        }
         var isCoordinate = false; //agar koordinate qo'shilishi kerak bo'lsa
         $(document).ready(function () {
             console.log("hello world")
@@ -541,12 +779,53 @@
                 $('#clear-coordinates-btn').prop('disabled', false);
                 isCoordinate = true;
             }
+
             $('#objectId').select2();
             // $('#activityId').select2();
+            const inputs = document.querySelectorAll( '.modal-table-input' );
+
+
+            const addBtn = document.querySelector( '.add-btn' );
+
+
+
+            const addDataTable = function () {
+                const tableTrs = document.querySelectorAll( '.table-tr' );
+                const numbers = [];
+                const data = [];
+                // $('#myTable > tbody:last-child').append('<tr>...</tr><tr>...</tr>');
+                inputs.forEach( ( input, index ) => {
+                    data[ index ] = input.value;
+
+                } );
+
+                tableTrs.forEach( ( tableTr, index ) => {
+                    numbers[ index ] = index + 1;
+                } );
+
+
+                $( '.top-table > tbody:last-child' ).append( ` <tr class="table-tr">
+        <th scope="row"> ${ numbers[ numbers.length - 1 ] + 1 } </th>
+
+        <td> ${ data[ 0 ] } </td>
+        <td>${ data[ 1 ] } </td>
+        <td>${ data[ 2 ] }</td>
+
+        <td class="d-flex justify-content-end"> <button type="button" class="btn btn-primary mr-2">
+          <i class="far fa-edit color-white font-weight-bold"></i>
+        </button>
+            <button type="button" class="btn btn-primary btn-remove">
+              <i class="fas fa-times color-white font-weight-bold "></i>
+        </button> </td>
+    </tr>`);
+            }
+
+            addBtn.addEventListener( 'click', addDataTable );
 
             if ($("#objectId").val()!=""){
                 $("#objectId").change();
             }
+
 
             $("#objectId").change(function(){
                 getActivityList();
