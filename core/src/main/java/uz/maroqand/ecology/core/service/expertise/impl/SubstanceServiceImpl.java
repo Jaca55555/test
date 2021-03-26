@@ -50,8 +50,12 @@ public class SubstanceServiceImpl implements SubstanceService {
         return substanceRepository.findByDeletedFalse();
     }
 
+    @Override
+    public List<Substance> getListByType(SubstanceType type) {
+        return substanceRepository.findByDeletedFalseAndType(type);
+    }
 
-    public Page<Substance> getAll(Pageable pageable,SubstanceType type, Boolean deleted){
+    public Page<Substance> getAll(Pageable pageable, SubstanceType type, Boolean deleted){
         Specification spec = new Specification<Substance>() {
             @Override
             public Predicate toPredicate(Root<Substance> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {

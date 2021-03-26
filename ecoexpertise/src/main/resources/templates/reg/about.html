@@ -320,12 +320,9 @@
                                                                         <td>
                                                                             <div class="form-group">
 
-                                                                                <select class="form-control w-100 modal-table-input">
-                                                                                    <option>1</option>
-                                                                                    <option>2</option>
-                                                                                    <option>3</option>
-                                                                                    <option>4</option>
-                                                                                    <option>5</option>
+                                                                                <select class="form-control" >
+                                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                                    <option th:each="substance:${substances}" th:value="${substance.id}" th:text="${substance.name}"></option>
                                                                                 </select>
 
                                                                             </div>

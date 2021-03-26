@@ -17,7 +17,7 @@ public interface SubstanceService {
     Page<Substance> getAll(Pageable pageable, SubstanceType type);
 
     List<Substance> getList();
-
+    List<Substance> getListByType(SubstanceType type);
     Substance delete(Substance substance, Integer userId);
 
     List<Substance> updateList();

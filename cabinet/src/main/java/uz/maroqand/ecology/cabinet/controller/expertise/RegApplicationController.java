@@ -82,6 +82,7 @@ public class RegApplicationController {
     private final ConclusionService conclusionService;
     private final GlobalConfigs globalConfigs ;
     private final DocumentRepoService documentRepoService;
+    private final SubstanceService substanceService;
 
     @Autowired
     public RegApplicationController(
@@ -110,7 +111,7 @@ public class RegApplicationController {
             CoordinateLatLongRepository coordinateLatLongRepository,
             SmsSendService smsSendService,
             ConclusionService conclusionService,
-            GlobalConfigs globalConfigs, DocumentRepoService documentRepoService) {
+            GlobalConfigs globalConfigs, DocumentRepoService documentRepoService, SubstanceService substanceService) {
         this.userService = userService;
         this.userAdditionalService = userAdditionalService;
         this.soatoService = soatoService;
@@ -141,6 +142,7 @@ public class RegApplicationController {
         this.conclusionService = conclusionService;
         this.globalConfigs = globalConfigs;
         this.documentRepoService = documentRepoService;
+        this.substanceService = substanceService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationList)
@@ -401,7 +403,8 @@ public class RegApplicationController {
             model.addAttribute("coordinate", coordinate);
             model.addAttribute("coordinateLatLongList", coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId()));
         }
-
+        model.addAttribute("substances",substanceService.getList());
+        System.out.println("substance="+substanceService.getList());
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("activityList", activityService.getList());
         model.addAttribute("requirementList", requirementService.getAllList());

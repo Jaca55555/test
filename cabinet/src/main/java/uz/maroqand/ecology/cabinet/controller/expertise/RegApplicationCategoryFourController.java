@@ -82,7 +82,7 @@ public class RegApplicationCategoryFourController {
     private final HarmfulSubstancesAmountService harmfulSubstancesAmountService;
     private final DescriptionOfSourcesService descriptionOfSourcesService;
     private final DescriptionOfSourcesAdditionalService descriptionOfSourcesAdditionalService;
-
+    private final SubstanceService substanceService;
     private final GlobalConfigs globalConfigs;
 
     private final String RegListRedirect = "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
@@ -117,7 +117,7 @@ public class RegApplicationCategoryFourController {
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
             NotificationService notificationService,
-            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, PollutionMeasuresService pollutionMeasuresService, AirPoolService airPoolService, HarmfulSubstancesAmountService harmfulSubstancesAmountService, DescriptionOfSourcesService descriptionOfSourcesService, DescriptionOfSourcesAdditionalService descriptionOfSourcesAdditionalService, GlobalConfigs globalConfigs) {
+            FactureService factureService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, BoilerCharacteristicsService boilerCharacteristicsService, PollutionMeasuresService pollutionMeasuresService, AirPoolService airPoolService, HarmfulSubstancesAmountService harmfulSubstancesAmountService, DescriptionOfSourcesService descriptionOfSourcesService, DescriptionOfSourcesAdditionalService descriptionOfSourcesAdditionalService, SubstanceService substanceService, GlobalConfigs globalConfigs) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -155,6 +155,7 @@ public class RegApplicationCategoryFourController {
         this.harmfulSubstancesAmountService = harmfulSubstancesAmountService;
         this.descriptionOfSourcesService = descriptionOfSourcesService;
         this.descriptionOfSourcesAdditionalService = descriptionOfSourcesAdditionalService;
+        this.substanceService = substanceService;
         this.globalConfigs = globalConfigs;
     }
 
@@ -380,7 +381,7 @@ public class RegApplicationCategoryFourController {
         if (regApplicationCategoryFourAdditional==null){
             regApplicationCategoryFourAdditional = new RegApplicationCategoryFourAdditional();
         }
-
+        model.addAttribute("substances",substanceService.getList());
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("requirementList", requirementService.getByCategory(Category.Category4));
@@ -1414,11 +1415,11 @@ public class RegApplicationCategoryFourController {
         if (regApplication==null ){
             return 0;
         }
-        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regId);
-        if (regApplicationCategoryFourAdditional==null ){
-            return -1;
-        }
-        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
+//        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regId);
+//        if (regApplicationCategoryFourAdditional==null ){
+//            return -1;
+//        }
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
 
         BoilerCharacteristics  characteristics = boilerCharacteristicsService.getById(id);
         if (!boilerCharacteristicsSet.contains(characteristics)){
@@ -1430,8 +1431,8 @@ public class RegApplicationCategoryFourController {
         characteristics.setAmount(amount);
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristicsSet.add(characteristics);
-        regApplicationCategoryFourAdditional.setBoilerCharacteristics(boilerCharacteristicsSet);
-        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationService.updateBoiler(regApplication,user.getId());
         return 1 + "";
     }
 
@@ -1441,14 +1442,14 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "regAddId") Integer regAddId
     ) {
-
+        RegApplication regApplication = regApplicationService.getById(regAddId);
         String status = "1";
         User user = userService.getCurrentUserFromContext();
-       RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
-        if (regApplicationCategoryFourAdditional == null || regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null) {
-            status = "0";
-            return status;
-        }
+//       RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
+//        if (regApplicationCategoryFourAdditional == null || regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null) {
+//            status = "0";
+//            return status;
+//        }
 
         BoilerCharacteristics characteristics = boilerCharacteristicsService.getById(id);
         if (characteristics == null) {
@@ -1456,14 +1457,14 @@ public class RegApplicationCategoryFourController {
             return status;
         }
 
-        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
         if (boilerCharacteristicsSet == null || boilerCharacteristicsSet.isEmpty() || !boilerCharacteristicsSet.contains(characteristics)) {
             status = "-2";
             return status;
         }
         boilerCharacteristicsSet.remove(characteristics);
-        regApplicationCategoryFourAdditional.setBoilerCharacteristics(boilerCharacteristicsSet);
-        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationService.updateBoiler(regApplication,user.getId());
 
         characteristics.setDeleted(Boolean.TRUE);
         boilerCharacteristicsService.save(characteristics);
@@ -1477,21 +1478,22 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "boiler_name") String boilerName,
             @RequestBody MultiValueMap<String, String> formData
     ){
+        System.out.println("regCategoryId"+regCategoryId);
         User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
         result.put("status",0);
         Map<String,String> map = formData.toSingleValueMap();
-        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regCategoryId);
-        if (regApplicationCategoryFourAdditional==null
-                || regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null
-                || regApplicationCategoryFourAdditional.getBoilerCharacteristics().isEmpty()){
+        RegApplication regApplication = regApplicationService.getById(regCategoryId);
+        if (regApplication==null
+                || regApplication.getBoilerCharacteristics()==null
+                || regApplication.getBoilerCharacteristics().isEmpty()){
             return result;
         }
-        regApplicationCategoryFourAdditional.setBoilerName(boilerName);
-        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        regApplication.setBoilerName(boilerName);
+        regApplicationService.updateBoiler(regApplication,user.getId());
         // BoilerCharacteristics hammasini id orqali mapga solindi
         HashMap<Integer,BoilerCharacteristics> boilerCharacteristicsHashMap = new HashMap<>();
-        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
         for (BoilerCharacteristics boilerCharacteristics: boilerCharacteristicsSet) {
             if (!boilerCharacteristicsHashMap.containsKey(boilerCharacteristics.getId())){
                 boilerCharacteristicsHashMap.put(boilerCharacteristics.getId(),boilerCharacteristics);

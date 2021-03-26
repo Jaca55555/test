@@ -1,16 +1,12 @@
 package uz.maroqand.ecology.ecoexpertise.controller;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,7 +51,6 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.ecoexpertise.constant.reg.RegTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls;
 
-import java.time.LocalDate;
 import java.util.*;
 
 @Controller
@@ -93,6 +88,7 @@ public class RegApplicationController {
     private final FactureService factureService;
     private Logger logger = LogManager.getLogger(RegApplicationController.class);
     private final GlobalConfigs globalConfigs;
+    private final SubstanceService substanceService;
 
     @Autowired
     public RegApplicationController(
@@ -125,7 +121,7 @@ public class RegApplicationController {
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
             NotificationService notificationService,
-            FactureService factureService, GlobalConfigs globalConfigs) {
+            FactureService factureService, GlobalConfigs globalConfigs, SubstanceService substanceService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -158,6 +154,7 @@ public class RegApplicationController {
         this.notificationService = notificationService;
         this.factureService = factureService;
         this.globalConfigs = globalConfigs;
+        this.substanceService = substanceService;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -480,6 +477,7 @@ public class RegApplicationController {
                 categoryList.add(category);
             }
         }
+        model.addAttribute("substances",substanceService.getList());
 
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("activityList", activityService.getList());

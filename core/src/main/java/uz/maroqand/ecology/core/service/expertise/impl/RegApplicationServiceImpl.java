@@ -103,6 +103,13 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public RegApplication updateBoiler(RegApplication regApplication, Integer userId) {
+        regApplication.setUpdateAt(new Date());
+        regApplication.setUpdateById(userId);
+        return  regApplicationRepository.save(regApplication);
+    }
+
+    @Override
     public List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse() {
         return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
     }
