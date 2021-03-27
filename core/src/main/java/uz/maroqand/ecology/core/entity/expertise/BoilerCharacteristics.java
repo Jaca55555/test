@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.constant.expertise.SubstanceType;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -30,6 +31,10 @@ public class BoilerCharacteristics {
     //qiymati
     @Column(name = "amount", precision = 20, scale = 2)
     private Double amount;
+
+    //qiymati
+    @Column(name = "type_boiler" )
+    private Integer substanceType;
 
     @Column(name="deleted", columnDefinition = "boolean default false")
     private Boolean deleted;

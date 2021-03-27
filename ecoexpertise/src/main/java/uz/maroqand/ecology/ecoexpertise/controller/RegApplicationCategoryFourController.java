@@ -1379,6 +1379,7 @@ public class RegApplicationCategoryFourController {
     @ResponseBody
     public HashMap<String,Object> regApplicationFourCategoryBoilerCharacteristicsCreate(
             @RequestParam(name = "regId") Integer regId,
+            @RequestParam(name = "typeBoiler") Integer typeBoiler,
             @RequestParam(name = "name") String name,
             @RequestParam(name = "type") String type,
             @RequestParam(name = "amount") Double amount
@@ -1404,6 +1405,7 @@ public class RegApplicationCategoryFourController {
         characteristics.setName(name);
         characteristics.setType(type);
         characteristics.setAmount(amount);
+        characteristics.setSubstanceType(typeBoiler);
         characteristics.setDeleted(Boolean.FALSE);
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristics.add(characteristics);
@@ -1515,6 +1517,10 @@ public class RegApplicationCategoryFourController {
         HashMap<String,Object> result = new HashMap<>();
         result.put("status",0);
         Map<String,String> map = formData.toSingleValueMap();
+        System.out.println("Map="+map);
+        String val = (String)map.get("typeBoiler");
+        System.out.println("val="+val);
+        System.out.println(map.values().toArray()[result.size()-1]);
         RegApplication regApplication = regApplicationService.getById(regCategoryId);
         if (regApplication==null
                 || regApplication.getBoilerCharacteristics()==null
@@ -1531,7 +1537,7 @@ public class RegApplicationCategoryFourController {
                 boilerCharacteristicsHashMap.put(boilerCharacteristics.getId(),boilerCharacteristics);
             }
         }
-
+        System.out.println("boilerCharacteristicsHashMap="+boilerCharacteristicsHashMap);
         for (Map.Entry<String,String> mapEntry: map.entrySet()) {
             Integer boilerId = null;
 
@@ -1556,6 +1562,10 @@ public class RegApplicationCategoryFourController {
 
                     BoilerCharacteristics boilerCharacteristics = boilerCharacteristicsHashMap.get(boilerId);
                     boilerCharacteristics.setAmount(value);
+                    System.out.println("Integer.parseInt(val)="+Integer.parseInt(val));
+                    System.out.println("SubstanceType.getSubstance(Integer.parseInt(val))="+SubstanceType.getSubstance(Integer.parseInt(val)));
+                    boilerCharacteristics.setSubstanceType(Integer.parseInt(val));
+
                     boilerCharacteristicsService.save(boilerCharacteristics);
 
                 }
