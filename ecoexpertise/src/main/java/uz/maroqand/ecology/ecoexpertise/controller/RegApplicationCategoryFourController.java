@@ -419,8 +419,12 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "aboutWindSpeed") String aboutWindSpeed,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
             @RequestParam(name = "opfId") Integer projectDeveloperOpfId,
-            @RequestParam(name = "coordinates", required = false) List<Double> coordinates
-    ){
+            @RequestParam(name = "coordinates", required = false) List<Double> coordinates,
+            @RequestParam(name = "objectRegionId", required = false) Integer objectRegionId,
+            @RequestParam(name = "objectSubRegionId", required = false) Integer objectSubRegionId,
+            @RequestParam(name = "individualPhone") String individualPhone
+
+            ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         String check = check(regApplication,user);
@@ -509,6 +513,9 @@ public class RegApplicationCategoryFourController {
         regApplication.setDeadline(requirement.getDeadline());
 
         regApplication.setObjectId(objectId);
+        regApplication.setObjectRegionId(objectRegionId);
+        regApplication.setObjectSubRegionId(objectSubRegionId);
+        regApplication.setIndividualPhone(individualPhone);
         regApplication.setName(name);
         regApplication.setMaterials(materials);
 
