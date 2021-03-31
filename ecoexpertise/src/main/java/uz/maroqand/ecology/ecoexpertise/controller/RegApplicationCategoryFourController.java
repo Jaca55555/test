@@ -1425,15 +1425,15 @@ public class RegApplicationCategoryFourController {
         return response;
     }
 
-    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsEdit)
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsEditType1)
     @ResponseBody
-    public Object regApplicationFourCategoryBoilerCharacteristicsEdit(
+    public Object regApplicationFourCategoryBoilerCharacteristicsEdit1(
             Model model,
             @RequestParam(name = "regId") Integer regId,
             @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "name_boiler") String name,
-            @RequestParam(name = "type_boiler") String type,
-            @RequestParam(name = "amount_boiler") Double amount
+            @RequestParam(name = "name_boiler1") String name,
+            @RequestParam(name = "type_boiler1") String type,
+            @RequestParam(name = "amount_boiler1") Double amount
     ){
         System.out.println("regId" + regId);
         System.out.println("id" + id);
@@ -1445,11 +1445,8 @@ public class RegApplicationCategoryFourController {
         if (regApplication==null ){
             return 0;
         }
-        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regId);
-        if (regApplicationCategoryFourAdditional==null ){
-            return -1;
-        }
-        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
+
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
 
         BoilerCharacteristics  characteristics = boilerCharacteristicsService.getById(id);
         if (!boilerCharacteristicsSet.contains(characteristics)){
@@ -1461,10 +1458,86 @@ public class RegApplicationCategoryFourController {
         characteristics.setAmount(amount);
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristicsSet.add(characteristics);
-        regApplicationCategoryFourAdditional.setBoilerCharacteristics(boilerCharacteristicsSet);
-        regApplicationCategoryFourAdditionalService.update(regApplicationCategoryFourAdditional,user.getId());
+        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationService.updateBoiler(regApplication,user.getId());
         return 1 + "";
     }
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsEditType2)
+    @ResponseBody
+    public Object regApplicationFourCategoryBoilerCharacteristicsEdit2(
+            Model model,
+            @RequestParam(name = "regId") Integer regId,
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "name_boiler2") String name,
+            @RequestParam(name = "type_boiler2") String type,
+            @RequestParam(name = "amount_boiler2") Double amount
+    ){
+        System.out.println("regId" + regId);
+        System.out.println("id" + id);
+        System.out.println("name_boiler" + name);
+        System.out.println("type_boiler" + type);
+        System.out.println("amount_boiler" + amount);
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null ){
+            return 0;
+        }
+
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
+
+        BoilerCharacteristics  characteristics = boilerCharacteristicsService.getById(id);
+        if (!boilerCharacteristicsSet.contains(characteristics)){
+            return 2;
+        }
+        boilerCharacteristicsSet.remove(characteristics);
+        characteristics.setName(name);
+        characteristics.setType(type);
+        characteristics.setAmount(amount);
+        characteristics = boilerCharacteristicsService.save(characteristics);
+        boilerCharacteristicsSet.add(characteristics);
+        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationService.updateBoiler(regApplication,user.getId());
+        return 1 + "";
+    }
+    @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsEditType3)
+    @ResponseBody
+    public Object regApplicationFourCategoryBoilerCharacteristicsEdit3(
+            Model model,
+            @RequestParam(name = "regId") Integer regId,
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "name_boiler3") String name,
+            @RequestParam(name = "type_boiler3") String type,
+            @RequestParam(name = "amount_boiler3") Double amount
+    ){
+        System.out.println("regId" + regId);
+        System.out.println("id" + id);
+        System.out.println("name_boiler" + name);
+        System.out.println("type_boiler" + type);
+        System.out.println("amount_boiler" + amount);
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null ){
+            return 0;
+        }
+
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
+
+        BoilerCharacteristics  characteristics = boilerCharacteristicsService.getById(id);
+        if (!boilerCharacteristicsSet.contains(characteristics)){
+            return 2;
+        }
+        boilerCharacteristicsSet.remove(characteristics);
+        characteristics.setName(name);
+        characteristics.setType(type);
+        characteristics.setAmount(amount);
+        characteristics = boilerCharacteristicsService.save(characteristics);
+        boilerCharacteristicsSet.add(characteristics);
+        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationService.updateBoiler(regApplication,user.getId());
+        return 1 + "";
+    }
+
+
 
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsDelete)
     @ResponseBody
@@ -2146,7 +2219,6 @@ public class RegApplicationCategoryFourController {
             model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
         }
         Offer offer = offerService.getById(regApplication.getOfferId());
-
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
         model.addAttribute("offer", offer);
