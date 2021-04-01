@@ -238,9 +238,9 @@
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">First</th>
-                                            <th scope="col">Last</th>
-                                            <th scope="col">Handle</th>
+                                            <th th:text="#{substance_type}" scope="col">First</th>
+                                            <th th:text="#{substance_weight.type}" scope="col">Last</th>
+                                            <th th:text="#{substance_weight}" scope="col">Handle</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -269,9 +269,9 @@
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">First</th>
-                                            <th scope="col">Last</th>
-                                            <th scope="col">Handle</th>
+                                            <th th:text="#{substance_type}" scope="col">First</th>
+                                            <th th:text="#{substance_weight.type}" scope="col">Last</th>
+                                            <th th:text="#{substance_weight}" scope="col">Handle</th>
                                         </tr>
 
 
@@ -303,9 +303,9 @@
                                         <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">First</th>
-                                            <th scope="col">Last</th>
-                                            <th scope="col">Handle</th>
+                                            <th th:text="#{substance_type}" scope="col">First</th>
+                                            <th th:text="#{substance_weight.type}" scope="col">Last</th>
+                                            <th th:text="#{substance_weight}" scope="col">Handle</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -326,12 +326,10 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" th:text="#{sys_close}">
                             Close
                         </button>
-                        <button type="button" class="btn btn-primary">
-                            Save changes
-                        </button>
+
                     </div>
                 </div>
             </div>

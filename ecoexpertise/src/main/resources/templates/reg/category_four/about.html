@@ -659,12 +659,12 @@
                                 <i class="fas fa-exclamation-triangle"></i>
                             </div>
 
-                            <div class="ml-3">
-                                <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
+                            <div class="ml-3" th:text="#{boiler_title}">
+                                <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold " th:text="#{boiler_title}">
                                     Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
                                 </p>
                                 <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
-                                    Qo'shimcha moddalar qo'shish uchun " <span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
+                                  <span th:text="#{boiler_title_part}">  Qo'shimcha moddalar qo'shish uchun " </span><span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
                                 </p>
                             </div>
                         </div>
@@ -695,9 +695,7 @@
                                 <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
                                 <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
                                 <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
-                                <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%">
-
-                                </td>
+                                <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
                                 <td style="width: 15%">
                                     <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
                                     <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
@@ -775,7 +773,7 @@
                                 <i class="fas fa-exclamation-triangle"></i>
                             </div>
 
-                            <div class="ml-3">
+                            <div class="ml-3"  th:text="#{boiler_title}">
                                 <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
                                     Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
                                 </p>
@@ -888,7 +886,7 @@
                                 <i class="fas fa-exclamation-triangle"></i>
                             </div>
 
-                            <div class="ml-3">
+                            <div class="ml-3"  th:text="#{boiler_title}">
                                 <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
                                     Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
                                 </p>
@@ -1926,6 +1924,17 @@
     $('#boiler-table').css("width", "100%");
 </script>
 <script>
+    $(document).ready(function() {
+        $("#name_boiler1").select2({
+            dropdownParent: $("#boilerModal1")
+        });
+        $("#name_boiler2").select2({
+            dropdownParent: $("#boilerModal2")
+        });
+        $("#name_boiler3").select2({
+            dropdownParent: $("#boilerModal3")
+        });
+    });
     $("#boiler-table1").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
         $(this).removeClass().addClass("feather icon-check-circle mr-0");
         var $row = $(this).closest("tr").off("mousedown");
@@ -1935,7 +1944,12 @@
             var txt = $(this).text();
             $idn++;
             if ($idn==2) {
-                $(this).html("").append("<input id='name_boiler1' name='name_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
+                $(this).html("").append(``+
+               ` <select class="form-control" id="name_boiler1"  >`+
+                    text1+
+                    `<option selected="selected" value="` +txt+`">`+txt+`</option>`+
+                                  `  </select>`+
+                ``);
             }
             if ($idn==3){
                 $(this).html("").append("<input id='type_boiler1' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
@@ -1951,6 +1965,7 @@
         var $row = $(this).closest("tr");
         var $tds = $row.find("td").not(':last');
         var id=$row.find("td").first().attr('id');
+        console.log("$td="+$tds);
         $('#name_boiler1').parsley().validate();
         $('#type_boiler1').parsley().validate();
         $('#amount_boiler1').parsley().validate();
@@ -1962,13 +1977,47 @@
 
             var form = new FormData();
 
+            var selectText, selectId;
+            var inputOneText, inputOneId;
+            var inputTwoText, inputTwoId;
+
+
+            // selectText = $tds[1].children("select").val();
+            // selectId = $tds[1].children("select").attr('id');
+            //
+            // inputOneText =  $tds[2].children("input").val();
+            // inputOneId =  $tds[2].children("input").attr('id');
+            //
+            // inputTwoText =  $tds[3].children("input").val();
+            // inputTwoId =  $tds[3].children("input").attr('id');
+            //
+            //
+            // console.log( " selectText " + selectText  + " selectId " + selectId );
+            // console.log( " inputOneText " + inputOneText  + " inputOneId " + inputOneId );
+            // console.log( " inputTwoText " + inputTwoText  + " inputTwoId " + inputTwoId );
+
+
+
             $.each($tds, function(i, el) {
-                var txt = $(this).find("input").val();
-                var txtId = $(this).find("input").attr('id');
+                if($(this).has('select').length){
+                    console.log($(this).has('select'));
+                    console.log("selectni ichiga kiryapti");
+                    text = $(this).find("select").val();
+                    textId = $(this).find("select").attr('id');
+                    form.append(textId,text);
+                    $(this).html(text);
+                }else if($(this).has('input').length){
+                    console.log("inputni ichiga kiryapti");
+                    var txt = $(this).find("input").val();
+                    var txtId = $(this).find("input").attr('id');
+                    form.append(txtId,txt);
+                    $(this).html(txt);
+                }
                 console.log("txt=" + txt + "   txtId=" + txtId);
-                form.append(txtId,txt);
                 $(this).html(txt);
             });
+
+
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);
@@ -1997,7 +2046,12 @@
             var txt = $(this).text();
             $idn++;
             if ($idn==2) {
-                $(this).html("").append("<input id='name_boiler2' name='name_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
+                $(this).html("").append(``+
+                    ` <select class="form-control" id="name_boiler2"  >`+
+                    text2+
+                    `<option selected="selected" value="` +txt+`">`+txt+`</option>`+
+                    `  </select>`+
+                    ``);
             }
             if ($idn==3){
                 $(this).html("").append("<input id='type_boiler2' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
@@ -2025,10 +2079,21 @@
             var form = new FormData();
 
             $.each($tds, function(i, el) {
-                var txt = $(this).find("input").val();
-                var txtId = $(this).find("input").attr('id');
+                if($(this).has('select').length){
+                    console.log($(this).has('select'));
+                    console.log("selectni ichiga kiryapti");
+                    text = $(this).find("select").val();
+                    textId = $(this).find("select").attr('id');
+                    form.append(textId,text);
+                    $(this).html(text);
+                }else if($(this).has('input').length){
+                    console.log("inputni ichiga kiryapti");
+                    var txt = $(this).find("input").val();
+                    var txtId = $(this).find("input").attr('id');
+                    form.append(txtId,txt);
+                    $(this).html(txt);
+                }
                 console.log("txt=" + txt + "   txtId=" + txtId);
-                form.append(txtId,txt);
                 $(this).html(txt);
             });
             form.append('id',id);
@@ -2058,7 +2123,12 @@
             var txt = $(this).text();
             $idn++;
             if ($idn==2) {
-                $(this).html("").append("<input id='name_boiler3' name='name_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
+                $(this).html("").append(``+
+                    ` <select class="form-control" id="name_boiler3"  >`+
+                    text3+
+                    `<option selected="selected" value="` +txt+`">`+txt+`</option>`+
+                    `  </select>`+
+                    ``);
             }
             if ($idn==3){
                 $(this).html("").append("<input id='type_boiler3' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
@@ -2086,10 +2156,21 @@
             var form = new FormData();
 
             $.each($tds, function(i, el) {
-                var txt = $(this).find("input").val();
-                var txtId = $(this).find("input").attr('id');
+                if($(this).has('select').length){
+                    console.log($(this).has('select'));
+                    console.log("selectni ichiga kiryapti");
+                    text = $(this).find("select").val();
+                    textId = $(this).find("select").attr('id');
+                    form.append(textId,text);
+                    $(this).html(text);
+                }else if($(this).has('input').length){
+                    console.log("inputni ichiga kiryapti");
+                    var txt = $(this).find("input").val();
+                    var txtId = $(this).find("input").attr('id');
+                    form.append(txtId,txt);
+                    $(this).html(txt);
+                }
                 console.log("txt=" + txt + "   txtId=" + txtId);
-                form.append(txtId,txt);
                 $(this).html(txt);
             });
             form.append('id',id);
