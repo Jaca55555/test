@@ -239,19 +239,19 @@
             <div class="container">
                 <div class="statistic-list">
                     <div class="statistic-item">
-                        <div class="number"><span th:text="${total}"></span>
+                        <div class="number"><span th:if="${total!=null}" th:text="${total}"></span>
                         </div>
                         <div class="title"><span th:text="#{front.all_statistic_title}">Umumiy arizalar soni</span>
                         </div>
                     </div>
                     <div class="statistic-item">
-                        <div class="number"><span th:text="${done}"></span>
+                        <div class="number"><span th:if="${done!=null}" th:text="${done}"></span>
                         </div>
                         <div class="title"><span th:text="#{front.in_closed_statistic_title}">Ko’rib chiqilgan arizalar soni</span>
                         </div>
                     </div>
                     <div class="statistic-item">
-                        <div class="number"><span th:text="${total - done}"></span>
+                        <div class="number"><span th:if="${total!=null and done!=null}" th:text="${total - done}"></span>
                         </div>
                         <div class="title"><span th:text="#{front.in_progress_statistic_title}">Jarayondagi arizalar soni</span>
                         </div>
@@ -511,7 +511,7 @@
             /*image,created_at,titleUz,descriptionUz,contentUz,titleRU,descriptionRU,contentRu*/
 
 
-            if (apitext['status']) {
+            if (apitext!=null && apitext['status']) {
                 var html = '';
                  html += ' <div class="latest-articles-slider" ><div class="swiper-wrapper">';
                 $.each(apitext['data'], function (item, val) {
