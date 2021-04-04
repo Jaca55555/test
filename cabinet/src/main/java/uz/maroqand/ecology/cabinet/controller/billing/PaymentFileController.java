@@ -190,6 +190,24 @@ public class PaymentFileController {
         return BillingTemplates.PaymentFileView;
     }
 
+    @RequestMapping(BillingUrls.PaymentFileAllDelete+"/{id}")
+    public String getPaymentFileViewPageAndDelete(@PathVariable("id") Integer id, Model model ){
+        PaymentFile paymentFile = paymentFileService.getById(id);
+        User user = userService.getCurrentUserFromContext();
+        Payment payment = paymentService.getById(paymentFile.getPaymentId());
+        if(payment!=null){
+            payment.setDeleted(true);
+            paymentService.save(payment);
+            System.out.println("payment saqlandi");
+            paymentFile.setInvoice(null);
+            paymentFile.setPaymentId(null);
+            paymentFileService.save(paymentFile);
+            System.out.println("paymentFile saqlandi");
+        }
+        model.addAttribute("paymentFile", paymentFile);
+        return BillingTemplates.PaymentFileAllView;
+    }
+
     @RequestMapping(BillingUrls.PaymentFileEdit)
     public String joinInvoice(
             @RequestParam(name = "id") Integer id,
@@ -326,7 +344,9 @@ public class PaymentFileController {
                     accountString!=null?accountString.toString():"",
                     paymentFile.getReceiverName(),
                     paymentFile.getReceiverInn(),
-                    paymentFile.getReceiverMfo()
+                    paymentFile.getReceiverMfo(),
+                    paymentFile.getPaymentId(),
+                    userService.isAdmin()
             });
         }
 
@@ -567,8 +587,9 @@ public class PaymentFileController {
         }
 
         paymentFile.setInvoice(invoice.getInvoice());
-        paymentFileService.update(paymentFile,user.getId());
         Payment payment  = paymentService.pay(invoice.getId(), paymentFile.getAmount(), paymentFile.getPaymentDate(), paymentFile.getDetails(), PaymentType.BANK);
+        paymentFile.setPaymentId(payment.getId());
+        paymentFileService.update(paymentFile,user.getId());
         payment.setMessage("qo'lda biriktirildi. Invoice kelmagan yoki norog'tri kelgan update userId=" + user.getId().toString());
         paymentService.save(payment);
         invoiceService.checkInvoiceStatus(invoice);

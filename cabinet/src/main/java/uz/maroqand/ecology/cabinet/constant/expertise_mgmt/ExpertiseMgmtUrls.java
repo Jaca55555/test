@@ -36,6 +36,15 @@ public class ExpertiseMgmtUrls {
     public static final String MaterialView = Material + "/view";
     public static final String MaterialDelete = Material + "/delete";
 
+    //Substance
+    private static final String Substance = Prefix + "/substance";
+    public static final String SubstanceList = Substance + "/list";
+    public static final String SubstanceListAjax = Substance + "/list_ajax";
+    public static final String SubstanceNew = Substance + "/new";
+    public static final String SubstanceEdit = Substance + "/edit";
+    public static final String SubstanceView = Substance + "/view";
+    public static final String SubstanceDelete = Substance + "/delete";
+
     //ExpertiseRequirement
     private static final String ExpertiseRequirement = Prefix + "/expertise_requirement";
     public static final String ExpertiseRequirementList = ExpertiseRequirement + "/list";

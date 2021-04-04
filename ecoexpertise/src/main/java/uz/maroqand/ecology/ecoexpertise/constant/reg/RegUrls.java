@@ -56,7 +56,7 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryStep3FileDownload = RegApplication + "/step3_file_download";
     public static final String RegApplicationFourCategoryStep3FileDelete = RegApplication + "/step3_file_delete";
 
-   /* public static final String RegApplicationFourCategoryStep4 = RegApplicationFourCategory + "/step4";
+    public static final String RegApplicationFourCategoryStep4 = RegApplicationFourCategory + "/step4";
 
     public static final String RegApplicationFourCategoryAirPoolCreate = RegApplicationFourCategory + "/air_pool_create";
     public static final String RegApplicationFourCategoryAirPoolEdit = RegApplicationFourCategory + "/air_pool_edit";
@@ -82,7 +82,9 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryStep5 = RegApplicationFourCategory + "/step5";
 
     public static final String RegApplicationFourCategoryBoilerCharacteristicsCreate = RegApplicationFourCategory + "/boiler_characteristics_create";
-    public static final String RegApplicationFourCategoryBoilerCharacteristicsEdit = RegApplicationFourCategory + "/boiler_characteristics_edit";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType1 = RegApplicationFourCategory + "/boiler_characteristics_edit1";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType2 = RegApplicationFourCategory + "/boiler_characteristics_edit2";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType3 = RegApplicationFourCategory + "/boiler_characteristics_edit3";
     public static final String RegApplicationFourCategoryBoilerCharacteristicsDelete = RegApplicationFourCategory + "/boiler_characteristics_delete";
 
     public static final String RegApplicationFourCategoryBoilerSave = RegApplicationFourCategory + "/boiler_characteristics_save";
@@ -94,7 +96,7 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryPollutionMeasuresEdit = RegApplicationFourCategory + "/pollution_measures_edit";
     public static final String RegApplicationFourCategoryPollutionMeasuresDelete = RegApplicationFourCategory + "/pollution_measures_delete";
 
-    public static final String RegApplicationFourCategoryStep7 = RegApplicationFourCategory + "/step7";*/
+    public static final String RegApplicationFourCategoryStep7 = RegApplicationFourCategory + "/step7";
 
     public static final String RegApplicationFourCategoryWaiting = RegApplicationFourCategory + "/waiting";
     public static final String RegApplicationFourCategoryContract = RegApplicationFourCategory + "/contract";

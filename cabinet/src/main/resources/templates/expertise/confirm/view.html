@@ -14,6 +14,32 @@
         .datepicker>.datepicker-days {
             display: block;
         }
+        .acc-wrap .acc-top {
+            background-color: #45bfe8;
+        }
+
+        .acc-wrap .acc-top i {
+            -webkit-transition: all 0.2s linear;
+            transition: all 0.2s linear;
+        }
+
+        .acc-wrap .acc-top .angle-down {
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        .acc-wrap .acc-body {
+            display: none;
+        }
+        .custom-progress-modal .modal-header .modal-title::before {
+            content: "";
+            position: absolute;
+            width: 5px;
+            height: 30px;
+            background-color: #007bff;
+            left: 0;
+            top: 15px;
+        }
     </style>
 </head>
 <body class="layout-6">
@@ -242,6 +268,18 @@
         setTimeout( function() { map.updateSize();}, 200);
     })
 
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        const accordion = $('.acc-top');
+
+        $(accordion).click(function() {
+            $(this).next().slideToggle(500);
+            accordion.not(this).next().slideUp(500);
+            $(this).children("i").toggleClass("angle-down");
+            accordion.not(this).children("i").removeClass("angle-down");
+        });
+    })
 </script>
 </body>
 </html>

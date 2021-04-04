@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" href="/static/datatables/css/datatables.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+</head>
+<body class="layout-6">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+
+                                    <!-- Accordion block begins here -->
+                                    <div class="accordion" id="accordionExample">
+
+                                        <!-- dataTable card begins here -->
+                                        <div class="card" style="border-radius: 5px">
+                                        <div class="card-header">
+                                            <h5 th:text="#{substance.new}"></h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form th:action="${T(uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls).SubstanceNew}" method="post" th:object="${substance}">
+                                               <div class="row col-md-10 offset-2">
+                                                   <div class="form-group col-md-5">
+                                                       <label for="name" th:text="#{substance.name}"></label>
+                                                       <input type="text" class="form-control" id="name" th:field="*{name}" required="">
+                                                   </div>
+                                               </div>
+                                                <div class="row col-md-10 offset-2">
+                                                    <div class="form-group col-md-5">
+                                                        <label for="name" th:text="#{substance.nameOz}"></label>
+                                                        <input type="text" class="form-control" id="nameOz" th:field="*{nameOz}" required="">
+                                                    </div>
+
+                                                </div>
+                                                <div class="row col-md-10 offset-2">
+                                                    <div class="form-group col-md-5">
+                                                        <label for="name" th:text="#{substance.nameEn}"></label>
+                                                        <input type="text" class="form-control" id="nameEn" th:field="*{nameEn}" required="">
+                                                    </div>
+                                                </div>
+                                                <div class="row col-md-10 offset-2">
+                                                    <div class="form-group col-md-5">
+                                                        <label for="nameRu" th:text="#{substance.nameRu}"></label>
+                                                        <input type="text" class="form-control" id="nameRu" th:field="*{nameRu}" required="">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-md-4 text-right">
+                                                        <label class="col-form-label">
+                                                            <span th:text="#{substance_type}"></span>
+                                                            <span class="required">*</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <select class="form-control" required="" id="substanceType" th:field="*{type}">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option th:each="type : ${substanceType}" th:value="${type}" th:text="${type.name}" ></option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" th:field="*{id}">
+                                                <div class="col-md-2 offset-5">
+                                                    <button type="submit" class="btn btn-success btn-block">
+                                                        <i class="feather icon-check"></i>
+                                                        <span th:text="#{sys_add}" ></span>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                        <!-- dataTable card ends here -->
+
+                                    </div>
+                                    <!-- Accordion block ends here -->
+
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- [ Main Content ] end -->
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+
+</body>
+</html>

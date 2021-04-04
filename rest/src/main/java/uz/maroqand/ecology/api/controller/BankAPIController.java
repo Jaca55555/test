@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
 import uz.maroqand.ecology.core.dto.api.*;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
@@ -148,8 +149,9 @@ public class BankAPIController {
                   if (!account.isEmpty() && paymentFile.getReceiverAccount().equals(account)) {
                       if(paymentFile.getPayerTin()!=null && regApplication.getApplicant()!=null && regApplication.getApplicant().getTin().equals(paymentFile.getPayerTin())){
                           paymentFile.setInvoice(invoice.getInvoice());
+                          Payment payment = paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
+                          paymentFile.setPaymentId(payment.getId());
                           paymentFileService.save(paymentFile);
-                          paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
                       }
                       invoiceService.checkInvoiceStatus(invoice);
                   }

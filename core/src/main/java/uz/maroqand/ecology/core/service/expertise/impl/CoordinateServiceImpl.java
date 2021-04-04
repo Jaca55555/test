@@ -89,7 +89,7 @@ public class CoordinateServiceImpl implements CoordinateService {
     }
 
     public Coordinate findById(Integer id){
-        return coordinateRepository.getOne(id);
+        return coordinateRepository.findTop1ByIdOrderByIdDesc(id);
     }
 
     public void coordinateView(Integer regApplicationId, Model model){

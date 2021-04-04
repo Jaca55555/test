@@ -9,6 +9,11 @@ public class ExpertiseUrls {
     private static final String Prefix = "/expertise";
     private static final String  ExpertiseReg = Prefix + "/reg";
 
+    //API
+    public static final String Api = Prefix + "/api";
+    public static final String ApiView = Api + "/view";
+    public static final String ApiList = Api + "/list";
+
     //Birinchi tekshiruv
     private static final String Confirm = Prefix + "/confirm";
     public static final String ConfirmList = Confirm + "/list";
@@ -85,6 +90,12 @@ public class ExpertiseUrls {
     public static final String BillingInvoiceIsNol = Billing + "/amount_is_nol";
     public static final String BillingDelete = Billing + "/delete";
 
+    //Report
+    private static final String Report = Prefix + "/report";
+    public static final String ReportList = Report + "/list";
+    public static final String ReportListAjax = Report + "/list_ajax";
+    public static final String ReportSoato= Report+"/soato";
+    public static final String ReportOrganization= Report+"/organization";
 
     //Applicant
     private static final String Applicant = Prefix + "/applicant";
@@ -98,6 +109,7 @@ public class ExpertiseUrls {
     private static final String EmployeeControl= Prefix + "/employee_control";
     public static final String EmployeeControls= EmployeeControl + "s";
     public static final String EmployeeControlList = EmployeeControl + "/list";
+    public static final String EmployeeControlListForward = EmployeeControl + "/list_forward";
 
     //Coordinate
     private static final String Coordinate = Prefix + "/coordinate";

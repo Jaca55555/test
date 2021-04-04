@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.*;
+import uz.maroqand.ecology.core.entity.SubstanceContent;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Soato;
@@ -96,7 +97,15 @@ public class RegApplication {
 
     //Наименование объекта
     private String name;
+    //    Object location
+    @Column(name = "object_region_id")
+    private Integer objectRegionId;
 
+
+    @Column(name = "object_sub_region_id")
+    private Integer objectSubRegionId;
+
+    private String individualPhone;
     //разработчика проекта
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "developer_id", insertable = false, updatable = false)
@@ -281,4 +290,20 @@ public class RegApplication {
     @Column(name = "update_by")
     private Integer updateById;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "reg_application_jt_substance_content",
+            joinColumns = { @JoinColumn(name = "reg_application_id") },
+            inverseJoinColumns = { @JoinColumn(name = "substance_content_id") })
+    private Set<SubstanceContent> substanceContents;
+    //Qozon nomi
+    @Column(name = "boiler_name")
+    private String boilerName;
+
+    //Қозон характеристикаси
+    @ManyToMany
+    @JoinTable(name = "reg_application_jt_boiler_characteristics",
+            joinColumns = { @JoinColumn(name = "reg_application") },
+            inverseJoinColumns = { @JoinColumn(name = "boiler_characteristics")})
+    @OrderBy(value = "id asc")
+    private Set<BoilerCharacteristics> boilerCharacteristics;
 }

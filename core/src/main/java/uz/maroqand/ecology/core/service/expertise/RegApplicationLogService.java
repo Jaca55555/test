@@ -23,7 +23,7 @@ public interface RegApplicationLogService {
     RegApplicationLog getById(Integer id);
 
     List<RegApplicationLog> getByRegApplicationId(Integer regApplicationId);
-
+    List<RegApplicationLog> findAll();
     List<RegApplicationLog> getByRegApplicationIdAndType(Integer regApplicationId, LogType type);
 
     List<RegApplicationLog> getByIds(Set<Integer> ids);

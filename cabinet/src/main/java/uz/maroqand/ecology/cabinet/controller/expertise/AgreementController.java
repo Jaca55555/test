@@ -127,7 +127,7 @@ public class AgreementController {
         Page<RegApplicationLog> regApplicationLogs = regApplicationLogService.findFiltered(
                 filterDto,
                 null,
-                user.getId(),
+                userService.isAdmin() ? null : user.getId(),
                 LogType.Agreement,
                 null,
                 pageable
@@ -185,6 +185,7 @@ public class AgreementController {
         }
 
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
+        if (!userService.isAdmin()){
         if(
             !regApplicationLog.getRegApplicationId().equals(regApplicationId) ||
             !regApplicationLog.getUpdateById().equals(user.getId()) ||
@@ -192,7 +193,7 @@ public class AgreementController {
         ){
             toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kelishish bo'yicha ariza topilmadi");
             return "redirect:" + ExpertiseUrls.AgreementList;
-        }
+        }}
 
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);

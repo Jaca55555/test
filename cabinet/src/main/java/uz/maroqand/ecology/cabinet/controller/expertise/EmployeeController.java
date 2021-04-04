@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,17 +16,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.client.Opf;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.client.OpfService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -35,13 +43,17 @@ public class EmployeeController {
     private final UserService userService;
     private final HelperService helperService;
     private final OpfService opfService;
+    private final ClientService clientService;
+    private final RegApplicationLogService regApplicationLogService;
 
     @Autowired
-    public EmployeeController(RegApplicationService regApplicationService, UserService userService, HelperService helperService, OpfService opfService) {
+    public EmployeeController(RegApplicationService regApplicationService, UserService userService, HelperService helperService, OpfService opfService, ClientService clientService, RegApplicationLogService regApplicationLogService) {
         this.regApplicationService = regApplicationService;
         this.userService = userService;
         this.helperService = helperService;
         this.opfService = opfService;
+        this.clientService = clientService;
+        this.regApplicationLogService = regApplicationLogService;
     }
 
     @RequestMapping(value = ExpertiseUrls.EmployeeControls,method = RequestMethod.GET)
@@ -118,6 +130,70 @@ public class EmployeeController {
         model.addAttribute("proccess",getProccess());
         model.addAttribute("users",userService.getEmployeesPerformerForForwarding(user.getRole().getId()!=16?user.getOrganizationId():null));
         return ExpertiseTemplates.EmployeeControlList;
+    }
+
+
+    @RequestMapping(value = ExpertiseUrls.EmployeeControlListForward,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public HashMap<String,Object> getEmployeeControlForwardingListAjaxPage(
+            FilterDto filterDto,
+            @RequestParam(name = "performerId",required = false) Integer performerId,
+            @RequestParam(name = "statusId",required = false) Integer statusId,
+            Pageable pageable
+    ){
+        if(statusId!=null) {
+            if (statusId == 4) {
+                filterDto.setRegApplicationStatus(RegApplicationStatus.Process);
+            } else if (statusId == 6) {
+                filterDto.setRegApplicationStatus(RegApplicationStatus.Approved);
+            }else if(statusId == 9){
+                Date today = new Date();
+                DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+                filterDto.setDeadlineDate(dateFormat.format(today));
+
+            }
+        }
+        User user = userService.getCurrentUserFromContext();
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        HashMap<String,Object> result = new HashMap<>();
+
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+                filterDto,
+                user.getRole().getId()!=16?user.getOrganizationId():null,
+                LogType.Forwarding,
+                performerId,
+                null,
+                null,//todo shart kerak
+                pageable
+        );
+
+        List<RegApplication> regApplicationList = regApplicationPage.getContent();
+        List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
+        for (RegApplication regApplication : regApplicationList){
+            Client client = clientService.getById(regApplication.getApplicantId());
+            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+            RegApplicationLog forwardingLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
+
+            convenientForJSONArray.add(new Object[]{
+                    regApplication.getId(),
+                    client.getTin(),
+                    client.getName(),
+                    regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
+                    regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
+                    regApplication.getRegistrationDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
+                    regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+                    performerLog!=null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(),locale):"",
+                    performerLog!=null ? performerLog.getStatus().getId():"",
+                    forwardingLog.getStatus()!=null? helperService.getTranslation(forwardingLog.getStatus().getForwardingName(),locale):"",
+                    forwardingLog.getStatus()!=null? forwardingLog.getStatus().getId():"",
+                    regApplicationService.beforeOrEqualsTrue(regApplication)
+            });
+        }
+
+        result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
+        result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
+        result.put("data",convenientForJSONArray);
+        return result;
     }
 
     @RequestMapping(value = ExpertiseUrls.EmployeeControlList, method = RequestMethod.POST)
@@ -206,6 +282,7 @@ public class EmployeeController {
         result.put("data",convenientForJSONArray);
         return result;
     }
+
 
     private List<Integer> getProccess(){
 

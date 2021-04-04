@@ -103,6 +103,13 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public RegApplication updateBoiler(RegApplication regApplication, Integer userId) {
+        regApplication.setUpdateAt(new Date());
+        regApplication.setUpdateById(userId);
+        return  regApplicationRepository.save(regApplication);
+    }
+
+    @Override
     public List<RegApplication> getAllByPerfomerIdNotNullDeletedFalse() {
         return regApplicationRepository.findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
     }
@@ -278,6 +285,41 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return regApplicationRepository.findAll(getFilteringSpecification(filterDto, reviewId, logType, performerId, userId,regApplicationInputType),pageable);
     }
 
+    @Override
+    public Integer countByCategoryAndStatusAndRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status, Integer regionId,Set<Integer> organizationIds) {
+        if(status!=null){
+            if (category!=null){
+                return regApplicationRepository.countByCategoryAndStatusAndRegionId(category,dateBegin,dateEnd,status,regionId,organizationIds);
+            }else{
+                return regApplicationRepository.countByStatusAndRegionId(dateBegin,dateEnd,status,regionId,organizationIds);
+            }
+        }else {
+            if (category!=null){
+                return regApplicationRepository.countByCategoryAndRegionId(category,dateBegin,dateEnd,regionId,organizationIds);
+            }else{
+                return regApplicationRepository.countByRegionId(dateBegin,dateEnd,regionId,organizationIds);
+            }
+        }
+    }
+
+    @Override
+    public Integer countByCategoryAndStatusAndSubRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status, Integer subRegionId,Set<Integer> organizationIds) {
+        if(status!=null){
+            if(category!=null){
+                return regApplicationRepository.countByCategoryAndStatusAndSubRegionId(category,dateBegin,dateEnd,status,subRegionId,organizationIds);
+            }else {
+                return regApplicationRepository.countByStatusAndSubRegionId(dateBegin,dateEnd,status,subRegionId,organizationIds);
+            }
+        }
+        else {
+            if (category!=null){
+                return regApplicationRepository.countByCategoryAndSubRegionId(category,dateBegin,dateEnd,subRegionId,organizationIds);
+            }else {
+                return regApplicationRepository.countBySubRegionId(dateBegin,dateEnd,subRegionId,organizationIds);
+            }
+        }
+    }
+
     private static Specification<RegApplication> getFilteringSpecification(
             final FilterDto filterDto,
             final Integer reviewId,
@@ -359,6 +401,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     }
                     if (regDateBegin != null && regDateEnd != null) {
                         predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), regDateBegin, regDateEnd));
+                    }
+                    Date deadlineDate = DateParser.TryParse(filterDto.getDeadlineDate(), Common.uzbekistanDateFormat);
+
+                    if (deadlineDate != null) {
+                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate").as(Date.class),deadlineDate));
                     }
 
                     Date dateBegin = DateParser.TryParse(filterDto.getDateBegin(), Common.uzbekistanDateFormat);
