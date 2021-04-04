@@ -69,7 +69,7 @@ public class AgreeController {
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                 user.getOrganizationId(),
+                user.getRole().getId()!=16 ?user.getOrganizationId():null,
                 null,
                 null,
                 null,
@@ -88,9 +88,9 @@ public class AgreeController {
                     regApplication.getId(),
                     regApplication.getOfferId(),
                     regApplication.getConfirmLogAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getConfirmLogAt()):"",
-                    regApplication.getApplicant().getTin(),
-                    regApplication.getApplicant().getName(),
-                    regApplication.getApplicant().getTin(),
+                    regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():null,
+                    regApplication.getApplicant()!=null?regApplication.getApplicant().getName():null,
+                    regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():null,
                     regApplication.getContractNumber()
             });
         }

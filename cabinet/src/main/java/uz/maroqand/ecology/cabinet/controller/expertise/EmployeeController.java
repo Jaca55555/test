@@ -116,7 +116,7 @@ public class EmployeeController {
     public String getEmployeeControlList(Model model){
         User user = userService.getCurrentUserFromContext();
         model.addAttribute("proccess",getProccess());
-        model.addAttribute("users",userService.getEmployeesPerformerForForwarding(user.getOrganizationId()));
+        model.addAttribute("users",userService.getEmployeesPerformerForForwarding(user.getRole().getId()!=16?user.getOrganizationId():null));
         return ExpertiseTemplates.EmployeeControlList;
     }
 

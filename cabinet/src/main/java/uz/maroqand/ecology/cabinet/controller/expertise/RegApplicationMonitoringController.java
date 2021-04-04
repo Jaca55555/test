@@ -100,7 +100,7 @@ public class RegApplicationMonitoringController {
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                userService.isAdmin()?null:user.getOrganizationId(),
+                userService.isAdmin()||user.getRole().getId()==16?null:user.getOrganizationId(),
                 null,
                 null,
                 null,
