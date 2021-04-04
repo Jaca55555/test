@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/news").permitAll()
+                .antMatchers("/get_news").permitAll()
                 .antMatchers("/get_modal_file").permitAll()
                 .antMatchers("/test/login").permitAll()
                 .antMatchers(SysUrls.SelectLang).permitAll()
@@ -73,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout");
 
         
-        http.csrf().ignoringAntMatchers("/login","/upay/payment","/upay/check");
+        http.csrf().ignoringAntMatchers("/login","/upay/payment","/upay/check","/get_news");
 
         http.authorizeRequests().anyRequest().authenticated()
                 .and()

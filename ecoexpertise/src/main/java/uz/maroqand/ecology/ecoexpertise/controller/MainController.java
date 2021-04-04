@@ -7,7 +7,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
@@ -24,6 +26,7 @@ import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
 import org.springframework.data.domain.Pageable;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -54,7 +57,15 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String getPage(Model model, Pageable pageable) {
+    public String getPage() {
+        return "index";
+    }
+
+    @RequestMapping(value = "/get_news",method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> getNews(Pageable pageable){
+
+        HashMap<String,Object> result = new HashMap<>();
         String element = ecoGovService.getEcoGovApi();
         try {
             element = new String(element.getBytes("utf8"));
@@ -83,10 +94,10 @@ public class MainController {
         System.out.println("filterDto="+filterDto);
         Long done = regApplicationService.findFiltered(filterDto, null, null, null, null, null,pageable).getTotalElements();
 
-        model.addAttribute("element", element);
-        model.addAttribute("total", total);
-        model.addAttribute("done", done);
-        return "index";
+        result.put("element", element);
+        result.put("total", total);
+        result.put("done", done);
+        return result;
     }
 
     //fileDownload
