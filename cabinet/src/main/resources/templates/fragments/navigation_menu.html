@@ -37,7 +37,7 @@
                     <a href="/expertise/confirm/list" class="nav-link">
                         <span class="pcoded-micon"><i class="fas fa-envelope-open"></i></span>
                         <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.confirmList}"> </span>
-                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(0)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(0)}">2</span>
+<!--                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(0)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(0)}">2</span>-->
                         <!--<span th:text="${@getNotifacationService.countIncomingByStatus()}" class="rounded-notification w-15 text-center" style="height: 20px">12</span>-->
                     </a>
                 </li>
@@ -45,35 +45,35 @@
                     <a href="/expertise/forwarding/list" class="nav-link">
                         <span class="pcoded-micon"><i class="mdi mdi-file-multiple"></i></span>
                         <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.forwardingList}"> </span>
-                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(1)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(1)}">2</span>
+<!--                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(1)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(1)}">2</span>-->
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_PERFORMER')">
                     <a href="/expertise/performer/list" class="nav-link">
                         <span class="pcoded-micon"><i class="mdi mdi-pen"></i></span>
                         <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.performerList}"> </span>
-                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(2)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(2)}">2</span>
+<!--                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(2)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(2)}">2</span>-->
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT')">
                     <a href="/expertise/agreement/list" class="nav-link">
                         <span class="pcoded-micon"><i class="feather icon-layers"></i></span>
                         <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.agreementList}"> </span>
-                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(3)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(3)}">2</span>
+<!--                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(3)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(3)}">2</span>-->
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')">
                     <a href="/expertise/agreement_complete/list" class="nav-link">
                         <span class="pcoded-micon"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></span>
                         <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.agreementCompleteList}"> </span>
-                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(4)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(4)}">2</span>
+<!--                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(4)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(4)}">2</span>-->
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_CONCLUSION_COMPLETE')">
                     <a href="/expertise/conclusion_complete/list" class="nav-link">
                         <span class="pcoded-micon"><i class="mdi mdi-checkbox-multiple-marked-outline"></i></span>
                         <span class="pcoded-mtext text-wrap" th:text="#{sys_menu.conclusionCompleteList}"> </span>
-                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(5)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(5)}">2</span>
+<!--                        <span class="rounded-notification w-15 text-center" th:if="${@regApplicationLogServiceImpl.getLogCount(5)}!=0" style="height: 20px" th:text="${@regApplicationLogServiceImpl.getLogCount(5)}">2</span>-->
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EXPERTISE_AGREEMENT_COMPLETE')">
@@ -109,7 +109,7 @@
                     <a href="/sys/appeal_admin/list" class="nav-link">
                         <span class="pcoded-micon"><i class="mdi mdi-email-outline"></i></span>
                         <span class="pcoded-mtext" th:text="#{sys_menu.admin_appeal}"></span>
-                        <span class="rounded-notification w-15 text-center" th:if="${@appealServiceImpl.getbyStatus()}!=0" style="height: 20px" th:text="${@appealServiceImpl.getbyStatus()}">2</span>
+<!--                        <span class="rounded-notification w-15 text-center" th:if="${@appealServiceImpl.getbyStatus()}!=0" style="height: 20px" th:text="${@appealServiceImpl.getbyStatus()}">2</span>-->
                     </a>
                 </li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('EMPLOYEE_CONTROL')"><a href="/expertise/employee_control/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-users"></i></span><span class="pcoded-mtext" th:text="#{sys_employee.list}"> </span></a></li>

@@ -390,6 +390,8 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("requirementList", requirementService.getByCategory(Category.Category4));
         model.addAttribute("regions", soatoService.getRegions());
+
+        model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);

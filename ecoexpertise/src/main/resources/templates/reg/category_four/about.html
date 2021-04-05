@@ -1001,20 +1001,16 @@
         let regCategory = null;
         var isCoordinate = false; //agar koordinate qo'shilishi kerak bo'lsa
         $(document).ready(function () {
-
-            $(document).ready(function() {
-                $("#name_boiler1").select2({
-                    dropdownParent: $("#boilerModal1")
-                });
-                $("#name_boiler2").select2({
-                    dropdownParent: $("#boilerModal2")
-                });
-                $("#name_boiler3").select2({
-                    dropdownParent: $("#boilerModal3")
-                });
-                bindSubRegionSelectToRegionSelect('#subRegionId', '#region');
+            $("#name_boiler1").select2({
+                dropdownParent: $("#boilerModal1")
             });
-
+            $("#name_boiler2").select2({
+                dropdownParent: $("#boilerModal2")
+            });
+            $("#name_boiler3").select2({
+                dropdownParent: $("#boilerModal3")
+            });
+            bindSubRegionSelectToRegionSelect('#subRegionId', '#region');
 
             var srSelector = $('#materialId');
 
