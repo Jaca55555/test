@@ -1665,7 +1665,7 @@
             type: 'post',
             dataType: 'json',
             success: function (response) {
-                console.log(response);
+
                 if (response==true){
                     $('#alert-not_save-characteristics').html('');
                     $('#form-step5').submit();
@@ -1679,14 +1679,14 @@
     }
     function saveBoiler1() {
         // $('#boiler_name').parsley().validate();
-        console.log($("#boiler_form1").serialize());
+
         $.ajax({
             url: saveBoilerLink,
             data: $("#boiler_form1").serialize()+"&typeBoiler=1",
             type: 'post',
             dataType: 'json',
             success: function (response) {
-                console.log(response);
+
                 if (response.status == 1) {
                     $('#alert-isSave1').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
                 } else {
@@ -1705,7 +1705,7 @@
             type: 'post',
             dataType: 'json',
             success: function (response) {
-                console.log(response);
+
                 if (response.status == 1) {
                     $('#alert-isSave2').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
                 } else {
@@ -1724,7 +1724,7 @@
             type: 'post',
             dataType: 'json',
             success: function (response) {
-                console.log(response);
+
                 if (response.status == 1) {
                     $('#alert-isSave3').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
                 } else {
@@ -1751,10 +1751,7 @@
         if( $('#name_boiler1').parsley().isValid()
             && $('#type_boiler1').parsley().isValid()
             && $('#amount_boiler1').parsley().isValid()) {
-            console.log("regId" + regApplicationId)
-            console.log("name" + name)
-            console.log("type" + type)
-            console.log("amount" + amount)
+
             var form = new FormData();
             form.append("regId", regApplicationId);
             form.append("name", name);
@@ -1771,7 +1768,10 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    console.log("response.status"+response.status);
+                    $('#name_boiler1').val(" ");
+                    $('#type_boiler1').val(" ");
+                    $('#amount_boiler1').val(null);
+
                     if (response.status==1){
                         const tableRows = document.querySelectorAll('#boiler-table1 tbody tr');
 
@@ -1829,8 +1829,9 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    console.log("response.status"+response.status);
-
+                    $('#name_boiler2').val(" ");
+                    $('#type_boiler2').val(" ");
+                    $('#amount_boiler2').val(null);
                     const tableRows = document.querySelectorAll('#boiler-table2 tbody tr');
 
 
@@ -1892,8 +1893,9 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    console.log("response.status"+response.status);
-
+                    $('#name_boiler3').val(" ");
+                    $('#type_boiler3').val(" ");
+                    $('#amount_boiler3').val(null);
 
 
 
