@@ -1012,6 +1012,7 @@
                 $("#name_boiler3").select2({
                     dropdownParent: $("#boilerModal3")
                 });
+                bindSubRegionSelectToRegionSelect('#subRegionId', '#region');
             });
 
 
@@ -1027,7 +1028,7 @@
                 $('#clear-coordinates-btn').prop('disabled', false);
                 isCoordinate = true;
             }
-            bindSubRegionSelectToRegionSelect('#subRegionId', '#region');
+
             $('#objectId').select2();
 
 
