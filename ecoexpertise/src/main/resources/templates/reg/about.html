@@ -296,7 +296,7 @@
                                                                     <div class="w-100 d-flex justify-content-start row ">
                                                                         <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
                                                                             <div class="form-group">
-                                                                                <select class="form-control" id="name_boiler1"  style="margin-top: 16px;">
+                                                                                <select class="form-control" id="name_boiler1"  style="margin-top: 16px;" data-select2-tags="true">
                                                                                     <option  th:text="#{sys_select}"></option>
                                                                                     <option th:each="s:${substances1}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
                                                                                 </select>
@@ -490,7 +490,7 @@
                                                                         <thead>
                                                                         <tr>
                                                                             <th  style="width: 10%" >№</th>
-                                                                            <th th:text="#{substance_type}">Modda turi</th>
+                                                                            <th th:text="#{substance_type_3}">Modda turi</th>
                                                                             <th th:text="#{substance_weight.type}"></th>
                                                                             <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
                                                                                 <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
@@ -1771,7 +1771,7 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    $('#name_boiler1').val(" ");
+
                     $('#type_boiler1').val(" ");
                     $('#amount_boiler1').val(null);
 
@@ -1832,7 +1832,7 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    $('#name_boiler2').val(" ");
+
                     $('#type_boiler2').val(" ");
                     $('#amount_boiler2').val(null);
                     const tableRows = document.querySelectorAll('#boiler-table2 tbody tr');
@@ -1896,7 +1896,7 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    $('#name_boiler3').val(" ");
+
                     $('#type_boiler3').val(" ");
                     $('#amount_boiler3').val(null);
 
