@@ -150,6 +150,28 @@ public class ExpertiseUrls {
     public static final String ExpertiseRegApplicationSendSMSCode = ExpertiseRegApplication + "/send_sms_code";
     public static final String ExpertiseRegApplicationGetSMSCode = ExpertiseRegApplication + "/get_sms_code";
 
+
+
+
+
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsCreate = ExpertiseRegApplication + "/boiler_characteristics_create";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType1 = ExpertiseRegApplication + "/boiler_characteristics_edit1";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType2 = ExpertiseRegApplication + "/boiler_characteristics_edit2";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType3 = ExpertiseRegApplication + "/boiler_characteristics_edit3";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsDelete = ExpertiseRegApplication + "/boiler_characteristics_delete";
+
+    public static final String RegApplicationFourCategoryBoilerSave = ExpertiseRegApplication + "/boiler_characteristics_save";
+    public static final String RegApplicationFourCategoryBoilerIsSave = ExpertiseRegApplication + "/boiler_characteristics_is_save";
+
+
+
+
+
+
+
+
+
+
     public static final String ExpertiseRegApplicationAbout = ExpertiseRegApplication + "/about";
     public static final String ExpertiseRegApplicationClearCoordinates = ExpertiseRegApplication + "/clear_coordinates";
     public static final String ExpertiseRegApplicationGetActivity = ExpertiseRegApplication + "/activity";

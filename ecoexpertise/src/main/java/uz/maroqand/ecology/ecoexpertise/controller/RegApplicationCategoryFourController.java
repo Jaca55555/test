@@ -2386,11 +2386,11 @@ public class RegApplicationCategoryFourController {
     //RegApplicationCategoryFourAdditionalId
     private Boolean isSavingBoiler(Integer regAddId){
 
-        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getById(regAddId);
-        if (regApplicationCategoryFourAdditional==null || regApplicationCategoryFourAdditional.getBoilerCharacteristics()==null || regApplicationCategoryFourAdditional.getBoilerCharacteristics().isEmpty()){
+        RegApplication regApplication = regApplicationService.getById(regAddId);
+        if (regApplication==null || regApplication.getBoilerCharacteristics()==null || regApplication.getBoilerCharacteristics().isEmpty()){
             return Boolean.FALSE;
         }
-        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplicationCategoryFourAdditional.getBoilerCharacteristics();
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
         for (BoilerCharacteristics boilerCharacteristics:boilerCharacteristicsSet){
             if (boilerCharacteristics.getAmount()==null || boilerCharacteristics.getAmount()==0.0){
                 return Boolean.FALSE;
