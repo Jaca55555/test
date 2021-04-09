@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/plugins/ViewerJS/viewer.css">
+
+</head>
+<body class="layout-6" style="overflow:auto;">
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container" style="overflow:auto;">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <object th:include="expertise/reg/category_four/step_wizard :: wizard" th:remove="tag" ></object>
+
+
+                                            <div class="row" >
+                                                <div class="form-group col-md-12 text-center" >
+                                                    <form th:action="${action_url}" method="post" th:object="${regApplication}" data-parsley-validate="">
+                                                        <div class="col-md-10 offset-1 text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >
+                                                            <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz/reg/application/contract/offer_download?offer_id='+offer.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+                                                        </div>
+
+                                                        <div id="checkInput" th:if="${regApplication.offerId==null}">
+                                                            <div class="custom-control custom-checkbox mb-3 mt-4">
+                                                                <input type="checkbox" class="custom-control-input" id="confirm" required="">
+                                                                <label class="custom-control-label " for="confirm"><u style="font-weight: bold; color: black" th:text="#{reg_application.agreeAccept}"> </u></label>
+                                                            </div>
+                                                            <div class="custom-control text-center" >
+                                                                <button type="submit" class="btn btn-primary disabled" id="confirmButton" th:text="#{reg_application.digitalSignature}"> </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="confirmAction" class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
+                                                            <div class="row">
+                                                                <div class="col-md-7 offset-1 text-left " style="color: #2f9c0a;">
+                                                                    <span class="hei-50 wid-50 d-inline-block mr-4">
+                                                                        <img src="/static/images/check.png" style="width: 100%; height: 100%">
+                                                                    </span>
+                                                                    <span class="f-20 font-weight-bold" style="vertical-align: middle" th:text="#{reg_application.digitalSignatureComplete}"> Документ успешно подписан и принят на обработку </span>
+
+                                                                    <p style="color: black;margin-top: 15px;"><span th:text="#{reg_application.numberOffer}">Номер подт. оферты №</span> <span th:text="${regApplication.contractNumber}">392</span>, <span th:text="${#dates.format(regApplication.contractDate, 'dd.MM.yyyy')}">«3» Май 2019 </span>  <span th:text="#{sys_year}">г.</span> </p>
+                                                                </div>
+                                                                <div class="col-md-3 text-right">
+                                                                    <a type="button" class="btn btn-secondary" th:href="${'/reg/application/contract/offer_download?offer_id='+offer.id}" th:text="#{reg_application.downloadOffer}">Скачать электронную версию договора</a>
+                                                                </div>
+                                                                <div class="clearfix"></div>
+                                                                <div class="col-md-11 text-right mt-4 mr-0">
+                                                                    <button type="submit" class="btn btn-primary pl-lg-5 pr-lg-5" >
+                                                                        <span th:text="#{sys_next}"></span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" >
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+    <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+    <script src="/static/plugins/ViewerJS/viewer.js"></script>
+    <script th:inline="javascript">
+        $('#confirm').on('click',function () {
+            if ($('#confirm').is(':checked')) {
+                $('#confirmButton').removeClass('disabled');
+            } else {
+                $('#confirmButton').addClass('disabled');
+            }
+        });
+
+    </script>
+</body>
+</html>

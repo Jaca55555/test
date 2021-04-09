@@ -381,11 +381,15 @@ public class RegApplicationCategoryFourController {
         if (regApplicationCategoryFourAdditional==null){
             regApplicationCategoryFourAdditional = new RegApplicationCategoryFourAdditional();
         }
+        model.addAttribute("substances1",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE1));
+        model.addAttribute("substances2",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE2));
+        model.addAttribute("substances3",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE3));
         model.addAttribute("substances",substanceService.getList());
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("requirementList", requirementService.getByCategory(Category.Category4));
         model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
@@ -404,13 +408,13 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "name") String name,
             @RequestParam(name = "tin") String projectDeveloperTin,
             @RequestParam(name = "objectBlanket") String objectBlanket,
-            @RequestParam(name = "coordinateDescription") String coordinateDescription,
+//            @RequestParam(name = "coordinateDescription") String coordinateDescription,
             @RequestParam(name = "borderingObjects") String borderingObjects,
             @RequestParam(name = "territoryDescription") String territoryDescription,
             @RequestParam(name = "culturalHeritageDescription") String culturalHeritageDescription,
             @RequestParam(name = "animalCountAdditional") String animalCountAdditional,
             @RequestParam(name = "treeCountAdditional") String treeCountAdditional,
-            @RequestParam(name = "waterInformation") String waterInformation,
+            @RequestParam(name = "waterInformation",required = false) String waterInformation,
             @RequestParam(name = "structuresInformation") String structuresInformation,
             @RequestParam(name = "aboutWindSpeed") String aboutWindSpeed,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
@@ -651,10 +655,26 @@ public class RegApplicationCategoryFourController {
             return RegListRedirect + "#field=2";
         }
 
-        regApplicationCategoryFourAdditionalService.saveStep3(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
-//        regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP4);
-        regApplicationService.update(regApplication);
-        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4 + "?id=" + id;
+
+        regApplicationCategoryFourAdditionalOld = regApplicationCategoryFourAdditionalService.saveStep3(regApplicationCategoryFourAdditional,regApplicationCategoryFourAdditionalOld,user.getId());
+        if (regApplicationCategoryFourAdditionalOld.getPlanFiles()==null
+                || regApplicationCategoryFourAdditionalOld.getPlanFiles().isEmpty()
+                || regApplicationCategoryFourAdditionalOld.getPlanFiles().size()==0
+        ){
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3 + "?id=" + id + "&field=1";
+        }else{
+
+            RegApplicationLog confirmLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
+            if(confirmLog==null || !confirmLog.getStatus().equals(LogStatus.Approved)){
+                RegApplicationLog regApplicationLog = regApplicationLogService.create(regApplication,LogType.Confirm,"",user);
+                regApplication.setConfirmLogAt(new Date());
+                regApplication.setConfirmLogId(regApplicationLog.getId());
+                regApplication.setStatus(RegApplicationStatus.CheckSent);
+            }
+            regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.WAITING);
+            regApplicationService.update(regApplication);
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + id;
+        }
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep4, method = RequestMethod.GET)
@@ -1395,46 +1415,46 @@ public class RegApplicationCategoryFourController {
         return response;
     }
 
-    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryBoilerCharacteristicsEdit)
-    @ResponseBody
-    public Object regApplicationFourCategoryBoilerCharacteristicsEdit(
-            Model model,
-            @RequestParam(name = "regId") Integer regId,
-            @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "name_boiler") String name,
-            @RequestParam(name = "type_boiler") String type,
-            @RequestParam(name = "amount_boiler") Double amount
-    ){
-        System.out.println("regId" + regId);
-        System.out.println("id" + id);
-        System.out.println("name_boiler" + name);
-        System.out.println("type_boiler" + type);
-        System.out.println("amount_boiler" + amount);
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(regId);
-        if (regApplication==null ){
-            return 0;
-        }
-//        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regId);
-//        if (regApplicationCategoryFourAdditional==null ){
-//            return -1;
+//    @RequestMapping(value = ExpertiseUrls.RegApplicationFourCategoryBoilerCharacteristicsEditType1)
+//    @ResponseBody
+//    public Object regApplicationFourCategoryBoilerCharacteristicsEdit(
+//            Model model,
+//            @RequestParam(name = "regId") Integer regId,
+//            @RequestParam(name = "id") Integer id,
+//            @RequestParam(name = "name_boiler") String name,
+//            @RequestParam(name = "type_boiler") String type,
+//            @RequestParam(name = "amount_boiler") Double amount
+//    ){
+//        System.out.println("regId" + regId);
+//        System.out.println("id" + id);
+//        System.out.println("name_boiler" + name);
+//        System.out.println("type_boiler" + type);
+//        System.out.println("amount_boiler" + amount);
+//        User user = userService.getCurrentUserFromContext();
+//        RegApplication regApplication = regApplicationService.getById(regId);
+//        if (regApplication==null ){
+//            return 0;
 //        }
-        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
-
-        BoilerCharacteristics  characteristics = boilerCharacteristicsService.getById(id);
-        if (!boilerCharacteristicsSet.contains(characteristics)){
-            return 2;
-        }
-        boilerCharacteristicsSet.remove(characteristics);
-        characteristics.setName(name);
-        characteristics.setType(type);
-        characteristics.setAmount(amount);
-        characteristics = boilerCharacteristicsService.save(characteristics);
-        boilerCharacteristicsSet.add(characteristics);
-        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
-        regApplicationService.updateBoiler(regApplication,user.getId());
-        return 1 + "";
-    }
+////        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regId);
+////        if (regApplicationCategoryFourAdditional==null ){
+////            return -1;
+////        }
+//        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
+//
+//        BoilerCharacteristics  characteristics = boilerCharacteristicsService.getById(id);
+//        if (!boilerCharacteristicsSet.contains(characteristics)){
+//            return 2;
+//        }
+//        boilerCharacteristicsSet.remove(characteristics);
+//        characteristics.setName(name);
+//        characteristics.setType(type);
+//        characteristics.setAmount(amount);
+//        characteristics = boilerCharacteristicsService.save(characteristics);
+//        boilerCharacteristicsSet.add(characteristics);
+//        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+//        regApplicationService.updateBoiler(regApplication,user.getId());
+//        return 1 + "";
+//    }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryBoilerCharacteristicsDelete)
     @ResponseBody
@@ -1780,7 +1800,7 @@ public class RegApplicationCategoryFourController {
         }
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if (regApplicationLog==null){
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3 + "?id=" + id;
         }
         if (regApplication.getForwardingLogId() != null){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
@@ -1789,8 +1809,8 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("field", field);
         model.addAttribute("regApplicationLog", regApplicationLog);
-        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + id);
-//        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP7.ordinal()+1);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep3 + "?id=" + id);
+        model.addAttribute("step_id", RegApplicationCategoryFourStep.STEP3.ordinal()+1);
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryWaiting;
     }
 
@@ -1826,7 +1846,7 @@ public class RegApplicationCategoryFourController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-           /* toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");*/
+            /* toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");*/
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
                 return RegListRedirect;
@@ -1870,7 +1890,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("offer", offer);
         model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal());
-        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryContract;
+        return ExpertiseTemplates.ExpertiseRegApplicationContract;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryContractConfirm,method = RequestMethod.POST)
@@ -1892,6 +1912,8 @@ public class RegApplicationCategoryFourController {
         }
 
         Offer offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
+        System.out.println("offer="+offer);
+        offerService.complete(offer.getId());
         regApplication.setOfferId(offer.getId());
         notificationService.confirmContractRegApplication(regApplication.getId());
         String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
@@ -1909,11 +1931,6 @@ public class RegApplicationCategoryFourController {
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        System.out.println("##########################################################################");
-        System.out.println("id="+id);
-        System.out.println("user"+user.getId());
-        System.out.println("##########################################################################");
-
         if(regApplication == null){
             regApplication = regApplicationService.getByIdAndUserTin(id,user);
             if (regApplication==null){
@@ -1931,7 +1948,6 @@ public class RegApplicationCategoryFourController {
 
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment + "?id=" + id;
     }
-
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment)
     public String getPrepaymentPage(
             @RequestParam(name = "id") Integer id,
@@ -1972,12 +1988,11 @@ public class RegApplicationCategoryFourController {
         System.out.println(globalConfigs.getUploadedFilesFolder());
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-//        model.addAttribute("action_url", ExpertiseUrls.RegApplicationPaymentSendSms);
+//        model.addAttribute("action_url", RegUrls.RegApplicationPaymentSendSms);
         model.addAttribute("action_url", globalConfigs.getIsTesting().equals("test")? ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentFree : ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms);
-        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal());
-        return ExpertiseTemplates.ExpertiseRegApplicationPrepayment;
+        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryPrepayment;
     }
-
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms)
     @ResponseBody
@@ -2013,6 +2028,7 @@ public class RegApplicationCategoryFourController {
         );
     }
 
+
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentConfirmSms)
     @ResponseBody
     public Map<String, Object> confirmSmsPayment(
@@ -2033,7 +2049,6 @@ public class RegApplicationCategoryFourController {
                 failUrl
         );
     }
-
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentFree)
     public String getPaymentFreeMethod(
             @RequestParam(name = "id") Integer id
@@ -2099,16 +2114,16 @@ public class RegApplicationCategoryFourController {
         if(conclusion != null){
             model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
         }
-
+        Offer offer = offerService.getById(regApplication.getOfferId());
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
-
+        model.addAttribute("offer", offer);
         model.addAttribute("invoice", invoice);
         model.addAttribute("facture", factureService.getById(regApplication.getFactureId()));
         model.addAttribute("factureProductList", factureService.getByFactureId(regApplication.getFactureId()));
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationList);
-        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal());
+        model.addAttribute("step_id", RegApplicationStep.STATUS.ordinal()+1);
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryStatus;
     }
 
@@ -2134,7 +2149,34 @@ public class RegApplicationCategoryFourController {
         regApplication.setLogIndex(regApplication.getLogIndex()+1);
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
         forwardingLog = regApplicationLogService.update(forwardingLog, LogStatus.Resend,"", user.getId());
-
+        Date currentDate = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(currentDate);
+        if(regApplication.getCategory()!=null){
+            switch (regApplication.getCategory().getId()){
+                case 0:
+                case 1:
+                    c.add(Calendar.DATE,10);
+                    Date currentDatePlusZero = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusZero);
+                    break;
+                case 2:
+                    c.add(Calendar.DATE,7);
+                    Date currentDatePlusTwo = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusTwo);
+                    break;
+                case 3:
+                    c.add(Calendar.DATE,5);
+                    Date currentDatePlusThree = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusThree);
+                    break;
+                case 4:
+                    c.add(Calendar.DATE,3);
+                    Date currentDatePlusFour = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusFour);
+                    break;
+            }
+        }
         regApplication.setForwardingLogId(forwardingLog.getId());
         regApplication.setPerformerId(null);
         regApplication.setPerformerLogId(null);
@@ -2148,7 +2190,6 @@ public class RegApplicationCategoryFourController {
 
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + regApplication.getId();
     }
-
 
 
 

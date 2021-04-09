@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+
+</head>
+<body class="layout-6">
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <object th:include="expertise/reg/category_four/step_wizard :: wizard" th:remove="tag" ></object>
+
+                                            <div class="row" >
+                                                <div class="form-group col-md-12 text-center" >
+                                                    <form action="" method="post" th:object="${regApplication}" data-parsley-validate="">
+
+                                                        <div class="alert alert-primary col-md-8 offset-2" role="alert" th:if="${regApplicationLog.status!=null && regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial}" >
+                                                            <p th:text="#{reg_application.confirmStatusInitial}">Ваша заявка в процессе рассмотрения и будет рассмотрена в течении одного рабочего дня.</p>
+                                                        </div>
+                                                        <div class="alert alert-warning col-md-8 offset-2" role="alert" th:if="${field!=null}" >
+                                                            <p th:text="#{reg_application.not_contract_confirm}">Ваша заявка в процессе рассмотрения и будет рассмотрена в течении одного рабочего дня.</p>
+                                                        </div>
+
+                                                        <div class="alert alert-success col-md-8 offset-2" role="alert" th:if="${regApplicationLog.status!=null && regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}">
+                                                            <p th:text="#{reg_application.confirmStatusApproved}">Ваша заявка успешно рассмотрено, теперь вы можете заключить договор.</p>
+                                                        </div>
+
+                                                        <div class="alert alert-danger col-md-8 offset-2" role="alert" th:if="${regApplicationLog.status!=null && regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">
+                                                            <p th:text="#{reg_application.confirmStatusDenied}">Данная заявка отказано. Пожалуйста, устраните причины отказа и заново отправьте. </br>Причины: </p>
+                                                            <p ><span th:text="#{sys_comment}"></span>: <span th:text="${regApplicationLog.comment}"></span></p>
+                                                        </div>
+
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" >
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                        <div class="row" >
+                                                            <div class="form-group col-md-12 text-center" >
+                                                                <a th:href="${back_url}" th:if="${regApplicationLog.status!=null && regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" class="btn btn-danger" >
+                                                                   <i class="feather icon-chevrons-left"></i>
+                                                                    <span th:text="#{sys_back}"></span>
+                                                                </a>
+                                                                <button th:if="${regApplicationLog.status!=null && regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Approved}" type="submit" class="btn btn-primary" >
+                                                                    <span th:text="#{sys_next}"></span>
+                                                                    <i class="feather icon-chevrons-right ml-2 mr-0"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+    <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+    <script th:inline="javascript">
+
+        function openInputFile() {
+            document.getElementById("file-input").click();
+        }
+
+        $('.only-number').keyup(function() {
+            if (/\D/g.test(this.value))
+            {
+                // Filter non-digits from input value.
+                this.value = this.value.replace(/\D/g, '');
+            }
+        });
+
+    </script>
+</body>
+</html>

@@ -36,6 +36,9 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
+        .table td, .table th {
+            white-space: initial;
+        }
 .is-invalid{
 
 }
@@ -135,59 +138,6 @@
             background-position: center center;
             display: none;
         }*/
-        .custom-progress-modal .modal-header {
-            position: relative;
-        }
-
-        .custom-progress-modal .modal-header .modal-title::before {
-            content: "";
-            position: absolute;
-            width: 5px;
-            height: 30px;
-            background-color: #007bff;
-            left: 0;
-            top: 15px;
-        }
-
-        .custom-progress-modal .modal-body .top-content .top-item p {
-            text-align: justify;
-        }
-
-        .custom-progress-modal .modal-body .top-content .top-item .icon-box {
-            width: 40px;
-            height: 40px;
-            background-color: orange;
-        }
-
-        .custom-progress-modal .modal-body .top-content .top-item .icon-box i {
-            color: white;
-        }
-        .custom-progress-modal .modal-body .top-content .top-item .icon-box i::before {
-            content: none !important;
-        }
-
-
-        .custom-progress-modal .modal-body .top-content .under-item p {
-            text-align: justify;
-        }
-
-        .custom-progress-box .left-content .left-item .top-item p {
-            text-align: justify;
-        }
-
-        .custom-progress-box .left-content .left-item .top-item .icon-box {
-            width: 40px;
-            height: 40px;
-            background-color: orange;
-        }
-
-        .custom-progress-box .left-content .left-item .top-item .icon-box i {
-            color: white;
-        }
-
-        .custom-progress-box .left-content .left-item .under-item p {
-            text-align: justify;
-        }
     </style>
 </head>
 <body class="layout-6">
@@ -222,349 +172,11 @@
                                                 <span th:text="${regApplication.id}"></span>
                                             </h5>
                                         </div>
-
                                         <div class="card-body">
-                                            <div class="modal fade" id="boilerModal1" tabindex="-1" role="dialog" aria-labelledby="boilerModalCenterTitle" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 930px;">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title" id="boilerModalCenterTitle" th:text="#{boiler_modal_title1}"></h4>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body" style="height: 70vh; overflow-y: auto;">
-                                                            <div class="table-responsive">
 
 
+                                            <object th:include="expertise/reg/category_four/step_wizard :: wizard" th:remove="tag" ></object>
 
-
-                                                                <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
-                                                                    <div class="top-item d-flex align-items-center mb-2">
-                                                                        <div class=" rounded d-flex  justify-content-center align-items-center">
-                                                                            <i class="fas fa-exclamation-triangle"></i>
-                                                                        </div>
-
-                                                                        <div class="ml-3"  th:text="#{boiler_title}">
-                                                                            <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
-                                                                                Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
-                                                                            </p>
-                                                                            <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
-                                                                                Qo'shimcha moddalar qo'shish uchun " <span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-
-
-                                                                </div>
-
-
-
-                                                                <div class="col-md-12 text-center" id="alert-isSave1" >
-                                                                </div>
-
-                                                                <form id="boiler_form1" action="">
-                                                                    <table class="table  table-striped" id="boiler-table1">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th  style="width: 10%" >№</th>
-                                                                            <th th:text="#{substance_type}">Modda turi</th>
-                                                                            <th th:text="#{substance_weight.type}"></th>
-                                                                            <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
-                                                                                <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
-                                                                            </th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <!--                            <tbody>-->
-                                                                        <tbody  style="height: 70vh; overflow-y: auto;" >
-                                                                        <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==1}">
-                                                                            <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
-                                                                            <td style="width: 15%">
-                                                                                <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
-                                                                                <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr></tr>
-                                                                        </tbody>
-                                                                    </table>
-
-
-
-                                                                    <div class="w-100 d-flex justify-content-start row ">
-                                                                        <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
-                                                                            <div class="form-group">
-                                                                                <select class="form-control" id="name_boiler1"  style="margin-top: 16px;" data-select2-tags="true">
-                                                                                    <option  th:text="#{sys_select}"></option>
-                                                                                    <option th:each="s:${substances1}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-
-
-                                                                        <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
-                                                                            <input id="type_boiler1" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
-
-                                                                        </div>
-                                                                        <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
-                                                                            <input id="amount_boiler1" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
-
-                                                                        </div>
-
-
-                                                                        <div>
-                                                                            <div class="d-flex justify-content-center">
-
-                                                                                <button type="button" onclick="addExecutive1()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
-                                                                                <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
-
-                                                                            </div>
-
-
-                                                                        </div>
-
-
-                                                                    </div>
-
-
-                                                                    <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
-                                                                    <input type="hidden" id="_csrf1" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler1()"><span th:text="#{sys_save}"></span></button>
-<!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal fade" id="boilerModal2" tabindex="-1" role="dialog" aria-labelledby="boilerModalCenterTitle" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 930px;">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title" id="boilerModalCenterTitle" th:text="#{boiler_modal_title2}"></h4>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body" style="height: 70vh; overflow-y: auto;">
-                                                            <div class="table-responsive">
-                                                                <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
-                                                                    <div class="top-item d-flex align-items-center mb-2">
-                                                                        <div class="  rounded d-flex  justify-content-center align-items-center">
-                                                                            <i class="fas fa-exclamation-triangle"></i>
-                                                                        </div>
-
-                                                                        <div class="ml-3"  th:text="#{boiler_title}">
-                                                                            <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
-                                                                                Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
-                                                                            </p>
-                                                                            <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
-                                                                                Qo'shimcha moddalar qo'shish uchun " <span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-
-
-                                                                </div>
-                                                                <div class="col-md-12 text-center" id="alert-isSave2" >
-                                                                </div>
-
-                                                                <form id="boiler_form2" action="">
-                                                                    <table class="table  table-striped" id="boiler-table2">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th  style="width: 10%" >№</th>
-                                                                            <th th:text="#{substance_type}">Modda turi</th>
-                                                                            <th th:text="#{substance_weight.type}"></th>
-                                                                            <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
-                                                                                <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
-                                                                            </th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <!--                            <tbody>-->
-                                                                        <tbody  style="height: 70vh; overflow-y: auto;" >
-                                                                        <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==2}">
-                                                                            <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
-                                                                            <td style="width: 15%">
-                                                                                <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
-                                                                                <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr></tr>
-                                                                        </tbody>
-                                                                    </table>
-
-
-
-                                                                    <div class="w-100 d-flex justify-content-start row ">
-                                                                        <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
-                                                                            <div class="form-group">
-                                                                                <select class="form-control" id="name_boiler2"  style="margin-top: 16px;" data-select2-tags="true">
-                                                                                    <option  th:text="#{sys_select}"></option>
-                                                                                    <option th:each="s:${substances2}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-
-
-                                                                        <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
-                                                                            <input id="type_boiler2" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
-
-                                                                        </div>
-                                                                        <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
-                                                                            <input id="amount_boiler2" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
-
-                                                                        </div>
-
-
-                                                                        <div>
-                                                                            <div class="d-flex justify-content-center">
-
-                                                                                <button type="button" onclick="addExecutive2()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
-                                                                                <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
-
-                                                                            </div>
-
-
-                                                                        </div>
-
-
-                                                                    </div>
-
-
-                                                                    <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
-                                                                    <input type="hidden" id="_csrf2" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler2()"><span th:text="#{sys_save}"></span></button>
-<!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal fade" id="boilerModal3" tabindex="-1" role="dialog" aria-labelledby="boilerModalCenterTitle" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 930px;">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h4 class="modal-title" id="boilerModalCenterTitle" th:text="#{boiler_modal_title3}"></h4>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body" style="height: 70vh; overflow-y: auto;">
-                                                            <div class="table-responsive">
-                                                                <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
-                                                                    <div class="top-item d-flex align-items-center mb-2">
-                                                                        <div class=" rounded d-flex  justify-content-center align-items-center">
-                                                                            <i class="fas fa-exclamation-triangle"></i>
-                                                                        </div>
-
-                                                                        <div class="ml-3"  th:text="#{boiler_title}">
-                                                                            <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
-                                                                                Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
-                                                                            </p>
-                                                                            <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
-                                                                                Qo'shimcha moddalar qo'shish uchun " <span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-
-
-                                                                </div>
-                                                                <div class="col-md-12 text-center" id="alert-isSave3" >
-                                                                </div>
-
-                                                                <form id="boiler_form3" action="">
-                                                                    <table class="table  table-striped" id="boiler-table3">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th  style="width: 10%" >№</th>
-                                                                            <th th:text="#{substance_type_3}">Modda turi</th>
-                                                                            <th th:text="#{substance_weight.type}"></th>
-                                                                            <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
-                                                                                <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
-                                                                            </th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <!--                            <tbody>-->
-                                                                        <tbody  style="height: 70vh; overflow-y: auto;" >
-                                                                        <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==3}">
-                                                                            <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%">
-                                                                            <td style="width: 15%">
-                                                                            <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
-                                                                            <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr></tr>
-                                                                        </tbody>
-                                                                    </table>
-
-
-
-                                                                    <div class="w-100 d-flex justify-content-start row ">
-                                                                        <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
-                                                                            <div class="form-group">
-                                                                                <select class="form-control" id="name_boiler3"  style="margin-top: 16px;" data-select2-tags="true">
-                                                                                    <option  th:text="#{sys_select}"></option>
-                                                                                    <option th:each="s:${substances3}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-
-
-                                                                        <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
-                                                                            <input id="type_boiler3" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
-
-                                                                        </div>
-                                                                        <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
-                                                                            <input id="amount_boiler3" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
-
-                                                                        </div>
-
-
-                                                                        <div>
-                                                                            <div class="d-flex justify-content-center">
-
-                                                                                <button type="button" onclick="addExecutive3()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
-                                                                                <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
-
-                                                                            </div>
-
-
-                                                                        </div>
-
-
-                                                                    </div>
-
-
-                                                                    <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
-                                                                    <input type="hidden" id="_csrf3" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler3()"><span th:text="#{sys_save}"></span></button>
-<!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
 
                                             <div class="row" >
                                                 <div class="form-group col-md-12" >
@@ -578,23 +190,14 @@
                                                             <div class="col-md-6">
                                                                 <select class="form-control"  th:field="*{objectId}" required="">
                                                                     <option value="" th:text="#{sys_select}"></option>
-                                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row" id="categorySelectDiv">
-                                                            <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <select class="form-control" required="" id="categorySelect" >
-                                                                    <option value="" th:text="#{sys_select}"></option>
-                                                                    <option th:if="${regApplication.category!=null}" th:value="${regApplication.category.id}" th:text="${@helperService.getCategory(regApplication.category.id, #locale)}" selected=""></option>
+                                                                    <div th:if="${#lists.size(requirementList)>0}" th:each="requirement : ${requirementList}">
+                                                                        <option  th:each="objectExpertise : ${objectExpertiseList}" th:if="${requirement.objectExpertiseId==objectExpertise.id}"  th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
+                                                                    </div>
                                                                 </select>
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group row" id="regionDiv" style="display: none">
+                                                        <div class="form-group row" id="regionDiv" >
                                                             <div class="col-md-3 text-right">
                                                                 <label class="col-form-label" th:text="#{sys_region}" >Категория</label>
                                                                 <span class="required">*</span>
@@ -620,15 +223,6 @@
                                                             </div>
                                                         </div>
 
-                                                        <!--<div class="form-group row" id="categoryDiv">
-                                                            <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" th:text="#{sys_about.category}" >Категория</label>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <label class="col-form-label" id="categoryName" th:text="${regApplication.category!=null? @helperService.getCategory(regApplication.category, #locale):''}"></label>
-                                                            </div>
-                                                        </div>-->
-
                                                         <div class="form-group row">
                                                             <div class="col-md-3 text-right">
                                                                 <label class="col-form-label" th:text="#{sys_about.material}">Вид материалов</label>
@@ -643,7 +237,62 @@
                                                             <div class="col-md-6 offset-3" id="materialError"></div>
                                                         </div>
 
-                                                        <div id="coordinates-control" class="form-group row" style="margin-bottom: 50px; display: none;">
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.name}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="*{name}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.object_blanket}">Умумий қисм</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.objectBlanket}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_region_object}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <!--                                                            <label for="region" class="control-label" th:text="#{sys_region}"></label>-->
+                                                            <div class="col-md-6">
+                                                                <select id="region" class="form-control" th:field="*{objectRegionId}">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_subRegion_object}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <!--                                                            <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>-->
+                                                            <div class="col-md-6">
+                                                                <select id="subRegionId" class="form-control" th:field="*{objectSubRegionId}">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <!--<div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.coordinate_description}">Танланган ёки ажратилган ер майдони﻿ҳақида қисқача маълумот</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.coordinateDescription}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>-->
+
+                                                        <div id="coordinates-control" class="form-group row" style="margin-bottom: 50px;">
                                                             <div class="col-md-3 text-right">
                                                                 <label class="col-form-label" th:text="#{sys_about.coordinates}"></label>
                                                             </div>
@@ -652,7 +301,7 @@
                                                                 <button type="button" class="btn btn-primary" th:text="#{sys_about.write_coordinates}" id="write-coordinates-btn" onclick="writeCoordinates()"></button>
                                                                 <button type="button" class="btn btn-secondary" th:text="#{sys_about.clear_coordinates}" id="clear-coordinates-btn" disabled="" style="float: right; margin-right: 0;" onclick="clearCoordinates()"></button>
                                                             </div>
-                                                            <div class="col-md-6 offset-md-3" id="error_coordinate" style="display: none">
+                                                            <div class="col-md-6 offset-md-3" id="error_coordinate">
                                                                 <span class="text-c-red" th:text="#{sys_cordinate.select}">koordinateni belgilang</span>
                                                             </div>
                                                         </div>
@@ -719,81 +368,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group row">
-                                                            <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" th:text="#{sys_about.name}">Наименование объекта</label>
-                                                                <span class="required">*</span>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <input class="form-control" type="text" th:field="*{name}" required="" maxlength="254"  />
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" th:text="#{sys_region_object}">Наименование объекта</label>
-                                                                <span class="required">*</span>
-                                                            </div>
-<!--                                                            <label for="region" class="control-label" th:text="#{sys_region}"></label>-->
-                                                            <div class="col-md-6">
-                                                                <select id="region" class="form-control" th:field="*{objectRegionId}">
-                                                                    <option value="" th:text="#{sys_select}"></option>
-                                                                    <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
-                                                                </select>
-                                                            </div>
-                                                            </div>
-                                                        <div class="form-group row">
-                                                            <div class="col-md-3 text-right">
-                                                                <label class="col-form-label" th:text="#{sys_subRegion_object}">Наименование объекта</label>
-                                                                <span class="required">*</span>
-                                                            </div>
-                                                            <!--                                                            <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>-->
-                                                            <div class="col-md-6">
-                                                                <select id="subRegionId" class="form-control" th:field="*{objectSubRegionId}">
-                                                                    <option value="" th:text="#{sys_select}"></option>
-                                                                    <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                            <div class="form-group row mx-auto mt-4 custom-progress-box">
-                                                                <div class="col-md-3  left-content">
-                                                                    <div class="left-item shadow rounded p-3">
-                                                                        <div class="top-item d-flex align-items-center mb-2">
-                                                                            <div class="  rounded d-flex  justify-content-center align-items-center">
-                                                                                <i class="fas fa-exclamation-triangle"></i>
-                                                                            </div>
 
-                                                                            <p class=" ml-2 text-muted w-75 p-0 font-weight-bold " th:text="#{all_substances}">
-                                                                                Barcha ifloslantruvchi moddalarni kiritish majburiy
-                                                                            </p>
-
-                                                                        </div>
-                                                                        <div class="under-item">
-                                                                            <p class="p-0 m-0 text-muted" th:text="#{all_substances_info}">
-                                                                                Kritilgan ma'lumotlar va loyohadagi ma'lumotlar o'rtasida farq aniqlansa sizning arizangiz rad etiladi
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6 right-content">
-                                                                    <div class="right-item shadow p-3">
-                                                                        <h3 class="text-center  my-3 text-muted w-100 font-weight-bold " th:text="#{affects_for_nature}">
-                                                                            Atrof muhitga ta'sir
-                                                                        </h3>
-
-                                                                        <div class="right-under-item d-flex justify-content-between">
-                                                                            <button class="w-25 p-2 btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal1" style="border-radius: 5px">
-                                                                                <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type1}">info</span>
-                                                                            </button>
-                                                                            <button class="w-25 p-2 btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal2" style="border-radius: 5px">
-                                                                                <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type2}">info</span>
-                                                                            </button>
-                                                                            <button class="w-25 p-2  btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal3" style="border-radius: 5px">
-                                                                                <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type3}">info</span>
-                                                                            </button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
 
                                                         <div class="form-group row" >
                                                             <div class="col-md-3 text-right">
@@ -836,8 +411,129 @@
                                                                 <div id="legalEntityOpf-error"></div>
                                                             </div>
                                                         </div>
+                                                        <div class="form-group row mx-auto mt-4 custom-progress-box">
+                                                            <div class="col-md-3  left-content">
+                                                                <div class="left-item shadow rounded p-3">
+                                                                    <div class="top-item d-flex align-items-center mb-2">
+                                                                        <div class="  rounded d-flex  justify-content-center align-items-center">
+                                                                            <i class="fas fa-exclamation-triangle"></i>
+                                                                        </div>
+
+                                                                        <p class=" ml-2 text-muted w-75 p-0 font-weight-bold " th:text="#{all_substances}">
+                                                                            Barcha ifloslantruvchi moddalarni kiritish majburiy
+                                                                        </p>
+
+                                                                    </div>
+                                                                    <div class="under-item">
+                                                                        <p class="p-0 m-0 text-muted" th:text="#{all_substances_info}">
+                                                                            Kritilgan ma'lumotlar va loyohadagi ma'lumotlar o'rtasida farq aniqlansa sizning arizangiz rad etiladi
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 right-content">
+                                                                <div class="right-item shadow p-3">
+                                                                    <h3 class="text-center  my-3 text-muted w-100 font-weight-bold " th:text="#{affects_for_nature}">
+                                                                        Atrof muhitga ta'sir
+                                                                    </h3>
+
+                                                                    <div class="right-under-item d-flex justify-content-between">
+                                                                        <button class="w-25 p-2 btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal1" style="border-radius: 5px">
+                                                                            <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type1}">info</span>
+                                                                        </button>
+                                                                        <button class="w-25 p-2 btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal2" style="border-radius: 5px">
+                                                                            <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type2}">info</span>
+                                                                        </button>
+                                                                        <button class="w-25 p-2  btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal3" style="border-radius: 5px">
+                                                                            <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type3}">info</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.bordering_objects}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.borderingObjects}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.territory_description}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.territoryDescription}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.cultural_heritage_description}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.culturalHeritageDescription}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.animal_count_additional}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.animalCountAdditional}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.tree_count_additional}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.treeCountAdditional}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+
+                                                       <!-- <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.water_information}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.waterInformation}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>-->
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.structures_information}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.structuresInformation}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_about.about_wind_speed}"></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" type="text" th:field="${regApplicationCategoryFourAdditional.aboutWindSpeed}" required="" maxlength="254"  />
+                                                            </div>
+                                                        </div>
+
+
                                                         </br>
-                                                        <h4 class="text-center" th:text="#{sys_about.documentFiles}"></h4>
+                                                        <!--<h4 class="text-center" th:text="#{sys_about.documentFiles}"></h4>
                                                         <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
                                                             <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
                                                                 <div class="add-file">
@@ -870,18 +566,26 @@
                                                                 </div>
                                                             </div>
 
+                                                        </div>-->
+
+                                                        <div class="alert alert-light row col-md-8 offset-2" role="alert">
+                                                            <div class="col-auto">
+                                                                <button class="btn drp-icon btn-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather icon-alert-triangle"></i></button>
+                                                            </div>
+                                                            <div class="col-auto f-25" style="padding: inherit">
+                                                                <span th:utext="#{sys_about.alert}"></span>
+                                                            </div>
                                                         </div>
                                                         <input type="hidden" name="id" th:value="${regApplication.id}" />
                                                         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                                         <div class="row" >
                                                             <div class="form-group col-md-12 text-center" >
                                                                 <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
-                                                                           <span th:if="${regApplication.status!=null &&  regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification && regApplication.regApplicationCategoryType==T(uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryType).oneToTree}">
-                                                                            <a class="btn btn-warning" th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationResend + '?id=' + regApplication.id}">
-                                                                                <i class="feather icon-rotate-cw"></i> <span th:text="#{sys_send_to_review}"></span>
-                                                                            </a></span>
                                                                 <button type="button" onclick="submitForm()" class="btn btn-primary" th:text="#{sys_next}" >Далее</button><!--onclick="submitForm()"-->
                                                             </div>
+<!--                                                            <button class="btn btn-warning" type="button" data-toggle="modal" data-target="#boilerModal" style="border-radius: 5px">-->
+<!--                                                                <i class="feather icon-alert-triangle"></i><span th:text="#{boiler_info}">info</span>-->
+<!--                                                            </button>-->
                                                         </div>
                                                     </form>
                                                 </div>
@@ -935,6 +639,348 @@
             </div>
         </div>
     </div>
+<div class="modal fade" id="boilerModal1" tabindex="-1" role="dialog" aria-labelledby="boilerModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 930px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="boilerModalCenterTitle" th:text="#{boiler_modal_title1}"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 70vh; overflow-y: auto;">
+                <div class="table-responsive">
+
+
+
+
+                    <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
+                        <div class="top-item d-flex align-items-center mb-2">
+                            <div class=" rounded d-flex  justify-content-center align-items-center">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+
+                            <div class="ml-3" th:text="#{boiler_title}">
+                                <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold " th:text="#{boiler_title}">
+                                    Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
+                                </p>
+                                <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
+                                  <span th:text="#{boiler_title_part}">  Qo'shimcha moddalar qo'shish uchun " </span><span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
+                                </p>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <div class="col-md-12 text-center" id="alert-isSave1" >
+                    </div>
+
+                    <form id="boiler_form1" action="">
+                        <table class="table  table-striped" id="boiler-table1">
+                            <thead>
+                            <tr>
+                                <th style="width: 10%" >№</th>
+                                <th th:text="#{substance_type}">Modda turi</th>
+                                <th th:text="#{substance_weight.type}"></th>
+                                <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
+<!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
+                                </th>
+                            </tr>
+                            </thead>
+<!--                            <tbody>-->
+                            <tbody  style="height: 70vh; overflow-y: auto;" >
+                            <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index1 :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==1}">
+                                <td th:id="${boilerCharacteristic.id}" th:utext="${index1.count}" style="width: 10%"></td>
+                                <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
+                                <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
+                                <td style="width: 15%">
+                                    <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                    <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
+                                </td>
+                            </tr>
+                            <tr></tr>
+                            </tbody>
+                        </table>
+
+
+
+                        <div class="w-100 d-flex justify-content-start row ">
+                            <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
+                                <div class="form-group">
+                                    <select class="form-control" id="name_boiler1"  style="margin-top: 16px;" data-select2-tags="true">
+                                        <option  th:text="#{sys_select}"></option>
+                                        <option th:each="s:${substances1}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
+                                <input id="type_boiler1" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
+
+                            </div>
+                            <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
+                                <input id="amount_boiler1" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="5">
+
+                            </div>
+
+
+                            <div>
+                                <div class="d-flex justify-content-center">
+
+                                    <button type="button" onclick="addExecutive1()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
+<!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                            <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
+                        <input type="hidden" id="_csrf1" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler1()"><span th:text="#{sys_save}"></span></button>
+<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="boilerModal2" tabindex="-1" role="dialog" aria-labelledby="boilerModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 930px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="boilerModalCenterTitle" th:text="#{boiler_modal_title2}"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 70vh; overflow-y: auto;">
+                <div class="table-responsive">
+                    <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
+                        <div class="top-item d-flex align-items-center mb-2">
+                            <div class=" rounded d-flex  justify-content-center align-items-center">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+
+                            <div class="ml-3"  th:text="#{boiler_title}">
+                                <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
+                                    Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
+                                </p>
+                                <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
+                                    Qo'shimcha moddalar qo'shish uchun " <span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
+                                </p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-12 text-center" id="alert-isSave2" >
+                    </div>
+
+                    <form id="boiler_form2" action="">
+                        <table class="table  table-striped" id="boiler-table2">
+                            <thead>
+                            <tr>
+                                <th  style="width: 10%"  >№</th>
+                                <th th:text="#{substance_type}">Modda turi</th>
+                                <th th:text="#{substance_weight.type}"></th>
+                                <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
+                                    <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
+                                </th>
+                            </tr>
+                            </thead>
+                            <!--                            <tbody>-->
+                            <tbody  style="height: 70vh; overflow-y: auto;" >
+                            <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index2 :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==2}">
+                                <td th:id="${boilerCharacteristic.id}" th:utext="${index2.count}" style="width: 10%"></td>
+                                <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
+                                <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%">
+
+                                </td>
+                                <td style="width: 15%">
+                                    <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                    <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
+                                </td>
+                            </tr>
+                            <tr></tr>
+                            </tbody>
+                        </table>
+
+
+
+                        <div class="w-100 d-flex justify-content-start row ">
+                            <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
+                                <div class="form-group">
+                                    <select class="form-control" id="name_boiler2"  style="margin-top: 16px;" data-select2-tags="true">
+                                        <option  th:text="#{sys_select}"></option>
+                                        <option th:each="s:${substances2}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
+                                <input id="type_boiler2" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
+
+                            </div>
+                            <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
+                                <input id="amount_boiler2" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="5">
+
+                            </div>
+
+
+                            <div>
+                                <div class="d-flex justify-content-center">
+
+                                    <button type="button" onclick="addExecutive2()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
+                                    <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
+                        <input type="hidden" id="_csrf2" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler2()"><span th:text="#{sys_save}"></span></button>
+<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="boilerModal3" tabindex="-1" role="dialog" aria-labelledby="boilerModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 930px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="boilerModalCenterTitle" th:text="#{boiler_modal_title3}"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="height: 70vh; overflow-y: auto;">
+                <div class="table-responsive">
+                    <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
+                        <div class="top-item d-flex align-items-center mb-2">
+                            <div class=" rounded d-flex  justify-content-center align-items-center">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+
+                            <div class="ml-3"  th:text="#{boiler_title}">
+                                <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
+                                    Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
+                                </p>
+                                <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
+                                    Qo'shimcha moddalar qo'shish uchun " <span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
+                                </p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-12 text-center" id="alert-isSave3" >
+                    </div>
+
+                    <form id="boiler_form3" action="">
+                        <table class="table  table-striped" id="boiler-table3">
+                            <thead>
+                            <tr>
+                                <th  style="width: 10%"  >№</th>
+                                <th th:text="#{substance_type}">Modda turi</th>
+                                <th th:text="#{substance_weight.type}"></th>
+                                <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
+                                    <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
+                                </th>
+                            </tr>
+                            </thead>
+                            <!--                            <tbody>-->
+                            <tbody  style="height: 70vh; overflow-y: auto;" >
+                            <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index3 :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==3}">
+                                <td th:id="${boilerCharacteristic.id}" th:utext="${index3.count}" style="width: 10%"></td>
+                                <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
+                                <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
+                                <td style="width: 15%">
+                                    <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                    <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
+                                </td>
+                            </tr>
+                            <tr></tr>
+                            </tbody>
+                        </table>
+
+
+
+                        <div class="w-100 d-flex justify-content-start row ">
+                            <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
+                                <div class="form-group">
+                                    <select class="form-control" id="name_boiler3"  style="margin-top: 16px;" data-select2-tags="true">
+                                        <option  th:text="#{sys_select}"></option>
+                                        <option th:each="s:${substances3}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
+                                <input id="type_boiler3" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
+
+                            </div>
+                            <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
+                                <input id="amount_boiler3" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="5">
+
+                            </div>
+
+
+                            <div>
+                                <div class="d-flex justify-content-center">
+
+                                    <button type="button" onclick="addExecutive3()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
+                                    <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
+
+                                </div>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                        <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
+                        <input type="hidden" id="_csrf3" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler3()"><span th:text="#{sys_save}"></span></button>
+<!--                <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- [ Main Content ] end -->
     <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
@@ -944,24 +990,18 @@
     <script src="/static/plugins/ol/ol.js"></script>
     <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
     <script type="text/javascript" src="/static/js/select2/js/select2.full.min.js"></script>
-<script type="text/javascript" src="/static/plugins/input-mask/jquery.mask.min.js"></script>
 
 
-<script th:inline="javascript">
-        var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetLegalEntityByTin}]];
-        var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileUpload}]];
-        var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileDelete}]];
-        var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationClearCoordinates}]];
+    <script th:inline="javascript">
+        var leInfoUrlGnk = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).GetLegalEntityByTin}]];
+        var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFileUpload}]];
+        var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFileDelete}]];
+        var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationClearCoordinates}]];
+        var getActivity = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFourCategoryGetActivity}]];
+        var getMaterials = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFourCategoryGetMaterials}]];
         var regApplicationId = [[${regApplication.id}]];
         var coordinate = [[${coordinate}]];
         let regCategory = null;
-        if([[${regApplication.category}]]!=null){
-         regCategory =  getCategoryId([[${regApplication.category}]]);
-        }
-        function modalShow(){
-            $('#exampleModal2').modal('show');
-        }
-
         var isCoordinate = false; //agar koordinate qo'shilishi kerak bo'lsa
         $(document).ready(function () {
             $("#name_boiler1").select2({
@@ -976,10 +1016,11 @@
                 dropdownParent: $("#boilerModal3"),
                 tags: true
             });
-            console.log("hello world")
-            $(".phone").mask('+999(99)999-99-99');
             bindSubRegionSelectToRegionSelect('#subRegionId', '#region');
+
             var srSelector = $('#materialId');
+
+
             srSelector.find('option:selected').show();
             if(coordinate != null){
                 $('#coordinates-list').show();
@@ -991,51 +1032,14 @@
             }
 
             $('#objectId').select2();
+
+
+
             // $('#activityId').select2();
-            const inputs = document.querySelectorAll( '.modal-table-input' );
-
-
-            const addBtn = document.querySelector( '.add-btn' );
-
-
-
-            const addDataTable = function () {
-                const tableTrs = document.querySelectorAll( '.table-tr' );
-                const numbers = [];
-                const data = [];
-                // $('#myTable > tbody:last-child').append('<tr>...</tr><tr>...</tr>');
-                inputs.forEach( ( input, index ) => {
-                    data[ index ] = input.value;
-
-                } );
-
-                tableTrs.forEach( ( tableTr, index ) => {
-                    numbers[ index ] = index + 1;
-                } );
-
-
-                $( '.top-table > tbody:last-child' ).append( ` <tr class="table-tr">
-        <th scope="row"> ${ numbers[ numbers.length - 1 ] + 1 } </th>
-
-        <td> ${ data[ 0 ] } </td>
-        <td>${ data[ 1 ] } </td>
-        <td>${ data[ 2 ] }</td>
-
-        <td class="d-flex justify-content-end"> <button type="button" class="btn btn-primary mr-2">
-          <i class="far fa-edit color-white font-weight-bold"></i>
-        </button>
-            <button type="button" class="btn btn-primary btn-remove">
-              <i class="fas fa-times color-white font-weight-bold "></i>
-        </button> </td>
-    </tr>`);
-            }
-
-
 
             if ($("#objectId").val()!=""){
                 $("#objectId").change();
             }
-
 
             $("#objectId").change(function(){
                 getActivityList();
@@ -1043,15 +1047,7 @@
             $("#activityId").change(function(){
                 getMaterialList();
             });
-            if ($("#objectId").val()==15){
-                $('#regionDiv').show();
-                $('#regionId').prop('required',true);
-            }
 
-            if (regCategory!=null && (regCategory==3 || regCategory==4 || ($("#objectId").val()==4 && regCategory==2))){
-                $('#regionDiv').show();
-                $('#regionId').prop('required',true);
-            }
         });
         function openInputFile() {
             document.getElementById("file-input").click();
@@ -1074,7 +1070,7 @@
             form.append("objectId", $("#objectId").val());
             form.append("_csrf", $("#global_csrf").val());
             $.ajax({
-                url: '/reg/application/activity',
+                url: 'activity',
                 type: "POST",
                 data: form,
                 processData: false,
@@ -1082,37 +1078,18 @@
                 cache: false,
                 success: function (response) {
                     $('#activityId').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
-                    $('#categorySelect').find('option').remove().end().append('<option value="">'+[[#{sys_select}]]+'</option>').val('');
                     $("#materialDiv").text("");
                     console.log(response)
                     if(response.requirementListSize===1 && response.requirementList[0].category==='CategoryAll'){
                         $("#activityIdDiv").hide();
                         $("#activityId").removeAttr('required');
-                        $("#categorySelect").removeAttr('required');
-                        // $("#categoryDiv").hide();
-                        $("#categorySelectDiv").hide();
-
-                        if ($("#objectId").val()==15){
-                            $('#regionDiv').show();
-                            $('#regionId').prop('required',true);
-                        }else{
-                            $('#regionDiv').hide();
-                            $('#regionId').prop('required',false);
-                        }
                         materialDiv(response.requirementList[0].materials);
                     }else {
                         $("#activityIdDiv").show();
                         $("#activityId").prop('required',true);
-                        // $("#categoryDiv").show();
-                        $("#categorySelectDiv").show();
-                        $("#categorySelect").prop('required',true);
-
                         console.log('response.categoryList='+response.categoryList);
                         $.each(response.categoryList, function (keyCategory, valueCategory) {
                             console.log('valueCategory='+valueCategory);
-                            var optionCategory = new Option(getCategoryName(valueCategory),getCategoryId(valueCategory),false,false);
-                            $('#categorySelect').append(optionCategory);
-                            // var options =  $('<optgroup label="'+getCategoryName(valueCategory)+'">');
                             $.each(response.activityList, function (key, value) {
                                 if(valueCategory === value.category){
                                     var selected = false;
@@ -1127,8 +1104,6 @@
                                         selected = true;
                                     }
                                     var optionActivity = new Option(name, value.id,!selected,selected);
-                                    optionActivity.setAttribute("class","category_"+getCategoryId(value.category));
-                                    optionActivity.setAttribute("style","display:none");
                                     $('#activityId').append(optionActivity);
                                 }
                             });
@@ -1138,7 +1113,7 @@
             });
         }
 
-        function getCategoryName(valueCategory) {
+        /*function getCategoryName(valueCategory) {
             switch (valueCategory){
                 case 'CategoryAll': return [[#{sys_categoryAll}]];
                 case 'Category1': return [[#{sys_category1}]];
@@ -1179,7 +1154,7 @@
 
             }
 
-        });
+        });*/
 
         function getMaterialList() {
             var form = new FormData();
@@ -1190,15 +1165,13 @@
             srSelector.find('option:selected').prop('selected',false);
             srSelector.find('option').hide();
             $.ajax({
-                url: '/reg/application/materials',
+                url: 'materials',
                 type: "POST",
                 data: form,
                 processData: false,
                 contentType: false,
                 cache: false,
                 success: function (response) {
-                    $('#categoryName').text("");
-                    $('#categoryName').text(response.category);
                     $("#materialDiv").text("");
                     console.log(response.requirementList);
                     if (response.requirementList!=undefined && response.requirementList.length>0){
@@ -1224,16 +1197,16 @@
                 getMaterial(value);
             });
             checkedMaretil();
-            if(materialId){
+            /*if(materialId){
                 isCoordinate = true;
                 $("#coordinates-control").show();
             }else {
                 $("#coordinates-control").hide();
-            }
+            }*/
         }
 
         function getMaterial(id) {
-            $.post('/reg/application/material', {materialId:id, _csrf:$("#global_csrf").val()}, function(response){
+            $.post('material', {materialId:id, _csrf:$("#global_csrf").val()}, function(response){
                 $.each(response, function (key, value) {
                     if(value.id===id){
                         var name = '';
@@ -1624,13 +1597,13 @@
     var substances3 = [[${substances3}]];
     var labelDelete = [[#{sys_delete}]];
     var labelEdit = [[#{sys_edit}]];
-    var editLink1 = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType1}]];
-    var editLink2 = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType2}]];
-    var editLink3 = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType3}]];
-    var deleteLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsDelete}]];
-    var createLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsCreate}]];
-    var saveBoilerLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerSave}]];
-    var isSaveBoilerLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerIsSave}]];
+    var editLink1 = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType1}]];
+    var editLink2 = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType2}]];
+    var editLink3 = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType3}]];
+    var deleteLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsDelete}]];
+    var createLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsCreate}]];
+    var saveBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerSave}]];
+    var isSaveBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerIsSave}]];
     var _csrf = [[${_csrf.token}]];
     var isSavingTitle = [[#{sys_is_saving}]];
     var isNotSavingTitle = [[#{sys_is_not_saving}]];
@@ -1668,7 +1641,7 @@
             type: 'post',
             dataType: 'json',
             success: function (response) {
-
+                console.log(response);
                 if (response==true){
                     $('#alert-not_save-characteristics').html('');
                     $('#form-step5').submit();
@@ -1682,14 +1655,14 @@
     }
     function saveBoiler1() {
         // $('#boiler_name').parsley().validate();
-
+        console.log($("#boiler_form1").serialize());
         $.ajax({
             url: saveBoilerLink,
             data: $("#boiler_form1").serialize()+"&typeBoiler=1",
             type: 'post',
             dataType: 'json',
             success: function (response) {
-
+                console.log(response);
                 if (response.status == 1) {
                     $('#alert-isSave1').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
                 } else {
@@ -1708,7 +1681,7 @@
             type: 'post',
             dataType: 'json',
             success: function (response) {
-
+                console.log(response);
                 if (response.status == 1) {
                     $('#alert-isSave2').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
                 } else {
@@ -1727,7 +1700,7 @@
             type: 'post',
             dataType: 'json',
             success: function (response) {
-
+                console.log(response);
                 if (response.status == 1) {
                     $('#alert-isSave3').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
                 } else {
@@ -1754,7 +1727,10 @@
         if( $('#name_boiler1').parsley().isValid()
             && $('#type_boiler1').parsley().isValid()
             && $('#amount_boiler1').parsley().isValid()) {
-
+            console.log("regId" + regApplicationId)
+            console.log("name" + name)
+            console.log("type" + type)
+            console.log("amount" + amount)
             var form = new FormData();
             form.append("regId", regApplicationId);
             form.append("name", name);
@@ -1775,6 +1751,7 @@
                     $('#type_boiler1').val(" ");
                     $('#amount_boiler1').val(null);
 
+                    console.log("response.status"+response.status);
                     if (response.status==1){
                         const tableRows = document.querySelectorAll('#boiler-table1 tbody tr');
 
@@ -1832,6 +1809,7 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
+                    console.log("response.status"+response.status);
 
                     $('#type_boiler2').val(" ");
                     $('#amount_boiler2').val(null);
@@ -1896,6 +1874,7 @@
                 contentType: false,
                 cache: false,
                 success: function (response) {
+                    console.log("response.status"+response.status);
 
                     $('#type_boiler3').val(" ");
                     $('#amount_boiler3').val(null);
@@ -1918,7 +1897,7 @@
                             '<td  style="width: 20%" >' + type + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
-                            '   \n" >' + amount + '</td>' +
+                            '    \n" >' + amount + '</td>' +
                             '<td style="width: 15%">' + actions + '</td></tr>');
 
                     }
@@ -1977,11 +1956,11 @@
             $idn++;
             if ($idn==2) {
                 $(this).html("").append(``+
-                    ` <select class="form-control" id="name_boiler1"  >`+
+               ` <select class="form-control" id="name_boiler1"  >`+
                     text1+
                     `<option selected="selected" value="` +txt+`">`+txt+`</option>`+
-                    `  </select>`+
-                    ``);
+                                  `  </select>`+
+                ``);
             }
             if ($idn==3){
                 $(this).html("").append("<input id='type_boiler1' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
@@ -1997,6 +1976,7 @@
         var $row = $(this).closest("tr");
         var $tds = $row.find("td").not(':last');
         var id=$row.find("td").first().attr('id');
+        console.log("$td="+$tds);
         $('#name_boiler1').parsley().validate();
         $('#type_boiler1').parsley().validate();
         $('#amount_boiler1').parsley().validate();
@@ -2007,6 +1987,27 @@
         ){
 
             var form = new FormData();
+
+            var selectText, selectId;
+            var inputOneText, inputOneId;
+            var inputTwoText, inputTwoId;
+
+
+            // selectText = $tds[1].children("select").val();
+            // selectId = $tds[1].children("select").attr('id');
+            //
+            // inputOneText =  $tds[2].children("input").val();
+            // inputOneId =  $tds[2].children("input").attr('id');
+            //
+            // inputTwoText =  $tds[3].children("input").val();
+            // inputTwoId =  $tds[3].children("input").attr('id');
+            //
+            //
+            // console.log( " selectText " + selectText  + " selectId " + selectId );
+            // console.log( " inputOneText " + inputOneText  + " inputOneId " + inputOneId );
+            // console.log( " inputTwoText " + inputTwoText  + " inputTwoId " + inputTwoId );
+
+
 
             $.each($tds, function(i, el) {
                 if($(this).has('select').length){
@@ -2026,6 +2027,8 @@
                 console.log("txt=" + txt + "   txtId=" + txtId);
                 $(this).html(txt);
             });
+
+
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);

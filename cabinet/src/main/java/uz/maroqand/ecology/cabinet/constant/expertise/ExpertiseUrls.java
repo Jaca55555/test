@@ -249,7 +249,7 @@ public class ExpertiseUrls {
     public static final String ExpertiseRegApplicationFourCategoryStep5 = RegApplicationFourCategory + "/step5";
 
     public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsCreate = RegApplicationFourCategory + "/boiler_characteristics_create";
-    public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsEdit = RegApplicationFourCategory + "/boiler_characteristics_edit";
+    public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsEdit1 = RegApplicationFourCategory + "/boiler_characteristics_edit";
     public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsDelete = RegApplicationFourCategory + "/boiler_characteristics_delete";
 
     public static final String ExpertiseRegApplicationFourCategoryBoilerSave = RegApplicationFourCategory + "/boiler_characteristics_save";
