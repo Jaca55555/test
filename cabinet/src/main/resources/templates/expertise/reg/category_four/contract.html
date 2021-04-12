@@ -49,44 +49,88 @@
 
                                             <div class="row" >
                                                 <div class="form-group col-md-12 text-center" >
-                                                    <form th:action="${action_url}" method="post" th:object="${regApplication}" data-parsley-validate="">
-                                                        <div class="col-md-10 offset-1 text-justify" style="border: #6e45e2 1px dashed;  height: 500px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >
-                                                            <iframe th:src="${'http://docs.google.com/gview?url=http://eco-service.uz/reg/application/contract/offer_download?offer_id='+offer.id+'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+                                                    <form th:action="${action_url}" th:object="${regApplication}" data-parsley-validate="" id="contract-form">
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label">
+                                                                    <span th:text="#{sys_is_budget}"></span>
+                                                                    <span class="required">*</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-md-6 text-left">
+                                                                <div class="custom-control custom-radio">
+                                                                    <input type="radio" id="budgetFalse" name="budget" value="0" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==false}" required="" >
+                                                                    <label class="custom-control-label" for="budgetFalse" th:text="#{sys_budget.false}"> </label>
+                                                                </div>
+                                                                <div class="custom-control custom-radio">
+                                                                    <input type="radio" id="budgetTrue" name="budget" value="1" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==true}" required="" >
+                                                                    <label class="custom-control-label" for="budgetTrue" th:text="#{sys_budget.true}"> </label>
+                                                                </div>
+                                                            </div>
                                                         </div>
 
-                                                        <div id="checkInput" th:if="${regApplication.offerId==null}">
-                                                            <div class="custom-control custom-checkbox mb-3 mt-4">
-                                                                <input type="checkbox" class="custom-control-input" id="confirm" required="">
-                                                                <label class="custom-control-label " for="confirm"><u style="font-weight: bold; color: black" th:text="#{reg_application.agreeAccept}"> </u></label>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label " th:text="#{sys_contract.date}" ></label>
+                                                                <span class="required">*</span>
                                                             </div>
-                                                            <div class="custom-control text-center" >
-                                                                <button type="submit" class="btn btn-primary disabled" id="confirmButton" th:text="#{reg_application.digitalSignature}"> </button>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control datepicker" required="" id="contractDate" name="contractDate" th:value="${regApplication.contractDate!=null?#dates.format(regApplication.contractDate,'dd.MM.yyyy'):''}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
                                                             </div>
                                                         </div>
 
-                                                        <div id="confirmAction" class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
-                                                            <div class="row">
-                                                                <div class="col-md-7 offset-1 text-left " style="color: #2f9c0a;">
-                                                                    <span class="hei-50 wid-50 d-inline-block mr-4">
-                                                                        <img src="/static/images/check.png" style="width: 100%; height: 100%">
-                                                                    </span>
-                                                                    <span class="f-20 font-weight-bold" style="vertical-align: middle" th:text="#{reg_application.digitalSignatureComplete}"> Документ успешно подписан и принят на обработку </span>
-
-                                                                    <p style="color: black;margin-top: 15px;"><span th:text="#{reg_application.numberOffer}">Номер подт. оферты №</span> <span th:text="${regApplication.contractNumber}">392</span>, <span th:text="${#dates.format(regApplication.contractDate, 'dd.MM.yyyy')}">«3» Май 2019 </span>  <span th:text="#{sys_year}">г.</span> </p>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label " th:text="#{sys_contract.number}" ></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" required="" id="contractNumber" name="contractNumber" th:value="${regApplication.contractNumber}" />
+                                                            </div>
+                                                        </div>
+                                                        </br>
+                                                        <h4 class="text-center" th:text="#{sys_contract.files}"></h4>
+                                                        <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
+                                                            <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
+                                                                <div class="add-file">
+                                                                    <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                                                    <span id="percentage"><span id="percentage-num"></span>%</span>
+                                                                    <i class="feather icon-plus" id="plus-icon"></i>
                                                                 </div>
-                                                                <div class="col-md-3 text-right">
-                                                                    <a type="button" class="btn btn-secondary" th:href="${'/reg/application/contract/offer_download?offer_id='+offer.id}" th:text="#{reg_application.downloadOffer}">Скачать электронную версию договора</a>
-                                                                </div>
-                                                                <div class="clearfix"></div>
-                                                                <div class="col-md-11 text-right mt-4 mr-0">
-                                                                    <button type="submit" class="btn btn-primary pl-lg-5 pr-lg-5" >
-                                                                        <span th:text="#{sys_next}"></span>
+                                                            </a>
+                                                            <div class="col-md-3" th:each="file : ${regApplication.contractFiles}" th:id="${'file-block-' + file.id}">
+                                                                <div class="file">
+                                                                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFourCategoryContractDownload + '?file_id=' + file.id}">
+                                                                        <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                                                                        <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                                                                        <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                                                                        <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                                                                        <i th:if="${file.extension!='doc'
+                                                                                    && file.extension!='docx'
+                                                                                    && file.extension!='xls'
+                                                                                    && file.extension!='xlsx'
+                                                                                    && file.extension!='pdf'
+                                                                                    && file.extension!='png'
+                                                                                    && file.extension!='jpg'
+                                                                                    && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                                                                        <span th:text="${file.description}"></span>
+                                                                        <p th:text="${file.name}"></p>
+                                                                    </a>
+                                                                    <button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">
+                                                                        <i class="feather icon-x"></i>
                                                                     </button>
                                                                 </div>
                                                             </div>
+
                                                         </div>
-                                                        <input type="hidden" name="id" th:value="${regApplication.id}" >
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" />
                                                         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                        <div class="row" >
+                                                            <div class="form-group col-md-12 text-center" >
+                                                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}" >Далее</button><!--onclick="submitForm()"-->
+                                                            </div>
+                                                        </div>
                                                     </form>
                                                 </div>
                                             </div>

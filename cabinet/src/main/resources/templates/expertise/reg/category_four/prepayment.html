@@ -49,7 +49,7 @@
 
                                             <div class="row" th:if="${invoice.amount == 0}">
                                                 <div class="col-md-12 text-right" >
-                                                    <a class="btn btn-warning" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationPaymentFree + '?id=' + regApplication.id}" style="font-size: 18px;color: black;">
+                                                    <a class="btn btn-warning" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFourCategoryPaymentFree + '?id=' + regApplication.id}" style="font-size: 18px;color: black;">
                                                         <i class="mdi mdi-arrow-right-bold-outline"></i> <span th:text="#{sys_payment.paymentFreeMsg}">Мазкур тоифадаги лойиҳалар бепул ўтказилади</span>
                                                     </a>
                                                 </div>
@@ -57,7 +57,7 @@
 
                                             <div class="row" th:if="${invoice.amount != 0 && invoice.status == T(uz.maroqand.ecology.core.constant.billing.InvoiceStatus).Success}">
                                                 <div class="col-md-12 text-right" >
-                                                    <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationPaymentFree + '?id=' + regApplication.id}" style="font-size: 18px;color: #fff;">
+                                                    <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFourCategoryPaymentFree + '?id=' + regApplication.id}" style="font-size: 18px;color: #fff;">
                                                         <i class="mdi mdi-arrow-right-bold-outline"></i> <span th:text="#{sys_payment.paymentPaidMsg}">Мазкур тоифадаги лойиҳалар бепул ўтказилади</span>
                                                     </a>
                                                 </div>
@@ -97,13 +97,13 @@
                                             </div>
 
                                             <div id="bank_check_fragment" style="display: none">
-                                                <object th:include="reg/fragments/bank_check :: bank" th:remove="tag"></object>
+                                                <object th:include="expertise/reg/fragments/bank_check :: bank" th:remove="tag"></object>
                                             </div>
                                             <div id="transfer_fragment" style="display: none">
-                                                <object th:include="reg/fragments/transfer :: transfer" th:remove="tag"></object>
+                                                <object th:include="expertise/reg/fragments/transfer :: transfer" th:remove="tag"></object>
                                             </div>
                                             <div id="payment_fragment" style="display: none">
-                                                <object th:include="reg/fragments/payment :: payment" th:remove="tag"></object>
+                                                <object th:include="expertise/reg/fragments/payment :: payment" th:remove="tag"></object>
                                             </div>
                                         </div>
                                     </div>

@@ -159,7 +159,10 @@ public class RegApplicationController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(new FilterDto(),null,null,null,user.getRole().getId()!=16 ? user.getId():null,RegApplicationInputType.cabinet,pageable);
+        FilterDto filterDto = new FilterDto();
+        filterDto.setByLeTin(user.getLeTin());
+        filterDto.setByTin(user.getTin());
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,null,null,null,user.getRole().getId()!=16 ? user.getId():null,RegApplicationInputType.ecoService,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements

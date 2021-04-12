@@ -40,6 +40,8 @@ import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.*;
 
@@ -671,9 +673,9 @@ public class RegApplicationCategoryFourController {
                 regApplication.setConfirmLogId(regApplicationLog.getId());
                 regApplication.setStatus(RegApplicationStatus.CheckSent);
             }
-            regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.WAITING);
+            regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.CONTRACT);
             regApplicationService.update(regApplication);
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + id;
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
         }
     }
 
@@ -1842,87 +1844,40 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
-        System.out.println("contractt=====");
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            /* toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");*/
-            regApplication = regApplicationService.getByIdAndUserTin(id,user);
-            if (regApplication==null){
-                return RegListRedirect;
-            }
-        }
-
-        if (regApplication.getConfirmLogId()!=null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-            if(regApplicationLog.getStatus()!=LogStatus.Approved){
-                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kutilyabdi.");
-                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + id;
-            }
-        }
-        if (regApplication.getConfirmLogId()==null){
-            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kerak.");
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + id;
-        }
-
-        if (regApplication.getPerformerLogId()!=null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-            if(regApplicationLog.getStatus() != LogStatus.Modification){
-                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + id;
-            }
-        }
-
-        Offer offer;
-        if(regApplication.getOfferId()!=null){
-            //offerta tasdiqlangan
-            offer = offerService.getById(regApplication.getOfferId());
-            model.addAttribute("action_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract);
-        }else {
-            //offerta tasdiqlanmagan
-            RegApplication regApplicationCheck = regApplicationService.getByIdAndUserTin(regApplication.getId(),user);
-            if (regApplicationCheck==null || !regApplicationCheck.getId().equals(regApplication.getId())){
-                return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + regApplication.getId() +  "&field=" + -1;
-            }
-            offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
-            model.addAttribute("action_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryContractConfirm);
-        }
+//        String check = check(regApplication,user);
+//        if(check!=null){
+//            return check;
+//        }
 
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("offer", offer);
+        model.addAttribute("action_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryContractConfirm);
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryAbout + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal());
-        return ExpertiseTemplates.ExpertiseRegApplicationContract;
+        return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryContract;
     }
 
-    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryContractConfirm,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryContractConfirm,method = RequestMethod.GET)
     public String regApplicationContractConfirm(
-            @RequestParam(name = "id") Integer id
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "contractDate") String contractDateStr,
+            @RequestParam(name = "contractNumber") String contractNumber,
+            @RequestParam(name = "budget") Boolean budget
     ){
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            regApplication = regApplicationService.getByIdAndUserTin(id,user);
-            if (regApplication==null){
-                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return RegListRedirect;
-            }
-        }
-        if(regApplication.getOfferId() != null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlangan.");
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
+        RegApplication regApplication = regApplicationService.getById(id,user.getId());
+
+        if (regApplication==null){
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
         }
 
-        Offer offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
-        System.out.println("offer="+offer);
-        offerService.complete(offer.getId());
-        regApplication.setOfferId(offer.getId());
-        notificationService.confirmContractRegApplication(regApplication.getId());
-        String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
         regApplication.setContractNumber(contractNumber);
-        regApplication.setContractDate(new Date());
-        regApplication.setStep(RegApplicationStep.CONTRACT);
+        regApplication.setContractDate(DateParser.TryParse(contractDateStr, Common.uzbekistanDateFormat));
+        regApplication.setBudget(budget);
         regApplicationService.update(regApplication);
 
-        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment+ "?id=" + id;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract,method = RequestMethod.POST)
@@ -1939,7 +1894,7 @@ public class RegApplicationCategoryFourController {
             }
         }
         if(regApplication.getOfferId()==null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
+//            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
         }
 
@@ -1953,22 +1908,13 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
-        System.out.println("RegApplicationPrepayment");
-
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if(regApplication == null){
-            regApplication = regApplicationService.getByIdAndUserTin(id,user);
-            if (regApplication==null){
-                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return RegListRedirect;
-            }
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationList;
         }
-
-        if(regApplication.getOfferId() == null){
-            toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Oferta tasdiqlanmagan.");
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + id;
-        }
+        regApplication.setStep(RegApplicationStep.PAYMENT);
+        regApplicationService.update(regApplication);
         Requirement requirement = requirementService.getById(regApplication.getRequirementId());
         Invoice invoice;
         if (regApplication.getInvoiceId()==null){
@@ -1977,20 +1923,17 @@ public class RegApplicationCategoryFourController {
             regApplicationService.update(regApplication);
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-            if (invoice.getStatus()==InvoiceStatus.Success || invoice.getStatus()==InvoiceStatus.PartialSuccess){
+            invoice = invoiceService.modification(regApplication, invoice, requirement);
+            invoiceService.checkInvoiceStatus(invoice);
+            if (invoice.getStatus().equals(InvoiceStatus.Success) || invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
                 return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + id;
             }
-            invoice = invoiceService.modification(regApplication, invoice, requirement);
         }
-
-        System.out.println("config==");
-        System.out.println(globalConfigs.getIsTesting());
-        System.out.println(globalConfigs.getUploadedFilesFolder());
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
-//        model.addAttribute("action_url", RegUrls.RegApplicationPaymentSendSms);
-        model.addAttribute("action_url", globalConfigs.getIsTesting().equals("test")? ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentFree : ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms);
-        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal()+1);
+        model.addAttribute("action_url", ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms);
+        model.addAttribute("action_url", globalConfigs.getIsTesting().equals("test") ? ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentFree : ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms);
+        model.addAttribute("step_id", RegApplicationStep.PAYMENT.ordinal());
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryPrepayment;
     }
 
