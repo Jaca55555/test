@@ -421,7 +421,10 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "aboutWindSpeed") String aboutWindSpeed,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
             @RequestParam(name = "opfId") Integer projectDeveloperOpfId,
-            @RequestParam(name = "coordinates", required = false) List<Double> coordinates
+            @RequestParam(name = "coordinates", required = false) List<Double> coordinates,
+            @RequestParam(name = "objectRegionId", required = false) Integer objectRegionId,
+            @RequestParam(name = "objectSubRegionId", required = false) Integer objectSubRegionId,
+            @RequestParam(name = "individualPhone") String individualPhone
     ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
@@ -516,7 +519,9 @@ public class RegApplicationCategoryFourController {
 
         regApplication.setActivityId(activityId);
         regApplication.setCategory(activity!=null? activity.getCategory():null);
-
+        regApplication.setObjectRegionId(objectRegionId);
+        regApplication.setObjectSubRegionId(objectSubRegionId);
+        regApplication.setIndividualPhone(individualPhone);
 
 
         regApplication.setCategoryFourStep(RegApplicationCategoryFourStep.STEP3);
@@ -1994,8 +1999,9 @@ public class RegApplicationCategoryFourController {
     }
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentFree)
     public String getPaymentFreeMethod(
-            @RequestParam(name = "id") Integer id
+            @RequestParam(name = "id",required = false) Integer id
     ) {
+        System.out.println("id="+id);
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if (regApplication == null) {
@@ -2026,12 +2032,14 @@ public class RegApplicationCategoryFourController {
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + id;
     }
 
+
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus)
     public String getStatusPage(
             @RequestParam(name = "id") Integer id,
             Model model
     ) {
         System.out.println("RegApplicationStatus");
+        System.out.println("id="+id);
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
@@ -2057,10 +2065,10 @@ public class RegApplicationCategoryFourController {
         if(conclusion != null){
             model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
         }
-        Offer offer = offerService.getById(regApplication.getOfferId());
+//        Offer offer = offerService.getById(regApplication.getOfferId());
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
-        model.addAttribute("offer", offer);
+//        model.addAttribute("offer", offer);
         model.addAttribute("invoice", invoice);
         model.addAttribute("facture", factureService.getById(regApplication.getFactureId()));
         model.addAttribute("factureProductList", factureService.getByFactureId(regApplication.getFactureId()));

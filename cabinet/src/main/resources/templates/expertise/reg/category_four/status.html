@@ -158,13 +158,13 @@
                                                     <a class="nav-link show" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" th:text="#{sys_chat}"></a>
                                                 </li>
                                             </ul>
-                                            <div class="form-group  text-center" style="border: 1px dashed #b7c5d4;width: 95%;overflow-y: scroll; height:400px; padding: 40px 20px;margin: 0 auto; display: none" id="contract">
-                                                <div style="text-align: justify"  th:utext="#{${offer.tagName}}"></div>
+<!--                                            <div class="form-group  text-center" style="border: 1px dashed #b7c5d4;width: 95%;overflow-y: scroll; height:400px; padding: 40px 20px;margin: 0 auto; display: none" id="contract">-->
+<!--                                                <div style="text-align: justify"  th:utext="#{${offer.tagName}}"></div>-->
 
-                                                <div class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
-                                                    <img th:if="${offer.documentRepoId!=null}" th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImageOffer + '?id=' + @offerServiceImpl.getById(regApplication.offerId).documentRepoId+'&rid='+regApplication.id}" class="qr-code" />
-                                                </div>
-                                            </div>
+<!--                                                <div class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">-->
+<!--                                                    <img th:if="${offer.documentRepoId!=null}" th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImageOffer + '?id=' + @offerServiceImpl.getById(regApplication.offerId).documentRepoId+'&rid='+regApplication.id}" class="qr-code" />-->
+<!--                                                </div>-->
+<!--                                            </div>-->
 
                                             <button class="btn btn-primary pl-5 pr-5" id="contract_print_btn">
                                                 <i class="feather icon-printer"></i>

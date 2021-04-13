@@ -715,7 +715,8 @@ public class RegApplicationController {
             //offerta tasdiqlangan
             offer = offerService.getById(regApplication.getOfferId());
             model.addAttribute("action_url", RegUrls.RegApplicationContract);
-        }else {
+        }else
+            {
             //offerta tasdiqlanmagan
             RegApplication regApplicationCheck = regApplicationService.getByIdAndUserTin(regApplication.getId(),user);
             if (regApplicationCheck==null || !regApplicationCheck.getId().equals(regApplication.getId())){

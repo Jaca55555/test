@@ -437,8 +437,11 @@ public class RegApplicationController {
             @RequestParam(name = "tin") String projectDeveloperTin,
             @RequestParam(name = "opfId") Integer projectDeveloperOpfId,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
-            @RequestParam(name = "coordinates", required = false) List<Double> coordinates
-    ){
+            @RequestParam(name = "coordinates", required = false) List<Double> coordinates,
+            @RequestParam(name = "objectRegionId", required = false) Integer objectRegionId,
+            @RequestParam(name = "objectSubRegionId", required = false) Integer objectSubRegionId,
+            @RequestParam(name = "individualPhone") String individualPhone
+            ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         String check = check(regApplication,user);
@@ -515,7 +518,9 @@ public class RegApplicationController {
         regApplication.setObjectId(objectId);
         regApplication.setName(name);
         regApplication.setMaterials(materials);
-
+        regApplication.setObjectRegionId(objectRegionId);
+        regApplication.setObjectSubRegionId(objectSubRegionId);
+        regApplication.setIndividualPhone(individualPhone);
         regApplication.setActivityId(activityId);
         regApplication.setCategory(activity!=null? activity.getCategory():null);
         //todo to'g'rilash kerak
@@ -740,6 +745,7 @@ public class RegApplicationController {
     public String expertiseRegApplicationPaymentFree(
             @RequestParam(name = "id") Integer id
     ) {
+        System.out.println("id="+id);
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if (regApplication == null) {
