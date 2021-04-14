@@ -187,7 +187,7 @@ public class RegApplicationCategoryFourController {
         }
 
         if (regApplication.getRegApplicationCategoryType()==null || regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.oneToTree)){
-            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationResume + "?id=" + regApplication.getId();
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryResume + "?id=" + regApplication.getId();
         }
 
         switch (regApplication.getCategoryFourStep()){
@@ -198,7 +198,7 @@ public class RegApplicationCategoryFourController {
 //            case     STEP5: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep5 + "?id=" + regApplication.getId();
 //            case     STEP6: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep6 + "?id=" + regApplication.getId();
 //            case     STEP7: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStep7 + "?id=" + regApplication.getId();
-            case   WAITING: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
+//            case   WAITING: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryWaiting + "?id=" + regApplication.getId();
             case  CONTRACT: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryContract + "?id=" + regApplication.getId();
             case   PAYMENT: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryPrepayment + "?id=" + regApplication.getId();
             case    STATUS: return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus+ "?id=" + regApplication.getId();

@@ -6,13 +6,13 @@ import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
+import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryType;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationInputType;
 import uz.maroqand.ecology.core.entity.user.User;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +40,7 @@ public interface RegApplicationService {
     RegApplication getById(Integer id);
     RegApplication getByContractNumber(String contractNumber);
     RegApplication getByIdAndUserTin(Integer id, User user);
-
+    List<RegApplicationDTO> listByTin(Integer tin);
     RegApplication sendRegApplicationAfterPayment(RegApplication regApplication, User user, Invoice invoice, String locale);
 
     RegApplication cancelApplicationByInvoiceId(Integer invoiceId);

@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
+import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
@@ -202,6 +203,14 @@ public class RegApplicationServiceImpl implements RegApplicationService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<RegApplicationDTO> listByTin(Integer tin) {
+        Client client=clientService.getByTin(tin);
+        List<RegApplication> regApplicationList=getByClientIdDeletedFalse(client.getId());
+//        System.out.println("regApplicationList="+regApplicationList);
+        return RegApplicationDTO.listFromEntity(regApplicationList);
     }
 
     @Override
