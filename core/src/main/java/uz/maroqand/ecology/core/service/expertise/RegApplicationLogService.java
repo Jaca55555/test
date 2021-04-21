@@ -43,7 +43,12 @@ public interface RegApplicationLogService {
     List<RegApplicationLog> getAllByLogType(LogType logType);
 
     Integer getLogCount(Integer id);
-
+    Integer countbyLogType0AndDeletedFalseOrganizationId();
+    Integer countbyLogType1AndDeletedFalseOrganizationId();
+    Integer countbyLogType2AndDeletedFalseOrganizationId();
+    Integer countbyLogType3AndDeletedFalseOrganizationId();
+    Integer countbyLogType4AndDeletedFalseOrganizationId();
+    Integer countbyLogType5AndDeletedFalseOrganizationId();
     Page<RegApplicationLog> findFiltered(
             FilterDto filterDto,
             Integer createdById,

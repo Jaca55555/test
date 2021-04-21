@@ -210,6 +210,65 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     }
 
     @Override
+    public Integer countbyLogType0AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.Initial);
+        statuses.add(LogStatus.Resend);
+        LogType type=LogType.Confirm;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses);
+    }
+    @Override
+    public Integer countbyLogType1AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.Initial);
+        statuses.add(LogStatus.Resend);
+        LogType type=LogType.Forwarding;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses);
+    }
+    @Override
+    public Integer countbyLogType2AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.Initial);
+        statuses.add(LogStatus.Resend);
+        LogType type=LogType.Performer;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndUpdatedByIdAndDeletedFalse(type,organizationId,statuses,user.getId());
+    }
+    @Override
+    public Integer countbyLogType3AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.New);
+        LogType type=LogType.Agreement;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndUpdatedByIdAndDeletedFalse(type,organizationId,statuses,user.getId());
+    }
+    @Override
+    public Integer countbyLogType4AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.Initial);
+        statuses.add(LogStatus.Resend);
+        LogType type=LogType.AgreementComplete;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses);
+    }
+    @Override
+    public Integer countbyLogType5AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.Initial);
+        LogType type=LogType.ConclusionComplete;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses);
+    }
+
+    @Override
     public Page<RegApplicationLog> findFiltered(
             FilterDto filterDto,
             Integer createdById,
