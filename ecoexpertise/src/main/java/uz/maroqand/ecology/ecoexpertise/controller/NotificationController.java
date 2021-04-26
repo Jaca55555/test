@@ -107,7 +107,7 @@ public class NotificationController {
     ) {
         User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
-
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         Page<Notification> notificationPage = notificationService.findFiltered(dateBeginStr, dateEndStr, user.getId(), null,NotificationType.Expertise,pageable);
 
         List<Notification> notificationList = notificationPage.getContent();
@@ -117,7 +117,7 @@ public class NotificationController {
                     notification.getId(),
                     notification.getType(),
                     notification.getStatus(),
-                    notification.getTitle(),
+                    notification.getTitle()!=null? helperService.getTranslation(notification.getTitle(),locale):"",
                     notification.getMessage(),
                     notification.getUrl(),
                     notification.getCreatedAt()!=null? Common.uzbekistanDateAndTimeFormat.format(notification.getCreatedAt()):"",
