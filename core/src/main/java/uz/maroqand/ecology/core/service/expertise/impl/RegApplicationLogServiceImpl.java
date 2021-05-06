@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
@@ -211,19 +212,18 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
 
     @Override
     public Integer countbyLogType0AndDeletedFalseOrganizationId() {
-        Set<LogStatus> statuses=new HashSet<>();
-        statuses.add(LogStatus.Initial);
-        statuses.add(LogStatus.Resend);
+        Set<RegApplicationStatus> statuses=new HashSet<>();
+        statuses.add(RegApplicationStatus.Initial);
         LogType type=LogType.Confirm;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
-        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses);
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalseAndStatus(type,organizationId,statuses);
     }
     @Override
     public Integer countbyLogType1AndDeletedFalseOrganizationId() {
         Set<LogStatus> statuses=new HashSet<>();
         statuses.add(LogStatus.Initial);
-        statuses.add(LogStatus.Resend);
+//        statuses.add(LogStatus.Resend);
         LogType type=LogType.Forwarding;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
@@ -233,7 +233,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     public Integer countbyLogType2AndDeletedFalseOrganizationId() {
         Set<LogStatus> statuses=new HashSet<>();
         statuses.add(LogStatus.Initial);
-        statuses.add(LogStatus.Resend);
+//        statuses.add(LogStatus.Resend);
         LogType type=LogType.Performer;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
@@ -252,7 +252,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     public Integer countbyLogType4AndDeletedFalseOrganizationId() {
         Set<LogStatus> statuses=new HashSet<>();
         statuses.add(LogStatus.Initial);
-        statuses.add(LogStatus.Resend);
+//        statuses.add(LogStatus.Resend);
         LogType type=LogType.AgreementComplete;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();

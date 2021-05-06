@@ -19,5 +19,6 @@ public interface JournalRepository extends DataTablesRepository<Journal, Integer
     List<Journal> findByStatusTrueAndDocumentType(Integer organizationId,Integer documentTypeId);
 
     List<Journal> findByStatusTrueAndDocumentTypeId(Integer documentTypeId);
+    Journal findByIdAndDeletedFalse(Integer id);
 
 }
