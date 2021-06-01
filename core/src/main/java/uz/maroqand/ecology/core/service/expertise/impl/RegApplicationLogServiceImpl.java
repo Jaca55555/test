@@ -243,6 +243,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     public Integer countbyLogType3AndDeletedFalseOrganizationId() {
         Set<LogStatus> statuses=new HashSet<>();
         statuses.add(LogStatus.New);
+        statuses.add(LogStatus.Initial);
         LogType type=LogType.Agreement;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
@@ -262,6 +263,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     public Integer countbyLogType5AndDeletedFalseOrganizationId() {
         Set<LogStatus> statuses=new HashSet<>();
         statuses.add(LogStatus.Initial);
+        statuses.add(LogStatus.Resend);
         LogType type=LogType.ConclusionComplete;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
