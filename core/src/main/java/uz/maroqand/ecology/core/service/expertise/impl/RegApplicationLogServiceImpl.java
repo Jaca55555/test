@@ -223,7 +223,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     public Integer countbyLogType1AndDeletedFalseOrganizationId() {
         Set<LogStatus> statuses=new HashSet<>();
         statuses.add(LogStatus.Initial);
-//        statuses.add(LogStatus.Resend);
+        statuses.add(LogStatus.Resend);
         LogType type=LogType.Forwarding;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
@@ -233,11 +233,11 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     public Integer countbyLogType2AndDeletedFalseOrganizationId() {
         Set<LogStatus> statuses=new HashSet<>();
         statuses.add(LogStatus.Initial);
-//        statuses.add(LogStatus.Resend);
+        statuses.add(LogStatus.Resend);
         LogType type=LogType.Performer;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
-        return regApplicationLogRepository.countByTypeAndOrganizationIdAndUpdatedByIdAndDeletedFalse(type,organizationId,statuses,user.getId());
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses);
     }
     @Override
     public Integer countbyLogType3AndDeletedFalseOrganizationId() {
@@ -246,13 +246,13 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         LogType type=LogType.Agreement;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
-        return regApplicationLogRepository.countByTypeAndOrganizationIdAndUpdatedByIdAndDeletedFalse(type,organizationId,statuses,user.getId());
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses);
     }
     @Override
     public Integer countbyLogType4AndDeletedFalseOrganizationId() {
         Set<LogStatus> statuses=new HashSet<>();
         statuses.add(LogStatus.Initial);
-//        statuses.add(LogStatus.Resend);
+        statuses.add(LogStatus.Resend);
         LogType type=LogType.AgreementComplete;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
