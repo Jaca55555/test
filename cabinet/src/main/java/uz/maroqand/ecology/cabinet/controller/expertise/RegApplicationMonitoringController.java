@@ -228,8 +228,9 @@ public class RegApplicationMonitoringController {
         model.addAttribute("categoryId", regApplication.getCategory() !=null ? regApplication.getCategory().getId() : null);
 
         model.addAttribute("regApplication", regApplication);
-        return ExpertiseTemplates.ExpertiseRegApplicationMonitoringEdit;
+        return ExpertiseTemplates.ExpertiseRegApplicationMonitoringChangePerformer;
     }
+
 
     @PostMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringEdit + "/{id}")
     public String updateRegApplication(
@@ -324,6 +325,19 @@ public class RegApplicationMonitoringController {
 
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringView + "?id=" + id;
     }
+
+    @PostMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringChangePerformer + "/{id}")
+    public String updateRegApplicationChangePerformer(
+            @PathVariable("id") Integer id,
+            @RequestParam(name = "userId") Integer userId
+
+    ) {
+
+
+
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringView + "?id=" + id;
+    }
+
 
     @RequestMapping(ExpertiseUrls.ExpertiseRegApplicationMonitoringPerformerConclusionEdit)
     public String expertiseRegApplicationMonitoringPerformerConclusionEdit(@RequestParam(name = "id") Integer logId){

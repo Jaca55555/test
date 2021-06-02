@@ -174,8 +174,8 @@
     <script th:inline="javascript">
         var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringListAjax}]];
         var ajaxViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringView}]];
-        var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringChangePerformer}]];
-        var changePerformer = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringEdit}]];
+        var changePerformer = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringChangePerformer}]];
+        var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringEdit}]];
         var editPerformerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringPerformerConclusionEdit}]];
 
         function getCurrentLanguage() {
@@ -263,7 +263,7 @@
                             if ([[${isAdmin}]]){
                                 if (row[11]===0 || row[11]===1 || row[11]===2){
                                     html+='<br/>' +
-                                        '<a href="'+changePerformer+'?id='+row[0]+'" class="btn btn-danger btn-sm ">' +
+                                        '<a href="'+changePerformer+'/'+row[0]+'" class="btn btn-dark btn-sm ">' +
                                         '<i class="feather icon-settings" style="margin-right: 0px;"></i>' +
                                         '</a>';
                                 }
