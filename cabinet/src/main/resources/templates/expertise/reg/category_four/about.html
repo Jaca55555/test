@@ -990,6 +990,7 @@
     <script src="/static/plugins/ol/ol.js"></script>
     <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
     <script type="text/javascript" src="/static/js/select2/js/select2.full.min.js"></script>
+    <script type="text/javascript" src="/static/plugins/input-mask/jquery.mask.min.js"></script>
 
 
     <script th:inline="javascript">
@@ -1016,6 +1017,7 @@
                 dropdownParent: $("#boilerModal3"),
                 tags: true
             });
+            $(".phone").mask('+999(99)999-99-99');
             bindSubRegionSelectToRegionSelect('#subRegionId', '#region');
 
             var srSelector = $('#materialId');

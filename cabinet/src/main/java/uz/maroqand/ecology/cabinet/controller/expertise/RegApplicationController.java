@@ -421,6 +421,7 @@ public class RegApplicationController {
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
         return ExpertiseTemplates.ExpertiseRegApplicationAbout;

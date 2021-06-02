@@ -172,7 +172,7 @@
                                             </button>
                                             <div class="tab-content" id="myTabContent">
                                                 <div class="tab-pane fade active show" id="status" role="tabpanel" aria-labelledby="status-tab" th:if="${regApplication.status!=null}">
-                                                    <object th:include="reg/fragments/status :: status" th:remove="tag"></object>
+                                                    <object  th:include="expertise/reg/fragments/status :: status"  th:remove="tag"></object>
                                                 </div>
                                                 <!--<div class="tab-pane fade" id="facture" role="tabpanel" aria-labelledby="facture-tab">
                                                     <div class="container text-dark" th:if="${regApplication.status!=null && (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
@@ -193,7 +193,7 @@
                                                     </div>
                                                 </div>-->
                                                 <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
-                                                    <object th:include="reg/fragments/chat :: chat" th:remove="tag"></object>
+                                                    <object th:include="expertise/reg/fragments/chat :: chat" th:remove="tag"></object>
                                                 </div>
                                             </div>
                                         </div>

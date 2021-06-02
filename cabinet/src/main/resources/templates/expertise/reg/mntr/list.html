@@ -174,7 +174,8 @@
     <script th:inline="javascript">
         var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringListAjax}]];
         var ajaxViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringView}]];
-        var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringEdit}]];
+        var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringChangePerformer}]];
+        var changePerformer = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringEdit}]];
         var editPerformerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringPerformerConclusionEdit}]];
 
         function getCurrentLanguage() {
@@ -244,7 +245,7 @@
                                 html='<a href="'+ajaxViewLink+'?id='+row[0]+'" class="btn btn-info btn-sm "><i class="feather icon-eye" style="margin-right: 0px;"></i></a>' +
                                     '<a href="'+editLink+'/'+row[0]+'" class="btn btn-warning btn-sm "><i class="feather icon-edit" style="margin-right: 0px;"></i></a>';
                             }
-
+                            // feather icon-settings
                             if ([[${isAdmin}]] && row[9] !== null){
                                 if (row[10]==true){
                                     html+='<br/>' +
@@ -259,6 +260,17 @@
                                 }
 
                             }
+                            if ([[${isAdmin}]]){
+                                if (row[11]===0 || row[11]===1 || row[11]===2){
+                                    html+='<br/>' +
+                                        '<a href="'+changePerformer+'?id='+row[0]+'" class="btn btn-danger btn-sm ">' +
+                                        '<i class="feather icon-settings" style="margin-right: 0px;"></i>' +
+                                        '</a>';
+                                }
+
+                            }
+
+
 
                             return html;
                         }, orderable:false, className:'text-center'

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
     <!-- Bootstrap datetimepicker css -->
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
     <link rel="stylesheet" href="/static/plugins/ViewerJS/viewer.css">
 
@@ -151,7 +152,16 @@
     <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
     <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
     <script src="/static/plugins/ViewerJS/viewer.js"></script>
+    <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+
     <script th:inline="javascript">
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: "dd.mm.yyyy",
+                todayHighlight: true,
+                autoclose: true
+            });
+        });
         $('#confirm').on('click',function () {
             if ($('#confirm').is(':checked')) {
                 $('#confirmButton').removeClass('disabled');

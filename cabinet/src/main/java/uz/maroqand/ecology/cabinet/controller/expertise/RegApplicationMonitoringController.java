@@ -118,6 +118,7 @@ public class RegApplicationMonitoringController {
             if (regApplication.getPerformerId()!=null){
                 performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
             }
+
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     regApplication.getInputType(),
@@ -129,7 +130,10 @@ public class RegApplicationMonitoringController {
                     regApplication.getApplicantId()!=null?regApplication.getName():"",
                     regApplication.getApplicantId()!=null?regApplication.getApplicant().getTin():"",
                     performerLog,
-                    performerLog!=null && performerLog.getOldStatus()!=null
+                    performerLog!=null && performerLog.getOldStatus()!=null,
+                    performerLog!=null ? performerLog.getStatus().getId():"",
+                    performerLog!=null ? performerLog.getType().getId():"",
+
             });
         }
         result.put("data",convenientForJSONArray);
@@ -182,6 +186,29 @@ public class RegApplicationMonitoringController {
 
     @GetMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringEdit + "/{id}")
     public String getMonitoringEditPage( @PathVariable("id") Integer id, Model model ) {
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
+        }
+
+        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        if(coordinate != null){
+            model.addAttribute("coordinate", coordinate);
+            model.addAttribute("coordinateLatLongList", coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId()));
+        }
+        model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
+        model.addAttribute("activityList", activityService.getList());
+        model.addAttribute("requirementList", requirementService.getAllList());
+        model.addAttribute("categoryList", Category.getCategoryList());
+        model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
+        model.addAttribute("categoryId", regApplication.getCategory() !=null ? regApplication.getCategory().getId() : null);
+
+        model.addAttribute("regApplication", regApplication);
+        return ExpertiseTemplates.ExpertiseRegApplicationMonitoringEdit;
+    }
+    @GetMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringChangePerformer + "/{id}")
+    public String getMonitoringChangePerformerPage( @PathVariable("id") Integer id, Model model ) {
         RegApplication regApplication = regApplicationService.getById(id);
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
