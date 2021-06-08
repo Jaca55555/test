@@ -647,7 +647,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="height: 70vh; overflow-y: auto;">
+            <div class="modal-body" style="overflow-y: auto;">
                 <div class="table-responsive">
 
 
@@ -690,7 +690,7 @@
                             </tr>
                             </thead>
 <!--                            <tbody>-->
-                            <tbody  style="height: 70vh; overflow-y: auto;" >
+                            <tbody  style=" overflow-y: auto;" >
                             <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index1 :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==1}">
                                 <td th:id="${boilerCharacteristic.id}" th:utext="${index1.count}" style="width: 10%"></td>
                                 <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
@@ -765,7 +765,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="height: 70vh; overflow-y: auto;">
+            <div class="modal-body" style="overflow-y: auto;">
                 <div class="table-responsive">
                     <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
                         <div class="top-item d-flex align-items-center mb-2">
@@ -801,7 +801,7 @@
                             </tr>
                             </thead>
                             <!--                            <tbody>-->
-                            <tbody  style="height: 70vh; overflow-y: auto;" >
+                            <tbody  style=" overflow-y: auto;" >
                             <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index2 :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==2}">
                                 <td th:id="${boilerCharacteristic.id}" th:utext="${index2.count}" style="width: 10%"></td>
                                 <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
@@ -878,7 +878,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body" style="height: 70vh; overflow-y: auto;">
+            <div class="modal-body" style=" overflow-y: auto;">
                 <div class="table-responsive">
                     <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
                         <div class="top-item d-flex align-items-center mb-2">
@@ -914,7 +914,7 @@
                             </tr>
                             </thead>
                             <!--                            <tbody>-->
-                            <tbody  style="height: 70vh; overflow-y: auto;" >
+                            <tbody  style="overflow-y: auto;" >
                             <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index3 :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==3}">
                                 <td th:id="${boilerCharacteristic.id}" th:utext="${index3.count}" style="width: 10%"></td>
                                 <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>

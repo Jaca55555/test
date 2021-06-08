@@ -21,6 +21,7 @@ import java.util.Set;
 public interface RegApplicationLogService {
 
     RegApplicationLog getById(Integer id);
+    RegApplicationLog getByRegApplcationId(Integer id);
 
     List<RegApplicationLog> getByRegApplicationId(Integer regApplicationId);
     List<RegApplicationLog> findAll();

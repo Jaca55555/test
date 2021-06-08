@@ -332,10 +332,23 @@ public class RegApplicationMonitoringController {
             @RequestParam(name = "userId") Integer userId
 
     ) {
+        System.out.println("userId"+userId);
+        RegApplication regApplication = regApplicationService.getById(id);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationId(id);
+        if (regApplicationLog!=null){
+            if((regApplicationLog.getStatus().getId()==0||regApplicationLog.getStatus().getId()==1||regApplicationLog.getStatus().getId()==2)&&
+                    regApplicationLog.getType().getId()==2){
+                regApplicationLog.setUpdateById(userId);
+                regApplication.setPerformerId(userId);
+                regApplicationLogService.updateDocument(regApplicationLog);
+                regApplicationService.update(regApplication);
+            }
+
+        }
 
 
 
-        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringView + "?id=" + id;
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
     }
 
 

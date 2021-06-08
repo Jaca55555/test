@@ -42,10 +42,11 @@
                                         <hr>
                                         <form action="" method="post" th:object="${regApplication}" data-parsley-validate="" id="about-form">
                                             <div class="col-md-6">
-                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">
-                                                    <option value="" th:text="#{sys_select}"></option>
-                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>
-                                                </select>
+<!--                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">-->
+<!--                                                    <option value="" th:text="#{sys_select}"></option>-->
+<!--                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>-->
+<!--                                                </select>-->
+                                                <input type="number" class="form-control" name="userId">
                                             </div>
 
                                             <input type="hidden" name="id" th:value="${regApplication.id}" />
