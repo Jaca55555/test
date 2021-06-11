@@ -41,12 +41,40 @@
                                         <h5 th:text="#{reg_application}+': ' + ${regApplication.id}"></h5>
                                         <hr>
                                         <form action="" method="post" th:object="${regApplication}" data-parsley-validate="" id="about-form">
-                                            <div class="col-md-6">
+                                            <div class="row mb-3">
 <!--                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">-->
 <!--                                                    <option value="" th:text="#{sys_select}"></option>-->
 <!--                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>-->
 <!--                                                </select>-->
-                                                <input type="number" class="form-control" name="userId">
+
+
+
+
+                                                    <div class="col-md-3 col-sm-12">
+                                                      <div>
+                                                          <label class="control-label"  th:text="#{qr_orgname}"></label><br/>
+                                                          <input type="text" class="form-control " readonly th:value="${regApplication.getPerformerId()+'-'+@userServiceImpl.findById(regApplication.getPerformerId()).getFName()}">
+                                                      </div>
+                                                    </div>
+                                                <div class="col-md-3 col-sm-12">
+                                                <div class="row">
+                                                    <div class="mr-2">
+                                                        <label class="control-label"  th:text="#{sys_id}"></label><br/>
+                                                        <input type="number" class="form-control" name="userId" id="userId">
+                                                    </div>
+                                                    <div class="mt-4">
+                                                        <input id="checkBtn" class="btn btn-danger" type="button" th:value="#{sys_documentRepo_info}">
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                <div class="col-md-3 col-sm-12">
+                                                   <div>
+                                                       <label class="control-label"  th:text="#{doc_incoming.reg_performer_name}"></label><br/>
+                                                       <input type="text" class="form-control" id="fio" readonly>
+                                                   </div>
+                                            </div>
+
+
                                             </div>
 
                                             <input type="hidden" name="id" th:value="${regApplication.id}" />
@@ -87,6 +115,32 @@
 
 
 <script th:inline="javascript">
+    var getUser = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseGetByUserId}]];
+
+
+        $('#checkBtn').click(function () {
+            $.ajax({
+                url: getUser,
+                data: {
+                    userId: $('#userId').val(),
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                cache: true,
+                success: function (response) {
+                    $('#fio').val(response.fio);
+    console.log(response)
+
+                },
+                error: function () {
+                }
+            });
+        })
+
+
+
+
 
 </script>
 

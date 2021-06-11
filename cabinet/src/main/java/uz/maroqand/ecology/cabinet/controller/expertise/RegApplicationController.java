@@ -352,6 +352,16 @@ public class RegApplicationController {
         result.put("status",regApplicationService.sendSMSCode(mobilePhone,id));
         return result;
     }
+    @RequestMapping(value = ExpertiseUrls.ExpertiseGetByUserId,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> expertiseGetByUserId(
+            @RequestParam(name = "userId") Integer id
+    ){
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("fio",userService.findById(id).getFName());
+        result.put("status",1);
+        return result;
+    }
 
     //status==1 confirm
     //status==2 regApplication == null
