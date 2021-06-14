@@ -109,6 +109,7 @@ public class ExpertiseTemplates {
     public static final String ExpertiseRegApplicationMonitoringView = ExpertiseReg + "/mntr/view";
     public static final String ExpertiseRegApplicationMonitoringEdit = ExpertiseReg + "/mntr/edit";
     public static final String ExpertiseRegApplicationMonitoringChangePerformer = ExpertiseReg + "/mntr/change_performer";
+    public static final String ExpertiseRegApplicationMonitoringChangeConclusion = ExpertiseReg + "/mntr/change_conclusion";
 
     //Facture
     private static final String Facture = Prefix + "/facture";

@@ -147,6 +147,7 @@
                                                         <th th:text="#{reg_application.createdAt}"></th>
                                                         <th th:text="#{reg_application.status}"></th>
                                                         <th ></th>
+                                                        <th ></th>
                                                     </tr>
 
                                                     </thead>
@@ -175,6 +176,7 @@
         var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringListAjax}]];
         var ajaxViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringView}]];
         var changePerformer = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringChangePerformer}]];
+        var changeConclusion = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringChangeConclusion}]];
         var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringEdit}]];
         var editPerformerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringPerformerConclusionEdit}]];
 
@@ -260,6 +262,13 @@
                                 }
 
                             }
+
+                            return html;
+                        }, orderable:false, className:'text-center'
+                    },
+                    {
+                        render: function (data, type, row, meta) {
+                            let html = '';
                             if ([[${isAdmin}]]){
                                 if (row[11]===0 || row[11]===1 || row[11]===2){
                                     html+='<br/>' +
@@ -269,12 +278,20 @@
                                 }
 
                             }
+                            if ([[${isAdmin}]] && row[12]===2){
+                                html+='<br/>' +
+                                    '<a href="'+changeConclusion+'/'+row[0]+'" class="btn btn-secondary btn-sm ">' +
+                                    '<i class="feather icon-file-text" style="margin-right: 0px;"></i>' +
+                                    '</a>';
+
+                            }
 
 
 
                             return html;
                         }, orderable:false, className:'text-center'
                     }
+
                 ],
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

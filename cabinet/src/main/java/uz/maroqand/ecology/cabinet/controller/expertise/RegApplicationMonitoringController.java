@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.Category;
@@ -14,6 +15,7 @@ import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
@@ -21,6 +23,7 @@ import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -53,10 +56,11 @@ public class RegApplicationMonitoringController {
     private final ObjectExpertiseService objectExpertiseService;
     private final ActivityService activityService;
     private final RequirementService requirementService;
+    private final FileService fileService;
     private final OrganizationService organizationService;
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
-    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, RequirementService requirementService, OrganizationService organizationService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
+    public RegApplicationMonitoringController(UserService userService, RegApplicationService regApplicationService, RegApplicationLogService regApplicationLogService, HelperService helperService, ClientService clientService, ChangeDeadlineDateService changeDeadlineDateService, CoordinateRepository coordinateRepository, CoordinateLatLongRepository coordinateLatLongRepository, CommentService commentService, InvoiceService invoiceService, ProjectDeveloperService projectDeveloperService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, RequirementService requirementService, FileService fileService, OrganizationService organizationService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.regApplicationLogService = regApplicationLogService;
@@ -72,6 +76,7 @@ public class RegApplicationMonitoringController {
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
         this.requirementService = requirementService;
+        this.fileService = fileService;
         this.organizationService = organizationService;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
@@ -226,9 +231,29 @@ public class RegApplicationMonitoringController {
         model.addAttribute("categoryList", Category.getCategoryList());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("categoryId", regApplication.getCategory() !=null ? regApplication.getCategory().getId() : null);
-
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationMonitoringList);
         model.addAttribute("regApplication", regApplication);
         return ExpertiseTemplates.ExpertiseRegApplicationMonitoringChangePerformer;
+    }
+    @GetMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringChangeConclusion + "/{id}")
+    public String getMonitoringChangeConclusionPage( @PathVariable("id") Integer id, Model model ) {
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication == null){
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
+        }
+        RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationId(id);
+
+        if (regApplicationLog != null&&regApplicationLog.getType().getId()!=2){
+            return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
+        }
+
+        if (regApplicationLog != null&&regApplicationLog.getType().getId()==2){
+            model.addAttribute("regApplicationLog",regApplicationLog);
+        }
+
+        model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationMonitoringList);
+        model.addAttribute("regApplication", regApplication);
+        return ExpertiseTemplates.ExpertiseRegApplicationMonitoringChangeConclusion;
     }
 
 
@@ -327,21 +352,46 @@ public class RegApplicationMonitoringController {
     }
 
     @PostMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringChangePerformer + "/{id}")
-    public String updateRegApplicationChangePerformer(
-            @PathVariable("id") Integer id,
-            @RequestParam(name = "userId") Integer userId
+        public String updateRegApplicationChangePerformer(
+                @PathVariable("id") Integer id,
+                @RequestParam(name = "userId") Integer userId
 
     ) {
-        System.out.println("userId"+userId);
+            System.out.println("userId"+userId);
+            RegApplication regApplication = regApplicationService.getById(id);
+            RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationId(id);
+            if (regApplicationLog!=null){
+                if((regApplicationLog.getStatus().getId()==0||regApplicationLog.getStatus().getId()==1||regApplicationLog.getStatus().getId()==2)&&
+                        regApplicationLog.getType().getId()==2){
+                    regApplicationLog.setUpdateById(userId);
+                    regApplication.setPerformerId(userId);
+                    regApplicationLogService.updateDocument(regApplicationLog);
+                    regApplicationService.update(regApplication);
+                }
+
+            }
+
+
+
+        return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
+    }
+
+    @PostMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringChangeConclusion + "/{id}")
+    public String updateRegApplicationChangeConclusion(
+            @PathVariable("id") Integer id,
+            @RequestParam(name = "file_id") Integer fileId
+    ) {
+        System.out.println("files"+fileId);
         RegApplication regApplication = regApplicationService.getById(id);
         RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationId(id);
         if (regApplicationLog!=null){
-            if((regApplicationLog.getStatus().getId()==0||regApplicationLog.getStatus().getId()==1||regApplicationLog.getStatus().getId()==2)&&
-                    regApplicationLog.getType().getId()==2){
-                regApplicationLog.setUpdateById(userId);
-                regApplication.setPerformerId(userId);
+            if(regApplicationLog.getType().getId()==2){
+                File file = fileService.findById(fileId);
+                Set<File> fileSet = new HashSet<>();
+                fileSet.add(file);
+                regApplicationLog.setDocumentFiles(fileSet);
                 regApplicationLogService.updateDocument(regApplicationLog);
-                regApplicationService.update(regApplication);
+
             }
 
         }
@@ -350,7 +400,30 @@ public class RegApplicationMonitoringController {
 
         return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
     }
+    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringFileDelete, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public File deleteAttachment(@RequestParam(name = "id")Integer id){
+        System.out.println("id====="+id);
+        File file = fileService.findById(id);
+        if (file!=null){
+            file.setDeleted(true);
+            file.setDateDeleted(new Date());
+            file.setDeletedById(userService.getCurrentUserFromContext().getId());
+        }
+        return fileService.save(file);
+    }
+    @PostMapping(value = ExpertiseUrls.ExpertiseRegApplicationMonitoringFileUpload)
+    @ResponseBody
+    public HashMap<String, Object> uploadFile(
+            @RequestParam(name = "file") MultipartFile uploadFile
+    ) {
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String, Object> response = new HashMap<>();
 
+        File file = fileService.uploadFile(uploadFile,user.getId(),uploadFile.getOriginalFilename(),uploadFile.getOriginalFilename());
+        response.put("data", file);
+        return response;
+    }
 
     @RequestMapping(ExpertiseUrls.ExpertiseRegApplicationMonitoringPerformerConclusionEdit)
     public String expertiseRegApplicationMonitoringPerformerConclusionEdit(@RequestParam(name = "id") Integer logId){

@@ -284,7 +284,10 @@ public class ExpertiseUrls {
     public static final String ExpertiseRegApplicationMonitoringView = ExpertiseRegApplicationMonitoring + "/view";
     public static final String ExpertiseRegApplicationMonitoringEdit = ExpertiseRegApplicationMonitoring + "/edit";
     public static final String ExpertiseRegApplicationMonitoringChangePerformer = ExpertiseRegApplicationMonitoring + "/change_performer";
+    public static final String ExpertiseRegApplicationMonitoringChangeConclusion = ExpertiseRegApplicationMonitoring + "/change_conclusion";
     public static final String ExpertiseRegApplicationMonitoringPerformerConclusionEdit = ExpertiseRegApplicationMonitoring + "/performer_conclusion_edit"; //agar ariza yopilgan yoki tasdiqlangan bo'lsa xulosani qayta edit qilish uchun
+    public static final String ExpertiseRegApplicationMonitoringFileDelete = ExpertiseRegApplicationMonitoring + "/file/delete"; //agar ariza yopilgan yoki tasdiqlangan bo'lsa xulosani qayta edit qilish uchun
+    public static final String ExpertiseRegApplicationMonitoringFileUpload = ExpertiseRegApplicationMonitoring + "/file/upload"; //agar ariza yopilgan yoki tasdiqlangan bo'lsa xulosani qayta edit qilish uchun
 
     public static final String GetLegalEntityByTin = ExpertiseReg + "/get_legal_entity";
     public static final String GetIndividualByPinfl = ExpertiseReg + "/get_individual";

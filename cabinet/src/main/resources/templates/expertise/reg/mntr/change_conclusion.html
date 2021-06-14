@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <style>
+        .table td, .table th{
+            white-space: unset;
+        }
+    </style>
+</head>
+<body class="layout-6">
+<!-- [ Pre-loader ] start -->
+<div class="loader-bg">
+    <div class="loader-track">
+        <div class="loader-fill"></div>
+    </div>
+</div>
+<!-- [ Pre-loader ] End -->
+
+<object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+<object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <!-- [ Main Content ] start -->
+                        <div class="row">
+
+                            <!-- [ sample-page ] start -->
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-body" style="min-height: calc(100vh - 130px);">
+                                        <h5 th:text="#{reg_application}+': ' + ${regApplication.id}"></h5>
+                                        <hr>
+                                        <form action="" method="post" th:object="${regApplication}" data-parsley-validate="" id="about-form">
+                                            <div class="row mb-3">
+                                                <!--                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">-->
+                                                <!--                                                    <option value="" th:text="#{sys_select}"></option>-->
+                                                <!--                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>-->
+                                                <!--                                                </select>-->
+
+
+
+                                                <div class="form-group">
+                                                    <div class="m10-vertical">
+                                                        <span th:text="#{file_upload_conclusion.file}"></span>
+                                                    </div>
+                                                    <div id="file_ids" class="d-none"></div>
+
+
+
+                                                    <div id="addFileDiv">
+                                                        <input type="file" class="d-none" id="addFile2" name="files" accept=".pdf"  >
+                                                    </div>
+
+
+
+                                                    <div class="col-md-8 offset-2 p20" id="file-container">
+                                                        <div class="file-block flex-center file-button" id="addFileBlock" onclick="clickPlus()">
+                                                            <div  class="text-center file-icon-container align-self-center color-gray" style="margin-top: 20%">
+                                                                <span class="fas fa-plus" id="addFileButton"></span>
+                                                                <span id="percentage" style="font-size: 40px"><span id="percentage-num"></span>%</span>
+                                                                <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div id="fileUploadError" class="col-md-8 offset-2 p20"></div>
+                                                </div>
+
+                                            </div>
+
+                                            <input type="hidden" name="id" th:value="${regApplication.id}" />
+                                            <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                            <div class="row" >
+                                                <div class="form-group col-md-12 text-center" >
+                                                    <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                    <button type="submit" class="btn btn-primary" th:text="#{sys_next}" >Далее</button><!--onclick="submitForm()"-->
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- [ sample-page ] end -->
+                        </div>
+                        <!-- [ Main Content ] end -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- [ Main Content ] end -->
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+<script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+<script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+<script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script src="/static/plugins/ol/ol.js"></script>
+<script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+<script type="text/javascript" src="/static/js/select2/js/select2.full.min.js"></script>
+
+
+<script th:inline="javascript">
+    var ajaxRequestAddLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ConclusionFileAdd}]];
+    var _csrf = [[${_csrf.token}]];
+    let files = [[${regApplicationLog.documentFiles}]];
+
+    console.log("files",files)
+    if (files!=null && files.length>0){
+        $.each(files,function (index,val) {
+
+            let extension = val.extension;
+            let fileName = val.name;
+            let color;
+            switch (extension) {
+                case 'jpg': case 'png': case 'jpeg':
+                    extension = '-image';
+                    color = 'color-yellow';
+                    break;
+                case 'pdf':
+                    extension = '-pdf';
+                    color = 'color-red';
+                    break;
+                case 'xls':
+                case 'xlsx':
+                    extension = '-excel';
+                    color = 'color-green';
+                    break;
+                case 'doc':
+                case 'docx':
+                    extension = '-word';
+                    color = 'color-blue';
+                    break;
+                case 'pptx':
+                    extension = '-powerpoint';
+                    color = 'color-red';
+                    break;
+                case 'zip': case '7z': case 'rar':
+                    extension = '-archive';
+                    color = 'color-purple';
+                    break;
+                default:
+                    extension = '';
+                    color = 'color-gray';
+            }
+
+
+
+
+            $('#file-container').append(
+                `<div class="file-block" id="file_block_${val.id}">
+                        <div class="text-right"><span class='fas fa-trash-alt' onclick="deleteFunc(${val.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${val.id})"><span class="fa fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>` + fileNameSubString(fileName) + `</span>
+                        </div>
+                    </div>`
+            );
+
+
+
+
+
+        })
+    }
+
+
+    function clickPlus() {
+        $('#addFile2').click();
+        console.log("clickplus func called");
+    }
+
+    $(document).ready(function ()
+    {
+        hearInputClickFunction();
+    });
+
+
+    function deleteFunc(id){
+        fetch(`/expertise/reg/mntr/application/file/delete?id=${id}`);
+        $('#addFile2').remove();
+        $(`#file_block_${id}`).remove();
+
+        $(`#input_file_id`).remove();
+
+        $('#addFileDiv').append(`
+         <input type="file" class="d-none" id="addFile2" name="files" accept=".pdf"  >
+        `);
+
+
+
+        $('#addFileBlock').show();
+
+
+        hearInputClickFunction();
+
+    }
+
+    function hearInputClickFunction(){
+
+        $('#addFile2').on('change', function () {
+
+
+            console.log("ishlashi boshlanishi")
+
+            if (this.files[0].size > 10000000) {
+                swal("Файл не должен занимать больше 10 мб.",'', "warning");
+                return false;
+            }
+            console.log(this.files[0].type);
+            if (this.files[0].type !== 'application/pdf') {
+                swal("Faqat .pdf tipdagi fayl yuklang.","", "warning");
+                return false;
+            }
+            if(this.files[0].size === 0){
+                swal("Файл не должен быть пустым", "", "warning");
+                return false;
+            }
+            let csrf =_csrf;
+            let files = document.querySelector('#addFile2').files[0];
+            let fd = new FormData();
+            fd.append("file", files);
+
+            console.log("yangi yuklangan file ", files)
+
+            fd.append("_csrf", csrf);
+            $.ajax({
+                url: "/expertise/reg/mntr/application/file/upload",
+                type: 'post',
+                data: fd,
+                processData: false,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                success: function (data) {
+                    console.log("ishlavotti",  data)
+                    detectExtensionAndDisplay(data)
+                } ,
+                beforeSend: function () {
+                    $('#addFileButton').hide();
+                    $('#upload-gif').show();
+                    $('#percentage').show();
+                },
+                complete: function () {
+                    $('#upload-gif').hide();
+                    $('#percentage').hide();
+                    $('#addFileButton').show();
+                },
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        uploadProgressHandler,
+                        false
+                    );
+                    return xhr;
+                }
+            })
+        });
+
+    }
+
+
+
+    function downloadFileFunction(id) {
+        window.open(`/expertise/conclusion/file_download?id=${id}`);
+    }
+
+    function detectExtensionAndDisplay(data){
+        let extension = data.data.extension;
+        let fileName = data.data.name;
+        let color;
+        let name = data.data.name;
+        switch (extension) {
+            case 'jpg': case 'png': case 'jpeg':
+                extension = '-image';
+                color = 'color-yellow';
+                break;
+            case 'pdf':
+                extension = '-pdf';
+                color = 'color-red';
+                break;
+            case 'xls':
+            case 'xlsx':
+                extension = '-excel';
+                color = 'color-green';
+                break;
+            case 'doc':
+            case 'docx':
+                extension = '-word';
+                color = 'color-blue';
+                break;
+            case 'pptx':
+                extension = '-powerpoint';
+                color = 'color-red';
+                break;
+            case 'zip': case '7z': case 'rar':
+                extension = '-archive';
+                color = 'color-purple';
+                break;
+            default:
+                extension = '';
+                color = 'color-gray';
+        }
+
+
+        $('#file_ids').append(
+            `<input type="text" name="file_id" id="input_file_id" value="${data.data.id}">`
+        );
+
+
+        $('#file-container').append(
+            `<div class="file-block" id="file_block_${data.data.id}">
+                        <div class="text-right mr-2 mt-1"><span class='fas fa-trash-alt' onclick="deleteFunc(${data.data.id})"></span></div>
+                        <div class="text-center file-icon-container ${color}" onclick="downloadFileFunction(${data.data.id})"><span class="fa fa-file${extension}"></span>
+                        </div>
+                        <div class="text-center">
+                            <span>` + fileNameSubString(fileName) + `</span>
+                        </div>
+                    </div>`
+        );
+
+        // $('#addFileBlock').hide();
+    }
+
+    function uploadProgressHandler(event)
+    {
+        var percent = (event.loaded / event.total) * 100;
+        var progress = Math.round(percent);
+        $('#percentage-num').html(progress);
+    }
+
+
+
+
+
+</script>
+
+</body>
+</html>
