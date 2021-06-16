@@ -11,6 +11,7 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
+import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -241,7 +242,7 @@ public class RegApplicationMonitoringController {
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
         }
-        RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationId(id);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationIdAndType(id,LogType.Performer);
 
         if (regApplicationLog != null&&regApplicationLog.getType().getId()!=2){
             return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationMonitoringList;
@@ -383,7 +384,7 @@ public class RegApplicationMonitoringController {
     ) {
         System.out.println("files"+fileId);
         RegApplication regApplication = regApplicationService.getById(id);
-        RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationId(id);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationIdAndType(id, LogType.Performer);
         if (regApplicationLog!=null){
             if(regApplicationLog.getType().getId()==2){
                 File file = fileService.findById(fileId);

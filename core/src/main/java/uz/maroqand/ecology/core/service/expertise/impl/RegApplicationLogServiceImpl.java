@@ -83,6 +83,11 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         return regApplicationLogRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(id);
     }
 
+    @Override
+    public RegApplicationLog getByRegApplcationIdAndType(Integer id, LogType type) {
+        return regApplicationLogRepository.findTop1ByRegApplicationIdAndTypeAndDeletedFalseOrderByIdDesc(id,type);
+    }
+
     public RegApplicationLog create(
             RegApplication regApplication,
             LogType logType,
