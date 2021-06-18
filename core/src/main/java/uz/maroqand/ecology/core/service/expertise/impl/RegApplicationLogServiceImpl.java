@@ -247,7 +247,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         LogType type=LogType.Performer;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
-        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses);
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndUpdatedByIdAndDeletedFalse(type,organizationId,statuses,user.getId());
     }
     @Override
     public Integer countbyLogType3AndDeletedFalseOrganizationId() {
@@ -257,7 +257,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         LogType type=LogType.Agreement;
         User user = userService.getCurrentUserFromContext();
         Integer organizationId=user.getOrganizationId();
-        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses);
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndUpdatedByIdAndDeletedFalse(type,organizationId,statuses,user.getId());
     }
     @Override
     public Integer countbyLogType4AndDeletedFalseOrganizationId() {
