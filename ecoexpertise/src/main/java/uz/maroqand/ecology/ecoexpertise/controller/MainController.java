@@ -181,6 +181,10 @@ public class MainController {
     public String getError403Page() {
         return SysTemplates.ErrorForbidden;
     }
+    @RequestMapping(SysUrls.EDSLogin + "?failed=1")
+    public String getErrorEDSPage() {
+        return SysTemplates.ErrorEds;
+    }
 
     @RequestMapping(value = SysUrls.SelectLang)
     public String selectLang(
