@@ -43,11 +43,11 @@ public interface RegApplicationLogRepository extends JpaRepository<RegApplicatio
     Integer countByTypeAndOrganizationIdAndDeletedFalseAndStatus(@Param("type") LogType type,@Param("organizationId") Integer organizationId,@Param("statuses")Set<RegApplicationStatus>  statuses);
 
 
-    @Query("SELECT COUNT(d) FROM RegApplicationLog d LEFT JOIN RegApplication dt ON d.regApplicationId = dt.id WHERE d.type =:type AND d.deleted = FALSE AND  dt.reviewId=:organizationId AND d.status in (:statuses)")
-    Integer countByTypeAndOrganizationIdAndDeletedFalse(@Param("type") LogType type,@Param("organizationId") Integer organizationId,@Param("statuses")Set<LogStatus>  statuses);
+    @Query("SELECT COUNT(d) FROM RegApplicationLog d LEFT JOIN RegApplication dt ON d.regApplicationId = dt.id WHERE d.type =:type AND d.deleted = FALSE AND  dt.reviewId=:organizationId AND d.status in (:statuses) and d.show=:show")
+    Integer countByTypeAndOrganizationIdAndDeletedFalse(@Param("type") LogType type,@Param("organizationId") Integer organizationId,@Param("statuses")Set<LogStatus>  statuses,@Param("show") Boolean show);
 
 
-    @Query("SELECT COUNT(d) FROM RegApplicationLog d LEFT JOIN RegApplication dt ON d.regApplicationId = dt.id WHERE d.type =:type AND d.deleted = FALSE AND  dt.reviewId=:organizationId AND d.status in (:statuses) AND d.updateById=:userId")
-    Integer countByTypeAndOrganizationIdAndUpdatedByIdAndDeletedFalse(@Param("type") LogType type,@Param("organizationId") Integer organizationId,@Param("statuses")Set<LogStatus>  statuses,@Param("userId") Integer userId);
+    @Query("SELECT COUNT(d) FROM RegApplicationLog d LEFT JOIN RegApplication dt ON d.regApplicationId = dt.id WHERE d.type =:type AND d.deleted = FALSE AND  dt.reviewId=:organizationId AND d.status in (:statuses) AND d.updateById=:userId and d.show=:show")
+    Integer countByTypeAndOrganizationIdAndUpdatedByIdAndDeletedFalse(@Param("type") LogType type,@Param("organizationId") Integer organizationId,@Param("statuses")Set<LogStatus>  statuses,@Param("userId") Integer userId,@Param("show") Boolean show);
 
 }
