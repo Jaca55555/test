@@ -172,13 +172,38 @@
 <!-- Ckeditor js -->
 <script>
     DecoupledEditor
-        .create(document.querySelector('.document-editor__editable'))
+        .create(document.querySelector('.document-editor__editable'),
+            {
+                fontSize: {
+                    options: [
+                        generatePtSetting( '10' ),
+                        generatePtSetting( '12' ),
+                        generatePtSetting( '14' ),
+                        generatePtSetting( '18' ),
+                        generatePtSetting( '20' ),
+                        generatePtSetting( '22' ),
+                    ]
+                }
+            }
+        )
         .then(editor => {
             const toolbarContainer = document.querySelector('#document-editor');
             toolbarContainer.appendChild(editor.ui.view.toolbar.element);
         })
         .catch(error => {
         });
+    function generatePtSetting( size ) {
+        return {
+            model: size,
+            title: size,
+            view: {
+                name: 'span',
+                styles: {
+                    'font-size': `${ size }pt`
+                }
+            }
+        };
+    }
 
     $("#test12").click(function (events) {
         $('.document-editor__editable').wordExport();

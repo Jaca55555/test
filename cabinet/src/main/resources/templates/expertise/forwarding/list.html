@@ -151,6 +151,7 @@
                                                     <th th:text="#{sys_conclusion_status}"></th>
                                                     <th th:text="#{sys_status}"></th>
                                                     <th ></th>
+                                                    <th ></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody></tbody>
@@ -257,7 +258,7 @@
             scrollX: true,
             pageLength: 25,
             lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
-            order: [[5, 'desc']],
+            order: [[10, 'asc']],
             dom: 'lrtip',
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
@@ -281,6 +282,7 @@
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
+                console.log(dataToSend.columns[ order[0][0] ].name + ',' + order[0][1]);
 
                 $.get(ajaxRequestLink, dataToSend, function(data){
                     callback(data);
@@ -296,7 +298,8 @@
                 {render:renderDeadlineDateColumn, name: 'deadlineDate'},
                 {data: 7, render:renderStatusColumn, orderable:false},
                 {data: 9, render:renderLogStatusColumn, orderable:false},
-                {render: renderActionsColumn, orderable: false}
+                {render: renderActionsColumn, orderable: false},
+                {data: 10, name: 'forwardingLog.status' , visible:false}
             ],
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

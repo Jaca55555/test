@@ -35,6 +35,7 @@ public class RegApplication {
     @JoinColumn(name = "applicant_id", insertable = false, updatable = false)
     private Client applicant;
 
+
     @Column(name = "applicant_id")
     private Integer applicantId;
 
@@ -226,6 +227,11 @@ public class RegApplication {
 
     @Column(name = "forwarding_log_id")
     private Integer forwardingLogId;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "forwarding_log_id", insertable = false, updatable = false)
+    private RegApplicationLog forwardingLog;
 
     @Column(name = "performer_log_id")
     private Integer performerLogId;

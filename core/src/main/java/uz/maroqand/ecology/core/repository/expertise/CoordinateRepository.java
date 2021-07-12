@@ -14,5 +14,6 @@ import uz.maroqand.ecology.core.entity.expertise.Coordinate;
 public interface CoordinateRepository extends JpaRepository<Coordinate, Integer>, JpaSpecificationExecutor<Coordinate> {
 
     Coordinate findByRegApplicationIdAndDeletedFalse(Integer regApplicationId);
+    Coordinate findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(Integer regApplicationId);
     Coordinate findTop1ByIdOrderByIdDesc(Integer id);
 }

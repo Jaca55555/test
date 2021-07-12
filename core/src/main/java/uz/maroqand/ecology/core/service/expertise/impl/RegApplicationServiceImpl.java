@@ -374,6 +374,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     if (filterDto.getStatusForReg()!=null){
                         predicates.add(criteriaBuilder.in(root.get("status")).value(filterDto.getStatusForReg()));
                     }
+
+
 //                    if(filterDto.getContractNumber()!=null && !filterDto.getContractNumber().isEmpty()){
 //                        predicates.add(criteriaBuilder.like(root.get("contractNumber"),"%" + StringUtils.trimToNull(filterDto.getContractNumber()) + "%"));
 //                    }

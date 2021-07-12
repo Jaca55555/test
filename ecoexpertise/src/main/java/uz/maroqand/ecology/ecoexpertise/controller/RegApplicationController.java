@@ -465,7 +465,7 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationFourCategoryAbout + "?id=" + id;
         }
 
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        Coordinate coordinate = coordinateRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplication.getId());
         if(coordinate != null){
             model.addAttribute("coordinate", coordinate);
             model.addAttribute("coordinateLatLongList", coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId()));
@@ -1326,7 +1326,7 @@ public class RegApplicationController {
             return result;
         }
 
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplicationId);
+        Coordinate coordinate = coordinateRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplicationId);
         if(coordinate == null){
             return result;
         }
