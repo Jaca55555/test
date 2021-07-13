@@ -228,7 +228,7 @@ public class RegApplication {
     @Column(name = "forwarding_log_id")
     private Integer forwardingLogId;
 
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "forwarding_log_id", insertable = false, updatable = false)
     private RegApplicationLog forwardingLog;
