@@ -22,6 +22,7 @@ public enum Permissions {
     EXPERTISE_AGREEMENT(15, 2, "sys_permissions.expertise_agreement"),// Ariza natijasini tasdiqlash
     EXPERTISE_AGREEMENT_COMPLETE(16, 2, "sys_permissions.expertise_agreement_complete"), // Ariza natijasini tasdiqlash va ariza tugatish
     EXPERTISE_CONCLUSION_COMPLETE(52, 2, "sys_permissions.expertise_conclusion_complete"), // Ariza Rais tasdiqlagandan keyin yakunlash uchun Xulosaga raqam va sana qo'yish
+    EXPERTISE_ARCHIVE_COMPLETE(54,2,"sys_permissions.expertise_archive_complete"),
 
     ENTERPRISE_REGISTER(17, 2, "sys_permissions.enterprise_register"), //
     BILLING(18, 2, "sys_permissions.billing"), //

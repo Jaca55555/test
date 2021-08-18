@@ -197,7 +197,9 @@ public class RegApplicationController {
                     helperService.getMaterials(regApplication.getMaterials(),locale),
                     regApplication.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
                     regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
-                    regApplication.getStatus()!=null? regApplication.getStatus().getColor():""
+                    regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
+                    regApplication.getApplicant()!=null?regApplication.getApplicant().getName():" ",
+                    regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():" "
             });
         }
         result.put("data",convenientForJSONArray);

@@ -244,8 +244,10 @@
                         render: function (data, type, row, meta) {
                             let html = '';
                             if (row[5] !== [[${@helperService.getRegApplicationStatus(T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Initial, #locale)}]]){
-                                html='<a href="'+ajaxViewLink+'?id='+row[0]+'" class="btn btn-info btn-sm "><i class="feather icon-eye" style="margin-right: 0px;"></i></a>' +
-                                    '<a href="'+editLink+'/'+row[0]+'" class="btn btn-warning btn-sm "><i class="feather icon-edit" style="margin-right: 0px;"></i></a>';
+                                html+='<a href="'+ajaxViewLink+'?id='+row[0]+'" class="btn btn-info btn-sm "><i class="feather icon-eye" style="margin-right: 0px;"></i></a>';
+                                        if(row[13]!==20){
+                                         html+='<a href="'+editLink+'/'+row[0]+'" class="btn btn-warning btn-sm "><i class="feather icon-edit" style="margin-right: 0px;"></i></a>';
+                                        }
                             }
                             // feather icon-settings
                             if ([[${isAdmin}]] && row[9] !== null){

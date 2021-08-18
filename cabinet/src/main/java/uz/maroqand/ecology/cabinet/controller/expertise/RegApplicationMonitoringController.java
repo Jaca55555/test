@@ -139,6 +139,7 @@ public class RegApplicationMonitoringController {
                     performerLog!=null && performerLog.getOldStatus()!=null,
                     performerLog!=null ? performerLog.getStatus().getId():"",
                     performerLog!=null ? performerLog.getType().getId():"",
+                    user.getRole().getId(),
 
             });
         }

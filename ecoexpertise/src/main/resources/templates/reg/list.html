@@ -51,6 +51,8 @@
                                                         <th th:text="#{reg_application.id}"></th>
                                                         <th th:text="#{sys_expertise.objectExpertise}"></th>
                                                         <th th:text="#{sys_expertise.material}"></th>
+                                                        <th th:text="#{sys_legal_entity_name}+'/'+#{applicant}"></th>
+                                                        <th th:text="#{sys_tin_individual}"></th>
                                                         <th th:text="#{reg_application.createdAt}"></th>
                                                         <th th:text="#{reg_application.status}"></th>
                                                         <th ></th>
@@ -115,6 +117,16 @@
                     {data: 0, name: 'id'},
                     {data: 1, name: 'objectId'},
                     {data: 2, orderable: false},
+                    {data: 6, name: 'name',
+                        render: function (data, type, row, meta) {
+                            return '<span class="">'+row[6]+'</span>';
+                        },orderable:false
+                    },
+                    {data: 7, name: 'tin',
+                        render: function (data, type, row, meta) {
+                            return '<span class="">'+row[7]+'</span>';
+                        },orderable:false
+                    },
                     {data: 3, name: 'createdAt'},
                     {
                         render: function (data, type, row, meta) {
