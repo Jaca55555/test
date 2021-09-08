@@ -9,6 +9,8 @@ public class ExpertiseUrls {
     private static final String Prefix = "/expertise";
     private static final String  ExpertiseReg = Prefix + "/reg";
 
+    public static final String InvoiceModification = Prefix + "/invoice_modification";
+
     //API
     public static final String Api = Prefix + "/api";
     public static final String ApiView = Api + "/view";
