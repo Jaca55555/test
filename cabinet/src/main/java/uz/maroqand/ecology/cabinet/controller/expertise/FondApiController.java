@@ -16,8 +16,8 @@ import static uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls.ApiVi
 public class FondApiController {
     @Autowired
     RegApplicationService regApplicationService;
-    @GetMapping("/{tin}")
-    ResponseDTO get(@PathVariable("tin") Integer tin) {
-        return new ResponseDTO(regApplicationService.listByTin(tin));
-    }
+//    @GetMapping("/{tin}")
+//    ResponseDTO get(@PathVariable("tin") Integer tin) {
+//        return new ResponseDTO(regApplicationService.listByTin(tin));
+//    }
 }

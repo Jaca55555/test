@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.CommentType;
@@ -18,6 +19,7 @@ import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
+import uz.maroqand.ecology.core.dto.api.ResponseDTO;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
@@ -65,6 +67,8 @@ public class ConclusionCompleteController {
     private final DocumentEditorService documentEditorService;
     private final FileService fileService;
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
+    private final RestTemplate restTemplate;
+    private final RegApplicationService applicationService;
 
     @Autowired
     public ConclusionCompleteController(
@@ -83,7 +87,7 @@ public class ConclusionCompleteController {
             ConclusionService conclusionService,
             NotificationService notificationService,
             SmsSendService smsSendService,
-            DocumentEditorService documentEditorService, FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
+            DocumentEditorService documentEditorService, FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, RestTemplate restTemplate, RegApplicationService applicationService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -102,6 +106,8 @@ public class ConclusionCompleteController {
         this.documentEditorService = documentEditorService;
         this.fileService = fileService;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
+        this.restTemplate = restTemplate;
+        this.applicationService = applicationService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConclusionCompleteList)
@@ -281,6 +287,7 @@ public class ConclusionCompleteController {
         );
         Client client = clientService.getById(regApplication.getApplicantId());
         smsSendService.sendSMS(client.getPhone(), " Arizangiz ko'rib chiqildi, ariza raqami ", regApplication.getId(), client.getName());
+
 
 
         return "redirect:"+ExpertiseUrls.ConclusionCompleteView + "?id=" + logId + "#action";

@@ -205,13 +205,13 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return null;
     }
 
-    @Override
-    public List<RegApplicationDTO> listByTin(Integer tin) {
-        Client client=clientService.getByTin(tin);
-        List<RegApplication> regApplicationList=getByClientIdDeletedFalse(client.getId());
-//        System.out.println("regApplicationList="+regApplicationList);
-        return RegApplicationDTO.listFromEntity(regApplicationList);
-    }
+//    @Override
+//    public List<RegApplicationDTO> listByTin(Integer tin) {
+//        Client client=clientService.getByTin(tin);
+//        List<RegApplication> regApplicationList=getByClientIdDeletedFalse(client.getId());
+////        System.out.println("regApplicationList="+regApplicationList);
+//        return RegApplicationDTO.listFromEntity(regApplicationList);
+//    }
 
     @Override
     public RegApplication sendRegApplicationAfterPayment(RegApplication regApplication,User user, Invoice invoice, String locale) {

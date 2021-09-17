@@ -13,9 +13,7 @@ public class ResponseDTO {
     private String statusMessage;
     private Object data;
 
-    public ResponseDTO(Object data) {
-        this.statusCode = 0;
-        this.statusMessage = "OK";
-        this.data = data;
+    public ResponseDTO() {
+
     }
 }

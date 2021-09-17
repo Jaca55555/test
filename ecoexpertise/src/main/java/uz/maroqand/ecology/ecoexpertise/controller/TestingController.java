@@ -1,0 +1,20 @@
+package uz.maroqand.ecology.ecoexpertise.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/get_post")
+public class TestingController {
+
+    @PostMapping
+    public ResponseEntity<?> set(@Valid @RequestBody String param) {
+        System.out.println("param="+param);
+        return new ResponseEntity<>(param, HttpStatus.OK);
+    }
+}

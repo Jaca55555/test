@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/get_post").permitAll()
                 .antMatchers("/news").permitAll()
                 .antMatchers("/get_news").permitAll()
                 .antMatchers("/get_modal_file").permitAll()
@@ -71,7 +72,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/dashboard/**").authenticated();
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout");
+                .logoutSuccessUrl("/login?logout")
+        .and().csrf().ignoringAntMatchers("/get_post");
 
         
         http.csrf().ignoringAntMatchers("/login","/upay/payment","/upay/check","/get_news");

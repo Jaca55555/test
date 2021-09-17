@@ -40,7 +40,7 @@ public interface RegApplicationService {
     RegApplication getById(Integer id);
     RegApplication getByContractNumber(String contractNumber);
     RegApplication getByIdAndUserTin(Integer id, User user);
-    List<RegApplicationDTO> listByTin(Integer tin);
+//    List<RegApplicationDTO> listByTin(Integer tin);
     RegApplication sendRegApplicationAfterPayment(RegApplication regApplication, User user, Invoice invoice, String locale);
 
     RegApplication cancelApplicationByInvoiceId(Integer invoiceId);

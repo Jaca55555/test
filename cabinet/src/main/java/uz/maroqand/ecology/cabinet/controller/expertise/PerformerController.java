@@ -6,11 +6,14 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
@@ -18,6 +21,8 @@ import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
+import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
+import uz.maroqand.ecology.core.dto.api.ResponseDTO;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
@@ -34,6 +39,7 @@ import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -66,6 +72,7 @@ public class PerformerController {
     private final DocumentEditorService documentEditorService;
     private final GlobalConfigs globalConfigs;
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
+    private final RestTemplate restTemplate;
 
     @Autowired
     public PerformerController(
@@ -87,7 +94,7 @@ public class PerformerController {
             NotificationService notificationService,
             ConclusionService conclusionService,
             SmsSendService smsSendService,
-            OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
+            OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, RestTemplate restTemplate) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -110,6 +117,7 @@ public class PerformerController {
         this.documentEditorService = documentEditorService;
         this.globalConfigs = globalConfigs;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
+        this.restTemplate = restTemplate;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -292,7 +300,7 @@ public class PerformerController {
             @RequestParam(name = "comment")String comment,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
-    ){
+    ) throws IOException {
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id);
@@ -354,6 +362,51 @@ public class PerformerController {
             regApplication.setStatus(RegApplicationStatus.Process);
             regApplicationService.update(regApplication);
         }
+        Set<Integer> materialsInt= regApplication.getMaterials();
+        Integer next = materialsInt.iterator().next();
+//        if(next==8){
+            RegApplicationDTO regApplicationDTO = RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService);
+            ResponseDTO responseDTO = new ResponseDTO();
+            responseDTO.setStatusCode(0);
+            responseDTO.setStatusMessage("RegApplication is confirmed");
+            responseDTO.setData(regApplicationDTO);
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+            HttpEntity reqEntity = new HttpEntity(responseDTO);
+            ResponseEntity<?> responseEntity =restTemplate.exchange("http://fo.eco-service.uz/get_post", HttpMethod.POST, reqEntity, Object.class);
+            responseEntity.getStatusCode().is2xxSuccessful();
+        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+reqEntity);
+        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity.getStatusCode());
+        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity);
+
+//        }
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }
 
