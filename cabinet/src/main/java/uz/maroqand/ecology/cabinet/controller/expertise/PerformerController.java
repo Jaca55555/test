@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import com.lowagie.text.DocumentException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -300,7 +301,7 @@ public class PerformerController {
             @RequestParam(name = "comment")String comment,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
-    ) throws IOException {
+    ) throws IOException, DocumentException {
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id);

@@ -221,6 +221,7 @@ public class ConclusionController {
             model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
         }
         model.addAttribute("conclusion", conclusion);
+        System.out.println(conclusion.getHtmlText());
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("isRegApplication", Boolean.FALSE);
 

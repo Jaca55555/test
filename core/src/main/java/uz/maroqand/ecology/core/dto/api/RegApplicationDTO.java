@@ -3,7 +3,9 @@ package uz.maroqand.ecology.core.dto.api;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.lowagie.text.DocumentException;
 import lombok.Data;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import uz.maroqand.ecology.core.entity.expertise.BoilerCharacteristics;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
@@ -46,7 +48,7 @@ public class RegApplicationDTO {
     private String fileStr;
     private Integer fileId;
 
-    public static RegApplicationDTO fromEntity(RegApplication model, ConclusionService conclusionService, FileService fileService) throws IOException {
+    public static RegApplicationDTO fromEntity(RegApplication model, ConclusionService conclusionService, FileService fileService) throws IOException, DocumentException {
         RegApplicationDTO dto = new RegApplicationDTO();
         dto.setId(model.getId());
         dto.setName(model.getName());
@@ -72,7 +74,9 @@ public class RegApplicationDTO {
         }
 
         dto.setSubjectActivities(model.getActivityId());
-        dto.setSubjectCategories(model.getCategory().getId());
+        if (model.getCategory() != null) {
+            dto.setSubjectCategories(model.getCategory().getId());
+        }
         //normativ hujjatlar
         dto.setStandartDocType(8);
         if(model.getConclusionId()!=null){
@@ -90,7 +94,14 @@ public class RegApplicationDTO {
                 String encodedString =  new String(encodedBytes);
                 dto.setFileStr(encodedString);
             }else{
-                dto.setFileStr(conclusionService.getById(model.getConclusionId()).getHtmlText());
+                String htmlText = conclusionService.getById(model.getConclusionId()).getHtmlText();
+                java.io.File  pdfFile= fileService.renderPdf(htmlText);
+
+                byte[] bytes = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+                byte[] encodedBytes = Base64.getEncoder().encode(bytes);
+                String encodedString =  new String(encodedBytes);
+                dto.setFileStr(encodedString);
+//                dto.setFileStr(conclusionService.getById(model.getConclusionId()).getHtmlText());
             }
             //FileEnd
         }

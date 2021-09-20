@@ -1,9 +1,11 @@
 package uz.maroqand.ecology.core.service.sys.impl;
 
+import com.lowagie.text.DocumentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -13,11 +15,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
+import org.xhtmlrenderer.pdf.ITextRenderer;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.repository.sys.FileRepository;
 import uz.maroqand.ecology.core.service.sys.FileService;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -190,6 +196,19 @@ public class FileServiceImpl implements FileService {
     @Override
     public File save(File file) {
         return fileRepository.save(file);
+    }
+
+    @Override
+    public java.io.File renderPdf(String htmlText) throws IOException, DocumentException {
+        java.io.File file = java.io.File.createTempFile("students", ".pdf");
+        OutputStream outputStream = new FileOutputStream(file);
+        ITextRenderer renderer = new ITextRenderer(20f * 4f / 3f, 20);
+        renderer.setDocumentFromString(htmlText, "");
+        renderer.layout();
+        renderer.createPDF(outputStream);
+        outputStream.close();
+        file.deleteOnExit();
+        return file;
     }
 
     private void createAndSetNextUploadFolder() {
