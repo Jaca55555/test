@@ -1928,11 +1928,13 @@ public class RegApplicationCategoryFourController {
             regApplicationService.update(regApplication);
         }else{
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-            invoice = invoiceService.modification(regApplication, invoice, requirement);
             invoiceService.checkInvoiceStatus(invoice);
             if (invoice.getStatus().equals(InvoiceStatus.Success) || invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
                 return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus + "?id=" + id;
             }
+
+            invoice = invoiceService.modification(regApplication, invoice, requirement);
+
         }
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);

@@ -363,51 +363,23 @@ public class PerformerController {
             regApplication.setStatus(RegApplicationStatus.Process);
             regApplicationService.update(regApplication);
         }
-        Set<Integer> materialsInt= regApplication.getMaterials();
-        Integer next = materialsInt.iterator().next();
-        if(next==8){
-            RegApplicationDTO regApplicationDTO = RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService);
-            ResponseDTO responseDTO = new ResponseDTO();
-            responseDTO.setStatusCode(0);
-            responseDTO.setStatusMessage("RegApplication is confirmed");
-            responseDTO.setData(regApplicationDTO);
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
-            HttpEntity reqEntity = new HttpEntity(responseDTO);
-            ResponseEntity<?> responseEntity =restTemplate.exchange("http://fo.eco-service.uz/get_post", HttpMethod.POST, reqEntity, Object.class);
-            responseEntity.getStatusCode().is2xxSuccessful();
-        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+reqEntity);
-        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity.getStatusCode());
-        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity);
 
-        }
+//        Set<Integer> materialsInt= regApplication.getMaterials();
+//        Integer next = materialsInt.iterator().next();
+//        if(next==8){
+//            RegApplicationDTO regApplicationDTO = RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService);
+//            ResponseDTO responseDTO = new ResponseDTO();
+//            responseDTO.setStatusCode(0);
+//            responseDTO.setStatusMessage("RegApplication is confirmed");
+//            responseDTO.setData(regApplicationDTO);
+//            HttpEntity reqEntity = new HttpEntity(responseDTO);
+//            ResponseEntity<?> responseEntity =restTemplate.exchange("http://fo.eco-service.uz/get_post", HttpMethod.POST, reqEntity, Object.class);
+//            responseEntity.getStatusCode().is2xxSuccessful();
+//        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+reqEntity);
+//        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity.getStatusCode());
+//        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity);
+//
+//        }
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }
 
