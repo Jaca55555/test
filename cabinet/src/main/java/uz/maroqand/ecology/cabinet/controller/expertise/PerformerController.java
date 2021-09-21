@@ -365,7 +365,7 @@ public class PerformerController {
         }
         Set<Integer> materialsInt= regApplication.getMaterials();
         Integer next = materialsInt.iterator().next();
-//        if(next==8){
+        if(next==8){
             RegApplicationDTO regApplicationDTO = RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService);
             ResponseDTO responseDTO = new ResponseDTO();
             responseDTO.setStatusCode(0);
@@ -407,7 +407,7 @@ public class PerformerController {
         System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity.getStatusCode());
         System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity);
 
-//        }
+        }
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }
 

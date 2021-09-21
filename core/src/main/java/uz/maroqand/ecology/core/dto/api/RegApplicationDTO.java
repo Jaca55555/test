@@ -95,7 +95,9 @@ public class RegApplicationDTO {
                 dto.setFileStr(encodedString);
             }else{
                 String htmlText = conclusionService.getById(model.getConclusionId()).getHtmlText();
-                java.io.File  pdfFile= fileService.renderPdf(htmlText);
+                String XHtmlText = htmlText.replaceAll("&nbsp;","&#160;");
+
+               java.io.File  pdfFile= fileService.renderPdf(XHtmlText);
 
                 byte[] bytes = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
                 byte[] encodedBytes = Base64.getEncoder().encode(bytes);

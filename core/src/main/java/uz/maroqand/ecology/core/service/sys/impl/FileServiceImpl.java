@@ -3,6 +3,8 @@ package uz.maroqand.ecology.core.service.sys.impl;
 import com.lowagie.text.DocumentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.ClassPathResource;
@@ -200,10 +202,15 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public java.io.File renderPdf(String htmlText) throws IOException, DocumentException {
-        java.io.File file = java.io.File.createTempFile("students", ".pdf");
+        java.io.File file = java.io.File.createTempFile("conclusions", ".pdf");
         OutputStream outputStream = new FileOutputStream(file);
         ITextRenderer renderer = new ITextRenderer(20f * 4f / 3f, 20);
-        renderer.setDocumentFromString(htmlText, "");
+        Document document = Jsoup.parse(htmlText);
+        document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+        String xhtml = document.html();
+        String XHtmlText = xhtml.replaceAll("&nbsp;","&#160;");
+        System.out.println("xthml=="+xhtml);
+        renderer.setDocumentFromString(XHtmlText, "");
         renderer.layout();
         renderer.createPDF(outputStream);
         outputStream.close();
