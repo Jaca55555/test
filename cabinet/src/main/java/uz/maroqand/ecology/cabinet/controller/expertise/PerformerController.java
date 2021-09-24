@@ -7,13 +7,13 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
@@ -41,6 +41,8 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -364,21 +366,57 @@ public class PerformerController {
             regApplicationService.update(regApplication);
         }
 
-        Set<Integer> materialsInt= regApplication.getMaterials();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        // This nested HttpEntiy is important to create the correct
+        // Content-Disposition entry with metadata "name" and "filename"
+        MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
+        File file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
+        String filePath = file.getPath();
+        String originalFileName = file.getName();
+        byte[] input_file = Files.readAllBytes(Paths.get(filePath+originalFileName));
+        ContentDisposition contentDisposition = ContentDisposition
+                .builder("form-data")
+                .name("file")
+                .filename(originalFileName)
+                .build();
+        fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
+        HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
+
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", fileEntity);
+        body.add("data", RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService));
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity =
+                new HttpEntity<>(body, headers);
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(
+                    "http://172.16.11.234:8087/api/expertise",
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class);
+
+            System.out.println(response);
+        } catch (HttpClientErrorException e) {
+            e.printStackTrace();
+        }
+
+        /*Set<Integer> materialsInt= regApplication.getMaterials();
         Integer next = materialsInt.iterator().next();
-        if(next==8&&performerStatus==4){
+//        if(next==8&&performerStatus==4){
             RegApplicationDTO regApplicationDTO = RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService);
             ResponseDTO responseDTO = new ResponseDTO();
             responseDTO.setStatusCode(0);
             responseDTO.setStatusMessage("RegApplication is confirmed");
             responseDTO.setData(regApplicationDTO);
             HttpEntity reqEntity = new HttpEntity(responseDTO);
-            ResponseEntity<?> responseEntity =restTemplate.exchange("http://fo.eco-service.uz/get_post", HttpMethod.POST, reqEntity, Object.class);
-            responseEntity.getStatusCode().is2xxSuccessful();
-        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+reqEntity);
-        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity.getStatusCode());
-        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity);
-        }
+            ResponseEntity<?> responseEntity =restTemplate.exchange("http://172.16.11.234:8087/api/expertise", HttpMethod.POST, reqEntity, Object.class);*/
+//            responseEntity.getStatusCode().is2xxSuccessful();
+//        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+reqEntity);
+//        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity.getStatusCode());
+//        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity);
+//        }
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }
 
@@ -386,7 +424,6 @@ public class PerformerController {
     public String getPerformerActionEditMethod(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
-//            @RequestParam(name = "number")String number,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){
