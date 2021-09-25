@@ -8,7 +8,7 @@ import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Data
 public class SubjectDTO {
-    private Integer subjectType; //Subyekt turi(yuridik/jismoniy)
+    private Integer subjectTypes; //Subyekt turi(yuridik/jismoniy)
     private String name;
     private String director;
     private Integer tin;
@@ -28,7 +28,7 @@ public class SubjectDTO {
         dto.setName(model.getName());
         if(model.getApplicant()!=null){
 
-            dto.setSubjectType(model.getApplicant().getType().getId());
+            dto.setSubjectTypes(model.getApplicant().getType().getId());
             if(model.getApplicant().getType().getId()==1){
                 dto.setDirector(model.getApplicant().getDirectorFullName());
             }else{

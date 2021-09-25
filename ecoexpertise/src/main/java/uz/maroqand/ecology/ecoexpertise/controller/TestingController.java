@@ -13,8 +13,11 @@ import java.util.UUID;
 public class TestingController {
 
     @PostMapping
-    public ResponseEntity<?> set(@Valid @RequestBody String param) {
-        System.out.println("param="+param);
-        return new ResponseEntity<>(param, HttpStatus.OK);
+    public ResponseEntity<?> set(@Valid @RequestParam String data) {
+        System.out.println("HHHHHHHHHH");
+
+
+        System.out.println("param="+data);
+        return new ResponseEntity<>(data, HttpStatus.OK);
     }
 }

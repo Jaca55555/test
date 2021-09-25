@@ -21,6 +21,8 @@ public class DocumentDTO {
     private String docNumber;
     @JsonFormat(pattern="dd-MM-yyyy")
     private Date docDate; //normativ hujjat sanasi
+
+    @JsonFormat(pattern="dd-MM-yyyy")
     private Date validityPeriod; //normativ hujjat amal qilish muddati
     private Integer organization;
 
