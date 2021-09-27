@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
+import org.apache.commons.lang3.time.DateUtils;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
 import uz.maroqand.ecology.core.service.sys.FileService;
@@ -37,7 +38,7 @@ public class DocumentDTO {
             }
 
             if (conclusionService.getById(model.getConclusionId()).getDate() != null) {
-                dto.setValidityPeriod(conclusionService.getById(model.getConclusionId()).getDate());
+                dto.setValidityPeriod(DateUtils.addYears(conclusionService.getById(model.getConclusionId()).getDate(),3));
             } else {
                 dto.setValidityPeriod(new Date());
             }
