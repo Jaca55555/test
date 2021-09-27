@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import com.lowagie.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -7,10 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
@@ -19,10 +23,12 @@ import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
+import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
 import uz.maroqand.ecology.core.dto.api.ResponseDTO;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -37,9 +43,13 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Sadullayev Akmal on 05.10.2020.
@@ -235,7 +245,7 @@ public class ConclusionCompleteController {
             @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "number")String number,
             @RequestParam(name = "date")String dateStr
-    ){
+    ) throws IOException, DocumentException {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id);
         if (regApplication == null || regApplication.getConclusionCompleteLogId() == null || regApplication.getPerformerLogId() == null){
@@ -266,6 +276,7 @@ public class ConclusionCompleteController {
             documentEditorService.conclusionComplete(conclusion);
         }
 
+
         notificationService.create(
                 regApplication.getCreatedById(),
                 NotificationType.Expertise,
@@ -285,8 +296,71 @@ public class ConclusionCompleteController {
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
+
+
+        //sendApi
+        if(conclusion!=null) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            // This nested HttpEntiy is important to create the correct
+            // Content-Disposition entry with metadata "name" and "filename"
+            File file;
+            byte[] input_file;
+            String originalFileName;
+            RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationIdAndType(regApplication.getId(), LogType.Performer);
+            MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
+            Set<Integer> materialsInt = regApplication.getMaterials();
+            Integer next = materialsInt.iterator().next();
+            if (next == 8 && regApplicationLog.getStatus() == LogStatus.Approved) {
+                if (conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId() != null) {
+                    file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
+                    String filePath = file.getPath();
+                    originalFileName = file.getName();
+                    input_file = Files.readAllBytes(Paths.get(filePath + originalFileName));
+                } else {
+                    String htmlText = conclusionService.getById(regApplication.getConclusionId()).getHtmlText();
+                    String XHtmlText = htmlText.replaceAll("&nbsp;", "&#160;");
+                    java.io.File pdfFile = fileService.renderPdf(XHtmlText);
+                    originalFileName = pdfFile.getName();
+                    input_file = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+                }
+
+
+                ContentDisposition contentDisposition = ContentDisposition
+                        .builder("form-data")
+                        .name("file")
+                        .filename(originalFileName)
+                        .build();
+                fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
+                HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
+
+                MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+                body.add("file", fileEntity);
+                body.add("data", RegApplicationDTO.fromEntity(regApplication, conclusionService, fileService));
+
+                HttpEntity<MultiValueMap<String, Object>> requestEntity =
+                        new HttpEntity<>(body, headers);
+                try {
+                    ResponseEntity<String> response = restTemplate.exchange(
+                            "http://172.16.11.234:8087/api/expertise",
+                            HttpMethod.POST,
+                            requestEntity,
+                            String.class);
+                    Boolean value = response.getStatusCode().is2xxSuccessful();
+                    System.out.println(response);
+                } catch (HttpClientErrorException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        //sendApi
+
+
         Client client = clientService.getById(regApplication.getApplicantId());
         smsSendService.sendSMS(client.getPhone(), " Arizangiz ko'rib chiqildi, ariza raqami ", regApplication.getId(), client.getName());
+
 
 
 

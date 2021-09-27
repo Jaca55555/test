@@ -365,56 +365,57 @@ public class PerformerController {
             regApplication.setStatus(RegApplicationStatus.Process);
             regApplicationService.update(regApplication);
         }
+//send api
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//
+//        // This nested HttpEntiy is important to create the correct
+//        // Content-Disposition entry with metadata "name" and "filename"
+//        File file;
+//        byte[] input_file;
+//        String originalFileName;
+//        MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
+//        if(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId()!=null){
+//            file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
+//            String filePath = file.getPath();
+//            originalFileName = file.getName();
+//            input_file = Files.readAllBytes(Paths.get(filePath+originalFileName));
+//        }else{
+//            String htmlText = conclusionService.getById(regApplication.getConclusionId()).getHtmlText();
+//            String XHtmlText = htmlText.replaceAll("&nbsp;","&#160;");
+//            java.io.File  pdfFile= fileService.renderPdf(XHtmlText);
+//            originalFileName = pdfFile.getName();
+//            input_file = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+//        }
+//
+//
+//        ContentDisposition contentDisposition = ContentDisposition
+//                .builder("form-data")
+//                .name("file")
+//                .filename(originalFileName)
+//                .build();
+//        fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
+//        HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
+//
+//        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+//        body.add("file", fileEntity);
+//        body.add("data", RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService));
+//
+//        HttpEntity<MultiValueMap<String, Object>> requestEntity =
+//                new HttpEntity<>(body, headers);
+//        try {
+//            ResponseEntity<String> response = restTemplate.exchange(
+//                    "http://172.16.11.234:8087/api/expertise",
+//                    HttpMethod.POST,
+//                    requestEntity,
+//                    String.class);
+//
+//            System.out.println(response);
+//        } catch (HttpClientErrorException e) {
+//            e.printStackTrace();
+//        }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-        // This nested HttpEntiy is important to create the correct
-        // Content-Disposition entry with metadata "name" and "filename"
-        File file;
-        byte[] input_file;
-        String originalFileName;
-        MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
-        if(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId()!=null){
-            file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
-            String filePath = file.getPath();
-            originalFileName = file.getName();
-            input_file = Files.readAllBytes(Paths.get(filePath+originalFileName));
-        }else{
-            String htmlText = conclusionService.getById(regApplication.getConclusionId()).getHtmlText();
-            String XHtmlText = htmlText.replaceAll("&nbsp;","&#160;");
-            java.io.File  pdfFile= fileService.renderPdf(XHtmlText);
-            originalFileName = pdfFile.getName();
-            input_file = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-        }
-
-
-        ContentDisposition contentDisposition = ContentDisposition
-                .builder("form-data")
-                .name("file")
-                .filename(originalFileName)
-                .build();
-        fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
-        HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
-
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", fileEntity);
-        body.add("data", RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService));
-
-        HttpEntity<MultiValueMap<String, Object>> requestEntity =
-                new HttpEntity<>(body, headers);
-        try {
-            ResponseEntity<String> response = restTemplate.exchange(
-                    "http://172.16.11.234:8087/api/expertise",
-                    HttpMethod.POST,
-                    requestEntity,
-                    String.class);
-
-            System.out.println(response);
-        } catch (HttpClientErrorException e) {
-            e.printStackTrace();
-        }
-
+//send api
 
         /*Set<Integer> materialsInt= regApplication.getMaterials();
         Integer next = materialsInt.iterator().next();

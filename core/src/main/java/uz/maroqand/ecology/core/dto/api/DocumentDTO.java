@@ -5,13 +5,8 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
 import uz.maroqand.ecology.core.service.sys.FileService;
-
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Base64;
 import java.util.Date;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
