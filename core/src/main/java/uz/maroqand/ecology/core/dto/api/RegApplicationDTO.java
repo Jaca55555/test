@@ -16,7 +16,7 @@ public class RegApplicationDTO {
     private SubjectDTO subject;
     //normativ hujjatlar
     private DocumentDTO document;
-    public static RegApplicationDTO fromEntity(RegApplication model, ConclusionService conclusionService, FileService fileService) throws IOException, DocumentException {
+    public static RegApplicationDTO fromEntity(RegApplication model, ConclusionService conclusionService, FileService fileService) {
         RegApplicationDTO dto = new RegApplicationDTO();
         dto.setSubject(SubjectDTO.fromEntity(model));
         //normativ hujjatlar

@@ -17,22 +17,40 @@ import java.util.Date;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Data
 public class DocumentDTO {
-    private Integer standartDocType; //normativ hujjat turi
+    private Integer standartDocTypes; //normativ hujjat turi
     private String docNumber;
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="dd.MM.yyyy")
     private Date docDate; //normativ hujjat sanasi
 
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="dd.MM.yyyy")
     private Date validityPeriod; //normativ hujjat amal qilish muddati
     private Integer organization;
 
     public static DocumentDTO fromEntity(RegApplication model, ConclusionService conclusionService, FileService fileService){
         DocumentDTO dto = new DocumentDTO();
-        dto.setStandartDocType(8);
+        dto.setStandartDocTypes(8);
         if(model.getConclusionId()!=null){
-            dto.setDocNumber(conclusionService.getById(model.getConclusionId()).getNumber());
-            dto.setDocDate(conclusionService.getById(model.getConclusionId()).getDate());
-            dto.setValidityPeriod(conclusionService.getById(model.getConclusionId()).getDate());
+            if (conclusionService.getById(model.getConclusionId()).getNumber() != null) {
+                dto.setDocNumber(conclusionService.getById(model.getConclusionId()).getNumber());
+            } else {
+                dto.setDocNumber("1");
+            }
+            if (conclusionService.getById(model.getConclusionId()).getDate() != null) {
+                dto.setDocDate(conclusionService.getById(model.getConclusionId()).getDate());
+            } else {
+                dto.setDocDate(new Date());
+            }
+
+            if (conclusionService.getById(model.getConclusionId()).getDate() != null) {
+                dto.setValidityPeriod(conclusionService.getById(model.getConclusionId()).getDate());
+            } else {
+                dto.setValidityPeriod(new Date());
+            }
+            if (model.getReviewId() != null) {
+                dto.setOrganization(model.getReviewId());
+            } else {
+                dto.setOrganization(0);
+            }
 //            dto.setFileId(conclusionService.getById(model.getConclusionId()).getConclusionWordFileId());
             //File
 //            if(conclusionService.getById(model.getConclusionId()).getConclusionWordFileId()!=null){
@@ -58,6 +76,7 @@ public class DocumentDTO {
 //            }
             //FileEnd
         }
+
         return dto;
     }
 }

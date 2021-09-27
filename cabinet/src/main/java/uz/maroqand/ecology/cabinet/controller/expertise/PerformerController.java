@@ -398,7 +398,7 @@ public class PerformerController {
         HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", null);
+        body.add("file", fileEntity);
         body.add("data", RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService));
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity =
