@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import com.lowagie.text.DocumentException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -79,6 +81,8 @@ public class ConclusionCompleteController {
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
     private final RestTemplate restTemplate;
     private final RegApplicationService applicationService;
+
+    private static final Logger logger = LogManager.getLogger(ConclusionCompleteController.class);
 
     @Autowired
     public ConclusionCompleteController(
@@ -313,7 +317,7 @@ public class ConclusionCompleteController {
             Set<Integer> materialsInt = regApplication.getMaterials();
             Integer next = materialsInt.iterator().next();
             if (next == 8 && regApplicationLog.getStatus() == LogStatus.Approved) {
-                if (conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId() != null) {
+                if (conclusionService.getById(conclusion.getId()).getConclusionWordFileId() != null) {
                     file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
                     String filePath = file.getPath();
                     originalFileName = file.getName();
@@ -349,8 +353,10 @@ public class ConclusionCompleteController {
                             String.class);
                     Boolean value = response.getStatusCode().is2xxSuccessful();
                     System.out.println(response);
+                    logger.info("data send to Fond ");
+
                 } catch (HttpClientErrorException e) {
-                    e.printStackTrace();
+                    logger.error("data not send to Fond ");
                 }
             }
         }
