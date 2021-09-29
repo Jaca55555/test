@@ -311,4 +311,8 @@ public class RegApplication {
             inverseJoinColumns = { @JoinColumn(name = "boiler_characteristics")})
     @OrderBy(value = "id asc")
     private Set<BoilerCharacteristics> boilerCharacteristics;
+
+
+    @Column(name = "delivery_status")
+    private Short deliveryStatus;
 }

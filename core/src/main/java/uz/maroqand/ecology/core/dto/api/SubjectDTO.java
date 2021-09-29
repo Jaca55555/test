@@ -25,13 +25,20 @@ public class SubjectDTO {
 
     public static SubjectDTO fromEntity(RegApplication model){
         SubjectDTO dto = new SubjectDTO();
-        dto.setName(model.getName());
+
+        dto.setSubjectTypes(model.getApplicant().getType().getId());
+        if(model.getApplicant().getType().getId()==0){
+            dto.setName(model.getApplicant().getName());
+        }else if(model.getApplicant().getType().getId()==1) {
+            dto.setName(model.getApplicant().getName());
+        }
+
         if(model.getApplicant()!=null){
 
             dto.setSubjectTypes(model.getApplicant().getType().getId());
-            if(model.getApplicant().getType().getId()==1){
+            if(model.getApplicant().getType().getId()==0){
                 dto.setDirector(model.getApplicant().getDirectorFullName());
-            }else{
+            }else if(model.getApplicant().getType().getId()==1) {
                 dto.setDirector(model.getApplicant().getName());
             }
             dto.setTin(model.getApplicant().getTin());

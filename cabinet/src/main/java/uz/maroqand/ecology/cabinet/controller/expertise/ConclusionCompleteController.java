@@ -354,8 +354,13 @@ public class ConclusionCompleteController {
                     Boolean value = response.getStatusCode().is2xxSuccessful();
                     System.out.println(response);
                     logger.info("data send to Fond ");
+                    regApplication.setDeliveryStatus((short) 1);
+                    regApplicationService.update(regApplication);
+
 
                 } catch (HttpClientErrorException e) {
+                    regApplication.setDeliveryStatus((short) 0);
+                    regApplicationService.update(regApplication);
                     logger.error("data not send to Fond ");
                 }
             }
