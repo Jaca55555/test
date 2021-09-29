@@ -124,13 +124,13 @@ public class EmployeeController {
 
 
 
-    @RequestMapping(value = ExpertiseUrls.EmployeeControlList,method = RequestMethod.GET)
-    public String getEmployeeControlList(Model model){
-        User user = userService.getCurrentUserFromContext();
-        model.addAttribute("proccess",getProccess());
-        model.addAttribute("users",userService.getEmployeesPerformerForForwarding(user.getRole().getId()!=16?user.getOrganizationId():null));
-        return ExpertiseTemplates.EmployeeControlList;
-    }
+//    @RequestMapping(value = ExpertiseUrls.EmployeeControlList,method = RequestMethod.GET)
+//    public String getEmployeeControlList(Model model){
+//        User user = userService.getCurrentUserFromContext();
+//        model.addAttribute("proccess",getProccess());
+//        model.addAttribute("users",userService.getEmployeesPerformerForForwarding(user.getRole().getId()!=16?user.getOrganizationId():null));
+//        return ExpertiseTemplates.EmployeeControlList;
+//    }
 
 
     @RequestMapping(value = ExpertiseUrls.EmployeeControlListForward,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
