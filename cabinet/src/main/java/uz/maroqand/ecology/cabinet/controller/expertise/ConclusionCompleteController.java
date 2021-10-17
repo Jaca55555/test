@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.xml.sax.SAXException;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.CommentType;
@@ -45,6 +46,7 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -249,7 +251,7 @@ public class ConclusionCompleteController {
             @RequestParam(name = "logId")Integer logId,
             @RequestParam(name = "number")String number,
             @RequestParam(name = "date")String dateStr
-    ) throws IOException, DocumentException {
+    ) throws IOException, DocumentException, ParserConfigurationException, SAXException {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id);
         if (regApplication == null || regApplication.getConclusionCompleteLogId() == null || regApplication.getPerformerLogId() == null){
@@ -316,7 +318,7 @@ public class ConclusionCompleteController {
             MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
             Set<Integer> materialsInt = regApplication.getMaterials();
             Integer next = materialsInt.iterator().next();
-            if (next == 8 && regApplicationLog.getStatus() == LogStatus.Approved) {
+            if (next == 8 && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
                 if (conclusionService.getById(conclusion.getId()).getConclusionWordFileId() != null) {
                     file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
                     String filePath = file.getPath();

@@ -255,6 +255,8 @@ public class RegApplicationController {
             return check;
         }
 
+
+
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
         //client begin

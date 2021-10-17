@@ -75,7 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mgmt/expertise/material/**").hasAuthority(Permissions.ADMIN.name())
                 .antMatchers("/mgmt/expertise/expertise_requirement/**").hasAuthority(Permissions.ADMIN.name())
                 .antMatchers("/mgmt/expertise/offer/**").hasAuthority(Permissions.ADMIN.name())
-
+                .antMatchers("/get_post").permitAll()
                 .antMatchers("/expertise/confirm/**").hasAuthority(Permissions.EXPERTISE_CONFIRM.name())
                 .antMatchers("/expertise/forwarding/").hasAuthority(Permissions.EXPERTISE_FORWARDING.name())
                 .antMatchers("/expertise/performer/**").hasAuthority(Permissions.EXPERTISE_PERFORMER.name())
@@ -98,7 +98,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mgmt/**").hasAuthority(Permissions.ADMIN.name());
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout");
+                .logoutSuccessUrl("/login?logout")
+                .and().csrf().ignoringAntMatchers("/get_post");
 
 
 

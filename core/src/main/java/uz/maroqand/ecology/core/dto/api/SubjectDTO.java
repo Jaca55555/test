@@ -11,7 +11,7 @@ public class SubjectDTO {
     private Integer subjectTypes; //Subyekt turi(yuridik/jismoniy)
     private String name;
     private String director;
-    private Integer tin;
+    private Integer inn;
     private String oked;
     private String account;
     private String mfo;
@@ -41,7 +41,7 @@ public class SubjectDTO {
             }else if(model.getApplicant().getType().getId()==1) {
                 dto.setDirector(model.getApplicant().getName());
             }
-            dto.setTin(model.getApplicant().getTin());
+            dto.setInn(model.getApplicant().getTin());
             dto.setOked(model.getApplicant().getOked());
             dto.setAccount(model.getApplicant().getBankAccount());
             dto.setMfo(model.getApplicant().getMfo());

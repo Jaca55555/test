@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.core.service.sys.impl;
 
+import com.itextpdf.html2pdf.HtmlConverter;
 import com.lowagie.text.DocumentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -160,7 +161,7 @@ public class FileServiceImpl implements FileService {
             file.setSize(Integer.valueOf(String.valueOf(multipartFile.getSize())));
             file.setTitle(title);
             file.setDescription(description);
-
+            System.out.println("File Uploaded");
             file.setPath(directory + "/" + filename);
 
             return fileRepository.saveAndFlush(file);
@@ -202,20 +203,23 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public java.io.File renderPdf(String htmlText) throws IOException, DocumentException {
-        java.io.File file = java.io.File.createTempFile("conclusions", ".pdf");
-        OutputStream outputStream = new FileOutputStream(file);
-        ITextRenderer renderer = new ITextRenderer(20f * 4f / 3f, 20);
-        Document document = Jsoup.parse(htmlText);
-        document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
-        String xhtml = document.html();
-        String XHtmlText = xhtml.replaceAll("&nbsp;","&#160;");
-        System.out.println("xthml=="+xhtml);
-        renderer.setDocumentFromString(XHtmlText, "");
-        renderer.layout();
-        renderer.createPDF(outputStream);
-        outputStream.close();
-        file.deleteOnExit();
-        return file;
+//        java.io.File file = java.io.File.createTempFile("conclusions", ".pdf");
+//        OutputStream outputStream = new FileOutputStream(file);
+//        ITextRenderer renderer = new ITextRenderer(20f * 4f / 3f, 20);
+//        Document document = Jsoup.parse(htmlText);
+//        document.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
+//        String xhtml = document.html();
+//        String XHtmlText = xhtml.replaceAll("&nbsp;","&#160;");
+//        System.out.println("xthml=="+xhtml);
+//        renderer.setDocumentFromString(XHtmlText, "");
+//        renderer.layout();
+//        renderer.createPDF(outputStream);
+//        outputStream.close();
+//        file.deleteOnExit();
+//        return file;
+        java.io.File  f = new java.io.File("conclusion" + ".pdf");
+        HtmlConverter.convertToPdf(htmlText, new FileOutputStream(f));
+        return f;
     }
 
     private void createAndSetNextUploadFolder() {
@@ -231,6 +235,8 @@ public class FileServiceImpl implements FileService {
     public File findByIdAndUploadUserId(Integer id, Integer userId){
         return fileRepository.findByIdAndUploadedByIdAndDeletedFalse(id, userId);
     }
+
+
 
 
 }
