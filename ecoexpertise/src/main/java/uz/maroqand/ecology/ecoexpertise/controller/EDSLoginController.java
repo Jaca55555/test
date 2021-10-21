@@ -199,6 +199,7 @@ public class EDSLoginController {
 
         user.setTin(userEds.getTin());
         user.setLeTin(userEds.getLeTin());
+        user.setPinfl(userEds.getPinfl());
         user.setLastEvent(new Date());
         user = userRepository.saveAndFlush(user);
 
