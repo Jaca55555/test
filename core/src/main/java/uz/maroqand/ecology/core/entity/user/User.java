@@ -68,6 +68,9 @@ public class User {
     @Column(name = "le_tin")
     private Integer leTin;
 
+    @Column(name = "pinfl")
+    private String pinfl;
+
 
     //Organization.ID
     @Column(name = "organization_id")
