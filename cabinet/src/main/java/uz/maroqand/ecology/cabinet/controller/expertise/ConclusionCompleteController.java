@@ -317,7 +317,7 @@ public class ConclusionCompleteController {
             RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationIdAndType(regApplication.getId(), LogType.Performer);
             MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
             Set<Integer> materialsInt = regApplication.getMaterials();
-            Integer next = materialsInt.iterator().next();
+            Integer next =materialsInt.size()>0? materialsInt.iterator().next():0;
             if (next == 8 && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
                 if (conclusionService.getById(conclusion.getId()).getConclusionWordFileId() != null) {
                     file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
@@ -353,10 +353,15 @@ public class ConclusionCompleteController {
                             HttpMethod.POST,
                             requestEntity,
                             String.class);
-                    Boolean value = response.getStatusCode().is2xxSuccessful();
+                    boolean value = response.getStatusCode().is2xxSuccessful();
                     System.out.println(response);
                     logger.info("data send to Fond ");
-                    regApplication.setDeliveryStatus((short) 1);
+                    if(value){
+                        regApplication.setDeliveryStatus((short) 1);
+                    }else{
+                        regApplication.setDeliveryStatus((short) 0);
+
+                    }
                     regApplicationService.update(regApplication);
 
 
