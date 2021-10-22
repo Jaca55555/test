@@ -21,6 +21,7 @@ public interface ClientService {
     Client getByTin(Integer tin);
 
     List<Client> getByListTin(Integer tin);
+    List<Client> getByListTinAndPinfl(Integer tin,String pinfl);
 
     Client saveLegalEntity(LegalEntityDto legalEntityDto, User user, String message);
 

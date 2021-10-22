@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.core.service.integration.application;
 
-import com.lowagie.text.DocumentException;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
 import uz.maroqand.ecology.core.dto.api.ResponseDTO;
@@ -22,7 +21,7 @@ public class RegApplicationService {
     }
 
 
-    public ResponseDTO postResponse(RegApplication regApplication) throws IOException, DocumentException {
+    public ResponseDTO postResponse(RegApplication regApplication) throws IOException {
         ResponseDTO response = new ResponseDTO();
 
         RegApplicationDTO regApplicationDTO = RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService);

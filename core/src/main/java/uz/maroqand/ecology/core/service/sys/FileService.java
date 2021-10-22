@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.core.service.sys;
 
-import com.lowagie.text.DocumentException;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +28,6 @@ public interface FileService {
     File getByName(String name);
 
     File save(File file);
-    java.io.File renderPdf(String htmlText) throws IOException, DocumentException, ParserConfigurationException;
+    java.io.File renderPdf(String htmlText) throws IOException;
 
 }

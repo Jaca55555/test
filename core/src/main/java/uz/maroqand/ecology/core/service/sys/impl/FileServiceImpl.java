@@ -1,7 +1,6 @@
 package uz.maroqand.ecology.core.service.sys.impl;
 
 import com.itextpdf.html2pdf.HtmlConverter;
-import com.lowagie.text.DocumentException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,7 +196,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public java.io.File renderPdf(String htmlText) throws IOException, DocumentException {
+    public java.io.File renderPdf(String htmlText) throws IOException{
 //        java.io.File file = java.io.File.createTempFile("conclusions", ".pdf");
 //        OutputStream outputStream = new FileOutputStream(file);
 //        ITextRenderer renderer = new ITextRenderer(20f * 4f / 3f, 20);

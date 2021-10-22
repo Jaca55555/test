@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
@@ -365,7 +366,7 @@ public class ConclusionCompleteController {
                     regApplicationService.update(regApplication);
 
 
-                } catch (HttpClientErrorException e) {
+                } catch (ResourceAccessException e) {
                     regApplication.setDeliveryStatus((short) 0);
                     regApplicationService.update(regApplication);
                     logger.error("data not send to Fond ");

@@ -3,7 +3,6 @@ package uz.maroqand.ecology.core.dto.api;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.lowagie.text.DocumentException;
 import lombok.Data;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;

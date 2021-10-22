@@ -18,7 +18,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer>, JpaSpe
     Client findTop1ByTinAndDeletedFalseOrderByIdDesc(Integer tin);
 
     List<Client> findByTinAndDeletedFalse(Integer tin);
-
+    List<Client> findByTinAndPinflAndDeletedFalse(Integer tin,String pinfl);
     Client findByIdAndDeletedFalse(Integer Id);
 
     Client findTop1ByPinflAndDeletedFalseOrderByIdDesc(String pinfl);
