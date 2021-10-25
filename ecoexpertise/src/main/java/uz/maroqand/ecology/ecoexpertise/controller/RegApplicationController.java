@@ -330,6 +330,8 @@ public class RegApplicationController {
             case IndividualEnterprise: individualEntrepreneurDto = new IndividualEntrepreneurDto(applicant);break;
         }
         individualDto.setIndividualTin(individualDto.getIndividualTin()==null?user.getTin():individualDto.getIndividualTin());
+        individualDto.setIndividualPinfl(individualDto.getIndividualPinfl()==null?user.getPinfl():individualDto.getIndividualPinfl());
+        individualEntrepreneurDto.setIndividualEntrepreneurPinfl(individualEntrepreneurDto.getIndividualEntrepreneurPinfl()==null?user.getPinfl():individualEntrepreneurDto.getIndividualEntrepreneurPinfl());
         legalEntityDto.setLegalEntityTin(legalEntityDto.getLegalEntityTin()==null?user.getLeTin():legalEntityDto.getLegalEntityTin());
         model.addAttribute("applicant", applicant);
         model.addAttribute("individual", individualDto);
