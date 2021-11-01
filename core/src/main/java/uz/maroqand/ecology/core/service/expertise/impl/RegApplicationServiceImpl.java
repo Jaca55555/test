@@ -173,13 +173,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         }
 
         if (user.getTin()!=null){
-            List<Client> clientList;
-            if(user.getPinfl()!=null && !user.getPinfl().equals("")){
-                clientList = clientService.getByListTinAndPinfl(user.getTin(),user.getPinfl());
-                System.out.println("if  user.getTin()!=null  " + clientList.size());
-            }else{
-                clientList = clientService.getByListTin(user.getTin());
-            }
+
+            List<Client> clientList = clientService.getByListTin(user.getTin());
             System.out.println("if  user.getTin()!=null  " + clientList.size());
             RegApplication regApplication = getRegApplication(id, clientList);
             if (regApplication != null) return regApplication;

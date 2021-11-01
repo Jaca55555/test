@@ -147,7 +147,7 @@
                                                     <th th:text="#{sys_about.material}"></th>
                                                     <th th:text="#{sys_about.activity}"></th>
                                                     <th th:text="#{sys_list.registration_date}"></th>
-                                                    <th th:text="#{sys_list.deadline_date}"></th>
+<!--                                                    <th th:text="#{sys_list.deadline_date}"></th>-->
                                                     <th th:text="#{sys_agreement.status}"></th>
                                                     <th th:text="#{sys_conclusion_status}"></th>
                                                     <th ></th>
@@ -299,7 +299,6 @@
                 {data: 3, orderable:false},
                 {data: 4, name: 'category'},
                 {data: 5, name: 'registrationDate'},
-                {render: renderDeadlineDateColumn, name: 'deadlineDate'},
                 {data: 7, render:renderAgreementStatusColumn, orderable:false},
                 {data: 9, render:renderLogStatusColumn, orderable:false},
                 {render: renderActionsColumn, orderable: false}
