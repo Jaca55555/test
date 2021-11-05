@@ -31,6 +31,7 @@ public class ExpertiseUrls {
     public static final String ForwardingList = Forwarding + "/list";
     public static final String ForwardingListAjax = Forwarding + "/list_ajax";
     public static final String ForwardingView = Forwarding + "/view";
+    public static final String ForwardingChangePerformer = Forwarding + "/change_performer";
     public static final String ForwardingAction = Forwarding + "/action";
     public static final String ForwardingAgreementAdd = Forwarding + "/agreement/add";
     public static final String ForwardingAgreementDelete = Forwarding + "/agreement/delete";
