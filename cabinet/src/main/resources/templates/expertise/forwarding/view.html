@@ -113,6 +113,32 @@
 <script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
 
 <script type="text/javascript" th:inline="javascript">
+
+    var getUser = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseGetByUserId}]];
+
+
+    $('#checkBtn').click(function () {
+        $.ajax({
+            url: getUser,
+            data: {
+                userId: $('#userId').val(),
+                _csrf: $('#global_csrf').val()
+            },
+            type: 'post',
+            dataType: 'json',
+            cache: true,
+            success: function (response) {
+                $('#fio').val(response.fio);
+                console.log(response)
+
+            },
+            error: function () {
+            }
+        });
+    })
+
+
+
     var sysLogTypeAgreement = [[#{sys_logType.agreement}]];
     $('.btnNext').click(function() {
         $('.nav-tabs .active').parent().next('li').find('a').trigger('click');
