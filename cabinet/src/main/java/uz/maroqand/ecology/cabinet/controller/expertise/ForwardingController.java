@@ -8,10 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.*;
@@ -197,8 +194,38 @@ public class ForwardingController {
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("action_url",ExpertiseUrls.ForwardingChangePerformer);
         return ExpertiseTemplates.ForwardingView;
     }
+    @PostMapping(value = ExpertiseUrls.ForwardingChangePerformer + "/{id}")
+    public String RegApplicationChangePerformer(
+            @PathVariable("id") Integer id,
+            @RequestParam(name = "userId") Integer userId
+
+    ) {
+        System.out.println("userId"+userId);
+        RegApplication regApplication = regApplicationService.getById(id);
+        RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationId(id);
+        if (regApplicationLog!=null){
+            if((regApplicationLog.getStatus().getId()==0||regApplicationLog.getStatus().getId()==1||regApplicationLog.getStatus().getId()==2)&&
+                    regApplicationLog.getType().getId()==2){
+                regApplicationLog.setUpdateById(userId);
+                regApplication.setPerformerId(userId);
+                regApplicationLogService.updateDocument(regApplicationLog);
+                regApplicationService.update(regApplication);
+            }
+
+        }
+
+
+
+        return "redirect:" + ExpertiseUrls.ForwardingView;
+    }
+
+
+
+
+
 
     @RequestMapping(value = ExpertiseUrls.ForwardingAction,method = RequestMethod.POST)
     public String confirmApplication(
