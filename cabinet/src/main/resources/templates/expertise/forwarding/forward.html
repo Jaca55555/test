@@ -107,7 +107,7 @@
 <!--                    </button>-->
 <!--                </div>-->
 <!--                <div class="modal-body">-->
-<!--                    <form th:action="${action_url}" method="post" th:object="${regApplication}" data-parsley-validate="" id="about-form">-->
+<!--                    <form th:action="${action_url}" th:method="POST" th:object="${regApplication}"  id="about-form">-->
 <!--                        <div class="row mb-3">-->
 <!--                            &lt;!&ndash;                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">&ndash;&gt;-->
 <!--                            &lt;!&ndash;                                                    <option value="" th:text="#{sys_select}"></option>&ndash;&gt;-->
@@ -125,26 +125,30 @@
 <!--                            </div>-->
 <!--                            <div class="col-md-6 col-sm-12">-->
 <!--                                <div class="row">-->
-<!--                                    <div class="mr-2">-->
+<!--                                    <div class="w-100">-->
 <!--                                        <label class="control-label"  th:text="#{sys_id}"></label><br/>-->
-<!--                                        <input type="number" class="form-control" name="userId" id="userId">-->
+<!--                                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId" name="userId">-->
+<!--&lt;!&ndash;                                            <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>&ndash;&gt;-->
+<!--                                            <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>-->
+<!--                                        </select>-->
+
 <!--                                    </div>-->
-<!--                                    <div style="margin-top: 30px">-->
-<!--                                        <input id="checkBtn" class="btn btn-danger" type="button" th:value="#{sys_documentRepo_info}">-->
-<!--                                    </div>-->
+<!--&lt;!&ndash;                                    <div style="margin-top: 30px">&ndash;&gt;-->
+<!--&lt;!&ndash;                                        <input id="checkBtn" class="btn btn-danger" type="button" th:value="#{sys_documentRepo_info}">&ndash;&gt;-->
+<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
 <!--                                </div>-->
 <!--                            </div>-->
-<!--                            <div class="col-md-12 mt-3 col-sm-12">-->
-<!--                                <div>-->
-<!--                                    <label class="control-label"  th:text="#{doc_incoming.reg_performer_name}"></label><br/>-->
-<!--                                    <input type="text" class="form-control" id="fio" readonly>-->
-<!--                                </div>-->
-<!--                            </div>-->
+<!--&lt;!&ndash;                            <div class="col-md-12 mt-3 col-sm-12">&ndash;&gt;-->
+<!--&lt;!&ndash;                                <div>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <label class="control-label"  th:text="#{doc_incoming.reg_performer_name}"></label><br/>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <input type="text" class="form-control" id="fio" readonly>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
 
 
 <!--                        </div>-->
 
-<!--                        <input type="hidden" name="id" th:value="${regApplication.id}" />-->
+<!--                        <input type="hidden" name="reg_id" id="reg_id" th:value="${regApplication.id}" />-->
 <!--                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
 <!--                        <div class="row" >-->
 <!--                            <div class="form-group col-md-12 text-center" >-->
@@ -166,39 +170,29 @@
 <!--        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">-->
 <!--            <div class="modal-content ">-->
 <!--                <div class="modal-header">-->
-<!--                    <h5 class="modal-title" id="exampleModalLongTitleAudit">Modal title</h5>-->
+<!--                    <h5 class="modal-title" id="exampleModalLongTitleAudit" th:text="#{performer_changes}">Modal title</h5>-->
 <!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
 <!--                        <span aria-hidden="true">&times;</span>-->
 <!--                    </button>-->
 <!--                </div>-->
 <!--                <div class="modal-body">-->
 <!--                    <table class="table">-->
-<!--                        <thead class="thead-dark">-->
+<!--                        <thead class="table-success">-->
 <!--                        <tr>-->
 <!--                            <th scope="col">#</th>-->
-<!--                            <th scope="col">First</th>-->
-<!--                            <th scope="col">Last</th>-->
-<!--                            <th scope="col">Handle</th>-->
+<!--                            <th scope="col" th:text="#{before_performer}">First</th>-->
+<!--                            <th scope="col" th:text="#{after_performer}">Last</th>-->
+<!--                            <th scope="col" th:text="#{updated_date}">Handle</th>-->
+<!--                            <th scope="col" th:text="#{user_id}">Handle</th>-->
 <!--                        </tr>-->
 <!--                        </thead>-->
 <!--                        <tbody>-->
-<!--                        <tr>-->
-<!--                            <th scope="row">1</th>-->
-<!--                            <td>Mark</td>-->
-<!--                            <td>Otto</td>-->
-<!--                            <td>@mdo</td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th scope="row">2</th>-->
-<!--                            <td>Jacob</td>-->
-<!--                            <td>Thornton</td>-->
-<!--                            <td>@fat</td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <th scope="row">3</th>-->
-<!--                            <td>Larry</td>-->
-<!--                            <td>the Bird</td>-->
-<!--                            <td>@twitter</td>-->
+<!--                        <tr th:each="history,stat:${histories}">-->
+<!--                            <th scope="row" style="padding: 20px 0px" th:text="${stat.count}">1</th>-->
+<!--                            <td th:text="${@userServiceImpl.findById(history.beforePerformer).getFName()}">Mark</td>-->
+<!--                            <td th:text="${@userServiceImpl.findById(history.afterPerformer).getFName()}">Mark</td>-->
+<!--                            <td th:text="${history.createdAt!=null? #dates.format(history.createdAt,'dd.MM.yyyy HH:mm'):''}">Mark</td>-->
+<!--                            <td th:text="${@userServiceImpl.findById(history.createdById).getFName()}">Mark</td>-->
 <!--                        </tr>-->
 <!--                        </tbody>-->
 <!--                    </table>-->
@@ -220,8 +214,8 @@
 <!--                <input class="form-control" readonly="readonly" th:value="${@helperService.getUserFullNameById(regApplication.performerId)}">-->
 <!--            </div>-->
 <!--            <div class="col-md-3">-->
-<!--                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#editModal" >Edit</button>-->
-<!--                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#auditModal">Info</button>-->
+<!--                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#editModal" th:text="#{performer_edit}" >Edit</button>-->
+<!--                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#auditModal" th:text="#{performer_info}">Info</button>-->
 <!--            </div>-->
 
 
