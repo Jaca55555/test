@@ -18,6 +18,7 @@ import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.repository.expertise.PerformerHistoryRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
@@ -57,6 +58,7 @@ public class ForwardingController {
     private final CommentService commentService;
     private final SmsSendService smsSendService;
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
+    private final PerformerHistoryRepository performerHistoryRepository;
 
     @Autowired
     public ForwardingController(
@@ -76,7 +78,7 @@ public class ForwardingController {
             NotificationService notificationService,
             CommentService commentService,
             SmsSendService smsSendService,
-            RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
+            RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, PerformerHistoryRepository performerHistoryRepository) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -94,6 +96,7 @@ public class ForwardingController {
         this.commentService = commentService;
         this.smsSendService = smsSendService;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
+        this.performerHistoryRepository = performerHistoryRepository;
     }
 
     @RequestMapping(ExpertiseUrls.ForwardingList)
@@ -160,7 +163,7 @@ public class ForwardingController {
         return result;
     }
 
-    @RequestMapping(ExpertiseUrls.ForwardingView)
+    @GetMapping(ExpertiseUrls.ForwardingView)
     public String getForwardingViewPage(
             @RequestParam(name = "id")Integer regApplicationId,
             Model model
@@ -194,32 +197,47 @@ public class ForwardingController {
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("regApplication", regApplication);
-        model.addAttribute("action_url",ExpertiseUrls.ForwardingChangePerformer);
+        model.addAttribute("action_url",ExpertiseUrls.ForwardingView);
+        model.addAttribute("histories",performerHistoryRepository.findByApplicationNumberAndDeletedFalse(regApplicationId));
         return ExpertiseTemplates.ForwardingView;
     }
-    @PostMapping(value = ExpertiseUrls.ForwardingChangePerformer + "/{id}")
+    @PostMapping(ExpertiseUrls.ForwardingView)
     public String RegApplicationChangePerformer(
-            @PathVariable("id") Integer id,
+            @RequestParam(name= "reg_id") Integer id,
             @RequestParam(name = "userId") Integer userId
 
     ) {
+
         System.out.println("userId"+userId);
+        User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id);
         RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationId(id);
         if (regApplicationLog!=null){
-            if((regApplicationLog.getStatus().getId()==0||regApplicationLog.getStatus().getId()==1||regApplicationLog.getStatus().getId()==2)&&
-                    regApplicationLog.getType().getId()==2){
+//            if((regApplicationLog.getStatus().getId()==0||regApplicationLog.getStatus().getId()==1||regApplicationLog.getStatus().getId()==2)&&
+//                    regApplicationLog.getType().getId()==2){
                 regApplicationLog.setUpdateById(userId);
+                PerformerHistory performerHistory = new PerformerHistory();
+                performerHistory.setBeforePerformer(regApplication.getPerformerId());
+                performerHistory.setApplicationNumber(regApplication.getId());
+                performerHistory.setCreatedAt(new Date());
+                performerHistory.setCreatedById(user.getId());
                 regApplication.setPerformerId(userId);
                 regApplicationLogService.updateDocument(regApplicationLog);
                 regApplicationService.update(regApplication);
-            }
+
+
+                performerHistory.setAfterPerformer(userId);
+
+                performerHistoryRepository.saveAndFlush(performerHistory);
+
+//            }
 
         }
 
 
 
-        return "redirect:" + ExpertiseUrls.ForwardingView;
+        return "redirect:" + ExpertiseUrls.ForwardingView + "?id=" + regApplication.getId() + "#action";
+
     }
 
 

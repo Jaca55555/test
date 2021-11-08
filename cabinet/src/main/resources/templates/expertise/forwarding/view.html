@@ -115,27 +115,30 @@
 <script type="text/javascript" th:inline="javascript">
 
     var getUser = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseGetByUserId}]];
+    $('#userId').select2({
+        dropdownParent: $('#editModal')
+    });
 
 
-    $('#checkBtn').click(function () {
-        $.ajax({
-            url: getUser,
-            data: {
-                userId: $('#userId').val(),
-                _csrf: $('#global_csrf').val()
-            },
-            type: 'post',
-            dataType: 'json',
-            cache: true,
-            success: function (response) {
-                $('#fio').val(response.fio);
-                console.log(response)
-
-            },
-            error: function () {
-            }
-        });
-    })
+    // $('#checkBtn').click(function () {
+    //     $.ajax({
+    //         url: getUser,
+    //         data: {
+    //             userId: $('#userId').val(),
+    //             _csrf: $('#global_csrf').val()
+    //         },
+    //         type: 'post',
+    //         dataType: 'json',
+    //         cache: true,
+    //         success: function (response) {
+    //             $('#fio').val(response.fio);
+    //             console.log(response)
+    //
+    //         },
+    //         error: function () {
+    //         }
+    //     });
+    // })
 
 
 
