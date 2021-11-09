@@ -685,13 +685,15 @@ public class RegApplicationController {
         }
         regApplication.setStep(RegApplicationStep.PAYMENT);
         regApplicationService.update(regApplication);
+
         Requirement requirement = requirementService.getById(regApplication.getRequirementId());
         Invoice invoice;
         if (regApplication.getInvoiceId()==null){
             invoice = invoiceService.create(regApplication,requirement);
             regApplication.setInvoiceId(invoice.getId());
             regApplicationService.update(regApplication);
-        }else{
+        }else
+            {
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
             invoiceService.checkInvoiceStatus(invoice);
             if (invoice.getStatus().equals(InvoiceStatus.Success) || invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){

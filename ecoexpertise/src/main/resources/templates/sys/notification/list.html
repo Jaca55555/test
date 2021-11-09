@@ -70,6 +70,7 @@
                                                 <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%">
                                                     <thead>
                                                     <tr>
+                                                        <th th:text="#{reg_application.id}"></th>
                                                         <th th:text="#{sys_notification.createdBy}"></th>
                                                         <th th:text="#{sys_notification.createdAt}"></th>
                                                         <th th:text="#{sys_notification.title}"></th>
@@ -135,6 +136,7 @@
 
                 },
                 columns: [
+                    {data: 8, name: 'applicationNumber'},
                     {data: 7, name: 'createdById'},
                     {data: 6, name: 'createdAt'},
                     {data: 3, name: 'title'},

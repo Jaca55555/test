@@ -118,10 +118,11 @@ public class NotificationController {
                     notification.getType(),
                     notification.getStatus(),
                     notification.getTitle()!=null? helperService.getTranslation(notification.getTitle(),locale):"",
-                    notification.getMessage(),
+                    notification.getMessage()!=null? helperService.getTranslation(notification.getMessage(),locale):"",
                     notification.getUrl(),
                     notification.getCreatedAt()!=null? Common.uzbekistanDateAndTimeFormat.format(notification.getCreatedAt()):"",
-                    notification.getCreatedById()!=null? helperService.getUserFullNameById(notification.getCreatedById()):""
+                    notification.getCreatedById()!=null? helperService.getUserFullNameById(notification.getCreatedById()):"",
+                    notification.getApplicationNumber()
             });
         }
         result.put("recordsTotal", notificationPage.getTotalElements()); //Total elements

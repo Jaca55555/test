@@ -127,8 +127,13 @@ public class InvoiceServiceImpl implements InvoiceService {
         String materials = helperService.getMaterialShortNames(regApplication.getMaterials(),"oz");
 
         Contract contract = contractService.create(invoice,requirement, ContractType.NewApplication,regApplication.getAddNds());
-        invoice.setAmount(contract.getAmount());
-        invoice.setQty(contract.getCost());
+        if(regApplication.getBudget()){
+            invoice.setAmount(contract.getAmount());
+            invoice.setQty(contract.getCost());
+        }else{
+            invoice.setAmount((double) 0);
+            invoice.setQty((double) 0);
+        }
 
         invoice.setInvoice(createInvoiceSerial());
         invoice.setCreatedDate(new Date());
