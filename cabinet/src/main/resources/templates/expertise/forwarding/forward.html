@@ -101,7 +101,7 @@
 <!--        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">-->
 <!--            <div class="modal-content ">-->
 <!--                <div class="modal-header">-->
-<!--                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>-->
+<!--                    <h5 class="modal-title" id="exampleModalLongTitle"  th:text="#{change_performer}" >Modal title</h5>-->
 <!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
 <!--                        <span aria-hidden="true">&times;</span>-->
 <!--                    </button>-->
@@ -118,17 +118,17 @@
 
 
 <!--                            <div class="col-md-6 col-sm-12">-->
-<!--                                <div>-->
+<!--                                <div th:if="${regApplication.getPerformerId()!=null}">-->
 <!--                                    <label class="control-label"  th:text="#{qr_orgname}"></label><br/>-->
 <!--                                    <input type="text" class="form-control " readonly th:value="${regApplication.getPerformerId()+'-'+@userServiceImpl.findById(regApplication.getPerformerId()).getFName()}" >-->
 <!--                                </div>-->
 <!--                            </div>-->
 <!--                            <div class="col-md-6 col-sm-12">-->
 <!--                                <div class="row">-->
-<!--                                    <div class="w-100">-->
-<!--                                        <label class="control-label"  th:text="#{sys_id}"></label><br/>-->
+<!--                                    <div class="w-100 mr-3">-->
+<!--                                        <label class="control-label"  th:text="#{user_name}"></label><br/>-->
 <!--                                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId" name="userId">-->
-<!--&lt;!&ndash;                                            <option value="">Шаблондан танланг ёки қуйида топшириқ матнини киритинг</option>&ndash;&gt;-->
+<!--                                            <option value="" th:text="#{sys_select}"></option>-->
 <!--                                            <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>-->
 <!--                                        </select>-->
 

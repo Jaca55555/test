@@ -213,8 +213,8 @@ public class ForwardingController {
         RegApplication regApplication = regApplicationService.getById(id);
         RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationId(id);
         if (regApplicationLog!=null){
-//            if((regApplicationLog.getStatus().getId()==0||regApplicationLog.getStatus().getId()==1||regApplicationLog.getStatus().getId()==2)&&
-//                    regApplicationLog.getType().getId()==2){
+            if((regApplicationLog.getStatus().getId()==0||regApplicationLog.getStatus().getId()==1||regApplicationLog.getStatus().getId()==2)&&
+                    regApplicationLog.getType().getId()==2){
                 regApplicationLog.setUpdateById(userId);
                 PerformerHistory performerHistory = new PerformerHistory();
                 performerHistory.setBeforePerformer(regApplication.getPerformerId());
@@ -230,7 +230,7 @@ public class ForwardingController {
 
                 performerHistoryRepository.saveAndFlush(performerHistory);
 
-//            }
+            }
 
         }
 
