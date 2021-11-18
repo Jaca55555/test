@@ -6,6 +6,7 @@ import uz.maroqand.ecology.core.constant.billing.ContractType;
 import uz.maroqand.ecology.core.entity.billing.Contract;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.MinWage;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.Requirement;
 import uz.maroqand.ecology.core.repository.billing.ContractRepository;
 import uz.maroqand.ecology.core.service.billing.ContractService;
@@ -29,7 +30,7 @@ public class ContractServiceImpl implements ContractService {
         this.minWageService = minWageService;
     }
 
-    public Contract create(Invoice invoice, Requirement requirement, ContractType contractType, Boolean isNds){
+    public Contract create(Invoice invoice, Requirement requirement, ContractType contractType, Boolean isNds, RegApplication regApplication){
         Contract contract = new Contract();
         contract.setType(contractType);
         contract.setInvoiceId(invoice.getId());
@@ -37,8 +38,13 @@ public class ContractServiceImpl implements ContractService {
 
         MinWage minWage = minWageService.getMinWage();
         Double amount = requirement.getQty() * minWage.getAmount();
-        contract.setAmount(amount);
+        if(!regApplication.getBudget()&&(regApplication.getRequirementId()==5||regApplication.getRequirementId()==6||regApplication.getRequirementId()==7||regApplication.getRequirementId()==8)){
+            contract.setAmount((double) 0);
+        }else{
+            contract.setAmount(amount);
+        }
         contract.setCost(requirement.getQty());
+
 
         return contractRepository.save(contract);
     }

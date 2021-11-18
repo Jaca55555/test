@@ -126,14 +126,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         calendar.add(Calendar.DATE, 30);
         String materials = helperService.getMaterialShortNames(regApplication.getMaterials(),"oz");
 
-        Contract contract = contractService.create(invoice,requirement, ContractType.NewApplication,regApplication.getAddNds());
-        if(!regApplication.getBudget()&&(regApplication.getRequirementId()==5||regApplication.getRequirementId()==6||regApplication.getRequirementId()==7||regApplication.getRequirementId()==8)){
-            invoice.setAmount((double) 0);
-            invoice.setQty((double) 0);
-        }else{
-            invoice.setAmount(contract.getAmount());
-            invoice.setQty(contract.getCost());
-        }
+        Contract contract = contractService.create(invoice,requirement, ContractType.NewApplication,regApplication.getAddNds(),regApplication);
+        invoice.setAmount(contract.getAmount());
+        invoice.setQty(contract.getCost());
 
         invoice.setInvoice(createInvoiceSerial());
         invoice.setCreatedDate(new Date());
