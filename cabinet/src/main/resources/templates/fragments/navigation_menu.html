@@ -119,7 +119,7 @@
 <!--                        <span class="rounded-notification w-15 text-center" th:if="${@appealServiceImpl.getbyStatus()}!=0" style="height: 20px" th:text="${@appealServiceImpl.getbyStatus()}">2</span>-->
                     </a>
                 </li>
-<!--                <li class="nav-item" sec:authorize="hasAnyAuthority('EMPLOYEE_CONTROL')"><a href="/expertise/employee_control/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-users"></i></span><span class="pcoded-mtext" th:text="#{sys_employee.list}"> </span></a></li>-->
+                <li class="nav-item" sec:authorize="hasAnyAuthority('EMPLOYEE_CONTROL')"><a href="/expertise/employee_control/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-users"></i></span><span class="pcoded-mtext" th:text="#{sys_employee.list}"> </span></a></li>
                 <li class="nav-item" sec:authorize="hasAnyAuthority('PAYMENT_FILE_ALL')"><a href="/expertise/report/list" class="nav-link"><span class="pcoded-micon"><i class="feather icon-layers"></i></span><span class="pcoded-mtext" th:text="#{sys.report}"> </span></a></li>
 
                 <li class="nav-item pcoded-hasmenu" sec:authorize="hasAnyAuthority('ADMIN')">

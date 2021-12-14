@@ -147,7 +147,7 @@
                                                     <th th:text="#{sys_about.material}"></th>
                                                     <th th:text="#{sys_about.activity}"></th>
                                                     <th th:text="#{sys_list.registration_date}"></th>
-<!--                                                    <th th:text="#{sys_list.deadline_date}"></th>-->
+                                                    <th th:text="#{sys_list.deadline_date}"></th>
                                                     <th th:text="#{sys_agreement.status}"></th>
                                                     <th th:text="#{sys_conclusion_status}"></th>
                                                     <th ></th>
@@ -207,7 +207,7 @@
                 if (complete){
                     html='<span class="badge badge-info">'+deadlineDate1+'</span>'
                 }else{
-                    html='<span class="badge badge-info">'+deadlineDate1+'</span>'
+                    html='<span class="badge badge-danger">'+deadlineDate1+'</span>'
                 }
             }else{
                 var parts = deadlineDate1.split('.');
@@ -222,9 +222,9 @@
                     html='<span class="badge badge-info"  data-toggle="tooltip" data-placement="top" title="'+(deadlineDate.getTime()-nowDate.getTime())/(1000*3600*24)+haveDay+'">'+deadlineDate1+'</span>'
                 }else{
                     if (deadlineDate>=nowDate && nearDate<=nowDate){
-                        html='<span class="badge badge-info" data-toggle="tooltip" data-placement="top" title="'+(deadlineDate.getTime()-nowDate.getTime())/(1000*3600*24)+haveDay+'">'+deadlineDate1+'</span>'
+                        html='<span class="badge badge-warning" data-toggle="tooltip" data-placement="top" title="'+(deadlineDate.getTime()-nowDate.getTime())/(1000*3600*24)+haveDay+'">'+deadlineDate1+'</span>'
                     }else{
-                        html='<span class="badge badge-info" data-toggle="tooltip" data-placement="top" title="'+(nowDate.getTime()-deadlineDate.getTime())/(1000*3600*24)+leftDay+'">'+deadlineDate1+'</span>'
+                        html='<span class="badge badge-danger" data-toggle="tooltip" data-placement="top" title="'+(nowDate.getTime()-deadlineDate.getTime())/(1000*3600*24)+leftDay+'">'+deadlineDate1+'</span>'
                     }
                 }
             }
@@ -299,6 +299,7 @@
                 {data: 3, orderable:false},
                 {data: 4, name: 'category'},
                 {data: 5, name: 'registrationDate'},
+                {render: renderDeadlineDateColumn, name: 'deadlineDate'},
                 {data: 7, render:renderAgreementStatusColumn, orderable:false},
                 {data: 9, render:renderLogStatusColumn, orderable:false},
                 {render: renderActionsColumn, orderable: false}
