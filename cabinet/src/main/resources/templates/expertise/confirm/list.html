@@ -232,6 +232,7 @@
             lengthMenu: [ [20, 50, 100], [20, 50, 100] ],
             order: [[6, 'desc']],
             dom: 'lrtip',
+            stateSave: true,
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
                 var jqTable = $(api.table().node());
