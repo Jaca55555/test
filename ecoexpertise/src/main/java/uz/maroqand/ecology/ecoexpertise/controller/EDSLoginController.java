@@ -45,7 +45,7 @@ public class EDSLoginController {
     Logger logger = LogManager.getLogger(MainController.class);
 
     private final Pattern tinPattern = Pattern.compile("=([1-9][0-9]{8}),");
-    private final Pattern pinflPattern = Pattern.compile("=([1-9]{1}[0-9]{13}),");
+    private final Pattern pinflPattern = Pattern.compile("=([1-9][0-9]{13}),");
 
     //EDS kirishda API key domenga to'g'ri bog'langan bo'lishi kerak.
     //Bu API keylar GNK NTMdagi Azamat aka tomonidan berilgan
@@ -99,9 +99,10 @@ public class EDSLoginController {
         }
 
         logger.info("subjectName: {}", subjectName);
-
+        String pinfl = subjectName.substring(subjectName.length()-14);
+        Matcher matcher1 = pinflPattern.matcher(pinfl);
+        System.out.println("matcher1"+matcher1);
         Matcher matcher = tinPattern.matcher(subjectName);
-        Matcher matcher1 = pinflPattern.matcher(subjectName);
 
         if (matcher1.find()){
             logger.info("Pinfl: {}", matcher1.group(1));
@@ -110,7 +111,7 @@ public class EDSLoginController {
 
         Integer tin = null;
         Integer leTIN = null;
-        String pinfl = null;
+//        String pinfl = null;
 
         //1-fiz litso INN si keladi.
         if (matcher.find()) {
@@ -125,7 +126,7 @@ public class EDSLoginController {
         }
 
         //2-yur litso INN si keladi.
-        if (matcher.find()) {
+        if (matcher1.find()) {
             logger.info("Pinfl: {}", matcher1.group(1));
             pinfl = matcher1.group(1);
         }
@@ -186,7 +187,7 @@ public class EDSLoginController {
 
             List<User> userList = userRepository.findByTin(tin);
             if(userList.size()>0){
-                user.setUsername(tin.toString()+"_"+userList.size());
+                user.setUsername(pinfl+"_"+userList.size());
             }else {
                 user.setUsername(userEds.getTin().toString());
             }

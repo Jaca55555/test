@@ -62,6 +62,11 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public List<Client> getByListPinfl(String pinfl) {
+        return clientRepository.findByPinflAndDeletedFalse(pinfl);
+    }
+
+    @Override
     public List<Client> getByListTinAndPinfl(Integer tin, String pinfl) {
         return clientRepository.findByTinAndPinflAndDeletedFalse(tin,pinfl);
     }

@@ -146,7 +146,7 @@
                                         <br/>
 
                                         <script src="/static/gnk/e-imzo.js" type="text/javascript"></script>
-                                        <script src="/static/gnk/e-imzo-client.js" type="text/javascript"></script>
+                                        <script src="/static/gnk/e-imzo-client.js?v=2.1" type="text/javascript"></script>
                                         <script th:inline="javascript">
                                             const sysSign = [[#{sys_sign}]];
                                             const sysFullName = [[#{sys_full_name}]];
@@ -168,6 +168,7 @@
                                                         '                   <span style="font-weight: bold">' + vo.O + '</span><br/>\n' +
                                                         '                   <span style="font-weight: bold" >' + sysFullName +': </span>:&nbsp;<span>' + vo.CN + '</span><br/>\n' +
                                                         '                   <span style="font-weight: bold" >' + sysTin + ':</span>:&nbsp;<span> ' + vo.TIN + ' </span><br/>\n' +
+                                                        '                   <span style="font-weight: bold" >' + sysPinfl + ':</span>:&nbsp;<span> ' + vo.PINFL + ' </span><br/>\n' +
                                                         '               </p>\n' +
                                                         '               <div class="text-right">\n' +
                                                         '                   <button type="button" class="btn btn-primary btn-sm  mr-0" onclick="selectKey(\''+itmKey+'\')">\n' +
@@ -320,7 +321,7 @@
                                                 vo.expired = dates.compare(now, vo.validTo) > 0;
                                                 var itm = document.createElement("option");
                                                 itm.value = itmkey;
-                                                itm.text = vo.CN + '\n  tin:'+vo.TIN;
+                                                itm.text = vo.CN + '\n  tin:'+vo.TIN+ '\n  pinfl:'+vo.PINFL;
                                                 if (!vo.expired) {
 
                                                 } else {

@@ -1,311 +1,311 @@
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Title</title>-->
-<!--</head>-->
-<!--<body th:fragment="forward">-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body th:fragment="forward">
 
-<!--    <form id="form" method="post" action="/expertise/forwarding/action" th:if="${regApplication.forwardingLogId!=null && (regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).New || regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend)}">-->
-<!--        <div class="form-group row">-->
-<!--            <div class="col-md-3 text-right">-->
-<!--                <label class="col-form-label" th:text="#{sys_reg_application.performer}"></label>-->
-<!--            </div>-->
-<!--            <div class="col-md-6">-->
-<!--                <select class="form-control" id="performerId" name="performerId" >-->
-<!--                    <option value="" th:text="#{sys_select}"></option>-->
-<!--                    <option th:each="user : ${performerList}" th:value="${user.id}" th:text="${user.getFullName()}"></option>-->
-<!--                </select>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="form-group row">-->
-<!--            <div class="col-md-3 text-right">-->
-<!--                <label class="col-form-label" th:text="#{sys_reg_application.performer_text}" th:selected="${regApplication}"></label>-->
-<!--            </div>-->
-<!--            <div class="col-md-6">-->
-<!--                <textarea class="form-control max-textarea" maxlength="255" name="comment" rows="4" th:value="${performerLog!=null? performerLog.comment:''}"></textarea>-->
-<!--            </div>-->
-<!--        </div>-->
+    <form id="form" method="post" action="/expertise/forwarding/action" th:if="${regApplication.forwardingLogId!=null && (regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).New || regApplicationLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend)}">
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.performer}"></label>
+            </div>
+            <div class="col-md-6">
+                <select class="form-control" id="performerId" name="performerId" >
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="user : ${performerList}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.performer_text}" th:selected="${regApplication}"></label>
+            </div>
+            <div class="col-md-6">
+                <textarea class="form-control max-textarea" maxlength="255" name="comment" rows="4" th:value="${performerLog!=null? performerLog.comment:''}"></textarea>
+            </div>
+        </div>
 
-<!--        <div class="form-group row">-->
-<!--            <div class="col-md-3 text-right">-->
-<!--                <label class="col-form-label" th:text="#{sys_reg_application.addAgreement}"></label>-->
-<!--            </div>-->
-<!--            <div class="col-md-5">-->
-<!--                <select class="form-control" id="agreements" name="agreements" >-->
-<!--                    <option value="" th:text="#{sys_select}"></option>-->
-<!--                    <option th:each="user : ${agreementList}" th:value="${user.id}" th:text="${user.getFullName()}"></option>-->
-<!--                </select>-->
-<!--            </div>-->
-<!--            <div class="col-md-1 text-left">-->
-<!--                <div class="input-group-append">-->
-<!--                    <button class="btn btn-primary" type="button" th:text="#{sys_add}" onclick="addAgreementUser()">Qo'shish</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <h4 class="text-center" th:text="#{sys_reg_application.agreements}"></h4>-->
-<!--        <div class="col-md-6 offset-3">-->
-<!--            <table style="width: 100%" id="agreementsTable">-->
-<!--                <tr th:each="agreementLog : ${agreementLogList}">-->
-<!--                    <td style="padding-bottom: 5px;padding-top: 20px;">-->
-<!--                        <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 5%; background-color: #bdc0c3; margin-right: 15px;" th:text="${@helperService.getUserLastAndFirstShortById(agreementLog.updateById)}" ></span>-->
-<!--                    </td>-->
-<!--                    <td style="border-bottom: 1px solid #f4f4f4;width: 100%;">-->
-<!--                        <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}"></h6>-->
-<!--                        <small th:text="#{sys_logType.agreement}"></small>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--            </table>-->
-<!--        </div>-->
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.addAgreement}"></label>
+            </div>
+            <div class="col-md-5">
+                <select class="form-control" id="agreements" name="agreements" >
+                    <option value="" th:text="#{sys_select}"></option>
+                    <option th:each="user : ${agreementList}" th:value="${user.id}" th:text="${user.getFullName()}"></option>
+                </select>
+            </div>
+            <div class="col-md-1 text-left">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" th:text="#{sys_add}" onclick="addAgreementUser()">Qo'shish</button>
+                </div>
+            </div>
+        </div>
+        <h4 class="text-center" th:text="#{sys_reg_application.agreements}"></h4>
+        <div class="col-md-6 offset-3">
+            <table style="width: 100%" id="agreementsTable">
+                <tr th:each="agreementLog : ${agreementLogList}">
+                    <td style="padding-bottom: 5px;padding-top: 20px;">
+                        <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 5%; background-color: #bdc0c3; margin-right: 15px;" th:text="${@helperService.getUserLastAndFirstShortById(agreementLog.updateById)}" ></span>
+                    </td>
+                    <td style="border-bottom: 1px solid #f4f4f4;width: 100%;">
+                        <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}"></h6>
+                        <small th:text="#{sys_logType.agreement}"></small>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-<!--        <h4 class="text-center" th:text="#{sys_regApplicationLog.documentFiles}" style="padding-top: 40px"></h4>-->
-<!--        <div class="col-md-6 offset-md-3 row" style="padding: 10px 0 40px 0;" id="files-div-documentFiles">-->
-<!--            <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">-->
-<!--                <div class="add-file">-->
-<!--                    <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">-->
-<!--                    <span id="percentage"><span id="percentage-num"></span>%</span>-->
-<!--                    <i class="feather icon-plus" id="plus-icon"></i>-->
-<!--                </div>-->
-<!--            </a>-->
-<!--            <div class="col-md-3" th:each="file : ${regApplicationLog.documentFiles}" th:id="${'file-block-' + file.id}">-->
-<!--                <div class="file">-->
-<!--                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDownload + '?file_id=' + file.id}">-->
-<!--                        <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>-->
-<!--                        <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>-->
-<!--                        <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>-->
-<!--                        <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>-->
-<!--                        <i th:if="${file.extension!='doc' && file.extension!='docx' && file.extension!='xls' && file.extension!='xlsx' && file.extension!='pdf' && file.extension!='png' && file.extension!='jpg' && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>-->
-<!--                        <span th:text="${file.description}"></span>-->
-<!--                        <p th:text="${file.name}"></p>-->
-<!--                    </a>-->
-<!--                    <button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">-->
-<!--                        <i class="feather icon-x"></i>-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <input type="hidden" id="regApplicationId" name="id" th:value="${regApplication.id}">-->
-<!--        <input type="hidden" name="logId" th:value="${regApplicationLog.id}">-->
-<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-<!--        <div class="form-group row">-->
-<!--            <div class="col-md-12 text-center" id="tab-control-buttons">-->
-<!--                <a class="btn btn-danger btnPrevious text-white" th:text="#{sys_back}">Отмена</a>-->
-<!--                <input class="btn btn-primary text-white" type="submit" th:value="#{sys_send}">-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </form>-->
-
-
-<!--    &lt;!&ndash; Modal &ndash;&gt;-->
-<!--    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">-->
-<!--        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">-->
-<!--            <div class="modal-content ">-->
-<!--                <div class="modal-header">-->
-<!--                    <h5 class="modal-title" id="exampleModalLongTitle"  th:text="#{change_performer}" >Modal title</h5>-->
-<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                        <span aria-hidden="true">&times;</span>-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--                <div class="modal-body">-->
-<!--                    <form th:action="${action_url}" th:method="POST" th:object="${regApplication}"  id="about-form">-->
-<!--                        <div class="row mb-3">-->
-<!--                            &lt;!&ndash;                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">&ndash;&gt;-->
-<!--                            &lt;!&ndash;                                                    <option value="" th:text="#{sys_select}"></option>&ndash;&gt;-->
-<!--                            &lt;!&ndash;                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>&ndash;&gt;-->
-<!--                            &lt;!&ndash;                                                </select>&ndash;&gt;-->
+        <h4 class="text-center" th:text="#{sys_regApplicationLog.documentFiles}" style="padding-top: 40px"></h4>
+        <div class="col-md-6 offset-md-3 row" style="padding: 10px 0 40px 0;" id="files-div-documentFiles">
+            <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
+                <div class="add-file">
+                    <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                    <span id="percentage"><span id="percentage-num"></span>%</span>
+                    <i class="feather icon-plus" id="plus-icon"></i>
+                </div>
+            </a>
+            <div class="col-md-3" th:each="file : ${regApplicationLog.documentFiles}" th:id="${'file-block-' + file.id}">
+                <div class="file">
+                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDownload + '?file_id=' + file.id}">
+                        <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                        <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                        <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                        <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                        <i th:if="${file.extension!='doc' && file.extension!='docx' && file.extension!='xls' && file.extension!='xlsx' && file.extension!='pdf' && file.extension!='png' && file.extension!='jpg' && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                        <span th:text="${file.description}"></span>
+                        <p th:text="${file.name}"></p>
+                    </a>
+                    <button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">
+                        <i class="feather icon-x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" id="regApplicationId" name="id" th:value="${regApplication.id}">
+        <input type="hidden" name="logId" th:value="${regApplicationLog.id}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="form-group row">
+            <div class="col-md-12 text-center" id="tab-control-buttons">
+                <a class="btn btn-danger btnPrevious text-white" th:text="#{sys_back}">Отмена</a>
+                <input class="btn btn-primary text-white" type="submit" th:value="#{sys_send}">
+            </div>
+        </div>
+    </form>
 
 
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle"  th:text="#{change_performer}" >Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="${action_url}" th:method="POST" th:object="${regApplication}"  id="about-form">
+                        <div class="row mb-3">
+                            <!--                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">-->
+                            <!--                                                    <option value="" th:text="#{sys_select}"></option>-->
+                            <!--                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>-->
+                            <!--                                                </select>-->
 
 
-<!--                            <div class="col-md-6 col-sm-12">-->
-<!--                                <div th:if="${regApplication.getPerformerId()!=null}">-->
-<!--                                    <label class="control-label"  th:text="#{qr_orgname}"></label><br/>-->
-<!--                                    <input type="text" class="form-control " readonly th:value="${regApplication.getPerformerId()+'-'+@userServiceImpl.findById(regApplication.getPerformerId()).getFName()}" >-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="col-md-6 col-sm-12">-->
-<!--                                <div class="row">-->
-<!--                                    <div class="w-100 mr-3">-->
-<!--                                        <label class="control-label"  th:text="#{user_name}"></label><br/>-->
-<!--                                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId" name="userId">-->
-<!--                                            <option value="" th:text="#{sys_select}"></option>-->
-<!--                                            <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>-->
-<!--                                        </select>-->
 
+
+                            <div class="col-md-6 col-sm-12">
+                                <div th:if="${regApplication.getPerformerId()!=null}">
+                                    <label class="control-label"  th:text="#{qr_orgname}"></label><br/>
+                                    <input type="text" class="form-control " readonly th:value="${regApplication.getPerformerId()+'-'+@userServiceImpl.findById(regApplication.getPerformerId()).getFName()}" >
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="row">
+                                    <div class="w-100 mr-3">
+                                        <label class="control-label"  th:text="#{user_name}"></label><br/>
+                                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId" name="userId">
+                                            <option value="" th:text="#{sys_select}"></option>
+                                            <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>
+                                        </select>
+
+                                    </div>
+<!--                                    <div style="margin-top: 30px">-->
+<!--                                        <input id="checkBtn" class="btn btn-danger" type="button" th:value="#{sys_documentRepo_info}">-->
 <!--                                    </div>-->
-<!--&lt;!&ndash;                                    <div style="margin-top: 30px">&ndash;&gt;-->
-<!--&lt;!&ndash;                                        <input id="checkBtn" class="btn btn-danger" type="button" th:value="#{sys_documentRepo_info}">&ndash;&gt;-->
-<!--&lt;!&ndash;                                    </div>&ndash;&gt;-->
+                                </div>
+                            </div>
+<!--                            <div class="col-md-12 mt-3 col-sm-12">-->
+<!--                                <div>-->
+<!--                                    <label class="control-label"  th:text="#{doc_incoming.reg_performer_name}"></label><br/>-->
+<!--                                    <input type="text" class="form-control" id="fio" readonly>-->
 <!--                                </div>-->
 <!--                            </div>-->
-<!--&lt;!&ndash;                            <div class="col-md-12 mt-3 col-sm-12">&ndash;&gt;-->
-<!--&lt;!&ndash;                                <div>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <label class="control-label"  th:text="#{doc_incoming.reg_performer_name}"></label><br/>&ndash;&gt;-->
-<!--&lt;!&ndash;                                    <input type="text" class="form-control" id="fio" readonly>&ndash;&gt;-->
-<!--&lt;!&ndash;                                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
 
 
-<!--                        </div>-->
+                        </div>
 
-<!--                        <input type="hidden" name="reg_id" id="reg_id" th:value="${regApplication.id}" />-->
-<!--                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
-<!--                        <div class="row" >-->
-<!--                            <div class="form-group col-md-12 text-center" >-->
-<!--&lt;!&ndash;                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>&ndash;&gt;-->
-<!--                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}"  >Далее</button>&lt;!&ndash;onclick="submitForm()"&ndash;&gt;-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--&lt;!&ndash;                <div class="modal-footer">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <button type="button" class="btn btn-primary">Save changes</button>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    &lt;!&ndash; Modal &ndash;&gt;-->
-<!--    <div class="modal fade" id="auditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">-->
-<!--        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">-->
-<!--            <div class="modal-content ">-->
-<!--                <div class="modal-header">-->
-<!--                    <h5 class="modal-title" id="exampleModalLongTitleAudit" th:text="#{performer_changes}">Modal title</h5>-->
-<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                        <span aria-hidden="true">&times;</span>-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--                <div class="modal-body">-->
-<!--                    <table class="table">-->
-<!--                        <thead class="table-success">-->
-<!--                        <tr>-->
-<!--                            <th scope="col">#</th>-->
-<!--                            <th scope="col" th:text="#{before_performer}">First</th>-->
-<!--                            <th scope="col" th:text="#{after_performer}">Last</th>-->
-<!--                            <th scope="col" th:text="#{updated_date}">Handle</th>-->
-<!--                            <th scope="col" th:text="#{user_id}">Handle</th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody>-->
-<!--                        <tr th:each="history,stat:${histories}">-->
-<!--                            <th scope="row" style="padding: 20px 0px" th:text="${stat.count}">1</th>-->
-<!--                            <td th:text="${@userServiceImpl.findById(history.beforePerformer).getFName()}">Mark</td>-->
-<!--                            <td th:text="${@userServiceImpl.findById(history.afterPerformer).getFName()}">Mark</td>-->
-<!--                            <td th:text="${history.createdAt!=null? #dates.format(history.createdAt,'dd.MM.yyyy HH:mm'):''}">Mark</td>-->
-<!--                            <td th:text="${@userServiceImpl.findById(history.createdById).getFName()}">Mark</td>-->
-<!--                        </tr>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </div>-->
+                        <input type="hidden" name="reg_id" id="reg_id" th:value="${regApplication.id}" />
+                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="row" >
+                            <div class="form-group col-md-12 text-center" >
+<!--                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>-->
+                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}"  >Далее</button><!--onclick="submitForm()"-->
+                            </div>
+                        </div>
+                    </form>
+                </div>
 <!--                <div class="modal-footer">-->
 <!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
 <!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
 <!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="auditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitleAudit" th:text="#{performer_changes}">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead class="table-success">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" th:text="#{before_performer}">First</th>
+                            <th scope="col" th:text="#{after_performer}">Last</th>
+                            <th scope="col" th:text="#{updated_date}">Handle</th>
+                            <th scope="col" th:text="#{user_id}">Handle</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="history,stat:${histories}">
+                            <th scope="row" style="padding: 20px 0px" th:text="${stat.count}">1</th>
+                            <td th:text="${@userServiceImpl.findById(history.beforePerformer).getFName()}">Mark</td>
+                            <td th:text="${@userServiceImpl.findById(history.afterPerformer).getFName()}">Mark</td>
+                            <td th:text="${history.createdAt!=null? #dates.format(history.createdAt,'dd.MM.yyyy HH:mm'):''}">Mark</td>
+                            <td th:text="${@userServiceImpl.findById(history.createdById).getFName()}">Mark</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<!--    <form th:if="${regApplication.forwardingLogId!=null && (regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial && regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).New && regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend)}">-->
-<!--        <div class="form-group row">-->
-<!--            <div class="col-md-3 text-right">-->
-<!--                <label class="col-form-label" th:text="#{sys_reg_application.performer}"></label>-->
-<!--            </div>-->
-<!--            <div class="col-md-6">-->
-<!--                <input class="form-control" readonly="readonly" th:value="${@helperService.getUserFullNameById(regApplication.performerId)}">-->
-<!--            </div>-->
-<!--            <div class="col-md-3">-->
-<!--                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#editModal" th:text="#{performer_edit}" >Edit</button>-->
-<!--                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#auditModal" th:text="#{performer_info}">Info</button>-->
-<!--            </div>-->
-
-
-<!--        </div>-->
-<!--        <div class="form-group row">-->
-<!--            <div class="col-md-3 text-right">-->
-<!--                <label class="col-form-label" th:text="#{sys_reg_application.performer_text}"></label>-->
-<!--            </div>-->
-<!--            <div class="col-md-6">-->
-<!--                <textarea class="form-control" readonly="readonly" rows="8" th:text="${regApplicationLog.comment}"></textarea>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <h4 class="text-center" th:text="#{sys_reg_application.agreements}"></h4>-->
-<!--        <div class="col-md-6 offset-3">-->
-<!--            <table style="width: 100%" >-->
-<!--                <tr th:each="agreementLog : ${agreementLogList}">-->
-<!--                    <td style="padding-bottom: 5px;padding-top: 20px;">-->
-<!--                        <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 5%; background-color: #bdc0c3; margin-right: 15px;" th:text="${@helperService.getUserLastAndFirstShortById(agreementLog.updateById)}" ></span>-->
-<!--                    </td>-->
-<!--                    <td style="border-bottom: 1px solid #f4f4f4;width: 100%;">-->
-<!--                        <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}"></h6>-->
-<!--                        <small th:text="#{sys_logType.agreement}"></small>-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--            </table>-->
-<!--        </div>-->
-<!--        <h4 class="text-center" th:text="#{sys_regApplicationLog.documentFiles}" style="padding-top: 40px"></h4>-->
-<!--        <div class="col-md-6 offset-md-3 row" style="padding: 10px 0 40px 0;">-->
-<!--            <div class="col-md-3" th:each="file : ${regApplicationLog.documentFiles}" th:id="${'file-block-' + file.id}">-->
-<!--                <div class="file">-->
-<!--                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseFileDownload + '?file_id=' + file.id}">-->
-<!--                        <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>-->
-<!--                        <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>-->
-<!--                        <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>-->
-<!--                        <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>-->
-<!--                        <i th:if="${file.extension!='doc' && file.extension!='docx' && file.extension!='xls' && file.extension!='xlsx' && file.extension!='pdf' && file.extension!='png' && file.extension!='jpg' && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>-->
-<!--                        <span th:text="${file.description}"></span>-->
-<!--                        <p th:text="${file.name}"></p>-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <input type="hidden" name="id" th:value="${regApplication.id}">-->
-<!--        <input type="hidden" name="logId" th:value="${regApplicationLog.id}">-->
-<!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-<!--        <div class="form-group row">-->
-<!--            <div class="col-md-12 text-center" >-->
-<!--                <a class="btn btn-danger btnPrevious text-white" th:text="#{sys_back}">Отмена</a>-->
-<!--                &lt;!&ndash;<a href="#upload-file-modal" onclick="openModalFile()" class="btn btn-primary text-white" th:text="#{sys_edit_forwarding}"></a>&ndash;&gt;-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </form>-->
+    <form th:if="${regApplication.forwardingLogId!=null && (regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial && regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).New && regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend)}">
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.performer}"></label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control" readonly="readonly" th:value="${@helperService.getUserFullNameById(regApplication.performerId)}">
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#editModal" th:text="#{performer_edit}" >Edit</button>
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#auditModal" th:text="#{performer_info}">Info</button>
+            </div>
 
 
-<!--    &lt;!&ndash; Modal &ndash;&gt;-->
-<!--    <div class="modal fade" id="upload-file-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">-->
-<!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
-<!--            <div class="modal-content">-->
-<!--                <div class="modal-header">-->
-<!--                    <h5 class="modal-title" th:text="#{sys_about.upload_files}" style="float: left">Modal title</h5>-->
-<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                        <span aria-hidden="true">&times;</span>-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--                <div class="modal-body">-->
-<!--                    <div class="form-group">-->
-<!--                        <label for="file-name">-->
-<!--                            <span th:text="#{sys_file_name}"></span>-->
-<!--                            <span class="required">*</span>-->
-<!--                        </label>-->
-<!--                        <input class="form-control" type="text" id="file-name" required="" />-->
-<!--                    </div>-->
-<!--                    <div class="input-group">-->
-<!--                          <span class="input-group-btn">-->
-<!--                            <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">-->
-<!--                               <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>-->
-<!--                            </span>-->
-<!--                            <input name="uploaded_file" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">-->
-<!--                          </span>-->
-<!--                        <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" placeholder="sdfsdfsdfsdf">-->
+        </div>
+        <div class="form-group row">
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_reg_application.performer_text}"></label>
+            </div>
+            <div class="col-md-6">
+                <textarea class="form-control" readonly="readonly" rows="8" th:text="${regApplicationLog.comment}"></textarea>
+            </div>
+        </div>
+        <h4 class="text-center" th:text="#{sys_reg_application.agreements}"></h4>
+        <div class="col-md-6 offset-3">
+            <table style="width: 100%" >
+                <tr th:each="agreementLog : ${agreementLogList}">
+                    <td style="padding-bottom: 5px;padding-top: 20px;">
+                        <span class="hei-50 wid-50 d-inline-block rounded-circle font-weight-bold text-center f-18" style="color: white; padding-top: 5%; background-color: #bdc0c3; margin-right: 15px;" th:text="${@helperService.getUserLastAndFirstShortById(agreementLog.updateById)}" ></span>
+                    </td>
+                    <td style="border-bottom: 1px solid #f4f4f4;width: 100%;">
+                        <h6 class="mb-0" th:text="${@helperService.getUserFullNameById(agreementLog.updateById)}"></h6>
+                        <small th:text="#{sys_logType.agreement}"></small>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <h4 class="text-center" th:text="#{sys_regApplicationLog.documentFiles}" style="padding-top: 40px"></h4>
+        <div class="col-md-6 offset-md-3 row" style="padding: 10px 0 40px 0;">
+            <div class="col-md-3" th:each="file : ${regApplicationLog.documentFiles}" th:id="${'file-block-' + file.id}">
+                <div class="file">
+                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseFileDownload + '?file_id=' + file.id}">
+                        <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                        <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                        <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                        <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                        <i th:if="${file.extension!='doc' && file.extension!='docx' && file.extension!='xls' && file.extension!='xlsx' && file.extension!='pdf' && file.extension!='png' && file.extension!='jpg' && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                        <span th:text="${file.description}"></span>
+                        <p th:text="${file.name}"></p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="id" th:value="${regApplication.id}">
+        <input type="hidden" name="logId" th:value="${regApplicationLog.id}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="form-group row">
+            <div class="col-md-12 text-center" >
+                <a class="btn btn-danger btnPrevious text-white" th:text="#{sys_back}">Отмена</a>
+                <!--<a href="#upload-file-modal" onclick="openModalFile()" class="btn btn-primary text-white" th:text="#{sys_edit_forwarding}"></a>-->
+            </div>
+        </div>
+    </form>
 
-<!--                        </span>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="modal-footer" style="text-align: center;">-->
-<!--                    <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadFile()"></button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 
-<!--</body>-->
-<!--</html>-->
+    <!-- Modal -->
+    <div class="modal fade" id="upload-file-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" th:text="#{sys_about.upload_files}" style="float: left">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="file-name">
+                            <span th:text="#{sys_file_name}"></span>
+                            <span class="required">*</span>
+                        </label>
+                        <input class="form-control" type="text" id="file-name" required="" />
+                    </div>
+                    <div class="input-group">
+                          <span class="input-group-btn">
+                            <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
+                               <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
+                            </span>
+                            <input name="uploaded_file" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+                          </span>
+                        <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" placeholder="sdfsdfsdfsdf">
+
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: center;">
+                    <button class="btn btn-info" type="button" th:text="#{sys_upload}" onclick="uploadFile()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
