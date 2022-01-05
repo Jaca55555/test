@@ -102,6 +102,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoice;
     }
 
+
+
     /*  payee */
     private Invoice createPayee(Invoice invoice, Organization organization) {
         invoice.setPayeeId(organization.getId());

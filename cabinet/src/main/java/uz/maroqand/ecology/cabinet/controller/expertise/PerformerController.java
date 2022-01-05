@@ -10,21 +10,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
+import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
-import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
-import uz.maroqand.ecology.core.dto.api.ResponseDTO;
 import uz.maroqand.ecology.core.dto.expertise.*;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -41,8 +38,6 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -76,6 +71,7 @@ public class PerformerController {
     private final GlobalConfigs globalConfigs;
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
     private final RestTemplate restTemplate;
+    private final RequirementService requirementService;
 
     @Autowired
     public PerformerController(
@@ -97,7 +93,7 @@ public class PerformerController {
             NotificationService notificationService,
             ConclusionService conclusionService,
             SmsSendService smsSendService,
-            OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, RestTemplate restTemplate) {
+            OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, RestTemplate restTemplate, RequirementService requirementService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -121,6 +117,7 @@ public class PerformerController {
         this.globalConfigs = globalConfigs;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
         this.restTemplate = restTemplate;
+        this.requirementService = requirementService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -321,6 +318,51 @@ public class PerformerController {
         if(StringUtils.trimToNull(comment) != null){
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
         }
+        List<RegApplicationLog> regApplicationLogList = regApplicationLogService.getByLogStatus(LogStatus.Modification,regApplication.getId());
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("===" + regApplicationLogList.size() + "===");
+
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        System.out.println("#############################");
+        if(LogStatus.getLogStatus(performerStatus)==LogStatus.Modification && regApplicationLogList.size()>=2){
+            RegApplicationLog firstRegApplicationLog = regApplicationLogList.get(0);
+            Date createdDate = firstRegApplicationLog.getCreatedAt();
+            Calendar c = Calendar.getInstance();
+            Date date = new Date();
+            c.setTime(date);
+            c.add(Calendar.DATE,-61);    // shu kunning o'zi ham qo'shildi
+            Date expireDate = c.getTime();
+//            if(createdDate.before(expireDate))
+//            {
+                Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+                invoice.setStatus(InvoiceStatus.CanceledForModification);
+                Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+                Invoice newInvoice = invoiceService.create(regApplication, requirement);
+                invoiceService.save(newInvoice);
+                regApplication.setInvoiceId(newInvoice.getId());
+
+//            }
+        }
+
 
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setAgreementStatus(LogStatus.Initial);

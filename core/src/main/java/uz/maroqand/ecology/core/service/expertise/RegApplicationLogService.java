@@ -22,8 +22,8 @@ public interface RegApplicationLogService {
 
     RegApplicationLog getById(Integer id);
     RegApplicationLog getByRegApplcationId(Integer id);
-    RegApplicationLog getByRegApplcationIdAndType(Integer id,LogType type);
-
+     RegApplicationLog getByRegApplcationIdAndType(Integer id,LogType type);
+    List<RegApplicationLog> getByLogStatus(LogStatus status,Integer regApplicationId);
     List<RegApplicationLog> getByRegApplicationId(Integer regApplicationId);
     List<RegApplicationLog> findAll();
     List<RegApplicationLog> getByRegApplicationIdAndType(Integer regApplicationId, LogType type);

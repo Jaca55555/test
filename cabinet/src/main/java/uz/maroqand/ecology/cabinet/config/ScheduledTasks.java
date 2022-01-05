@@ -5,7 +5,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.RequirementService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.cabinet.util.Maintenance;
 import uz.maroqand.ecology.docmanagement.service.Bot;
@@ -24,15 +26,19 @@ public class ScheduledTasks {
     private final UserService userService;
     private final DocumentTaskSubService documentTaskSubService;
     private final Bot bot;
+    private final RegApplicationLogService regApplicationLogService;
+    private final RequirementService requirementService;
 
     private Logger logger = LogManager.getLogger(ScheduledTasks.class);
 
-    public ScheduledTasks(InvoiceService invoiceService, RegApplicationService regApplicationService, UserService userService, DocumentTaskSubService documentTaskSubService, Bot bot) {
+    public ScheduledTasks(InvoiceService invoiceService, RegApplicationService regApplicationService, UserService userService, DocumentTaskSubService documentTaskSubService, Bot bot, RegApplicationLogService regApplicationLogService, RequirementService requirementService) {
         this.invoiceService = invoiceService;
         this.regApplicationService = regApplicationService;
         this.userService = userService;
         this.documentTaskSubService = documentTaskSubService;
         this.bot = bot;
+        this.regApplicationLogService = regApplicationLogService;
+        this.requirementService = requirementService;
     }
 
 
@@ -53,6 +59,23 @@ public class ScheduledTasks {
         );
 
     }
+//
+//    @Scheduled(cron = "0 1 20 * * *")
+//    public void createInvoiceForModificationRegApplications() {
+//        logger.info("\n" +
+//                "/*****************************/\n" +
+//                "/       CRON TASK STARTED      /\n" +
+//                "/*****************************/\n"
+//        );
+//        Maintenance.createInvoiceForModificationRegApplications(regApplicationLogService,regApplicationService,invoiceService,requirementService);
+//
+//        logger.info("\n" +
+//                "/*****************************/\n" +
+//                "/       CRON TASK FINISHED     /\n" +
+//                "/*****************************/\n"
+//        );
+//
+//    }
 
     @Scheduled(cron = "0 0 9 * * *")
     public void sendDocumentCount() {

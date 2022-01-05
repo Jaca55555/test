@@ -4,14 +4,17 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.config.ScheduledTask;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.telegram.SendQueryType;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.expertise.Requirement;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.RequirementService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.docmanagement.service.Bot;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentSubService;
@@ -57,6 +60,26 @@ public class Maintenance {
 
         }
     }
+
+    public static void createInvoiceForModificationRegApplications(RegApplicationLogService regApplicationLogService, RegApplicationService regApplicationService, InvoiceService invoiceService, RequirementService requirementService){
+
+//        List<RegApplicationLog> regApplicationLogList = regApplicationLogService.getByLogStatus(LogStatus.Modification);
+//        RegApplication regApplication = regApplicationService.getById(regApplicationLogList.get(0).getRegApplicationId());
+//        Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+//
+////        RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationId(Reg)
+//        RegApplicationLog firstRegApplicationLog = regApplicationLogList.get(0);
+//        Date createdDate = firstRegApplicationLog.getCreatedAt();
+//        Calendar c = Calendar.getInstance();
+//        Date date = new Date();
+//        c.setTime(date);
+//        c.add(Calendar.DATE,-61);    // shu kunning o'zi ham qo'shildi
+//        Date expireDate = c.getTime();
+//        if(createdDate.before(expireDate)){
+//            invoiceService.create(regApplication,requirement);
+//        }
+    }
+
 
     public static void sendAllDocumentCount(UserService userService, DocumentTaskSubService documentTaskSubService, Bot bot) {
         List<User> userList = userService.getAllByTelegramUsers();

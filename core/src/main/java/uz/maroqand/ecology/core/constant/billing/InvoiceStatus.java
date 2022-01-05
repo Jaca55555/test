@@ -11,4 +11,5 @@ public enum InvoiceStatus {
     Canceled, //ОТМЕНЕН, Bekor qilingan
     Error, //Не успешно, Xatolik bor
     PartialSuccess, //ОПЛАЧЕН , To'langan faqat qisman 15%
+    CanceledForModification,// 2-marta qayta ishlash uchun bekor qilingan
 }
