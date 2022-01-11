@@ -343,25 +343,25 @@ public class PerformerController {
         System.out.println("#############################");
         System.out.println("#############################");
         System.out.println("#############################");
-        if(LogStatus.getLogStatus(performerStatus)==LogStatus.Modification && regApplicationLogList.size()>=2){
-            RegApplicationLog firstRegApplicationLog = regApplicationLogList.get(0);
-            Date createdDate = firstRegApplicationLog.getCreatedAt();
-            Calendar c = Calendar.getInstance();
-            Date date = new Date();
-            c.setTime(date);
-            c.add(Calendar.DATE,-61);    // shu kunning o'zi ham qo'shildi
-            Date expireDate = c.getTime();
-//            if(createdDate.before(expireDate))
-//            {
-                Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-                invoice.setStatus(InvoiceStatus.CanceledForModification);
-                Requirement requirement = requirementService.getById(regApplication.getRequirementId());
-                Invoice newInvoice = invoiceService.create(regApplication, requirement);
-                invoiceService.save(newInvoice);
-                regApplication.setInvoiceId(newInvoice.getId());
-
-//            }
-        }
+//        if(LogStatus.getLogStatus(performerStatus)==LogStatus.Modification && regApplicationLogList.size()>=2){
+//            RegApplicationLog firstRegApplicationLog = regApplicationLogList.get(0);
+//            Date createdDate = firstRegApplicationLog.getCreatedAt();
+//            Calendar c = Calendar.getInstance();
+//            Date date = new Date();
+//            c.setTime(date);
+//            c.add(Calendar.DATE,-61);    // shu kunning o'zi ham qo'shildi
+//            Date expireDate = c.getTime();
+////            if(createdDate.before(expireDate))
+////            {
+//                Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+//                invoice.setStatus(InvoiceStatus.CanceledForModification);
+//                Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+//                Invoice newInvoice = invoiceService.create(regApplication, requirement);
+//                invoiceService.save(newInvoice);
+//                regApplication.setInvoiceId(newInvoice.getId());
+//
+////            }
+//        }
 
 
         regApplication.setStatus(RegApplicationStatus.Process);
@@ -371,7 +371,7 @@ public class PerformerController {
 
         //kelishiluvchilar bor bo'lsa yuboramiz
         Set<Integer> agreements = new LinkedHashSet<>();
-        List<RegApplicationLog> agreementLogs = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
+        List<RegApplicationLog> agreementLogs  = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
         for (RegApplicationLog agreementLog:agreementLogs){
             if(agreementLog.getUpdateById()!=null) agreements.add(agreementLog.getUpdateById());
             agreementLog.setStatus(LogStatus.New);
@@ -407,73 +407,7 @@ public class PerformerController {
             regApplication.setStatus(RegApplicationStatus.Process);
             regApplicationService.update(regApplication);
         }
-//send api
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-//
-//        // This nested HttpEntiy is important to create the correct
-//        // Content-Disposition entry with metadata "name" and "filename"
-//        File file;
-//        byte[] input_file;
-//        String originalFileName;
-//        MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
-//        if(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId()!=null){
-//            file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
-//            String filePath = file.getPath();
-//            originalFileName = file.getName();
-//            input_file = Files.readAllBytes(Paths.get(filePath+originalFileName));
-//        }else{
-//            String htmlText = conclusionService.getById(regApplication.getConclusionId()).getHtmlText();
-//            String XHtmlText = htmlText.replaceAll("&nbsp;","&#160;");
-//            java.io.File  pdfFile= fileService.renderPdf(XHtmlText);
-//            originalFileName = pdfFile.getName();
-//            input_file = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-//        }
-//
-//
-//        ContentDisposition contentDisposition = ContentDisposition
-//                .builder("form-data")
-//                .name("file")
-//                .filename(originalFileName)
-//                .build();
-//        fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
-//        HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
-//
-//        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-//        body.add("file", fileEntity);
-//        body.add("data", RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService));
-//
-//        HttpEntity<MultiValueMap<String, Object>> requestEntity =
-//                new HttpEntity<>(body, headers);
-//        try {
-//            ResponseEntity<String> response = restTemplate.exchange(
-//                    "http://172.16.11.234:8087/api/expertise",
-//                    HttpMethod.POST,
-//                    requestEntity,
-//                    String.class);
-//
-//            System.out.println(response);
-//        } catch (HttpClientErrorException e) {
-//            e.printStackTrace();
-//        }
 
-//send api
-
-        /*Set<Integer> materialsInt= regApplication.getMaterials();
-        Integer next = materialsInt.iterator().next();
-//        if(next==8&&performerStatus==4){
-            RegApplicationDTO regApplicationDTO = RegApplicationDTO.fromEntity(regApplication,conclusionService,fileService);
-            ResponseDTO responseDTO = new ResponseDTO();
-            responseDTO.setStatusCode(0);
-            responseDTO.setStatusMessage("RegApplication is confirmed");
-            responseDTO.setData(regApplicationDTO);
-            HttpEntity reqEntity = new HttpEntity(responseDTO);
-            ResponseEntity<?> responseEntity =restTemplate.exchange("http://172.16.11.234:8087/api/expertise", HttpMethod.POST, reqEntity, Object.class);*/
-//            responseEntity.getStatusCode().is2xxSuccessful();
-//        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+reqEntity);
-//        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity.getStatusCode());
-//        System.out.println("responseEntity.getStatusCode().is2xxSuccessful()"+responseEntity);
-//        }
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }
 

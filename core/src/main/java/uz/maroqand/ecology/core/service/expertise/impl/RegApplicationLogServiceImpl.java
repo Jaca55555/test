@@ -324,9 +324,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
                 if(filterDto.getTin() != null){
                     predicates.add(criteriaBuilder.equal(root.join("regApplication").get("applicant").get("tin"), filterDto.getTin()));
                 }
-                if(orgId != null){
-                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("reviewId"), orgId));
-                }
+
                 if(StringUtils.trimToNull(filterDto.getName()) != null){
                     predicates.add(criteriaBuilder.like(root.join("regApplication").get("applicant").<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
                 }
