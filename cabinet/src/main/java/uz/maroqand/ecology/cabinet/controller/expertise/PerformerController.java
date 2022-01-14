@@ -318,31 +318,31 @@ public class PerformerController {
         if(StringUtils.trimToNull(comment) != null){
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
         }
-        List<RegApplicationLog> regApplicationLogList = regApplicationLogService.getByLogStatus(LogStatus.Modification,regApplication.getId());
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("===" + regApplicationLogList.size() + "===");
-
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
-        System.out.println("#############################");
+//        List<RegApplicationLog> regApplicationLogList = regApplicationLogService.getByLogStatus(LogStatus.Modification,regApplication.getId());
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+////        System.out.println("===" + regApplicationLogList.size() + "===");
+//
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
 //        if(LogStatus.getLogStatus(performerStatus)==LogStatus.Modification && regApplicationLogList.size()>=2){
 //            RegApplicationLog firstRegApplicationLog = regApplicationLogList.get(0);
 //            Date createdDate = firstRegApplicationLog.getCreatedAt();

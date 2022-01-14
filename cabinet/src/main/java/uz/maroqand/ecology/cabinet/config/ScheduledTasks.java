@@ -71,23 +71,23 @@ public class ScheduledTasks {
 
     }
 
-    @Scheduled(cron = "0 40 13 * * *")
-    public void sendRegApplicationNotDeliver() throws IOException {
-        logger.info("\n" +
-                "/*****************************/\n" +
-                "/       DELIVER TASK STARTED      /\n" +
-                "/*****************************/\n"
-        );
-        System.out.println("--removeInvoice--");
-        Maintenance.sendRegApplicationNotDeliver(20993,regApplicationLogService,regApplicationService,conclusionService,fileService,restTemplate);
-
-        logger.info("\n" +
-                "/*****************************/\n" +
-                "/       DELIVER TASK FINISHED     /\n" +
-                "/*****************************/\n"
-        );
-
-    }
+//    @Scheduled(cron = "0 40 13 * * *")
+//    public void sendRegApplicationNotDeliver() throws IOException {
+//        logger.info("\n" +
+//                "/*****************************/\n" +
+//                "/       DELIVER TASK STARTED      /\n" +
+//                "/*****************************/\n"
+//        );
+//        System.out.println("--removeInvoice--");
+//        Maintenance.sendRegApplicationNotDeliver(20993,regApplicationLogService,regApplicationService,conclusionService,fileService,restTemplate);
+//
+//        logger.info("\n" +
+//                "/*****************************/\n" +
+//                "/       DELIVER TASK FINISHED     /\n" +
+//                "/*****************************/\n"
+//        );
+//
+//    }
 //
 //    @Scheduled(cron = "0 1 20 * * *")
 //    public void createInvoiceForModificationRegApplications() {
