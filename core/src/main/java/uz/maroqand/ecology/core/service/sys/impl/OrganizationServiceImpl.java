@@ -53,7 +53,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         organization.setLastNumber(organization.getLastNumber()+1);
         organizationRepository.save(organization);
 
-        String number = organization.getLastNumber()+"-"+"/21";
+        String number = organization.getLastNumber()+"-"+"/22";
         return number;
     }
 

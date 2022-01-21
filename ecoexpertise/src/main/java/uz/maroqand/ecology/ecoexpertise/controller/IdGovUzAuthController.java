@@ -40,8 +40,8 @@ import java.util.Map;
 @Controller
 public class IdGovUzAuthController {
 
-    private static final String AuthorizationUrl = "http://sso.egov.uz:8443/sso/oauth/Authorization.do";
-    private static final String LogoutUrl = "http://sso.egov.uz:8443/sso/svc/tk/SLO.do";
+    private static final String AuthorizationUrl = "https://sso.gov.uz:8443/sso/oauth/Authorization.do";
+    private static final String LogoutUrl = "https://sso.gov.uz:8443/sso/svc/tk/SLO.do";
     private static final String ClientId = "davekoekspertiza_uz";
     private static final String Scope = "davekoekspertiza_uz";
     private static final String ClientSecret = "XbzKDhhq8+3tDnuU/e02bA==";

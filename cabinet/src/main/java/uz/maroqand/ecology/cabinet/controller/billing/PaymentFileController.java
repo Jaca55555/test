@@ -447,7 +447,6 @@ public class PaymentFileController {
             @RequestParam(name = "invoiceStr") String invoiceStr,
             @RequestParam(name = "id") Integer payFilieId
     ){
-
         HashMap<String,Object> result = new HashMap<>();
         result.put("status",1);
         Invoice invoice = invoiceService.getInvoice(invoiceStr);
@@ -462,7 +461,7 @@ public class PaymentFileController {
             return result;
         }
         RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
-        if (regApplication==null){
+        if (regApplication==null ){
             result.put("status",-2);
             return result;
         }
@@ -538,6 +537,7 @@ public class PaymentFileController {
 
         HashMap<String,Object> result = new HashMap<>();
         result.put("status",1);
+        User user = userService.getCurrentUserFromContext();
         Invoice invoice = invoiceService.getInvoice(invoiceStr);
         if (invoice==null){
             result.put("status",-1);
@@ -550,7 +550,7 @@ public class PaymentFileController {
             return result;
         }
         RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
-        if (regApplication==null){
+        if (regApplication==null || !regApplication.getReviewId().equals(user.getOrganizationId())){
             result.put("status",-2);
             return result;
         }

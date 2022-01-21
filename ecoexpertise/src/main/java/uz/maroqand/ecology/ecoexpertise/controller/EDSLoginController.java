@@ -99,7 +99,7 @@ public class EDSLoginController {
         }
 
         logger.info("subjectName: {}", subjectName);
-        String pinfl = subjectName.substring(subjectName.length()-14);
+        String pinfl = subjectName.substring(subjectName.length()-30);
         Matcher matcher1 = pinflPattern.matcher(pinfl);
         System.out.println("matcher1"+matcher1);
         Matcher matcher = tinPattern.matcher(subjectName);
@@ -186,8 +186,9 @@ public class EDSLoginController {
             user.setGender(null);
 
             List<User> userList = userRepository.findByTin(tin);
+            List<User> userListPinfl = userRepository.findAllByPinfl(pinfl);
             if(userList.size()>0){
-                user.setUsername(pinfl+"_"+userList.size());
+                user.setUsername(pinfl+"_"+userList.size()+"_"+userListPinfl.size());
             }else {
                 user.setUsername(userEds.getTin().toString());
             }
