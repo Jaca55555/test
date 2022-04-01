@@ -88,9 +88,10 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
             Boolean isComplete,
             String account,
+            String oldAccount,
             Pageable pageable
     ) {
-        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete,account),pageable);
+        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete,account,oldAccount),pageable);
     }
 
     private static Specification<PaymentFile> getFilteringSpecification(
@@ -103,7 +104,8 @@ public class PaymentFileServiceImpl implements PaymentFileService {
             final String details,
             final String bankMfo,
             final Boolean isComplete,
-            final String account
+            final String account,
+            final String oldAccount
 
             ) {
         return new Specification<PaymentFile>() {
@@ -151,8 +153,8 @@ public class PaymentFileServiceImpl implements PaymentFileService {
                     }
                 }
 
-                if(account != null&& !account.isEmpty()){
-                    predicates.add(criteriaBuilder.like(root.get("receiverAccount"), "%"+account+"%"));
+                if((account != null&& !account.isEmpty()) || (oldAccount != null&& !oldAccount.isEmpty())){
+                    predicates.add(criteriaBuilder.or(criteriaBuilder.like(root.get("receiverAccount"), "%"+account+"%"),criteriaBuilder.like(root.get("receiverAccount"), "%"+oldAccount+"%")) );
                 }
 
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));

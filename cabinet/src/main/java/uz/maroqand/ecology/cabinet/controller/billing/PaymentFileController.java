@@ -115,9 +115,8 @@ public class PaymentFileController {
                 detail,
                 bankMfo,
                 isComplete,
-                account,
-                oldAccount,
                 user.getRole().getId()!=16?account:null,
+                oldAccount,
                 pageable
         );
 
@@ -304,7 +303,6 @@ public class PaymentFileController {
                 bankMfo,
                 isComplete,
                 account,
-                null,
                 null,
                 pageable
         );
