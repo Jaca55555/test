@@ -37,6 +37,9 @@ public class Organization {
     @Column(name = "account")
     private String account;
 
+    @Column(name = "old_account")
+    private String oldAccount;
+
     @Column(name = "mfo")
     private String mfo;
 
