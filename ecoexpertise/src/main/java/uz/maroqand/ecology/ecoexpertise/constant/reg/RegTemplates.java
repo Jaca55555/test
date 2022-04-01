@@ -37,5 +37,9 @@ public class RegTemplates {
     public static final String AppealNew = Appeal + "/new";
     public static final String AppealView = Appeal + "/view";
 
+    private static final String Offer = "offer";
+    public static final String OfferList = Offer + "/list";
+    public static final String OfferView = Offer + "/view";
+
 
 }

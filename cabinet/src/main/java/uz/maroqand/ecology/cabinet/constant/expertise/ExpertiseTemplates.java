@@ -30,6 +30,11 @@ public class ExpertiseTemplates {
     public static final String AgreementList = Agreement + "/list";
     public static final String AgreementView = Agreement + "/view";
 
+    //Hisobot-Report
+    private static final String Report = Prefix + "/report";
+    public static final String ReportList = Report + "/list";
+
+
     //Oxirgi kelishuv
     private static final String AgreementComplete = Prefix + "/agreement_complete";
     public static final String AgreementCompleteList = AgreementComplete + "/list";
@@ -103,10 +108,17 @@ public class ExpertiseTemplates {
     public static final String ExpertiseRegApplicationMonitoringList = ExpertiseReg + "/mntr/list";
     public static final String ExpertiseRegApplicationMonitoringView = ExpertiseReg + "/mntr/view";
     public static final String ExpertiseRegApplicationMonitoringEdit = ExpertiseReg + "/mntr/edit";
+    public static final String ExpertiseRegApplicationMonitoringChangePerformer = ExpertiseReg + "/mntr/change_performer";
+    public static final String ExpertiseRegApplicationMonitoringChangeConclusion = ExpertiseReg + "/mntr/change_conclusion";
 
     //Facture
     private static final String Facture = Prefix + "/facture";
     public static final String FactureList = Facture + "/list";
     public static final String FactureView = Facture + "/view";
+
+    //Birinchi tekshiruv
+    private static final String Agree = Prefix + "/agree";
+    public static final String AgreeList = Agree + "/list";
+    public static final String AgreeView = Agree + "/view";
 
 }

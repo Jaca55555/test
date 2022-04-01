@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/plugins/ol/ol.css">
+    <link rel="stylesheet" href="/static/css/select2.min.css">
+</head>
+<body class="layout-6">
+<!--<div style="display: none;" id="loader_box"></div>-->
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+<style>
+    .table td, .table th{
+        text-align: center;
+    }
+</style>
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <object th:include="expertise/reg/category_four/step_wizard :: wizard" th:remove="tag" ></object>
+
+
+                                            <div class="row" >
+                                                <div class="form-group col-md-12" >
+                                                    <form action="" method="post" th:object="${regApplicationCategoryFourAdditional}" data-parsley-validate="">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <h5 th:text="#{sys_step_4_3.harmful_substances}">Ҳаво бассейнини атмосфера хавосини ифлослантирувчи манбалар ҳақида маьлумот</h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="table-responsive">
+                                                                    <table class="table  table-striped" id="pollution-table">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th style="width: 10%">№</th>
+                                                                            <th  th:text="#{sys_step_4_3.name}">Tadbir nomi</th>
+                                                                            <th  th:text="#{sys_step_4_3.substancesAmount}">Tadbir nomi</th>
+                                                                            <th  th:text="#{sys_step_4_3.forCleaning}">Tadbir nomi</th>
+                                                                            <th  th:text="#{sys_step_4_3.caught}">Tadbir nomi</th>
+                                                                            <th  th:text="#{sys_step_4_3.used}">Tadbir nomi</th>
+                                                                            <th  th:text="#{sys_step_4_3.atmosphereAmount}">Tadbir nomi</th>
+                                                                            <th ></th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                        <tbody >
+                                                                        <tr th:id="${'row_' + itar.id}" th:if="${#lists.size(regApplicationCategoryFourAdditional.harmfulSubstancesAmounts)>0}" th:each="itar,index :${regApplicationCategoryFourAdditional.harmfulSubstancesAmounts}">
+                                                                            <td th:id="${itar.id}" th:utext="${index.index+1}" style="width: 10%"></td>
+                                                                            <td th:text="${itar.name}"></td>
+                                                                            <td th:text="${itar.substancesAmount}"></td>
+                                                                            <td th:text="${itar.forCleaning}"></td>
+                                                                            <td th:text="${itar.caught}"></td>
+                                                                            <td th:text="${itar.used}"></td>
+                                                                            <td th:text="${itar.atmosphereAmount}"></td>
+                                                                            <td style="width: 10%">
+                                                                                <a class="btn btn-primary btn-sm list-btn ">
+                                                                                    <i class="feather icon-edit-1 mr-0"></i>
+                                                                                </a>
+                                                                                <a class="btn btn-warning btn-sm list-btn" th:onclick="'mymodal('+${itar.id}+')'">
+                                                                                    <i class="feather icon-x-square mr-0"></i>
+                                                                                </a>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr></tr>
+                                                                        </tbody>
+                                                                        <tfoot>
+                                                                        <tr style="background-color: rgba(0, 0, 0, 0.05);" >
+                                                                            <th class="text-right" colspan="8">
+                                                                                <button type="button" onclick="createInput()" class="btn btn-success btn-sm">
+                                                                                    <i class="feather icon-plus"></i>
+                                                                                    <span th:text="#{sys_add}"></span>
+                                                                                </button>
+                                                                            </th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="2" th:text="#{${step4_3_total.name}}">Jami</td>
+                                                                            <td th:text="${step4_3_total.substancesAmount}">1</td>
+                                                                            <td th:text="${step4_3_total.forCleaning}">2</td>
+                                                                            <td th:text="${step4_3_total.caught}">3</td>
+                                                                            <td th:text="${step4_3_total.used}">4</td>
+                                                                            <td th:text="${step4_3_total.atmosphereAmount}">5</td>
+                                                                            <td></td>
+                                                                        </tr>
+                                                                        </tfoot>
+                                                                    </table>
+                                                                    <table class="table table-striped">
+                                                                        <tbody>
+                                                                        <tr>
+                                                                            <th colspan="2"style="width: 30%" th:text="#{sys_step_4_3.hard_value}">Қаттиқ ташламалар</th>
+                                                                            <td>
+                                                                                <input id="hardValueOne" name="hardValueOne" th:value="${regApplicationCategoryFourAdditional.hardValueOne}"  class="form-control " type="text" required="" data-parsley-type="number"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input id="hardValueTwo" name="hardValueTwo" th:value="${regApplicationCategoryFourAdditional.hardValueTwo}" class="form-control " type="text" required="" data-parsley-type="number"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input id="hardValueThree" name="hardValueThree" th:value="${regApplicationCategoryFourAdditional.hardValueThree}" class="form-control " type="text" required="" data-parsley-type="number"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input id="hardValueFour" name="hardValueFour" th:value="${regApplicationCategoryFourAdditional.hardValueFour}" class="form-control " type="text" required="" data-parsley-type="number"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input id="hardValueFive" name="hardValueFive" th:value="${regApplicationCategoryFourAdditional.hardValueFive}" class="form-control " type="text" required="" data-parsley-type="number"/>
+                                                                            </td>
+                                                                            <td style="width: 10%"></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <th colspan="2" th:text="#{sys_step_4_3.liquid_value}">Газ ва суюқ ҳолдаги ташламалар</th>
+                                                                            <td>
+                                                                                <input id="liquidValueOne" name="liquidValueOne" th:value="${regApplicationCategoryFourAdditional.liquidValueOne}" class="form-control " type="text" required="" data-parsley-type="number"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input id="liquidValueTwo" name="liquidValueTwo" th:value="${regApplicationCategoryFourAdditional.liquidValueTwo}" class="form-control " type="text" required="" data-parsley-type="number"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input id="liquidValueThree" name="liquidValueThree" th:value="${regApplicationCategoryFourAdditional.liquidValueThree}" class="form-control " type="text" required="" data-parsley-type="number"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input id="liquidValueFour" name="liquidValueFour" th:value="${regApplicationCategoryFourAdditional.liquidValueFour}" class="form-control " type="text" required="" data-parsley-type="number"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input id="liquidValueFive" name="liquidValueFive" th:value="${regApplicationCategoryFourAdditional.liquidValueFive}" class="form-control " type="text" required="" data-parsley-type="number"/>
+                                                                            </td>
+                                                                            <td style="width: 10%"></td>
+                                                                        </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" />
+                                                        <input type="hidden" name="regAddId" th:value="${regApplicationCategoryFourAdditional.id}" />
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                        <div class="row" >
+                                                            <div class="form-group col-md-12 text-center" >
+                                                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}" >Далее</button><!--onclick="submitForm()"-->
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+    <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+    <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+    <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
+
+<script th:inline="javascript">
+    var n=0;
+    var regAddId = [[${regApplicationCategoryFourAdditional.id}]];
+    var _csrf = [[${_csrf.token}]];
+
+
+    var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFourCategoryHarmfulSubstancesAmountEdit}]];
+    var deleteLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFourCategoryHarmfulSubstancesAmountDelete}]];
+    var createLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFourCategoryHarmfulSubstancesAmountCreate}]];
+
+    /*new row*/
+    function createInput(){
+        if (n==0) {
+            n=1;
+            $('#pollution-table tbody tr:last').after(
+                '<tr id="input_add">' +
+                '<td>' +
+                '</td>' +
+                '<td>' +
+                '<input id="name" name="name"  class="form-control " type="text" required="" data-parsley-maxlength="255"/>' +
+                '</td>' +
+                '<td>' +
+                '<input id="substancesAmount" name="substancesAmount"  class="form-control " type="text" required="" data-parsley-type="number"/>' +
+                '</td>' +
+                '<td>' +
+                '<input id="forCleaning" name="forCleaning"  class="form-control " type="text" required="" data-parsley-type="number"/>' +
+                '</td>' +
+                '<td>' +
+                '<input id="caught" name="caught"  class="form-control " type="text" required="" data-parsley-type="number"/>' +
+                '</td>' +
+                '<td>' +
+                '<input id="used" name="used"  class="form-control " type="text" required="" data-parsley-type="number"/>' +
+                '</td>' +
+                '<td>' +
+                '<input id="atmosphereAmount" name="atmosphereAmount"  class="form-control " type="text" required="" data-parsley-type="number"/>' +
+                '</td>' +
+                '<td>' +
+                '<button type="button" onclick="addExecutive()" class="btn btn-sm btn-outline-primary mr-0">\n' +
+                '<i class="feather icon-check-square mr-0" aria-hidden="true"></i>' +
+                '</button>' +
+                '<button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-warning">\n' +
+                '<i class="feather icon-x-square mr-0" aria-hidden="true"></i>' +
+                '</button>' +
+                '</td>' +
+                '</tr>'
+            );
+        }
+    }
+
+    //add base
+    function addExecutive(){
+        $('#name').parsley().validate();
+        $('#substancesAmount').parsley().validate();
+        $('#forCleaning').parsley().validate();
+        $('#caught').parsley().validate();
+        $('#used').parsley().validate();
+        $('#atmosphereAmount').parsley().validate();
+        var name = $('#name').val();
+        var substancesAmount = $('#substancesAmount').val();
+        var forCleaning = $('#forCleaning').val();
+        var caught = $('#caught').val();
+        var used = $('#used').val();
+        var atmosphereAmount = $('#atmosphereAmount').val();
+        if( $('#name').parsley().isValid() &&
+            $('#substancesAmount').parsley().isValid() &&
+        $('#forCleaning').parsley().isValid() &&
+        $('#caught').parsley().isValid() &&
+        $('#used').parsley().isValid() &&
+        $('#atmosphereAmount').parsley().isValid() ) {
+
+            var form = new FormData();
+            form.append("regAddId", regAddId);
+            form.append("name", name);
+            form.append("substancesAmount", substancesAmount);
+            form.append("forCleaning", forCleaning);
+            form.append("caught", caught);
+            form.append("used", used);
+            form.append("atmosphereAmount", atmosphereAmount);
+            form.append("_csrf", _csrf);
+
+            $.ajax({
+                type: "POST",
+                url: createLink,
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+                    if (response.status==1){
+                        console.log(response)
+                        var id = response.data.id;
+                        var name = response.data.name;
+                        var substancesAmount = response.data.substancesAmount;
+                        var forCleaning = response.data.forCleaning;
+                        var caught = response.data.caught;
+                        var used = response.data.used;
+                        var atmosphereAmount = response.data.atmosphereAmount;
+                        var actions = '<a class="btn btn-primary btn-sm list-btn mr-0" ><i class="feather icon-edit-1 mr-0"></i></a>' +
+                            '<a class="btn btn-warning btn-sm list-btn" onclick="mymodal('+id+')" ><i class="feather icon-x-square mr-0"></i></a>';
+                        cancelExecutive();
+                        $('#pollution-table tbody tr:last').after('' +
+                            '<tr id="row_' + id + '">' +
+                            '<td id="'+id+'">' + id + '</td>' +
+                            '<td>' + name + '</td>' +
+                            '<td>' + substancesAmount + '</td>' +
+                            '<td>' + forCleaning + '</td>' +
+                            '<td>' + caught + '</td>' +
+                            '<td>' + used + '</td>' +
+                            '<td>' + atmosphereAmount + '</td>' +
+                            '<td>' + actions + '</td></tr>');
+
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+    }
+
+    function cancelExecutive(){
+        n=0;
+        $('#input_add').remove();
+    }
+
+    /*delete modal*/
+    function mymodal(id){
+
+        var form = new FormData();
+        form.append("id",id);
+        form.append("regAddId",regAddId);
+        form.append("_csrf", _csrf);
+        $.ajax({
+            type: "POST",
+            url:deleteLink,
+            data:form,
+            success: function(){
+                $('#row_'+id).remove();
+            },
+            processData: false,
+            contentType: false,
+            cache:false
+        });
+    }
+
+    $('#pollution-table').css("width", "100%");
+</script>
+<script>
+
+    $("#pollution-table").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
+        $(this).removeClass().addClass("feather icon-check-circle mr-0");
+        var $row = $(this).closest("tr").off("mousedown");
+        var $tds = $row.find("td").not(':last').not(':first');
+        var $idn=0;
+        $.each($tds, function(i, el) {
+            var txt = $(this).text();
+            $idn++;
+            if ($idn==1) {
+                $(this).html("").append("<input id='name' name='name'  class='form-control' type='text' required='' data-parsley-maxlength='255'  value=\""+txt+"\"/>");
+            }
+            if ($idn==2) {
+                $(this).html("").append("<input id='substancesAmount' name='substancesAmount'  class='form-control' type='text' required='' data-parsley-type='number'  value=\""+txt+"\"/>");
+            }
+            if ($idn==3) {
+                $(this).html("").append("<input id='forCleaning' name='forCleaning'  class='form-control' type='text' required='' data-parsley-type='number'  value=\""+txt+"\"/>");
+            }
+            if ($idn==4) {
+                $(this).html("").append("<input id='caught' name='caught'  class='form-control' type='text' required='' data-parsley-type='number'  value=\""+txt+"\"/>");
+            }
+            if ($idn==5) {
+                $(this).html("").append("<input id='used' name='used'  class='form-control' type='text' required='' data-parsley-type='number'  value=\""+txt+"\"/>");
+            }
+            if ($idn==6) {
+                $(this).html("").append("<input id='atmosphereAmount' name='atmosphereAmount'  class='form-control' type='text' required='' data-parsley-type='number'  value=\""+txt+"\"/>");
+            }
+        });
+    });
+
+    $("#pollution-table").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
+        var $row = $(this).closest("tr");
+        var $tds = $row.find("td").not(':last').not(':first');
+        var id=$row.find("td").first().attr('id');
+        $('#name').parsley().validate();
+        $('#substancesAmount').parsley().validate();
+        $('#forCleaning').parsley().validate();
+        $('#caught').parsley().validate();
+        $('#used').parsley().validate();
+        $('#atmosphereAmount').parsley().validate();
+
+        if( $('#name').parsley().isValid(),
+            $('#substancesAmount').parsley().isValid(),
+            $('#forCleaning').parsley().isValid(),
+            $('#caught').parsley().isValid(),
+            $('#used').parsley().isValid(),
+            $('#atmosphereAmount').parsley().isValid() ){
+            var form = new FormData();
+            $.each($tds, function(i, el) {
+                var txt = $(this).find("input").val();
+                var txtId = $(this).find("input").attr('id');
+                form.append(txtId,txt);
+                $(this).html(txt);
+            });
+            form.append('id',id);
+            form.append('regAddId',regAddId);
+            form.append("_csrf", _csrf);
+            $(this).removeClass().addClass("feather icon-edit-1 mr-0");
+            $.ajax({
+                type: "POST",
+                url:editLink,
+                data:form,
+                success: function(response){
+                    console.log("refresh");
+                    window.location.reload();
+                },
+                processData: false,
+                contentType: false,
+                cache:false
+            });
+        }
+    });
+
+</script>
+</body>
+</html>

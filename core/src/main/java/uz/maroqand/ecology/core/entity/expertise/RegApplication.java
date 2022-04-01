@@ -35,13 +35,13 @@ public class RegApplication {
     @JoinColumn(name = "applicant_id", insertable = false, updatable = false)
     private Client applicant;
 
+
     @Column(name = "applicant_id")
     private Integer applicantId;
 
     @Column(name = "applicant_type")
     @Enumerated(EnumType.ORDINAL)
     private ApplicantType applicantType;
-
     @Column(name = "input_type")
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationInputType inputType;
@@ -97,7 +97,15 @@ public class RegApplication {
 
     //Наименование объекта
     private String name;
+    //    Object location
+    @Column(name = "object_region_id")
+    private Integer objectRegionId;
 
+
+    @Column(name = "object_sub_region_id")
+    private Integer objectSubRegionId;
+
+    private String individualPhone;
     //разработчика проекта
     /*@OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "developer_id", insertable = false, updatable = false)
@@ -220,6 +228,11 @@ public class RegApplication {
     @Column(name = "forwarding_log_id")
     private Integer forwardingLogId;
 
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "forwarding_log_id", insertable = false, updatable = false)
+    private RegApplicationLog forwardingLog;
+
     @Column(name = "performer_log_id")
     private Integer performerLogId;
 
@@ -282,4 +295,24 @@ public class RegApplication {
     @Column(name = "update_by")
     private Integer updateById;
 
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "reg_application_jt_substance_content",
+//            joinColumns = { @JoinColumn(name = "reg_application_id") },
+//            inverseJoinColumns = { @JoinColumn(name = "substance_content_id") })
+//    private Set<SubstanceContent> substanceContents;
+    //Qozon nomi
+    @Column(name = "boiler_name")
+    private String boilerName;
+
+    //Қозон характеристикаси
+    @ManyToMany
+    @JoinTable(name = "reg_application_jt_boiler_characteristics",
+            joinColumns = { @JoinColumn(name = "reg_application") },
+            inverseJoinColumns = { @JoinColumn(name = "boiler_characteristics")})
+    @OrderBy(value = "id asc")
+    private Set<BoilerCharacteristics> boilerCharacteristics;
+
+
+    @Column(name = "delivery_status")
+    private Short deliveryStatus;
 }

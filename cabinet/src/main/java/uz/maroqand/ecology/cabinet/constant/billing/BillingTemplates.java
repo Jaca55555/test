@@ -21,5 +21,6 @@ public class BillingTemplates {
 
     // xato kiritilgan bank malumotlar kelganda arizadagi invoice bilan ulash ushun qo'shildi
     public static final String PaymentFileAllConnectInvoice = PaymentFileAll + "/connect_invoice";
+    public static final String PaymentFileConnectInvoice = PaymentFile + "/connect_invoice";
 
 }

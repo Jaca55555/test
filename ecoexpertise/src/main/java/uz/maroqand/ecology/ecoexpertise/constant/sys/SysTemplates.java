@@ -10,6 +10,7 @@ public class SysTemplates {
     public static final String ErrorNotFound = Prefix + "/404";
     public static final String ErrorInternalServerError = Prefix + "/500";
     public static final String ErrorForbidden = Prefix + "/403";
+    public static final String ErrorEds = Prefix + "/eds";
 
     private static final String Notification = Prefix + "/notification";
     public static final String NotificationList = Notification + "/list";

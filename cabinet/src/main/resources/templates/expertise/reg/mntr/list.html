@@ -112,7 +112,7 @@
                                                         <label for="status" class="control-label" th:text="#{sys_status}"></label>
                                                         <select id="status" class="form-control">
                                                             <option value="" th:text="#{sys_select}"></option>
-                                                            <option th:each="status : ${statusList}" th:value="${status.id}" th:text="#{${status.name}}"></option>
+                                                            <option th:each="status : ${statusList}" th:value="${status}" th:text="#{${status.name}}"></option>
                                                         </select>
                                                     </div>
 
@@ -147,6 +147,7 @@
                                                         <th th:text="#{reg_application.createdAt}"></th>
                                                         <th th:text="#{reg_application.status}"></th>
                                                         <th ></th>
+                                                        <th ></th>
                                                     </tr>
 
                                                     </thead>
@@ -174,6 +175,8 @@
     <script th:inline="javascript">
         var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringListAjax}]];
         var ajaxViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringView}]];
+        var changePerformer = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringChangePerformer}]];
+        var changeConclusion = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringChangeConclusion}]];
         var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringEdit}]];
         var editPerformerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationMonitoringPerformerConclusionEdit}]];
 
@@ -213,7 +216,7 @@
                     dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
                     dataToSend.confirmStatus = $('#confirmStatus').val();
 
-                    dataToSend.status = $('#status').val();
+                    dataToSend.regApplicationStatus = $('#status').val();
                     dataToSend.dateBegin = $('#dateBegin').val();
                     dataToSend.dateEnd = $('#dateEnd').val();
 
@@ -241,10 +244,12 @@
                         render: function (data, type, row, meta) {
                             let html = '';
                             if (row[5] !== [[${@helperService.getRegApplicationStatus(T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Initial, #locale)}]]){
-                                html='<a href="'+ajaxViewLink+'?id='+row[0]+'" class="btn btn-info btn-sm "><i class="feather icon-eye" style="margin-right: 0px;"></i></a>' +
-                                    '<a href="'+editLink+'/'+row[0]+'" class="btn btn-warning btn-sm "><i class="feather icon-edit" style="margin-right: 0px;"></i></a>';
+                                html+='<a href="'+ajaxViewLink+'?id='+row[0]+'" class="btn btn-info btn-sm "><i class="feather icon-eye" style="margin-right: 0px;"></i></a>';
+                                        if(row[13]!==20){
+                                         html+='<a href="'+editLink+'/'+row[0]+'" class="btn btn-warning btn-sm "><i class="feather icon-edit" style="margin-right: 0px;"></i></a>';
+                                        }
                             }
-
+                            // feather icon-settings
                             if ([[${isAdmin}]] && row[9] !== null){
                                 if (row[10]==true){
                                     html+='<br/>' +
@@ -262,7 +267,33 @@
 
                             return html;
                         }, orderable:false, className:'text-center'
+                    },
+                    {
+                        render: function (data, type, row, meta) {
+                            let html = '';
+                            if ([[${isAdmin}]]){
+                                if (row[11]===0 || row[11]===1 || row[11]===2){
+                                    html+='<br/>' +
+                                        '<a href="'+changePerformer+'/'+row[0]+'" class="btn btn-dark btn-sm ">' +
+                                        '<i class="feather icon-settings" style="margin-right: 0px;"></i>' +
+                                        '</a>';
+                                }
+
+                            }
+                            if ([[${isAdmin}]] && row[12]===2){
+                                html+='<br/>' +
+                                    '<a href="'+changeConclusion+'/'+row[0]+'" class="btn btn-secondary btn-sm ">' +
+                                    '<i class="feather icon-file-text" style="margin-right: 0px;"></i>' +
+                                    '</a>';
+
+                            }
+
+
+
+                            return html;
+                        }, orderable:false, className:'text-center'
                     }
+
                 ],
                 language: {
                     'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'

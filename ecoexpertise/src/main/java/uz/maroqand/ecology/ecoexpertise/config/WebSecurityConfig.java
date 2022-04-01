@@ -47,7 +47,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/get_post").permitAll()
                 .antMatchers("/news").permitAll()
+                .antMatchers("/get_news").permitAll()
                 .antMatchers("/get_modal_file").permitAll()
                 .antMatchers("/test/login").permitAll()
                 .antMatchers(SysUrls.SelectLang).permitAll()
@@ -55,6 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/reg/conclusion_file/download").permitAll()
                 .antMatchers("/repository/get-document/**").permitAll()
                 .antMatchers("/repository/get_qr_image/**").permitAll()
+                .antMatchers("/repository/get-offer/**").permitAll()
+                .antMatchers("/repository/get_qr_image_offer/**").permitAll()
                 .antMatchers("/repository/captcha").permitAll()
                 .antMatchers(SysUrls.ErrorNotFound).permitAll()
                 .antMatchers(SysUrls.ErrorNotFound).permitAll()
@@ -68,10 +72,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/dashboard/**").authenticated();
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout");
+                .logoutSuccessUrl("/login?logout")
+        .and().csrf().ignoringAntMatchers("/get_post");
 
         
-        http.csrf().ignoringAntMatchers("/login","/upay/payment","/upay/check");
+        http.csrf().ignoringAntMatchers("/login","/upay/payment","/upay/check","/get_news");
 
         http.authorizeRequests().anyRequest().authenticated()
                 .and()

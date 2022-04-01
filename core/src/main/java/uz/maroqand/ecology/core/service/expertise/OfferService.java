@@ -16,13 +16,13 @@ public interface OfferService {
     Offer getOffer(Boolean budget,Integer organizationId);
 
     Page<Offer> getAll(Pageable pageable);
-
+    Offer getByDocumentRepoId(Integer repoId);
     Offer getById(Integer id);
 
     Offer save(Offer offer);
 
     List<Offer> getAllByLanguage();
-
+    Offer complete(Integer offerId);
     Integer getOfferFileIdByLanguage(Offer offer,String locale);
 
 }

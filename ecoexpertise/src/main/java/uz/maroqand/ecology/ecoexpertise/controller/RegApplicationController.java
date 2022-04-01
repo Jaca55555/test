@@ -1,14 +1,12 @@
 package uz.maroqand.ecology.ecoexpertise.controller;
 
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,8 +86,9 @@ public class RegApplicationController {
     private final DocumentRepoService documentRepoService;
     private final NotificationService notificationService;
     private final FactureService factureService;
-
+    private Logger logger = LogManager.getLogger(RegApplicationController.class);
     private final GlobalConfigs globalConfigs;
+    private final SubstanceService substanceService;
 
     @Autowired
     public RegApplicationController(
@@ -122,7 +121,7 @@ public class RegApplicationController {
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
             NotificationService notificationService,
-            FactureService factureService, GlobalConfigs globalConfigs) {
+            FactureService factureService, GlobalConfigs globalConfigs, SubstanceService substanceService) {
         this.userService = userService;
         this.soatoService = soatoService;
         this.opfService = opfService;
@@ -155,6 +154,7 @@ public class RegApplicationController {
         this.notificationService = notificationService;
         this.factureService = factureService;
         this.globalConfigs = globalConfigs;
+        this.substanceService = substanceService;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -197,7 +197,9 @@ public class RegApplicationController {
                     helperService.getMaterials(regApplication.getMaterials(),locale),
                     regApplication.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
                     regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
-                    regApplication.getStatus()!=null? regApplication.getStatus().getColor():""
+                    regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
+                    regApplication.getApplicant()!=null?regApplication.getApplicant().getName():" ",
+                    regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():" "
             });
         }
         result.put("data",convenientForJSONArray);
@@ -328,6 +330,8 @@ public class RegApplicationController {
             case IndividualEnterprise: individualEntrepreneurDto = new IndividualEntrepreneurDto(applicant);break;
         }
         individualDto.setIndividualTin(individualDto.getIndividualTin()==null?user.getTin():individualDto.getIndividualTin());
+        individualDto.setIndividualPinfl(individualDto.getIndividualPinfl()==null?user.getPinfl():individualDto.getIndividualPinfl());
+        individualEntrepreneurDto.setIndividualEntrepreneurPinfl(individualEntrepreneurDto.getIndividualEntrepreneurPinfl()==null?user.getPinfl():individualEntrepreneurDto.getIndividualEntrepreneurPinfl());
         legalEntityDto.setLegalEntityTin(legalEntityDto.getLegalEntityTin()==null?user.getLeTin():legalEntityDto.getLegalEntityTin());
         model.addAttribute("applicant", applicant);
         model.addAttribute("individual", individualDto);
@@ -465,7 +469,7 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationFourCategoryAbout + "?id=" + id;
         }
 
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        Coordinate coordinate = coordinateRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplication.getId());
         if(coordinate != null){
             model.addAttribute("coordinate", coordinate);
             model.addAttribute("coordinateLatLongList", coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId()));
@@ -477,13 +481,17 @@ public class RegApplicationController {
                 categoryList.add(category);
             }
         }
-
+        model.addAttribute("substances",substanceService.getList());
+        model.addAttribute("substances1",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE1));
+        model.addAttribute("substances2",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE2));
+        model.addAttribute("substances3",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE3));
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("activityList", activityService.getList());
         model.addAttribute("requirementList", requirementService.getAllList());
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("categoryId", regApplication.getCategory() !=null ? regApplication.getCategory().getId() : null);
 
@@ -498,9 +506,12 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "objectId") Integer objectId,
             @RequestParam(name = "regionId", required = false) Integer regionId,
+            @RequestParam(name = "objectRegionId", required = false) Integer objectRegionId,
+            @RequestParam(name = "objectSubRegionId", required = false) Integer objectSubRegionId,
             @RequestParam(name = "activityId", required = false) Integer activityId,
             @RequestParam(name = "materials", required = false) Set<Integer> materials,
             @RequestParam(name = "name") String name,
+            @RequestParam(name = "individualPhone") String individualPhone,
             @RequestParam(name = "tin") String projectDeveloperTin,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
             @RequestParam(name = "opfId") Integer projectDeveloperOpfId,
@@ -524,6 +535,8 @@ public class RegApplicationController {
             coordinate.setRegionId(client != null ? client.getRegionId() : null);
             coordinate.setSubRegionId(client != null ? client.getSubRegionId() : null);
             coordinate.setName(name);
+            coordinate.setObjectRegionId(objectRegionId);
+            coordinate.setObjectSubRegionId(objectSubRegionId);
             coordinate.setNumber(regApplication.getContractNumber());
             coordinate.setLongitude(coordinates.get(0).toString());
             coordinate.setLatitude(coordinates.get(1).toString());
@@ -583,10 +596,13 @@ public class RegApplicationController {
 
         regApplication.setObjectId(objectId);
         regApplication.setName(name);
+        regApplication.setObjectRegionId(objectRegionId);
+        regApplication.setObjectSubRegionId(objectSubRegionId);
+        regApplication.setIndividualPhone(individualPhone);
         regApplication.setMaterials(materials);
 
         regApplication.setActivityId(activityId);
-        regApplication.setCategory(activity!=null? activity.getCategory():null);
+        regApplication.setCategory(activity!=null? activity.getCategory():Category.CategoryAll);
 
         RegApplicationLog confirmLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
         if(confirmLog==null || !confirmLog.getStatus().equals(LogStatus.Approved)){
@@ -703,7 +719,8 @@ public class RegApplicationController {
             //offerta tasdiqlangan
             offer = offerService.getById(regApplication.getOfferId());
             model.addAttribute("action_url", RegUrls.RegApplicationContract);
-        }else {
+        }else
+            {
             //offerta tasdiqlanmagan
             RegApplication regApplicationCheck = regApplicationService.getByIdAndUserTin(regApplication.getId(),user);
             if (regApplicationCheck==null || !regApplicationCheck.getId().equals(regApplication.getId())){
@@ -738,6 +755,11 @@ public class RegApplicationController {
         }
 
         Offer offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
+        if (offer==null){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
+
+        offerService.complete(offer.getId());
         regApplication.setOfferId(offer.getId());
         notificationService.confirmContractRegApplication(regApplication.getId());
         String contractNumber = organizationService.getContractNumber(regApplication.getReviewId());
@@ -952,10 +974,10 @@ public class RegApplicationController {
         if(conclusion != null){
             model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
         }
-
+        Offer offer = offerService.getById(regApplication.getOfferId());
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
-
+        model.addAttribute("offer", offer);
         model.addAttribute("invoice", invoice);
         model.addAttribute("facture", factureService.getById(regApplication.getFactureId()));
         model.addAttribute("factureProductList", factureService.getByFactureId(regApplication.getFactureId()));
@@ -991,6 +1013,35 @@ public class RegApplicationController {
         regApplication.setLogIndex(regApplication.getLogIndex()+1);
         RegApplicationLog forwardingLog = regApplicationLogService.create(regApplication,LogType.Forwarding,"",user);
         forwardingLog = regApplicationLogService.update(forwardingLog, LogStatus.Resend,"", user.getId());
+        Date currentDate = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(currentDate);
+        if(regApplication.getCategory()!=null){
+            switch (regApplication.getCategory().getId()){
+                case 0:
+                case 1:
+                    c.add(Calendar.DATE,10);
+                    Date currentDatePlusZero = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusZero);
+                    break;
+                case 2:
+                    c.add(Calendar.DATE,7);
+                    Date currentDatePlusTwo = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusTwo);
+                    break;
+                case 3:
+                    c.add(Calendar.DATE,5);
+                    Date currentDatePlusThree = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusThree);
+                    break;
+                case 4:
+                    c.add(Calendar.DATE,3);
+                    Date currentDatePlusFour = c.getTime();
+                    regApplication.setDeadlineDate(currentDatePlusFour);
+                    break;
+            }
+        }
+
 
         regApplication.setForwardingLogId(forwardingLog.getId());
         regApplication.setPerformerId(null);
@@ -1279,7 +1330,7 @@ public class RegApplicationController {
             return result;
         }
 
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplicationId);
+        Coordinate coordinate = coordinateRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplicationId);
         if(coordinate == null){
             return result;
         }

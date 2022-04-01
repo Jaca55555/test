@@ -151,8 +151,8 @@ public class PaymentFileServiceImpl implements PaymentFileService {
                     }
                 }
 
-                if(account != null){
-                    predicates.add(criteriaBuilder.equal(root.get("receiverAccount"), account));
+                if(account != null&& !account.isEmpty()){
+                    predicates.add(criteriaBuilder.like(root.get("receiverAccount"), "%"+account+"%"));
                 }
 
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <!-- smart-wizard css -->
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
+    <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
+    <!-- Bootstrap datetimepicker css -->
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/plugins/ViewerJS/viewer.css">
+
+</head>
+<body class="layout-6" style="overflow:auto;">
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ Pre-loader ] End -->
+
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
+
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
+
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container" style="overflow:auto;">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
+
+                                            <object th:include="expertise/reg/category_four/step_wizard :: wizard" th:remove="tag" ></object>
+
+
+                                            <div class="row" >
+                                                <div class="form-group col-md-12 text-center" >
+                                                    <form th:action="${action_url}" th:object="${regApplication}" data-parsley-validate="" id="contract-form">
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label">
+                                                                    <span th:text="#{sys_is_budget}"></span>
+                                                                    <span class="required">*</span>
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-md-6 text-left">
+                                                                <div class="custom-control custom-radio">
+                                                                    <input type="radio" id="budgetFalse" name="budget" value="0" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==false}" required="" >
+                                                                    <label class="custom-control-label" for="budgetFalse" th:text="#{sys_budget.false}"> </label>
+                                                                </div>
+                                                                <div class="custom-control custom-radio">
+                                                                    <input type="radio" id="budgetTrue" name="budget" value="1" class="custom-control-input" th:checked="${regApplication.budget!=null and regApplication.budget==true}" required="" >
+                                                                    <label class="custom-control-label" for="budgetTrue" th:text="#{sys_budget.true}"> </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label " th:text="#{sys_contract.date}" ></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control datepicker" required="" id="contractDate" name="contractDate" th:value="${regApplication.contractDate!=null?#dates.format(regApplication.contractDate,'dd.MM.yyyy'):''}" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label " th:text="#{sys_contract.number}" ></label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control" required="" id="contractNumber" name="contractNumber" th:value="${regApplication.contractNumber}" />
+                                                            </div>
+                                                        </div>
+                                                        </br>
+                                                        <h4 class="text-center" th:text="#{sys_contract.files}"></h4>
+                                                        <div class="col-md-6 offset-md-3 row" style="padding: 40px 0 40px 0;" id="files-div">
+                                                            <a href="#upload-file-modal" onclick="openModalFile()" class="col-md-3" style="padding-bottom: 25px;">
+                                                                <div class="add-file">
+                                                                    <img src="/static/images/uploading.gif" alt="" id="upload-gif" style="display: none;">
+                                                                    <span id="percentage"><span id="percentage-num"></span>%</span>
+                                                                    <i class="feather icon-plus" id="plus-icon"></i>
+                                                                </div>
+                                                            </a>
+                                                            <div class="col-md-3" th:each="file : ${regApplication.contractFiles}" th:id="${'file-block-' + file.id}">
+                                                                <div class="file">
+                                                                    <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).ExpertiseRegApplicationFourCategoryContractDownload + '?file_id=' + file.id}">
+                                                                        <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                                                                        <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                                                                        <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                                                                        <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                                                                        <i th:if="${file.extension!='doc'
+                                                                                    && file.extension!='docx'
+                                                                                    && file.extension!='xls'
+                                                                                    && file.extension!='xlsx'
+                                                                                    && file.extension!='pdf'
+                                                                                    && file.extension!='png'
+                                                                                    && file.extension!='jpg'
+                                                                                    && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                                                                        <span th:text="${file.description}"></span>
+                                                                        <p th:text="${file.name}"></p>
+                                                                    </a>
+                                                                    <button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">
+                                                                        <i class="feather icon-x"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" />
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                        <div class="row" >
+                                                            <div class="form-group col-md-12 text-center" >
+                                                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>
+                                                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}" >Далее</button><!--onclick="submitForm()"-->
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ sample-page ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+    <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+    <script src="/static/plugins/ViewerJS/viewer.js"></script>
+    <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
+
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                format: "dd.mm.yyyy",
+                todayHighlight: true,
+                autoclose: true
+            });
+        });
+        $('#confirm').on('click',function () {
+            if ($('#confirm').is(':checked')) {
+                $('#confirmButton').removeClass('disabled');
+            } else {
+                $('#confirmButton').addClass('disabled');
+            }
+        });
+
+    </script>
+</body>
+</html>

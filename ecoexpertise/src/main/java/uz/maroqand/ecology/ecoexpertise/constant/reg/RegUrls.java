@@ -82,7 +82,9 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryStep5 = RegApplicationFourCategory + "/step5";
 
     public static final String RegApplicationFourCategoryBoilerCharacteristicsCreate = RegApplicationFourCategory + "/boiler_characteristics_create";
-    public static final String RegApplicationFourCategoryBoilerCharacteristicsEdit = RegApplicationFourCategory + "/boiler_characteristics_edit";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType1 = RegApplicationFourCategory + "/boiler_characteristics_edit1";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType2 = RegApplicationFourCategory + "/boiler_characteristics_edit2";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType3 = RegApplicationFourCategory + "/boiler_characteristics_edit3";
     public static final String RegApplicationFourCategoryBoilerCharacteristicsDelete = RegApplicationFourCategory + "/boiler_characteristics_delete";
 
     public static final String RegApplicationFourCategoryBoilerSave = RegApplicationFourCategory + "/boiler_characteristics_save";
@@ -131,6 +133,12 @@ public class RegUrls {
     public static final String AppealSubCreate = Appeal + "/sub_create";
     public static final String AppealFileUpload = Appeal + "/file";
     public static final String AppealImages = Appeal + "/images";
+
+    private static final String Offer = Prefix + "/offer";
+    public static final String OfferList = Offer + "/list";
+    public static final String OfferListAjax = Offer + "/list_ajax";
+    public static final String OfferView = Offer + "/view";
+
 
     public static final String GetLegalEntityByTin = Prefix + "/get_legal_entity";
     public static final String GetIndividualByPinfl = Prefix + "/get_individual";

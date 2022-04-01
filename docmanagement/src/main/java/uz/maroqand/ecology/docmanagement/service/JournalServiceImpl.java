@@ -42,7 +42,7 @@ public class JournalServiceImpl implements JournalService {
     @Cacheable(value = "journalGetById", key = "#id", condition="#id != null", unless="#result == null")
     public Journal getById(Integer id) throws IllegalArgumentException {
         if (id==null)return null;
-        return journalRepository.getOne(id);
+        return journalRepository.findByIdAndDeletedFalse(id);
     }
 
     @Override

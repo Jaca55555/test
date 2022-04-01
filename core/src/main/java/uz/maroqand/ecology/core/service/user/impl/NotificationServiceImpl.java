@@ -146,7 +146,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public Notification getByRegApplicationConfirm(Integer regId) {
-        return notificationRepository.findByApplicationNumberAndStatusAndType(regId,NotificationStatus.New,NotificationType.RegContract);
+        return notificationRepository.findTop1ByApplicationNumberAndStatusAndTypeAndDeletedFalseOrderByIdDesc(regId,NotificationStatus.New,NotificationType.RegContract);
     }
 
     public List<Notification> getNotificationList(Integer reviewerId, NotificationType notificationType){

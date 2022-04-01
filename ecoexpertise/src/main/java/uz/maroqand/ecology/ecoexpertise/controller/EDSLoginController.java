@@ -45,6 +45,7 @@ public class EDSLoginController {
     Logger logger = LogManager.getLogger(MainController.class);
 
     private final Pattern tinPattern = Pattern.compile("=([1-9][0-9]{8}),");
+    private final Pattern pinflPattern = Pattern.compile("=([1-9][0-9]{13}),");
 
     //EDS kirishda API key domenga to'g'ri bog'langan bo'lishi kerak.
     //Bu API keylar GNK NTMdagi Azamat aka tomonidan berilgan
@@ -98,10 +99,19 @@ public class EDSLoginController {
         }
 
         logger.info("subjectName: {}", subjectName);
-
+        String pinfl = subjectName.substring(subjectName.length()-30);
+        Matcher matcher1 = pinflPattern.matcher(pinfl);
+        System.out.println("matcher1"+matcher1);
         Matcher matcher = tinPattern.matcher(subjectName);
+
+        if (matcher1.find()){
+            logger.info("Pinfl: {}", matcher1.group(1));
+        }
+
+
         Integer tin = null;
         Integer leTIN = null;
+//        String pinfl = null;
 
         //1-fiz litso INN si keladi.
         if (matcher.find()) {
@@ -115,7 +125,13 @@ public class EDSLoginController {
             leTIN = Integer.parseInt(matcher.group(1));
         }
 
-        if (tin == null) {
+        //2-yur litso INN si keladi.
+        if (matcher1.find()) {
+            logger.info("Pinfl: {}", matcher1.group(1));
+            pinfl = matcher1.group(1);
+        }
+
+        if (tin == null && pinfl==null) {
             logger.info("Could not find individual TIN.");
             return "redirect:" + SysUrls.EDSLogin + "?failed=1";
         }
@@ -138,6 +154,7 @@ public class EDSLoginController {
                 case "ST": userEds.setRegion(r[1]); break;//viloyat
                 case "E": userEds.setEmail(r[1]); break;//e-mail
                 case "C": userEds.setCountry(r[1]); break;//davlat
+                case "PINFL": userEds.setPinfl(r[1]); break;//pinfl
                 default:
                     if (r[1] != null && r[1].length() == 14) {
                         userEds.setPinfl(r[1]);//pinfl
@@ -157,6 +174,8 @@ public class EDSLoginController {
             user = userRepository.findByTinAndLeTin(userEds.getTin(), userEds.getLeTin());
         }else if(userEds.getTin()!=null){
             user = userRepository.findByTinAndLeTinIsNull(userEds.getTin());
+        }else if (userEds.getPinfl()!=null){
+            user = userRepository.findByPinfl(userEds.getPinfl());
         }
 
         if (user == null) {
@@ -167,8 +186,9 @@ public class EDSLoginController {
             user.setGender(null);
 
             List<User> userList = userRepository.findByTin(tin);
+            List<User> userListPinfl = userRepository.findAllByPinfl(pinfl);
             if(userList.size()>0){
-                user.setUsername(tin.toString()+"_"+userList.size());
+                user.setUsername(pinfl+"_"+userList.size()+"_"+userListPinfl.size());
             }else {
                 user.setUsername(userEds.getTin().toString());
             }
@@ -181,6 +201,7 @@ public class EDSLoginController {
 
         user.setTin(userEds.getTin());
         user.setLeTin(userEds.getLeTin());
+        user.setPinfl(userEds.getPinfl());
         user.setLastEvent(new Date());
         user = userRepository.saveAndFlush(user);
 
@@ -198,5 +219,12 @@ public class EDSLoginController {
 
         return "redirect:"+"/dashboard";
     }
+
+    /*public static void main(String[] args) {
+        Pattern tinPattern = Pattern.compile("=([1-9]{1}[0-9]{13}),");
+        String sub = "CN=БЕРДИХАНОВ ЖАЛГАС ПИРИМБЕТОВИЧ,Name=ЖАЛГАС,SURNAME=БЕРДИХАНОВ,O=QARAQALPAQSTAN RESPUBLIKASI QURILIS MINISTRLIGI,L=Нукус шаҳар,ST=Қорақалпоғистон Респ.,C=UZ,UID=469577057,1.2.860.3.16.1.2=30106543500069,T=Direktor,1.2.860.3.16.1.1=200358244,BusinessCategory=Бюджет ташкилотлари";
+        Matcher matcher = tinPattern.matcher(sub);
+        System.out.println(matcher.find());
+    }*/
 
 }

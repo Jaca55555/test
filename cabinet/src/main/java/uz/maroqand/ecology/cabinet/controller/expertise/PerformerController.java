@@ -1,24 +1,27 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
+import com.lowagie.text.DocumentException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
+import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.*;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -34,6 +37,7 @@ import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -66,6 +70,8 @@ public class PerformerController {
     private final DocumentEditorService documentEditorService;
     private final GlobalConfigs globalConfigs;
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
+    private final RestTemplate restTemplate;
+    private final RequirementService requirementService;
 
     @Autowired
     public PerformerController(
@@ -87,7 +93,7 @@ public class PerformerController {
             NotificationService notificationService,
             ConclusionService conclusionService,
             SmsSendService smsSendService,
-            OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
+            OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, RestTemplate restTemplate, RequirementService requirementService) {
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
         this.userService = userService;
@@ -110,6 +116,8 @@ public class PerformerController {
         this.documentEditorService = documentEditorService;
         this.globalConfigs = globalConfigs;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
+        this.restTemplate = restTemplate;
+        this.requirementService = requirementService;
     }
 
     @RequestMapping(ExpertiseUrls.PerformerList)
@@ -242,6 +250,7 @@ public class PerformerController {
         model.addAttribute("LocalIp", globalConfigs.getLocalIp());
 
         model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
+        model.addAttribute("commentCount",commentService.CountByStatusAndPerformerId(CommentStatus.New,CommentType.CHAT,user.getId(),regApplicationId));
         model.addAttribute("changeDeadlineDateList", changeDeadlineDateService.getListByRegApplicationId(regApplicationId));
         model.addAttribute("changeDeadlineDate", changeDeadlineDateService.getByRegApplicationId(regApplicationId));
 
@@ -291,7 +300,7 @@ public class PerformerController {
             @RequestParam(name = "comment")String comment,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
-    ){
+    ) throws IOException, DocumentException {
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         RegApplication regApplication = regApplicationService.getById(id);
@@ -309,6 +318,51 @@ public class PerformerController {
         if(StringUtils.trimToNull(comment) != null){
             commentService.create(id, CommentType.CONFIDENTIAL, comment, user.getId());
         }
+//        List<RegApplicationLog> regApplicationLogList = regApplicationLogService.getByLogStatus(LogStatus.Modification,regApplication.getId());
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+////        System.out.println("===" + regApplicationLogList.size() + "===");
+//
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        System.out.println("#############################");
+//        if(LogStatus.getLogStatus(performerStatus)==LogStatus.Modification && regApplicationLogList.size()>=2){
+//            RegApplicationLog firstRegApplicationLog = regApplicationLogList.get(0);
+//            Date createdDate = firstRegApplicationLog.getCreatedAt();
+//            Calendar c = Calendar.getInstance();
+//            Date date = new Date();
+//            c.setTime(date);
+//            c.add(Calendar.DATE,-61);    // shu kunning o'zi ham qo'shildi
+//            Date expireDate = c.getTime();
+////            if(createdDate.before(expireDate))
+////            {
+//                Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+//                invoice.setStatus(InvoiceStatus.CanceledForModification);
+//                Requirement requirement = requirementService.getById(regApplication.getRequirementId());
+//                Invoice newInvoice = invoiceService.create(regApplication, requirement);
+//                invoiceService.save(newInvoice);
+//                regApplication.setInvoiceId(newInvoice.getId());
+//
+////            }
+//        }
+
 
         regApplication.setStatus(RegApplicationStatus.Process);
         regApplication.setAgreementStatus(LogStatus.Initial);
@@ -317,7 +371,7 @@ public class PerformerController {
 
         //kelishiluvchilar bor bo'lsa yuboramiz
         Set<Integer> agreements = new LinkedHashSet<>();
-        List<RegApplicationLog> agreementLogs = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
+        List<RegApplicationLog> agreementLogs  = regApplicationLogService.getByIds(regApplication.getAgreementLogs());
         for (RegApplicationLog agreementLog:agreementLogs){
             if(agreementLog.getUpdateById()!=null) agreements.add(agreementLog.getUpdateById());
             agreementLog.setStatus(LogStatus.New);
@@ -353,6 +407,7 @@ public class PerformerController {
             regApplication.setStatus(RegApplicationStatus.Process);
             regApplicationService.update(regApplication);
         }
+
         return "redirect:"+ExpertiseUrls.PerformerView + "?id=" + regApplication.getId() + "#action";
     }
 
@@ -360,7 +415,6 @@ public class PerformerController {
     public String getPerformerActionEditMethod(
             @RequestParam(name = "id")Integer id,
             @RequestParam(name = "comment")String comment,
-//            @RequestParam(name = "number")String number,
             @RequestParam(name = "performerStatus")Integer performerStatus,
             @RequestParam(name = "conclusionOnline")Boolean conclusionOnline
     ){

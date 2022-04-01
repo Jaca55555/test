@@ -26,6 +26,12 @@ public class ExpertiseMgmtTemplates {
     public static final String MaterialNew = Material + "/new";
     public static final String MaterialView = Material + "/view";
 
+    //Material
+    private static final String Substance = Prefix + "/substance";
+    public static final String SubstanceList = Substance + "/list";
+    public static final String SubstanceNew = Substance + "/new";
+    public static final String SubstanceView = Substance + "/view";
+
     //ExpertiseRequirement
     private static final String ExpertiseRequirement = Prefix + "/expertise_requirement";
     public static final String ExpertiseRequirementList = ExpertiseRequirement + "/list";

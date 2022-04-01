@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org">
+<head>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
+    <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/ol/ol.css">
+    <style>
+        .pad-top{
+            padding-top: calc(.375rem + 1px);
+        }
+        .border-bottom-styled {
+            border-bottom: 1px solid #000;
+            width: 100%;
+            margin-top: 20px
+        }
+        div.page {
+            background: white;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 0.5cm;
+            box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
+            font-size: 14px;
+        }
+
+        div.page.size-A4 {
+            width: 21cm;
+            /*height: 29.7cm;*/
+            padding: 1.5cm 2cm;
+            overflow: auto;
+        }
+        p{
+            margin-bottom: 4px !important;
+            padding-top: 1px !important;
+        }
+        div .image {
+            text-align: center !important;
+        }
+        .table td, .table th{
+            white-space: initial;
+        }
+    </style>
+</head>
+<body class="layout-6" style="background: #23b7e5;">
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container" style="margin-left: 0px;">
+    <div class="pcoded-wrapper">
+        <div class="pcoded-content">
+            <div class="pcoded-inner-content">
+                <div class="main-body">
+                    <div class="page-wrapper">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-body" style="min-height: calc(100vh - 130px);padding: 80px 80px;">
+                                        <img src="/static/images/qrcode.png" alt="" style="display: block;margin-left: auto;margin-right: auto;width: 10%; margin-bottom: 30px">
+                                        <h3 style="text-align: center" th:text="#{regApplication.title}"></h3>
+                                        <div class="row">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" style="width:70%; margin: 30px auto">
+                                                    <tr>
+                                                    <th class="w-50" th:text="#{qr_orgname}"></th>
+                                                    <th class="w-50"th:text="${organization}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-50" th:text="#{reg_application_number}"></th>
+                                                        <th class="w-50"th:text="${regApplication.id}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-50" th:text="#{coordinate.object_expertise}"></th>
+                                                        <th class="w-50"th:text="${objectExpertise}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-50" th:text="#{front.company_name}"></th>
+                                                        <th class="w-50"th:text="${regApplication.applicant.name}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-50" th:text="#{sys_tin_individual}"></th>
+                                                        <th class="w-50"th:text="${regApplication.applicant.tin}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-50" th:text="#{mntr_expertise_requirement.qty}"></th>
+                                                        <th class="w-50" th:if="${invoice!=null}" th:text="*{#numbers.formatDecimal(invoice.amount, 1, 'WHITESPACE', 2, 'POINT')}"></th>
+                                                        <th class="w-50" th:unless="${invoice!=null}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-50" th:text="#{sys_invoice.invoice}"></th>
+                                                        <th class="w-50" th:if="${invoice!=null}" th:text="${invoice.invoice}"></th>
+                                                        <th class="w-50" th:unless="${invoice!=null}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-50" th:text="#{sys_contract.number}"></th>
+                                                        <th class="w-50"th:text="${regApplication.contractNumber}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-50" th:text="#{sys_contractDate}"></th>
+                                                        <th class="w-50"th:text="${regApplication.contractDate!=null ? #dates.format(regApplication.contractDate,'dd.MM.yyyy'):''}"></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="w-50" th:text="#{invoice.status}"></th>
+                                                        <th class="w-50" th:if="${invoice!=null}" th:text="#{${status}}"></th>
+                                                        <th class="w-50" th:unless="${invoice!=null}"></th>
+                                                    </tr>
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="form-group  text-center" style="border: 1px dashed #b7c5d4;width: 95%; padding: 40px 20px;margin: 0 auto" id="contract">
+<!--                                            <p style="font-weight: bold" th:utext="#{text1}"></p>-->
+                                            <div style="text-align: justify" th:if="${offer.tagName!=null}" th:utext="#{${offer.tagName}}"></div>
+
+                                        </div>
+
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+
+<script type="text/javascript" src="/static/plugins/printThis.js"></script>
+<script th:inline="javascript">
+    $('#conclusion_print_btn').on('click',function () {
+        $("#conclusion").printThis({
+            debug: false,               // show the iframe for debugging
+            importCSS: true,            // import parent page css
+            importStyle: true,         // import style tags
+            printContainer: false,       // print outer container/$.selector
+            loadCSS: "/static/plugins/bootstrap/bootstrap.min.css",                // path to additional css file - use an array [] for multiple
+            pageTitle: "",              // add title to print page
+            removeInline: false,        // remove inline styles from print elements
+            removeInlineSelector: "*",  // custom selectors to filter inline styles. removeInline must be true
+            printDelay: 333,            // variable print delay
+            header: null,               // prefix to html
+            footer: null,               // postfix to html
+            base: false,                // preserve the BASE tag or accept a string for the URL
+            formValues: true,           // preserve input/form values
+            canvas: true,              // copy canvas content
+            doctypeString: '',       // enter a different doctype for older markup
+            removeScripts: true,       // remove script tags from print content
+            copyTagClasses: false,      // copy classes from the html & body tag
+            beforePrintEvent: null,     // function for printEvent in iframe
+            beforePrint: null,          // function called before iframe is filled
+            afterPrint: null            // function called before iframe is removed
+        });
+    });
+
+</script>
+</body>
+</html>

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import uz.maroqand.ecology.core.constant.sys.AppealStatus;
 import uz.maroqand.ecology.core.entity.sys.Appeal;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface AppealRepository extends JpaRepository<Appeal, Integer>, JpaSpecificationExecutor<Appeal> {
 
     Appeal findByIdAndCreatedByIdAndDeletedFalse(Integer id,Integer createdById);
-
+    Integer countAllByAppealStatusAndDeletedFalse(AppealStatus status);
     @Query("SELECT a.createdById,SUM(a.showUserCommentCount) FROM Appeal a WHERE a.showUserCommentCount>0 GROUP BY a.createdById")
     List<Object[]> findIdByShowUserCommentCount();
 

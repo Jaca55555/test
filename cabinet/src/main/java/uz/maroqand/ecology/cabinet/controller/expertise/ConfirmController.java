@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
@@ -31,6 +32,7 @@ import uz.maroqand.ecology.core.repository.expertise.CoordinateRepository;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -67,6 +69,7 @@ public class ConfirmController {
     private final NotificationService notificationService;
     private final SmsSendService smsSendService;
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
+    private final OrganizationService organizationService;
 
     @Autowired
     public ConfirmController(
@@ -83,7 +86,7 @@ public class ConfirmController {
             CoordinateRepository coordinateRepository,
             CoordinateLatLongRepository coordinateLatLongRepository,
             ToastrService toastrService,
-            NotificationService notificationService, SmsSendService smsSendService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService){
+            NotificationService notificationService, SmsSendService smsSendService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, OrganizationService organizationService){
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -100,20 +103,30 @@ public class ConfirmController {
         this.notificationService = notificationService;
         this.smsSendService = smsSendService;
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
+        this.organizationService = organizationService;
+
     }
 
     @RequestMapping(value = ExpertiseUrls.ConfirmList)
     public String getConfirmListPage(Model model) {
-        List<LogStatus> logStatusList = new ArrayList<>();
-        logStatusList.add(LogStatus.Initial);
-        logStatusList.add(LogStatus.Approved);
-        logStatusList.add(LogStatus.Denied);
+        List<RegApplicationStatus> regApplicationStatusList = new ArrayList<>();
+//        regApplicationStatusList.add(LogStatus.Initial);
+        regApplicationStatusList.add(RegApplicationStatus.Initial);
+        regApplicationStatusList.add(RegApplicationStatus.Approved);
+        regApplicationStatusList.add(RegApplicationStatus.Canceled);
+        regApplicationStatusList.add(RegApplicationStatus.CheckSent);
+        regApplicationStatusList.add(RegApplicationStatus.CheckConfirmed);
+        regApplicationStatusList.add(RegApplicationStatus.Process);
+        regApplicationStatusList.add(RegApplicationStatus.Modification);
+        regApplicationStatusList.add(RegApplicationStatus.NotConfirmed);
 
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
-        model.addAttribute("statusList", logStatusList);
+        model.addAttribute("statusList", RegApplicationStatus.getRegApplicationStatusList());
+        model.addAttribute("organizationList", organizationService.getList());
+        model.addAttribute("regApplicationCategoryType", Category.getCategoryList());
         return ExpertiseTemplates.ConfirmList;
     }
 
@@ -129,14 +142,14 @@ public class ConfirmController {
         System.out.println("user.OrgId===" + user.getOrganizationId());
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                userService.isAdmin()?null:user.getOrganizationId(),
+                userService.isAdmin()||user.getRole().getId()==16 ? null:user.getOrganizationId(),
                 LogType.Confirm,
                 null,
                 null,
                 RegApplicationInputType.ecoService,
                 pageable
         );
-
+        System.out.println(filterDto);
         List<RegApplication> regApplicationList = regApplicationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
@@ -148,14 +161,12 @@ public class ConfirmController {
                 client != null ? client.getTin() : "",
                 client != null ? client.getName() : "",
                 client != null ? helperService.getApplicantType(client.getType().getId(),locale):"",
-                client != null ? client.getOpfId()!=null? helperService.getOpfName(client.getOpfId(),locale):"" : "",
-                client != null ? client.getOked() : "",
-                client != null ? client.getRegionId()!=null?helperService.getSoatoName(client.getRegionId(),locale): "" : "",
-                client != null ? client.getSubRegionId()!=null?helperService.getSoatoName(client.getSubRegionId(),locale) : "" : "",
                 regApplication.getConfirmLogAt()!=null?Common.uzbekistanDateAndTimeFormat.format(regApplication.getConfirmLogAt()):"",
-                regApplicationLog.getStatus()!=null? helperService.getTranslation(regApplicationLog.getStatus().getConfirmName(),locale):"",
-                regApplicationLog.getStatus()!=null? regApplicationLog.getStatus().getId():"",
-                regApplicationLog.getId()
+                regApplication.getStatus()!=null? helperService.getTranslation(regApplication.getStatus().getName(),locale):"",
+                regApplication.getStatus()!=null? regApplication.getStatus().getId():"",
+                regApplicationLog.getId(),
+                regApplication.getReviewId()!=null ? organizationService.getById(regApplication.getReviewId()).getNameTranslation(locale):"",
+                regApplication.getCategory()!=null ? helperService.getTranslation(regApplication.getCategory().getName(),locale):"",
             });
         }
 
@@ -197,7 +208,7 @@ public class ConfirmController {
                 model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant)); break;
         }
 
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        Coordinate coordinate = coordinateRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplication.getId());
         if(coordinate != null){
             List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
             model.addAttribute("coordinate", coordinate);

@@ -165,7 +165,346 @@
                                             </h5>
                                         </div>
                                         <div class="card-body">
+                                            <div class="modal fade" id="boilerModal1" tabindex="-1" role="dialog" aria-labelledby="boilerModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 930px;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="boilerModalCenterTitle" th:text="#{boiler_modal_title1}"></h4>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body" style="height: 70vh; overflow-y: auto;">
+                                                            <div class="table-responsive">
 
+
+
+
+                                                                <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
+                                                                    <div class="top-item d-flex align-items-center mb-2">
+                                                                        <div class=" rounded d-flex  justify-content-center align-items-center">
+                                                                            <i class="fas fa-exclamation-triangle"></i>
+                                                                        </div>
+
+                                                                        <div class="ml-3"  th:text="#{boiler_title}">
+                                                                            <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
+                                                                                Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
+                                                                            </p>
+                                                                            <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
+                                                                                Qo'shimcha moddalar qo'shish uchun " <span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+
+
+
+                                                                <div class="col-md-12 text-center" id="alert-isSave1" >
+                                                                </div>
+
+                                                                <form id="boiler_form1" action="">
+                                                                    <table class="table  table-striped" id="boiler-table1">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th  style="width: 10%" >№</th>
+                                                                            <th th:text="#{substance_type}">Modda turi</th>
+                                                                            <th th:text="#{substance_weight.type}"></th>
+                                                                            <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
+                                                                                <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
+                                                                            </th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <!--                            <tbody>-->
+                                                                        <tbody  style="height: 70vh; overflow-y: auto;" >
+                                                                        <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==1}">
+                                                                            <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
+                                                                            <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
+                                                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                                                            <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
+                                                                            <td style="width: 15%">
+                                                                                <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                                <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr></tr>
+                                                                        </tbody>
+                                                                    </table>
+
+
+
+                                                                    <div class="w-100 d-flex justify-content-start row ">
+                                                                        <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
+                                                                            <div class="form-group">
+                                                                                <select class="form-control" id="name_boiler1"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                                    <option  th:text="#{sys_select}"></option>
+                                                                                    <option th:each="s:${substances1}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                        <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
+                                                                            <input id="type_boiler1" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
+
+                                                                        </div>
+                                                                        <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
+                                                                            <input id="amount_boiler1" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="5">
+
+                                                                        </div>
+
+
+                                                                        <div>
+                                                                            <div class="d-flex justify-content-center">
+
+                                                                                <button type="button" onclick="addExecutive1()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
+                                                                                <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
+
+                                                                            </div>
+
+
+                                                                        </div>
+
+
+                                                                    </div>
+
+
+                                                                    <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
+                                                                    <input type="hidden" id="_csrf1" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler1()"><span th:text="#{sys_save}"></span></button>
+                                                            <!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal fade" id="boilerModal2" tabindex="-1" role="dialog" aria-labelledby="boilerModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 930px;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="boilerModalCenterTitle" th:text="#{boiler_modal_title2}"></h4>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body" style="height: 70vh; overflow-y: auto;">
+                                                            <div class="table-responsive">
+                                                                <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
+                                                                    <div class="top-item d-flex align-items-center mb-2">
+                                                                        <div class="  rounded d-flex  justify-content-center align-items-center">
+                                                                            <i class="fas fa-exclamation-triangle"></i>
+                                                                        </div>
+
+                                                                        <div class="ml-3"  th:text="#{boiler_title}">
+                                                                            <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
+                                                                                Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
+                                                                            </p>
+                                                                            <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
+                                                                                Qo'shimcha moddalar qo'shish uchun " <span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <div class="col-md-12 text-center" id="alert-isSave2" >
+                                                                </div>
+
+                                                                <form id="boiler_form2" action="">
+                                                                    <table class="table  table-striped" id="boiler-table2">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th  style="width: 10%" >№</th>
+                                                                            <th th:text="#{substance_type}">Modda turi</th>
+                                                                            <th th:text="#{substance_weight.type}"></th>
+                                                                            <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
+                                                                                <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
+                                                                            </th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <!--                            <tbody>-->
+                                                                        <tbody  style="height: 70vh; overflow-y: auto;" >
+                                                                        <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==2}">
+                                                                            <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
+                                                                            <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
+                                                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                                                            <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
+                                                                            <td style="width: 15%">
+                                                                                <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                                <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr></tr>
+                                                                        </tbody>
+                                                                    </table>
+
+
+
+                                                                    <div class="w-100 d-flex justify-content-start row ">
+                                                                        <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
+                                                                            <div class="form-group">
+                                                                                <select class="form-control" id="name_boiler2"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                                    <option  th:text="#{sys_select}"></option>
+                                                                                    <option th:each="s:${substances2}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                        <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
+                                                                            <input id="type_boiler2" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
+
+                                                                        </div>
+                                                                        <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
+                                                                            <input id="amount_boiler2" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="5">
+
+                                                                        </div>
+
+
+                                                                        <div>
+                                                                            <div class="d-flex justify-content-center">
+
+                                                                                <button type="button" onclick="addExecutive2()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
+                                                                                <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
+
+                                                                            </div>
+
+
+                                                                        </div>
+
+
+                                                                    </div>
+
+
+                                                                    <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
+                                                                    <input type="hidden" id="_csrf2" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler2()"><span th:text="#{sys_save}"></span></button>
+                                                            <!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal fade" id="boilerModal3" tabindex="-1" role="dialog" aria-labelledby="boilerModalCenterTitle" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document" style="max-width: 930px;">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h4 class="modal-title" id="boilerModalCenterTitle" th:text="#{boiler_modal_title3}"></h4>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body" style="height: 70vh; overflow-y: auto;">
+                                                            <div class="table-responsive">
+                                                                <div class="top-content shadow rounded p-3 mb-5 w-100 d-flex">
+                                                                    <div class="top-item d-flex align-items-center mb-2">
+                                                                        <div class=" rounded d-flex  justify-content-center align-items-center">
+                                                                            <i class="fas fa-exclamation-triangle"></i>
+                                                                        </div>
+
+                                                                        <div class="ml-3"  th:text="#{boiler_title}">
+                                                                            <p class=" ml-2 mb-3 text-muted w-100 p-0 font-weight-bold ">
+                                                                                Moddani nomini kiritishni boshlang va tizim sizni moddalar ro'yxatidan moddani tanlashingizni suraydi
+                                                                            </p>
+                                                                            <p class=" ml-2  text-muted w-100 p-0 font-weight-bold ">
+                                                                                Qo'shimcha moddalar qo'shish uchun " <span class="text-primary font-weight-bold "> +   </span> " belgisini bosing
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                </div>
+                                                                <div class="col-md-12 text-center" id="alert-isSave3" >
+                                                                </div>
+
+                                                                <form id="boiler_form3" action="">
+                                                                    <table class="table  table-striped" id="boiler-table3">
+                                                                        <thead>
+                                                                        <tr>
+                                                                            <th  style="width: 10%" >№</th>
+                                                                            <th th:text="#{substance_type_3}">Modda turi</th>
+                                                                            <th th:text="#{substance_weight.type}"></th>
+                                                                            <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
+                                                                                <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
+                                                                            </th>
+                                                                        </tr>
+                                                                        </thead>
+                                                                        <!--                            <tbody>-->
+                                                                        <tbody  style="height: 70vh; overflow-y: auto;" >
+                                                                        <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==3}">
+                                                                            <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
+                                                                            <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
+                                                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                                                            <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%">
+                                                                            <td style="width: 15%">
+                                                                                <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                                <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr></tr>
+                                                                        </tbody>
+                                                                    </table>
+
+
+
+                                                                    <div class="w-100 d-flex justify-content-start row ">
+                                                                        <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
+                                                                            <div class="form-group">
+                                                                                <select class="form-control" id="name_boiler3"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                                    <option  th:text="#{sys_select}"></option>
+                                                                                    <option th:each="s:${substances3}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+
+
+                                                                        <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
+                                                                            <input id="type_boiler3" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
+
+                                                                        </div>
+                                                                        <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
+                                                                            <input id="amount_boiler3" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="5">
+
+                                                                        </div>
+
+
+                                                                        <div>
+                                                                            <div class="d-flex justify-content-center">
+
+                                                                                <button type="button" onclick="addExecutive3()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
+                                                                                <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
+
+                                                                            </div>
+
+
+                                                                        </div>
+
+
+                                                                    </div>
+
+
+                                                                    <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
+                                                                    <input type="hidden" id="_csrf3" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler3()"><span th:text="#{sys_save}"></span></button>
+                                                            <!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <object th:include="expertise/reg/step_wizard :: wizard" th:remove="tag" ></object>
 
                                             <div class="row" >
@@ -330,7 +669,72 @@
                                                                 <input class="form-control" type="text" th:field="*{name}"required=""  />
                                                             </div>
                                                         </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_region_object}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <!--                                                            <label for="region" class="control-label" th:text="#{sys_region}"></label>-->
+                                                            <div class="col-md-6">
+                                                                <select id="region" class="form-control" th:field="*{objectRegionId}">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_subRegion_object}">Наименование объекта</label>
+                                                                <span class="required">*</span>
+                                                            </div>
+                                                            <!--                                                            <label for="subRegionId" class="control-label" th:text="#{sys_subregion}">Вилоят</label>-->
+                                                            <div class="col-md-6">
+                                                                <select id="subRegionId" class="form-control" th:field="*{objectSubRegionId}">
+                                                                    <option value="" th:text="#{sys_select}"></option>
+                                                                    <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row mx-auto mt-4 custom-progress-box">
+                                                            <div class="col-md-3  left-content">
+                                                                <div class="left-item shadow rounded p-3">
+                                                                    <div class="top-item d-flex align-items-center mb-2">
+                                                                        <div class="  rounded d-flex  justify-content-center align-items-center">
+                                                                            <i class="fas fa-exclamation-triangle"></i>
+                                                                        </div>
 
+                                                                        <p class=" ml-2 text-muted w-75 p-0 font-weight-bold " th:text="#{all_substances}">
+                                                                            Barcha ifloslantruvchi moddalarni kiritish majburiy
+                                                                        </p>
+
+                                                                    </div>
+                                                                    <div class="under-item">
+                                                                        <p class="p-0 m-0 text-muted" th:text="#{all_substances_info}">
+                                                                            Kritilgan ma'lumotlar va loyohadagi ma'lumotlar o'rtasida farq aniqlansa sizning arizangiz rad etiladi
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6 right-content">
+                                                                <div class="right-item shadow p-3">
+                                                                    <h3 class="text-center  my-3 text-muted w-100 font-weight-bold " th:text="#{affects_for_nature}">
+                                                                        Atrof muhitga ta'sir
+                                                                    </h3>
+
+                                                                    <div class="right-under-item d-flex justify-content-between">
+                                                                        <button class="w-25 p-2 btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal1" style="border-radius: 5px">
+                                                                            <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type1}">info</span>
+                                                                        </button>
+                                                                        <button class="w-25 p-2 btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal2" style="border-radius: 5px">
+                                                                            <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type2}">info</span>
+                                                                        </button>
+                                                                        <button class="w-25 p-2  btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal3" style="border-radius: 5px">
+                                                                            <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type3}">info</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                         <div class="form-group row" >
                                                             <div class="col-md-3 text-right">
                                                                 <label class="col-form-label" th:text="#{sys_about.projectDeveloper_tin}">ИНН разработчика проекта</label>
@@ -349,6 +753,14 @@
                                                             <div class="col-md-6">
                                                                 <input class="form-control" type="text" name="projectDeveloperName" id="projectDeveloperName" th:value="${projectDeveloper.name}" required="" />
                                                                 <small id="projectDeveloperNameNotification" class="form-text text-muted" style="display: none" th:text="#{sys_not_found_project_developer_name_by_tin}"></small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row" >
+                                                            <div class="col-md-3 text-right">
+                                                                <label class="col-form-label" th:text="#{sys_phone}">Рабочий телефон</label>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <input class="form-control phone" id="individualPhone" th:field="*{individualPhone}"  placeholder="+998 ( -- ) --- -- --">
                                                             </div>
                                                         </div>
                                                         <div class="form-group row" >
@@ -468,6 +880,8 @@
     <script src="/static/plugins/ol/ol.js"></script>
     <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
     <script type="text/javascript" src="/static/js/select2/js/select2.full.min.js"></script>
+<script type="text/javascript" src="/static/plugins/input-mask/jquery.mask.min.js"></script>
+
 
 
     <script th:inline="javascript">
@@ -482,6 +896,21 @@
             regCategory =  getCategoryId([[${regApplication.category}]]);
         }
         $(document).ready(function () {
+            bindSubRegionSelectToRegionSelect('#subRegionId', '#region');
+            bindSubRegionSelectToRegionSelect('#objectSubRegionId', '#objectRegionId');
+            $("#name_boiler1").select2({
+                dropdownParent: $("#boilerModal1"),
+                tags: true
+            });
+            $("#name_boiler2").select2({
+                dropdownParent: $("#boilerModal2"),
+                tags: true
+            });
+            $("#name_boiler3").select2({
+                dropdownParent: $("#boilerModal3"),
+                tags: true
+            });
+            $(".phone").mask('+999(99)999-99-99');
             var srSelector = $('#materialId');
             srSelector.find('option:selected').show();
             // getActivityList();
@@ -1042,5 +1471,589 @@
 
         }).change();
     </script>
+<script th:inline="javascript">
+    var regApplicationId = [[${regApplication.id}]];
+    var regAddId = [[${regApplication.id}]];
+    var substances1 = [[${substances1}]];
+    var substances2 = [[${substances2}]];
+    var substances3 = [[${substances3}]];
+    var labelDelete = [[#{sys_delete}]];
+    var labelEdit = [[#{sys_edit}]];
+    var editLink1 = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType1}]];
+    var editLink2 = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType2}]];
+    var editLink3 = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType3}]];
+    var deleteLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsDelete}]];
+    var createLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsCreate}]];
+    var saveBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerSave}]];
+    var isSaveBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerIsSave}]];
+    var _csrf = [[${_csrf.token}]];
+    var isSavingTitle = [[#{sys_is_saving}]];
+    var isNotSavingTitle = [[#{sys_is_not_saving}]];
+
+
+
+
+
+
+
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+
+    var text1;
+    for (x in substances1) {
+        text1 += `<option value="` + substances1[x].name + `">` + substances1[x].name + `</option>`;
+    }
+    var text2;
+    for (x in substances2) {
+        text2 += `<option value="` + substances2[x].name + `">` + substances2[x].name + `</option>`;
+    }
+    var text3;
+    for (x in substances3) {
+        text3 += `<option value="` + substances3[x].name + `">` + substances3[x].name + `</option>`;
+    }
+    // console.log('substances='+substances);
+    function isSaveBoilerCharacteristice(){
+        $.ajax({
+            url: isSaveBoilerLink,
+            data: {
+                id: regAddId,
+                _csrf: _csrf
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function (response) {
+
+                if (response==true){
+                    $('#alert-not_save-characteristics').html('');
+                    $('#form-step5').submit();
+                }else{
+                    $('#alert-not_save-characteristics').html('<div class="alert alert-warning alert-dismissible" role="alert">'+ [[#{sys_not_saved_boiler_characteristics}]]  +'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    function saveBoiler1() {
+        // $('#boiler_name').parsley().validate();
+
+        $.ajax({
+            url: saveBoilerLink,
+            data: $("#boiler_form1").serialize()+"&typeBoiler=1",
+            type: 'post',
+            dataType: 'json',
+            success: function (response) {
+
+                if (response.status == 1) {
+                    $('#alert-isSave1').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                } else {
+                    $('#alert-isSave1').html('<div class="alert alert-warning alert-dismissible" role="alert">' + isNotSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    function saveBoiler2() {
+        // $('#boiler_name').parsley().validate();
+        $.ajax({
+            url: saveBoilerLink,
+            data: $("#boiler_form2").serialize()+"&typeBoiler=2",
+            type: 'post',
+            dataType: 'json',
+            success: function (response) {
+
+                if (response.status == 1) {
+                    $('#alert-isSave2').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                } else {
+                    $('#alert-isSave2').html('<div class="alert alert-warning alert-dismissible" role="alert">' + isNotSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    function saveBoiler3() {
+        // $('#boiler_name').parsley().validate();
+        $.ajax({
+            url: saveBoilerLink,
+            data: $("#boiler_form3").serialize()+"&typeBoiler=3",
+            type: 'post',
+            dataType: 'json',
+            success: function (response) {
+
+                if (response.status == 1) {
+                    $('#alert-isSave3').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                } else {
+                    $('#alert-isSave3').html('<div class="alert alert-warning alert-dismissible" role="alert">' + isNotSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+    var n=0;
+
+
+    //add base
+    function addExecutive1(){
+        $('#name_boiler1').parsley().validate();
+        $('#type_boiler1').parsley().validate();
+        $('#amount_boiler1').parsley().validate();
+
+        var name = $('#name_boiler1').val();
+        var type = $('#type_boiler1').val();
+        var amount = $('#amount_boiler1').val();
+
+        if( $('#name_boiler1').parsley().isValid()
+            && $('#type_boiler1').parsley().isValid()
+            && $('#amount_boiler1').parsley().isValid()) {
+
+            var form = new FormData();
+            form.append("regId", regApplicationId);
+            form.append("name", name);
+            form.append("type", type);
+            form.append("amount", amount);
+            form.append("typeBoiler",1);
+            form.append("_csrf", _csrf);
+
+            $.ajax({
+                type: "POST",
+                url: createLink,
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+                    $('#type_boiler1').val(" ");
+                    $('#amount_boiler1').val(null);
+
+                    if (response.status==1){
+                        const tableRows = document.querySelectorAll('#boiler-table1 tbody tr');
+
+                        var id = response.data.id;
+                        var name = response.data.name;
+                        var type = response.data.type;
+                        var amount = response.data.amount;
+                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                            '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
+                        cancelExecutive();
+                        $('#boiler-table1 tbody tr:last').after('' +
+                            '<tr id="row_' + id + '">' +
+                            '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
+                            '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
+                            '<td  style="width: 20%" >' + type + '</td>' +
+                            '<td style="\n' +
+                            '    width: 15%;\n' +
+                            '    \n" >' + amount + '</td>' +
+                            '<td style="width: 15%">' + actions + '</td></tr>');
+
+                    }
+                }
+            });
+        }
+    }
+    function addExecutive2(){
+        $('#name_boiler2').parsley().validate();
+        $('#type_boiler2').parsley().validate();
+        $('#amount_boiler2').parsley().validate();
+
+        var name = $('#name_boiler2').val();
+        var type = $('#type_boiler2').val();
+        var amount = $('#amount_boiler2').val();
+
+        if( $('#name_boiler2').parsley().isValid()
+            && $('#type_boiler2').parsley().isValid()
+            && $('#amount_boiler2').parsley().isValid()) {
+            console.log("regId" + regApplicationId)
+            console.log("name" + name)
+            console.log("type" + type)
+            console.log("amount" + amount)
+            var form = new FormData();
+            form.append("regId", regApplicationId);
+            form.append("name", name);
+            form.append("type", type);
+            form.append("amount", amount);
+            form.append("typeBoiler",2);
+            form.append("_csrf", _csrf);
+
+            $.ajax({
+                type: "POST",
+                url: createLink,
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+                    $('#type_boiler2').val(" ");
+                    $('#amount_boiler2').val(null);
+                    const tableRows = document.querySelectorAll('#boiler-table2 tbody tr');
+
+
+
+
+
+                    if (response.status==1){
+                        var id = response.data.id;
+                        var name = response.data.name;
+                        var type = response.data.type;
+                        var amount = response.data.amount;
+                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                            '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
+                        cancelExecutive();
+                        $('#boiler-table2 tbody tr:last').after('' +
+                            '<tr id="row_' + id + '">' +
+                            '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
+                            '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
+                            '<td  style="width: 20%" >' + type + '</td>' +
+                            '<td style="\n' +
+                            '    width: 15%;\n' +
+                            '    \n" >' + amount + '</td>' +
+                            '<td style="width: 15%">' + actions + '</td></tr>');
+
+                    }
+                }
+            });
+        }
+    }
+    function addExecutive3(){
+        $('#name_boiler3').parsley().validate();
+        $('#type_boiler3').parsley().validate();
+        $('#amount_boiler3').parsley().validate();
+
+        var name = $('#name_boiler3').val();
+        var type = $('#type_boiler3').val();
+        var amount = $('#amount_boiler3').val();
+
+        if( $('#name_boiler3').parsley().isValid()
+            && $('#type_boiler3').parsley().isValid()
+            && $('#amount_boiler3').parsley().isValid()) {
+            console.log("regId" + regApplicationId)
+            console.log("name" + name)
+            console.log("type" + type)
+            console.log("amount" + amount)
+            var form = new FormData();
+            form.append("regId", regApplicationId);
+            form.append("name", name);
+            form.append("type", type);
+            form.append("amount", amount);
+            form.append("typeBoiler",3);
+            form.append("_csrf", _csrf);
+
+            $.ajax({
+                type: "POST",
+                url: createLink,
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+                    $('#type_boiler3').val(" ");
+                    $('#amount_boiler3').val(null);
+
+
+
+                    if (response.status==1){
+                        const tableRows = document.querySelectorAll('#boiler-table3 tbody tr');
+                        var id = response.data.id;
+                        var name = response.data.name;
+                        var type = response.data.type;
+                        var amount = response.data.amount;
+                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                            '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
+                        cancelExecutive();
+                        $('#boiler-table3 tbody tr:last').after('' +
+                            '<tr id="row_' + id + '">' +
+                            '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
+                            '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
+                            '<td  style="width: 20%" >' + type + '</td>' +
+                            '<td style="\n' +
+                            '    width: 15%;\n' +
+                            '   \n" >' + amount + '</td>' +
+                            '<td style="width: 15%">' + actions + '</td></tr>');
+
+                    }
+                }
+            });
+        }
+    }
+
+
+    function cancelExecutive(){
+        n=0;
+        $('#input_add').remove();
+    }
+
+    /*delete modal*/
+    function mymodal(id){
+
+        var form = new FormData();
+        form.append("id",id);
+        form.append("regAddId",regAddId);
+        form.append("_csrf", _csrf);
+        $.ajax({
+            type: "POST",
+            url:deleteLink,
+            data:form,
+            success: function(){
+                $('#row_'+id).remove();
+            },
+            processData: false,
+            contentType: false,
+            cache:false
+        });
+    }
+
+    $('#boiler-table').css("width", "100%");
+</script>
+<script>
+    $(document).ready(function() {
+        $("#name_boiler1").select2({
+            dropdownParent: $("#boilerModal1")
+        });
+        $("#name_boiler2").select2({
+            dropdownParent: $("#boilerModal2")
+        });
+        $("#name_boiler3").select2({
+            dropdownParent: $("#boilerModal3")
+        });
+    });
+    $("#boiler-table1").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
+        $(this).removeClass().addClass("feather icon-check-circle mr-0");
+        var $row = $(this).closest("tr").off("mousedown");
+        var $tds = $row.find("td").not(':last');
+        var $idn=0;
+        $.each($tds, function(i, el) {
+            var txt = $(this).text();
+            $idn++;
+            if ($idn==2) {
+                $(this).html("").append(``+
+                    ` <select class="form-control" id="name_boiler1"  >`+
+                    text1+
+                    `<option selected="selected" value="` +txt+`">`+txt+`</option>`+
+                    `  </select>`+
+                    ``);
+            }
+            if ($idn==3){
+                $(this).html("").append("<input id='type_boiler1' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
+            }
+            if ($idn==4){
+                $(this).html("").append("<input id='amount_boiler1' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
+            }
+        });
+    });
+
+    $("#boiler-table1").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
+        console.log("Bu qism edit uchun")
+        var $row = $(this).closest("tr");
+        var $tds = $row.find("td").not(':last');
+        var id=$row.find("td").first().attr('id');
+        $('#name_boiler1').parsley().validate();
+        $('#type_boiler1').parsley().validate();
+        $('#amount_boiler1').parsley().validate();
+
+        if( $('#name_boiler1').parsley().isValid()
+            && $('#type_boiler1').parsley().isValid()
+            && $('#amount_boiler1').parsley().isValid()
+        ){
+
+            var form = new FormData();
+
+            $.each($tds, function(i, el) {
+                if($(this).has('select').length){
+                    console.log($(this).has('select'));
+                    console.log("selectni ichiga kiryapti");
+                    text = $(this).find("select").val();
+                    textId = $(this).find("select").attr('id');
+                    form.append(textId,text);
+                    $(this).html(text);
+                }else if($(this).has('input').length){
+                    console.log("inputni ichiga kiryapti");
+                    var txt = $(this).find("input").val();
+                    var txtId = $(this).find("input").attr('id');
+                    form.append(txtId,txt);
+                    $(this).html(txt);
+                }
+                console.log("txt=" + txt + "   txtId=" + txtId);
+                $(this).html(txt);
+            });
+            form.append('id',id);
+            form.append('regId',regApplicationId);
+            form.append("_csrf", _csrf);
+            $(this).removeClass().addClass("feather icon-edit-1 mr-0");
+
+            $.ajax({
+                type: "POST",
+                url:editLink1,
+                data:form,
+                success: function(e){
+                    console.log("refresh");
+                },
+                processData: false,
+                contentType: false,
+                cache:false
+            });
+        }
+    });
+
+    $("#boiler-table2").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
+        $(this).removeClass().addClass("feather icon-check-circle mr-0");
+        var $row = $(this).closest("tr").off("mousedown");
+        var $tds = $row.find("td").not(':last');
+        var $idn=0;
+        $.each($tds, function(i, el) {
+            var txt = $(this).text();
+            $idn++;
+            if ($idn==2) {
+                $(this).html("").append(``+
+                    ` <select class="form-control" id="name_boiler2"  >`+
+                    text2+
+                    `<option selected="selected" value="` +txt+`">`+txt+`</option>`+
+                    `  </select>`+
+                    ``);
+            }
+            if ($idn==3){
+                $(this).html("").append("<input id='type_boiler2' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
+            }
+            if ($idn==4){
+                $(this).html("").append("<input id='amount_boiler2' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
+            }
+        });
+    });
+
+    $("#boiler-table2").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
+        console.log("Bu qism edit uchun")
+        var $row = $(this).closest("tr");
+        var $tds = $row.find("td").not(':last');
+        var id=$row.find("td").first().attr('id');
+        $('#name_boiler2').parsley().validate();
+        $('#type_boiler2').parsley().validate();
+        $('#amount_boiler2').parsley().validate();
+
+        if( $('#name_boiler2').parsley().isValid()
+            && $('#type_boiler2').parsley().isValid()
+            && $('#amount_boiler2').parsley().isValid()
+        ){
+
+            var form = new FormData();
+
+            $.each($tds, function(i, el) {
+                if($(this).has('select').length){
+                    console.log($(this).has('select'));
+                    console.log("selectni ichiga kiryapti");
+                    text = $(this).find("select").val();
+                    textId = $(this).find("select").attr('id');
+                    form.append(textId,text);
+                    $(this).html(text);
+                }else if($(this).has('input').length){
+                    console.log("inputni ichiga kiryapti");
+                    var txt = $(this).find("input").val();
+                    var txtId = $(this).find("input").attr('id');
+                    form.append(txtId,txt);
+                    $(this).html(txt);
+                }
+                console.log("txt=" + txt + "   txtId=" + txtId);
+                $(this).html(txt);
+            });
+            form.append('id',id);
+            form.append('regId',regApplicationId);
+            form.append("_csrf", _csrf);
+            $(this).removeClass().addClass("feather icon-edit-1 mr-0");
+
+            $.ajax({
+                type: "POST",
+                url:editLink2,
+                data:form,
+                success: function(e){
+                    console.log("refresh");
+                },
+                processData: false,
+                contentType: false,
+                cache:false
+            });
+        }
+    });
+    $("#boiler-table3").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
+        $(this).removeClass().addClass("feather icon-check-circle mr-0");
+        var $row = $(this).closest("tr").off("mousedown");
+        var $tds = $row.find("td").not(':last');
+        var $idn=0;
+        $.each($tds, function(i, el) {
+            var txt = $(this).text();
+            $idn++;
+            if ($idn==2) {
+                $(this).html("").append(``+
+                    ` <select class="form-control" id="name_boiler3"  >`+
+                    text3+
+                    `<option selected="selected" value="` +txt+`">`+txt+`</option>`+
+                    `  </select>`+
+                    ``);
+            }
+            if ($idn==3){
+                $(this).html("").append("<input id='type_boiler3' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
+            }
+            if ($idn==4){
+                $(this).html("").append("<input id='amount_boiler3' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
+            }
+        });
+    });
+
+    $("#boiler-table3").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
+        console.log("Bu qism edit uchun 3-table")
+        var $row = $(this).closest("tr");
+        var $tds = $row.find("td").not(':last');
+        var id=$row.find("td").first().attr('id');
+        $('#name_boiler3').parsley().validate();
+        $('#type_boiler3').parsley().validate();
+        $('#amount_boiler3').parsley().validate();
+
+        if( $('#name_boiler3').parsley().isValid()
+            && $('#type_boiler3').parsley().isValid()
+            && $('#amount_boiler3').parsley().isValid()
+        ){
+
+            var form = new FormData();
+
+            $.each($tds, function(i, el) {
+                if($(this).has('select').length){
+                    console.log($(this).has('select'));
+                    console.log("selectni ichiga kiryapti");
+                    text = $(this).find("select").val();
+                    textId = $(this).find("select").attr('id');
+                    form.append(textId,text);
+                    $(this).html(text);
+                }else if($(this).has('input').length){
+                    console.log("inputni ichiga kiryapti");
+                    var txt = $(this).find("input").val();
+                    var txtId = $(this).find("input").attr('id');
+                    form.append(txtId,txt);
+                    $(this).html(txt);
+                }
+                console.log("txt=" + txt + "   txtId=" + txtId);
+                $(this).html(txt);
+            });
+            form.append('id',id);
+            form.append('regId',regApplicationId);
+            form.append("_csrf", _csrf);
+            $(this).removeClass().addClass("feather icon-edit-1 mr-0");
+
+            $.ajax({
+                type: "POST",
+                url:editLink3,
+                data:form,
+                success: function(e){
+                    console.log("refresh");
+                },
+                processData: false,
+                contentType: false,
+                cache:false
+            });
+        }
+    });
+</script>
 </body>
 </html>

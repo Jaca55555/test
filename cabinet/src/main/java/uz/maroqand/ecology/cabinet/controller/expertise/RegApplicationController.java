@@ -8,10 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
@@ -82,6 +80,8 @@ public class RegApplicationController {
     private final ConclusionService conclusionService;
     private final GlobalConfigs globalConfigs ;
     private final DocumentRepoService documentRepoService;
+    private final SubstanceService substanceService;
+    private final BoilerCharacteristicsService boilerCharacteristicsService;
 
     @Autowired
     public RegApplicationController(
@@ -110,7 +110,7 @@ public class RegApplicationController {
             CoordinateLatLongRepository coordinateLatLongRepository,
             SmsSendService smsSendService,
             ConclusionService conclusionService,
-            GlobalConfigs globalConfigs, DocumentRepoService documentRepoService) {
+            GlobalConfigs globalConfigs, DocumentRepoService documentRepoService, SubstanceService substanceService, BoilerCharacteristicsService boilerCharacteristicsService) {
         this.userService = userService;
         this.userAdditionalService = userAdditionalService;
         this.soatoService = soatoService;
@@ -141,6 +141,8 @@ public class RegApplicationController {
         this.conclusionService = conclusionService;
         this.globalConfigs = globalConfigs;
         this.documentRepoService = documentRepoService;
+        this.substanceService = substanceService;
+        this.boilerCharacteristicsService = boilerCharacteristicsService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationList)
@@ -157,7 +159,10 @@ public class RegApplicationController {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
 
-        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(new FilterDto(),null,null,null,user.getId(),RegApplicationInputType.cabinet,pageable);
+        FilterDto filterDto = new FilterDto();
+        filterDto.setByLeTin(user.getLeTin());
+        filterDto.setByTin(user.getTin());
+        Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,null,null,null,user.getRole().getId()!=16 ? user.getId():null,RegApplicationInputType.ecoService,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
@@ -249,6 +254,8 @@ public class RegApplicationController {
         if(check != null){
             return check;
         }
+
+
 
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
 
@@ -347,6 +354,16 @@ public class RegApplicationController {
         result.put("status",regApplicationService.sendSMSCode(mobilePhone,id));
         return result;
     }
+    @RequestMapping(value = ExpertiseUrls.ExpertiseGetByUserId,method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> expertiseGetByUserId(
+            @RequestParam(name = "userId") Integer id
+    ){
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("fio",userService.findById(id).getFName());
+        result.put("status",1);
+        return result;
+    }
 
     //status==1 confirm
     //status==2 regApplication == null
@@ -396,12 +413,16 @@ public class RegApplicationController {
             return check;
         }
 
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplication.getId());
+        Coordinate coordinate = coordinateRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplication.getId());
         if(coordinate != null){
             model.addAttribute("coordinate", coordinate);
             model.addAttribute("coordinateLatLongList", coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId()));
         }
 
+        model.addAttribute("substances1",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE1));
+        model.addAttribute("substances2",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE2));
+        model.addAttribute("substances3",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE3));
+        System.out.println("substance="+substanceService.getList());
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("activityList", activityService.getList());
         model.addAttribute("requirementList", requirementService.getAllList());
@@ -412,6 +433,7 @@ public class RegApplicationController {
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("back_url", ExpertiseUrls.ExpertiseRegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
         return ExpertiseTemplates.ExpertiseRegApplicationAbout;
@@ -428,8 +450,11 @@ public class RegApplicationController {
             @RequestParam(name = "tin") String projectDeveloperTin,
             @RequestParam(name = "opfId") Integer projectDeveloperOpfId,
             @RequestParam(name = "projectDeveloperName") String projectDeveloperName,
-            @RequestParam(name = "coordinates", required = false) List<Double> coordinates
-    ){
+            @RequestParam(name = "coordinates", required = false) List<Double> coordinates,
+            @RequestParam(name = "objectRegionId", required = false) Integer objectRegionId,
+            @RequestParam(name = "objectSubRegionId", required = false) Integer objectSubRegionId,
+            @RequestParam(name = "individualPhone") String individualPhone
+            ){
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         String check = check(regApplication,user);
@@ -506,7 +531,9 @@ public class RegApplicationController {
         regApplication.setObjectId(objectId);
         regApplication.setName(name);
         regApplication.setMaterials(materials);
-
+        regApplication.setObjectRegionId(objectRegionId);
+        regApplication.setObjectSubRegionId(objectSubRegionId);
+        regApplication.setIndividualPhone(individualPhone);
         regApplication.setActivityId(activityId);
         regApplication.setCategory(activity!=null? activity.getCategory():null);
         //todo to'g'rilash kerak
@@ -658,19 +685,23 @@ public class RegApplicationController {
         }
         regApplication.setStep(RegApplicationStep.PAYMENT);
         regApplicationService.update(regApplication);
+
         Requirement requirement = requirementService.getById(regApplication.getRequirementId());
         Invoice invoice;
         if (regApplication.getInvoiceId()==null){
             invoice = invoiceService.create(regApplication,requirement);
             regApplication.setInvoiceId(invoice.getId());
             regApplicationService.update(regApplication);
-        }else{
+        }else
+            {
             invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
-            invoice = invoiceService.modification(regApplication, invoice, requirement);
             invoiceService.checkInvoiceStatus(invoice);
             if (invoice.getStatus().equals(InvoiceStatus.Success) || invoice.getStatus().equals(InvoiceStatus.PartialSuccess)){
                 return "redirect:" + ExpertiseUrls.ExpertiseRegApplicationStatus + "?id=" + id;
             }
+
+            invoice = invoiceService.modification(regApplication, invoice, requirement);
+
         }
         model.addAttribute("invoice", invoice);
         model.addAttribute("regApplication", regApplication);
@@ -731,6 +762,7 @@ public class RegApplicationController {
     public String expertiseRegApplicationPaymentFree(
             @RequestParam(name = "id") Integer id
     ) {
+        System.out.println("id="+id);
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
         if (regApplication == null) {
@@ -1106,7 +1138,7 @@ public class RegApplicationController {
             return result;
         }
 
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplicationId);
+        Coordinate coordinate = coordinateRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplicationId);
         if(coordinate == null){
             return result;
         }
@@ -1294,5 +1326,306 @@ public class RegApplicationController {
 
         return null;
     }
+
+
+
+
+    //Boiler CRUD
+    @RequestMapping(value = ExpertiseUrls.RegApplicationFourCategoryBoilerCharacteristicsCreate)
+    @ResponseBody
+    public HashMap<String,Object> regApplicationFourCategoryBoilerCharacteristicsCreate(
+            @RequestParam(name = "regId") Integer regId,
+            @RequestParam(name = "typeBoiler") Integer typeBoiler,
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "type") String type,
+            @RequestParam(name = "amount") Double amount
+    ){
+        System.out.println("regApplicationFourCategoryBoilerCharacteristicsCreate");
+        Integer status = 0;
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regId);
+
+        HashMap<String,Object> response = new HashMap<>();
+        response.put("status",status);
+
+        if (regApplication==null ){
+            return response;
+        }
+//        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regId);
+//        if (regApplicationCategoryFourAdditional==null ){
+//            return response;
+//        }
+        Set<BoilerCharacteristics> boilerCharacteristics = regApplication.getBoilerCharacteristics();
+        if (boilerCharacteristics==null || boilerCharacteristics.isEmpty()) boilerCharacteristics = new HashSet<>();
+        BoilerCharacteristics characteristics = new BoilerCharacteristics();
+        characteristics.setName(name);
+        characteristics.setType(type);
+        characteristics.setAmount(amount);
+        characteristics.setSubstanceType(typeBoiler);
+        characteristics.setDeleted(Boolean.FALSE);
+        characteristics = boilerCharacteristicsService.save(characteristics);
+        boilerCharacteristics.add(characteristics);
+        regApplication.setBoilerCharacteristics(boilerCharacteristics);
+        regApplicationService.updateBoiler(regApplication,user.getId());
+
+        response.put("status",1);
+        response.put("data",characteristics);
+
+        return response;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.RegApplicationFourCategoryBoilerCharacteristicsEditType1)
+    @ResponseBody
+    public Object regApplicationFourCategoryBoilerCharacteristicsEdit1(
+            Model model,
+            @RequestParam(name = "regId") Integer regId,
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "name_boiler1") String name,
+            @RequestParam(name = "type_boiler1") String type,
+            @RequestParam(name = "amount_boiler1") Double amount
+    ){
+        System.out.println("regId" + regId);
+        System.out.println("id" + id);
+        System.out.println("name_boiler" + name);
+        System.out.println("type_boiler" + type);
+        System.out.println("amount_boiler" + amount);
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null ){
+            return 0;
+        }
+
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
+
+        BoilerCharacteristics  characteristics = boilerCharacteristicsService.getById(id);
+        if (!boilerCharacteristicsSet.contains(characteristics)){
+            return 2;
+        }
+        boilerCharacteristicsSet.remove(characteristics);
+        characteristics.setName(name);
+        characteristics.setType(type);
+        characteristics.setAmount(amount);
+        characteristics = boilerCharacteristicsService.save(characteristics);
+        boilerCharacteristicsSet.add(characteristics);
+        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationService.updateBoiler(regApplication,user.getId());
+        return 1 + "";
+    }
+    @RequestMapping(value = ExpertiseUrls.RegApplicationFourCategoryBoilerCharacteristicsEditType2)
+    @ResponseBody
+    public Object regApplicationFourCategoryBoilerCharacteristicsEdit2(
+            Model model,
+            @RequestParam(name = "regId") Integer regId,
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "name_boiler2") String name,
+            @RequestParam(name = "type_boiler2") String type,
+            @RequestParam(name = "amount_boiler2") Double amount
+    ){
+        System.out.println("regId" + regId);
+        System.out.println("id" + id);
+        System.out.println("name_boiler" + name);
+        System.out.println("type_boiler" + type);
+        System.out.println("amount_boiler" + amount);
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null ){
+            return 0;
+        }
+
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
+
+        BoilerCharacteristics  characteristics = boilerCharacteristicsService.getById(id);
+        if (!boilerCharacteristicsSet.contains(characteristics)){
+            return 2;
+        }
+        boilerCharacteristicsSet.remove(characteristics);
+        characteristics.setName(name);
+        characteristics.setType(type);
+        characteristics.setAmount(amount);
+        characteristics = boilerCharacteristicsService.save(characteristics);
+        boilerCharacteristicsSet.add(characteristics);
+        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationService.updateBoiler(regApplication,user.getId());
+        return 1 + "";
+    }
+    @RequestMapping(value = ExpertiseUrls.RegApplicationFourCategoryBoilerCharacteristicsEditType3)
+    @ResponseBody
+    public Object regApplicationFourCategoryBoilerCharacteristicsEdit3(
+            Model model,
+            @RequestParam(name = "regId") Integer regId,
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "name_boiler3") String name,
+            @RequestParam(name = "type_boiler3") String type,
+            @RequestParam(name = "amount_boiler3") Double amount
+    ){
+        System.out.println("regId" + regId);
+        System.out.println("id" + id);
+        System.out.println("name_boiler" + name);
+        System.out.println("type_boiler" + type);
+        System.out.println("amount_boiler" + amount);
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null ){
+            return 0;
+        }
+
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
+
+        BoilerCharacteristics  characteristics = boilerCharacteristicsService.getById(id);
+        if (!boilerCharacteristicsSet.contains(characteristics)){
+            return 2;
+        }
+        boilerCharacteristicsSet.remove(characteristics);
+        characteristics.setName(name);
+        characteristics.setType(type);
+        characteristics.setAmount(amount);
+        characteristics = boilerCharacteristicsService.save(characteristics);
+        boilerCharacteristicsSet.add(characteristics);
+        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationService.updateBoiler(regApplication,user.getId());
+        return 1 + "";
+    }
+
+
+
+    @RequestMapping(value = ExpertiseUrls.RegApplicationFourCategoryBoilerCharacteristicsDelete)
+    @ResponseBody
+    public String regApplicationFourCategoryBoilerCharacteristicsDelete(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "regAddId") Integer regAddId
+    ) {
+
+        String status = "1";
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regAddId);
+        if (regApplication == null || regApplication.getBoilerCharacteristics()==null) {
+            status = "0";
+            return status;
+        }
+
+        BoilerCharacteristics characteristics = boilerCharacteristicsService.getById(id);
+        if (characteristics == null) {
+            status = "-1";
+            return status;
+        }
+
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
+        if (boilerCharacteristicsSet == null || boilerCharacteristicsSet.isEmpty() || !boilerCharacteristicsSet.contains(characteristics)) {
+            status = "-2";
+            return status;
+        }
+        boilerCharacteristicsSet.remove(characteristics);
+        regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplicationService.updateBoiler(regApplication,user.getId());
+
+        characteristics.setDeleted(Boolean.TRUE);
+        boilerCharacteristicsService.save(characteristics);
+        return status;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.RegApplicationFourCategoryBoilerSave)
+    @ResponseBody
+    public HashMap<String,Object> isSaving(
+            @RequestParam(name = "regCategory_id") Integer regCategoryId,
+//            @RequestParam(name = "boiler_name") String boilerName,
+            @RequestBody MultiValueMap<String, String> formData
+    ){
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        System.out.println("regCategoryId=="+regCategoryId);
+        User user = userService.getCurrentUserFromContext();
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",0);
+        Map<String,String> map = formData.toSingleValueMap();
+        System.out.println("Map="+map);
+        String val = (String)map.get("typeBoiler");
+        System.out.println("val="+val);
+        System.out.println(map.values().toArray()[result.size()-1]);
+        RegApplication regApplication = regApplicationService.getById(regCategoryId);
+        if (regApplication==null
+                || regApplication.getBoilerCharacteristics()==null
+                || regApplication.getBoilerCharacteristics().isEmpty()){
+            return result;
+        }
+//        regApplication.setBoilerName(boilerName);
+        regApplicationService.updateBoiler(regApplication,user.getId());
+        // BoilerCharacteristics hammasini id orqali mapga solindi
+        HashMap<Integer,BoilerCharacteristics> boilerCharacteristicsHashMap = new HashMap<>();
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
+        for (BoilerCharacteristics boilerCharacteristics: boilerCharacteristicsSet) {
+            if (!boilerCharacteristicsHashMap.containsKey(boilerCharacteristics.getId())){
+                boilerCharacteristicsHashMap.put(boilerCharacteristics.getId(),boilerCharacteristics);
+            }
+        }
+        System.out.println("boilerCharacteristicsHashMap="+boilerCharacteristicsHashMap);
+        for (Map.Entry<String,String> mapEntry: map.entrySet()) {
+            Integer boilerId = null;
+
+            String[] paramName =  mapEntry.getKey().split("_");
+            String  tagName = paramName[0];
+            if (tagName.equals("boilerAmount")){
+
+                try {
+                    boilerId = Integer.parseInt(paramName[1]);
+                }catch (Exception ignored){}
+
+                Double value = null;
+                if (boilerCharacteristicsHashMap.containsKey(boilerId) && boilerId!=null){
+                    String valueStr = mapEntry.getValue().replaceAll(" ","");
+
+                    try {
+                        value = Double.parseDouble(valueStr);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        return result;
+                    }
+
+                    BoilerCharacteristics boilerCharacteristics = boilerCharacteristicsHashMap.get(boilerId);
+                    boilerCharacteristics.setAmount(value);
+                    System.out.println("Integer.parseInt(val)="+Integer.parseInt(val));
+                    System.out.println("SubstanceType.getSubstance(Integer.parseInt(val))="+SubstanceType.getSubstance(Integer.parseInt(val)));
+                    boilerCharacteristics.setSubstanceType(Integer.parseInt(val));
+
+                    boilerCharacteristicsService.save(boilerCharacteristics);
+
+                }
+
+            }
+        }
+        result.put("status",1);
+
+        return result;
+    }
+
+    @RequestMapping(value = ExpertiseUrls.RegApplicationFourCategoryBoilerIsSave)
+    @ResponseBody
+    public Boolean isSavedBoilercharacteristic(@RequestParam(name = "id") Integer id){
+        return isSavingBoiler(id);
+    }
+    private Boolean isSavingBoiler(Integer regAddId){
+
+        RegApplication regApplication = regApplicationService.getById(regAddId);
+        if (regApplication==null || regApplication.getBoilerCharacteristics()==null || regApplication.getBoilerCharacteristics().isEmpty()){
+            return Boolean.FALSE;
+        }
+        Set<BoilerCharacteristics> boilerCharacteristicsSet = regApplication.getBoilerCharacteristics();
+        for (BoilerCharacteristics boilerCharacteristics:boilerCharacteristicsSet){
+            if (boilerCharacteristics.getAmount()==null || boilerCharacteristics.getAmount()==0.0){
+                return Boolean.FALSE;
+            }
+        }
+        return Boolean.TRUE;
+    }
+
+
 
 }

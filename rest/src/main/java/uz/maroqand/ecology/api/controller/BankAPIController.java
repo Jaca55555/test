@@ -8,10 +8,15 @@ import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
 import uz.maroqand.ecology.core.dto.api.*;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
+import uz.maroqand.ecology.core.entity.billing.Payment;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
+import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,12 +36,18 @@ public class BankAPIController {
     private PaymentFileService paymentFileService;
     private InvoiceService invoiceService;
     private PaymentService paymentService;
+    private RegApplicationService regApplicationService;
+    private UserService userService;
+    private OrganizationService organizationService;
 
     @Autowired
-    public BankAPIController(PaymentFileService paymentFileService, InvoiceService invoiceService, PaymentService paymentService) {
+    public BankAPIController(PaymentFileService paymentFileService, RegApplicationService regApplicationService, InvoiceService invoiceService, PaymentService paymentService, UserService userService, OrganizationService organizationService) {
         this.paymentFileService = paymentFileService;
         this.invoiceService = invoiceService;
         this.paymentService = paymentService;
+        this.regApplicationService=regApplicationService;
+        this.userService = userService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(value = "/payment/new", method = RequestMethod.POST, consumes = "application/json;charset=UTF-8",produces = "application/json;charset=UTF-8")
@@ -125,11 +136,26 @@ public class BankAPIController {
                 }
             }
             if(invoice!=null){
-                paymentFile.setInvoice(invoice.getInvoice());
-                paymentFileService.save(paymentFile);
-                paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
-                invoiceService.checkInvoiceStatus(invoice);
+              RegApplication regApplication = regApplicationService.getTopByOneInvoiceId(invoice.getId());
+              if (regApplication!=null) {
+                  String account="";
 
+                  try {
+                      account = organizationService.getById(regApplication.getReviewId()).getAccount();
+                  }catch (Exception e){
+                      e.printStackTrace();
+                  }
+
+                  if (!account.isEmpty() && paymentFile.getReceiverAccount().equals(account)) {
+                      if(paymentFile.getPayerTin()!=null && regApplication.getApplicant()!=null && regApplication.getApplicant().getTin()!=null && regApplication.getApplicant().getTin().equals(paymentFile.getPayerTin())){
+                          paymentFile.setInvoice(invoice.getInvoice());
+                          Payment payment = paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);
+                          paymentFile.setPaymentId(payment.getId());
+                          paymentFileService.save(paymentFile);
+                      }
+                      invoiceService.checkInvoiceStatus(invoice);
+                  }
+              }
             }
 
         }

@@ -1,9 +1,11 @@
 package uz.maroqand.ecology.core.dto.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryType;
 
 import java.util.Set;
 
@@ -28,16 +30,18 @@ public class FilterDto {
     private Integer activityId;
     private Integer objectId;
     private String deadlineDateBegin;
+    private String deadlineDate;
     private String deadlineDateEnd;
     private Integer status;
-    private LogStatus logStatus;
+    private RegApplicationStatus regApplicationStatus;
     private Set<RegApplicationStatus> statusForReg;
     private Boolean conclusionOnline;
-
+    private Integer organizationId;
     private String dateBegin;
     private String dateEnd;
-
+    private Integer offerId;
     private Integer byTin;
     private Integer byLeTin;
-
+    private RegApplicationCategoryType regApplicationCategoryType;
+    private Category category;
 }

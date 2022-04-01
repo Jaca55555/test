@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +17,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import uz.maroqand.ecology.cabinet.CabinetStarter;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
-import uz.maroqand.ecology.cabinet.constant.expertise_mgmt.ExpertiseMgmtUrls;
-import uz.maroqand.ecology.core.component.UserDetailsImpl;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.ConclusionStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
@@ -35,6 +32,7 @@ import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.DocumentRepoService;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -58,11 +56,12 @@ public class ConclusionController {
     private final ObjectExpertiseService objectExpertiseService;
     private final ActivityService activityService;
     private final FileService fileService;
+    private final OrganizationService organizationService;
 
     private static final Logger logger = LogManager.getLogger(ConclusionController.class);
 
     @Autowired
-    public ConclusionController(UserService userService, RegApplicationService regApplicationService, ClientService clientService, ConclusionService conclusionService, RegApplicationLogService regApplicationLogService, HelperService helperService, DocumentRepoService documentRepoService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, FileService fileService) {
+    public ConclusionController(UserService userService, RegApplicationService regApplicationService, ClientService clientService, ConclusionService conclusionService, RegApplicationLogService regApplicationLogService, HelperService helperService, DocumentRepoService documentRepoService, SoatoService soatoService, ObjectExpertiseService objectExpertiseService, ActivityService activityService, FileService fileService, OrganizationService organizationService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.clientService = clientService;
@@ -74,6 +73,7 @@ public class ConclusionController {
         this.objectExpertiseService = objectExpertiseService;
         this.activityService = activityService;
         this.fileService = fileService;
+        this.organizationService = organizationService;
     }
 
 
@@ -83,6 +83,9 @@ public class ConclusionController {
         model.addAttribute("subRegions", soatoService.getSubRegions());
         model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
         model.addAttribute("activityList", activityService.getList());
+        model.addAttribute("organizationList", organizationService.getList());
+        model.addAttribute("category", Category.getCategoryList());
+
         return ExpertiseTemplates.ConclusionList;
     }
 
@@ -94,9 +97,14 @@ public class ConclusionController {
             @RequestParam(name = "dateEnd", required = false) String dateEndStr,
             @RequestParam(name = "tin", required = false) String tinStr,
             @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "category", required = false)Category category,
+            @RequestParam(name = "organizationId", required = false)Integer organizationId,
+            @RequestParam(name = "regionId", required = false)Integer regionId,
+            @RequestParam(name = "subRegionId", required = false)Integer subRegionId,
+            @RequestParam(name = "regApplicationId", required = false)Integer regApplicationId,
             Pageable pageable
     ){
-
+        System.out.println(category);
         Integer tin = TinParser.trimIndividualsTinToNull(tinStr);
         name = StringUtils.trimToNull(name);
         User user = userService.getCurrentUserFromContext();
@@ -104,7 +112,7 @@ public class ConclusionController {
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
-        Page<Conclusion> conclusionPage = conclusionService.findFiltered(userService.isAdmin()?null:user.getOrganizationId(),id, dateBegin, dateEnd,tin,name, pageable);
+        Page<Conclusion> conclusionPage = conclusionService.findFiltered(userService.isAdmin()||user.getRole().getId()==16?organizationId:user.getOrganizationId(),id, dateBegin, dateEnd,tin,regionId,subRegionId,name,category,regApplicationId,pageable);
         Calendar c = Calendar.getInstance();
         c.set(c.getTime().getYear(),c.getTime().getMonth(),c.getTime().getDate(),0,0,0);
         List<Conclusion> conclusionList = conclusionPage.getContent();
@@ -124,7 +132,8 @@ public class ConclusionController {
                     regApplication!=null && regApplication.getCategory() !=null ? helperService.getTranslation(regApplication.getCategory().getName(),locale) : "",
                     conclusion.getDeadlineDate() != null ? Common.uzbekistanDateAndTimeFormat.format(conclusion.getDeadlineDate()) : "",
                     conclusion.getDeadlineDate() != null ? (conclusion.getDeadlineDate().compareTo(c.getTime())>=0?Boolean.TRUE:Boolean.FALSE): Boolean.TRUE,
-                    regApplication!=null && regApplication.getApplicant()!=null?regApplication.getApplicant().getName():""
+                    regApplication!=null && regApplication.getApplicant()!=null?regApplication.getApplicant().getName():"",
+                    regApplication!=null ? regApplication.getId():"",
             });
         }
 
@@ -148,7 +157,7 @@ public class ConclusionController {
         statuses.add(RegApplicationStatus.NotConfirmed);
         filterDto.setStatusForReg(statuses);
         filterDto.setConclusionOnline(Boolean.FALSE);
-
+        System.out.println(filterDto);
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(filterDto,userService.isAdmin()?null:user.getOrganizationId(),null,null,null,null,pageable);
         HashMap<String, Object> result = new HashMap<>();
 
@@ -162,7 +171,7 @@ public class ConclusionController {
                     regApplication.getId(),
                     regApplication.getInputType(),
                     helperService.getObjectExpertise(regApplication.getObjectId(),locale),
-                    helperService.getMaterials(regApplication.getMaterials(),locale),
+                    regApplication.getApplicant()!=null ? regApplication.getApplicant().getName():"",
                     regApplication.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"",
                     regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
                     regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
@@ -212,6 +221,7 @@ public class ConclusionController {
             model.addAttribute("documentRepo", documentRepoService.getDocument(conclusion.getDocumentRepoId()));
         }
         model.addAttribute("conclusion", conclusion);
+        System.out.println(conclusion.getHtmlText());
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("isRegApplication", Boolean.FALSE);
 

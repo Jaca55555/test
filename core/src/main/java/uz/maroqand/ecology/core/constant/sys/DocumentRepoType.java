@@ -6,5 +6,6 @@ package uz.maroqand.ecology.core.constant.sys;
  * (ru)
  */
 public enum DocumentRepoType {
-    Conclusion
+    Conclusion,
+    Offer
 }

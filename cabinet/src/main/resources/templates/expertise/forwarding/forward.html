@@ -96,6 +96,115 @@
     </form>
 
 
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle"  th:text="#{change_performer}" >Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="${action_url}" th:method="POST" th:object="${regApplication}"  id="about-form">
+                        <div class="row mb-3">
+                            <!--                                                <select class="form-control"  th:field="*{objectId}" required="" onchange="getActivityList()">-->
+                            <!--                                                    <option value="" th:text="#{sys_select}"></option>-->
+                            <!--                                                    <option th:each="objectExpertise : ${objectExpertiseList}" th:value="${objectExpertise.id}" th:text="${objectExpertise.getNameTranslation(#locale)}" th:selected="${regApplication.objectId==objectExpertise.id}"></option>-->
+                            <!--                                                </select>-->
+
+
+
+
+                            <div class="col-md-6 col-sm-12">
+                                <div th:if="${regApplication.getPerformerId()!=null}">
+                                    <label class="control-label"  th:text="#{qr_orgname}"></label><br/>
+                                    <input type="text" class="form-control " readonly th:value="${regApplication.getPerformerId()+'-'+@userServiceImpl.findById(regApplication.getPerformerId()).getFName()}" >
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <div class="row">
+                                    <div class="w-100 mr-3">
+                                        <label class="control-label"  th:text="#{user_name}"></label><br/>
+                                        <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId" name="userId">
+                                            <option value="" th:text="#{sys_select}"></option>
+                                            <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>
+                                        </select>
+
+                                    </div>
+<!--                                    <div style="margin-top: 30px">-->
+<!--                                        <input id="checkBtn" class="btn btn-danger" type="button" th:value="#{sys_documentRepo_info}">-->
+<!--                                    </div>-->
+                                </div>
+                            </div>
+<!--                            <div class="col-md-12 mt-3 col-sm-12">-->
+<!--                                <div>-->
+<!--                                    <label class="control-label"  th:text="#{doc_incoming.reg_performer_name}"></label><br/>-->
+<!--                                    <input type="text" class="form-control" id="fio" readonly>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+
+                        </div>
+
+                        <input type="hidden" name="reg_id" id="reg_id" th:value="${regApplication.id}" />
+                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="row" >
+                            <div class="form-group col-md-12 text-center" >
+<!--                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>-->
+                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}"  >Далее</button><!--onclick="submitForm()"-->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                    <button type="button" class="btn btn-primary">Save changes</button>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="auditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitleAudit" th:text="#{performer_changes}">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead class="table-success">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col" th:text="#{before_performer}">First</th>
+                            <th scope="col" th:text="#{after_performer}">Last</th>
+                            <th scope="col" th:text="#{updated_date}">Handle</th>
+                            <th scope="col" th:text="#{user_id}">Handle</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="history,stat:${histories}">
+                            <th scope="row" style="padding: 20px 0px" th:text="${stat.count}">1</th>
+                            <td th:text="${@userServiceImpl.findById(history.beforePerformer).getFName()}">Mark</td>
+                            <td th:text="${@userServiceImpl.findById(history.afterPerformer).getFName()}">Mark</td>
+                            <td th:text="${history.createdAt!=null? #dates.format(history.createdAt,'dd.MM.yyyy HH:mm'):''}">Mark</td>
+                            <td th:text="${@userServiceImpl.findById(history.createdById).getFName()}">Mark</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <form th:if="${regApplication.forwardingLogId!=null && (regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial && regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).New && regApplicationLog.status!=T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend)}">
         <div class="form-group row">
             <div class="col-md-3 text-right">
@@ -104,6 +213,12 @@
             <div class="col-md-6">
                 <input class="form-control" readonly="readonly" th:value="${@helperService.getUserFullNameById(regApplication.performerId)}">
             </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#editModal" th:text="#{performer_edit}" >Edit</button>
+                <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#auditModal" th:text="#{performer_info}">Info</button>
+            </div>
+
+
         </div>
         <div class="form-group row">
             <div class="col-md-3 text-right">

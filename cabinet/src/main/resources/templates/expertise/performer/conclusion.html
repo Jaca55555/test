@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+<!--    <style>-->
+<!--        th.ck-editor__editable, td.ck-editor__editable {-->
+<!--            font-size: 19px !important;-->
+<!--        }-->
+<!--        figure.table.ck-widget.ck-widget_selectable p {-->
+<!--            font-size: 19px !important;-->
+<!--        }-->
+<!--    </style>-->
+
 </head>
 <body th:fragment="conclusion">
 <style>
@@ -104,6 +114,9 @@
         border-color: black;
         vertical-align: top;
     }
+
+
+
 </style>
 
 
@@ -114,7 +127,7 @@
         <div class="document-editor__toolbar"></div>
         <div class="document-editor__editable-container">
             <div class="document-editor__editable" id="document-editor__editable" th:if="${conclusionId!=0}">
-                <p th:utext="${conclusionText}"></p>
+                <p  th:utext="${conclusionText}"></p>
             </div>
             <div class="document-editor__editable" id="document-editor__editable" th:if="${conclusionId==0}">
                 <p>&nbsp;&nbsp;</p><br>
@@ -142,7 +155,7 @@
                         </tr>
                         <tr>
                             <th class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span th:text="#{sys_category}">Категория:</span>:</th>
-                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span >I, п.32, ПКМ РУз №949 от 22.11.2018 г.</span></td>
+                            <td class="ck-editor__editable ck-editor__nested-editable" contenteditable="true"><span >I, п.32, ПКМ РУз №541 от 07.09.2020 г.</span></td>
                         </tr>
                         <tr>
                             <th style="border-color: white" class="ck-editor__editable ck-editor__nested-editable" contenteditable="true">

@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.constant.expertise.CommentStatus;
 import uz.maroqand.ecology.core.constant.expertise.CommentType;
 import uz.maroqand.ecology.core.entity.sys.File;
 
@@ -43,6 +44,11 @@ public class Comment {
             joinColumns = { @JoinColumn(name = "comment_id") },
             inverseJoinColumns = { @JoinColumn(name = "file_id") })
     private Set<File> documentFiles;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.ORDINAL)
+    private CommentStatus status;
+
 
     /*
      * Technical Fields

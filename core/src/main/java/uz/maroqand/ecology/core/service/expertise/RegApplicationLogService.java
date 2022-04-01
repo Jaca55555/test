@@ -21,9 +21,11 @@ import java.util.Set;
 public interface RegApplicationLogService {
 
     RegApplicationLog getById(Integer id);
-
+    RegApplicationLog getByRegApplcationId(Integer id);
+     RegApplicationLog getByRegApplcationIdAndType(Integer id,LogType type);
+    List<RegApplicationLog> getByLogStatus(LogStatus status,Integer regApplicationId);
     List<RegApplicationLog> getByRegApplicationId(Integer regApplicationId);
-
+    List<RegApplicationLog> findAll();
     List<RegApplicationLog> getByRegApplicationIdAndType(Integer regApplicationId, LogType type);
 
     List<RegApplicationLog> getByIds(Set<Integer> ids);
@@ -43,7 +45,12 @@ public interface RegApplicationLogService {
     List<RegApplicationLog> getAllByLogType(LogType logType);
 
     Integer getLogCount(Integer id);
-
+    Integer countbyLogType0AndDeletedFalseOrganizationId();
+    Integer countbyLogType1AndDeletedFalseOrganizationId();
+    Integer countbyLogType2AndDeletedFalseOrganizationId();
+    Integer countbyLogType3AndDeletedFalseOrganizationId();
+    Integer countbyLogType4AndDeletedFalseOrganizationId();
+    Integer countbyLogType5AndDeletedFalseOrganizationId();
     Page<RegApplicationLog> findFiltered(
             FilterDto filterDto,
             Integer createdById,

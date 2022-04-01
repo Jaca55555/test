@@ -117,6 +117,7 @@ public class PaymentFileController {
                 isComplete,
                 account,
                 oldAccount,
+                user.getRole().getId()!=16?account:null,
                 pageable
         );
 
@@ -151,7 +152,7 @@ public class PaymentFileController {
             }
             convenientForJSONArray.add(new Object[]{
                 paymentFile.getId(),
-                paymentFile.getInvoice(),
+                paymentFile.getInvoice()!=null ? paymentFile.getInvoice():"",
                 paymentFile.getPayerName(),
                 paymentFile.getPaymentDate()!=null? Common.uzbekistanDateAndTimeFormat.format(paymentFile.getPaymentDate()):"",
                 String.format("% ,.1f", paymentFile.getAmount()),
@@ -161,7 +162,9 @@ public class PaymentFileController {
                 accountString!=null?accountString.toString():"",
                 paymentFile.getReceiverName(),
                 paymentFile.getReceiverInn(),
-                paymentFile.getReceiverMfo()
+                paymentFile.getReceiverMfo(),
+                paymentFile.getInvoice()!=null? invoiceService.getInvoice(paymentFile.getInvoice())!=null ? invoiceService.getInvoice(paymentFile.getInvoice()).getId():null:null,
+
             });
         }
 
@@ -189,6 +192,24 @@ public class PaymentFileController {
 
         model.addAttribute("paymentFile", paymentFile);
         return BillingTemplates.PaymentFileView;
+    }
+
+    @RequestMapping(BillingUrls.PaymentFileAllDelete+"/{id}")
+    public String getPaymentFileViewPageAndDelete(@PathVariable("id") Integer id, Model model ){
+        PaymentFile paymentFile = paymentFileService.getById(id);
+        User user = userService.getCurrentUserFromContext();
+        Payment payment = paymentService.getById(paymentFile.getPaymentId());
+        if(payment!=null){
+            payment.setDeleted(true);
+            paymentService.save(payment);
+            System.out.println("payment saqlandi");
+            paymentFile.setInvoice(null);
+            paymentFile.setPaymentId(null);
+            paymentFileService.save(paymentFile);
+            System.out.println("paymentFile saqlandi");
+        }
+        model.addAttribute("paymentFile", paymentFile);
+        return BillingTemplates.PaymentFileAllView;
     }
 
     @RequestMapping(BillingUrls.PaymentFileEdit)
@@ -237,6 +258,7 @@ public class PaymentFileController {
     @RequestMapping(BillingUrls.PaymentFileAllList)
     public String billingAllList(Model model){
         model.addAttribute("isAdmin",userService.isAdmin());
+        model.addAttribute("organizationList",organizationService.getList());
         return BillingTemplates.PaymentFileAllList;
     }
 
@@ -247,7 +269,7 @@ public class PaymentFileController {
             @RequestParam(name = "dateEnd", required = false) String dateEndStr,
             @RequestParam(name = "invoice", required = false) String invoice,
             @RequestParam(name = "paymentId", required = false) Integer paymentId,
-
+            @RequestParam(name = "organizationId", required = false) Integer organizationId,
             @RequestParam(name = "payerTin", required = false) Integer payerTin,
             @RequestParam(name = "payerName", required = false) String payerName,
             @RequestParam(name = "detail", required = false) String detail,
@@ -262,12 +284,15 @@ public class PaymentFileController {
         detail = StringUtils.trimToNull(detail);
         payerName = StringUtils.trimToNull(payerName);
         bankMfo = StringUtils.trimToNull(bankMfo);
-
+        String account="";
+        if(organizationId!=null) {
+            account = organizationService.getById(organizationId).getAccount();
+        }
         Date dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
-
+//        organizationService.getById(1).getAccount();
         HashMap<String,Object> result = new HashMap<>();
-
+        System.out.println("account="+account);
         Page<PaymentFile> paymentFilePage = paymentFileService.findFiltered(
                 dateBegin,
                 dateEnd,
@@ -278,6 +303,7 @@ public class PaymentFileController {
                 detail,
                 bankMfo,
                 isComplete,
+                account,
                 null,
                 null,
                 pageable
@@ -314,7 +340,7 @@ public class PaymentFileController {
             }
             convenientForJSONArray.add(new Object[]{
                     paymentFile.getId(),
-                    paymentFile.getInvoice(),
+                    paymentFile.getInvoice()!=null ? paymentFile.getInvoice():"",
                     paymentFile.getPayerName(),
                     paymentFile.getPaymentDate()!=null? Common.uzbekistanDateAndTimeFormat.format(paymentFile.getPaymentDate()):"",
                     String.format("% ,.1f", paymentFile.getAmount()),
@@ -324,7 +350,9 @@ public class PaymentFileController {
                     accountString!=null?accountString.toString():"",
                     paymentFile.getReceiverName(),
                     paymentFile.getReceiverInn(),
-                    paymentFile.getReceiverMfo()
+                    paymentFile.getReceiverMfo(),
+                    paymentFile.getPaymentId(),
+                    userService.isAdmin()
             });
         }
 
@@ -425,7 +453,6 @@ public class PaymentFileController {
             @RequestParam(name = "invoiceStr") String invoiceStr,
             @RequestParam(name = "id") Integer payFilieId
     ){
-
         HashMap<String,Object> result = new HashMap<>();
         result.put("status",1);
         Invoice invoice = invoiceService.getInvoice(invoiceStr);
@@ -440,7 +467,7 @@ public class PaymentFileController {
             return result;
         }
         RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
-        if (regApplication==null){
+        if (regApplication==null ){
             result.put("status",-2);
             return result;
         }
@@ -484,5 +511,95 @@ public class PaymentFileController {
         invoiceService.checkInvoiceStatus(invoice);
 
         return "redirect:" + BillingUrls.PaymentFileAllList;
+    }
+//########################################
+    @RequestMapping(BillingUrls.PaymentFileConnectInvoice)
+    public String connectInvoiceBilling(
+            @RequestParam(name = "id") Integer paymentFileId,
+            Model model
+    ){
+
+        PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
+        if (paymentFile==null || paymentFile.getInvoice()!=null){
+            return "redirect:" + BillingUrls.PaymentFileList;
+        }
+
+        model.addAttribute("paymentFile",paymentFile);
+        model.addAttribute("getLink",BillingUrls.PaymentFileGetInvoice);
+
+        return BillingTemplates.PaymentFileConnectInvoice;
+
+    }
+
+
+    // status=-1  invoice topilmadi
+    // status=-2  ariza topilmadi topilmadi
+    @RequestMapping(value = BillingUrls.PaymentFileGetInvoice,method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public HashMap<String,Object> getInvoiceDetailsBilling (
+            @RequestParam(name = "invoiceStr") String invoiceStr,
+            @RequestParam(name = "id") Integer payFilieId
+    ){
+
+        HashMap<String,Object> result = new HashMap<>();
+        result.put("status",1);
+        User user = userService.getCurrentUserFromContext();
+        Invoice invoice = invoiceService.getInvoice(invoiceStr);
+        if (invoice==null){
+            result.put("status",-1);
+            return result;
+        }
+
+        PaymentFile paymentFile = paymentFileService.getById(payFilieId);
+        if (paymentFile==null){
+            result.put("status",-3);
+            return result;
+        }
+        RegApplication regApplication = regApplicationService.getByOneInvoiceId(invoice.getId());
+        if (regApplication==null || !regApplication.getReviewId().equals(user.getOrganizationId())){
+            result.put("status",-2);
+            return result;
+        }
+
+        result.put("regId",regApplication.getId());
+        result.put("legalName",invoice.getPayeeName());
+        result.put("createdDate",invoice.getCreatedDate()!=null?Common.uzbekistanDateFormat.format(invoice.getCreatedDate()):"");
+        result.put("detail",invoice.getDetail());
+        result.put("amount",invoice.getAmount());
+        result.put("actionUrl",BillingUrls.PaymentFileConnectInvoiceSubmit + "?id=" + payFilieId + "&invoiceId=" + invoice.getId() + "&regId=" + regApplication.getId());
+
+        return result;
+    }
+
+    @RequestMapping(BillingUrls.PaymentFileConnectInvoiceSubmit)
+    public String connectInvoiceSubmitBilling(
+            @RequestParam(name = "id") Integer paymentFileId,
+            @RequestParam(name = "invoiceId") Integer invoiceId,
+            @RequestParam(name = "regId") Integer regId
+    ){
+        User user = userService.getCurrentUserFromContext();
+        PaymentFile paymentFile = paymentFileService.getById(paymentFileId);
+        if (paymentFile==null){
+            return "redirect:" + BillingUrls.PaymentFileList + "?failed=-1";
+        }
+
+        Invoice invoice = invoiceService.getInvoice(invoiceId);
+        if (invoice==null){
+            return "redirect:" + BillingUrls.PaymentFileList + "?failed=-2";
+        }
+        RegApplication regApplication = regApplicationService.getById(regId);
+        if (regApplication==null || regApplication.getInvoiceId()==null || !regApplication.getInvoiceId().equals(invoiceId)){
+            return "redirect:" + BillingUrls.PaymentFileList + "?failed=-3";
+        }
+
+        paymentFile.setInvoice(invoice.getInvoice());
+        Payment payment  = paymentService.pay(invoice.getId(), paymentFile.getAmount(), paymentFile.getPaymentDate(), paymentFile.getDetails(), PaymentType.BANK);
+        paymentFile.setPaymentId(payment.getId());
+        paymentFileService.update(paymentFile,user.getId());
+        payment.setMessage("qo'lda biriktirildi. Invoice kelmagan yoki norog'tri kelgan update userId=" + user.getId().toString());
+        paymentService.save(payment);
+        invoiceService.checkInvoiceStatus(invoice);
+
+        return "redirect:" + BillingUrls.PaymentFileList;
     }
 }

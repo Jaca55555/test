@@ -89,11 +89,25 @@ public class BillingController {
             @RequestParam(name = "detail", required = false) String detail,
             @RequestParam(name = "regionId", required = false) Integer regionId,
             @RequestParam(name = "tin", required = false) String tin,
+            @RequestParam(name = "contract", required = false) String contract,
+            @RequestParam(name = "regApplication", required = false) Integer regApplication,
             @RequestParam(name = "subRegionId", required = false) Integer subRegionId,
             Pageable pageable
     ){
         System.out.println("tin=======");
-        System.out.println(tin);
+        System.out.println(regApplication);
+        Integer id=null;
+
+        System.out.println("regApplicationId="+id);
+        if (!contract.isEmpty() && regApplication==null) {
+            id = regApplicationService.getByContractNumber(contract) != null ? regApplicationService.getByContractNumber(contract).getInvoiceId() : 0;
+        }
+        if (regApplication != null && contract.isEmpty()) {
+            id = regApplicationService.getById(regApplication) != null ? regApplicationService.getById(regApplication).getInvoiceId() : 0;
+        }
+        System.out.println("contractId="+id);
+
+        System.out.println("id="+id);
         dateBeginStr = StringUtils.trimToNull(dateBeginStr);
         dateEndStr = StringUtils.trimToNull(dateEndStr);
         invoiceNumber = StringUtils.trimToNull(invoiceNumber);
@@ -106,8 +120,9 @@ public class BillingController {
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String,Object> result = new HashMap<>();
-
+        System.out.println("id="+id);
         Page<Invoice> invoicePage = invoiceService.findFiltered(
+                id,
                 dateBegin,
                 dateEnd,
                 dateToday,
@@ -118,7 +133,7 @@ public class BillingController {
                 detail,
                 regionId,
                 subRegionId,
-                userService.isAdmin()?null:user.getOrganizationId(),
+                userService.isAdmin()||user.getRole().getId()==16?null:user.getOrganizationId(),
                 TinParser.trimIndividualsTinToNull(tin),
                 pageable
         );
@@ -144,7 +159,8 @@ public class BillingController {
                 invoice.getAmount(),
                 Common.uzbekistanDateAndTimeFormat.format(invoice.getCreatedDate()),
                 invoice.getStatus(),
-                clientName + "  <br/>" + clientTin
+                clientName + "  <br/>" + clientTin,
+                invoice.getId()!=null ? regApplicationService.getByOneInvoiceId(invoice.getId())!=null ? regApplicationService.getByOneInvoiceId(invoice.getId()).getId():"":""
             });
         }
 
@@ -158,7 +174,7 @@ public class BillingController {
     @ResponseBody
     public HashMap<String,Object> billingView(@RequestParam(name = "id") Integer id){
         HashMap<String,Object> result = new HashMap<>();
-
+        System.out.println("invoiceId="+id);
         Invoice invoice = invoiceService.getInvoice(id);
         if(invoice == null){
             return null;
@@ -166,7 +182,7 @@ public class BillingController {
         Client client = clientService.getById(invoice.getClientId());
         List<Payment> paymentList = paymentService.getByInvoiceId(id);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
-
+//        regApplicationService.getByInvoiceId(id);
         Double paymentTotal = 0.0;
         Double invoiceLeft = invoice.getAmount();
 
@@ -184,7 +200,7 @@ public class BillingController {
         invoiceLeft -= paymentTotal;
         result.put("paymentTotal",paymentTotal);
         result.put("invoiceLeft",invoiceLeft);
-
+        result.put("regApplicationId",regApplicationService.getTopByOneInvoiceId(id)!=null?regApplicationService.getTopByOneInvoiceId(id).getId():"");
         result.put("invoiceNumber", invoice.getInvoice());
         result.put("invoiceStatus", invoice.getStatus());
         result.put("invoiceDate", invoice.getCreatedDate() != null ? Common.uzbekistanDateFormat.format(invoice.getCreatedDate()) : "");

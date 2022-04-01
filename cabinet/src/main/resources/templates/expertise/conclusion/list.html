@@ -109,8 +109,23 @@
                                                             <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
                                                         </select>
                                                     </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <label for="regionId" class="control-label" th:text="#{sys_region}"></label>
+                                                        <select id="regionId" class="form-control">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-3">
+                                                        <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                        <select id="organizationId" class="form-control">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                        </select>
+                                                    </div>
 
-                                                    <div class="form-group col-sm-2 text-right">
+
+                                                    <div class="form-group col-sm-12 text-right">
                                                         <label class="control-label">&nbsp;</label></br>
                                                         <a class="btn btn-primary text-white" onclick="getRegDatatableConnect();return false;">
                                                             <i class="feather icon-search mr-1"></i>
@@ -158,16 +173,49 @@
                                                             <input type="text" class="form-control" id="tin" />
                                                         </div>
                                                         <div class="form-group col-sm-2">
+                                                            <label class="control-label"  th:text="#{reg_application.id}">ID</label><br/>
+                                                            <input type="text" class="form-control" id="regApplicationId" />
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
                                                             <label class="control-label"  th:text="#{sys_date_from}"></label><br/>
                                                             <input type="text" class="form-control datepicker" id="dateBegin" />
                                                         </div>
+
                                                         <div class="form-group col-sm-2">
                                                             <label class="control-label"  th:text="#{sys_date_to}"></label><br/>
                                                             <input type="text" class="form-control datepicker" id="dateEnd" />
                                                         </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label for="regionId1" class="control-label" th:text="#{sys_region}"></label>
+                                                            <select id="regionId1" class="form-control">
+                                                                <option value="" th:text="#{sys_select}"></option>
+                                                                <option th:each="region : ${regions}" th:value="${region.id}" th:text="${region.getNameTranslation(#locale)}"></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-sm-2">
+                                                            <label for="subRegionId1" class="control-label" th:text="#{sys_subregion}">Вилоят</label>
+                                                            <select id="subRegionId1" class="form-control">
+                                                                <option value="" th:text="#{sys_select}"></option>
+                                                                <option th:each="subRegion : ${subRegions}" th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:class="${'sr-'+subRegion.parentId}"></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-sm-3">
+                                                            <label class="control-label" th:text="#{conclusion.category}">:</label><br/>
+                                                            <select id="category" class="form-control">
+                                                                <option value="" th:text="#{sys_select}"></option>
+                                                                <option th:each="regApp : ${category}" th:value="${regApp}" th:text="${@helperService.getTranslation(regApp.getName(),#locale)}"></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group col-sm-3">
+                                                            <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                            <select id="organizationId1" class="form-control">
+                                                                <option value="" th:text="#{sys_select}"></option>
+                                                                <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                            </select>
+                                                        </div>
                                                         <div class="clearfix"></div>
 
-                                                        <div class="col-sm-3 text-right">
+                                                        <div class="col-sm-12 text-right">
                                                             <label class="control-label">&nbsp;</label><br/>
                                                             <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
                                                                 <span th:text="#{sys_search}">Поиск</span>
@@ -189,7 +237,7 @@
                                                                 <th th:text="#{sys_tin}"></th>
                                                                 <th th:text="#{sys_legal_entity_name}"></th>
                                                                 <th th:text="#{sys_company_name}"></th>
-                                                                <th th:text="#{conclusion.material}"></th>
+                                                                <th th:text="#{reg_application.id}"></th>
                                                                 <th th:text="#{conclusion.category}"></th>
                                                                 <th th:text="#{conclusion.deadline}"></th>
                                                                 <th th:text="#{conclusion.status}"></th>
@@ -275,6 +323,7 @@
             lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
             order: [[0, 'desc']],
             dom: 'lrtip',
+            stateSave: true,
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
                 var jqTable = $(api.table().node());
@@ -288,6 +337,11 @@
                 dataToSend.dateEnd = $("#dateEnd").val();
                 dataToSend.name = $("#name").val();
                 dataToSend.tin = $("#tin").val();
+                dataToSend.category=$("#category").val();
+                dataToSend.regionId = $('#regionId1').val();
+                dataToSend.subRegionId = $('#subRegionId1').val();
+                dataToSend.organizationId= $('#organizationId1').val();
+                dataToSend.regApplicationId=$('#regApplicationId').val();
                 dataToSend._csrf = $("#global_csrf").val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
@@ -304,7 +358,7 @@
                 {data: 3, orderable:false},
                 {data: 9, orderable:false},
                 {data: 4, orderable:false},
-                {data: 5, orderable:false},
+                {data: 10, orderable:false},
                 {data: 6, orderable:false},
                 {data: 7, name: 'deadlineDate'},
                 {render: renderStatusColumn, orderable:false},
@@ -346,7 +400,7 @@
                 dataToSend.deadlineDateBegin = $('#deadlineDateBegin').val();
                 dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
                 dataToSend.confirmStatus = $('#confirmStatus').val();
-
+                dataToSend.organizationId= $('#organizationId').val();
                 dataToSend.status = $('#status').val();
                 dataToSend.dateBegin = $('#dateBegin_reg').val();
                 dataToSend.dateEnd = $('#dateEnd_reg').val();

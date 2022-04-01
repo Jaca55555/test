@@ -52,6 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/doc/file_upload").permitAll()
                 .antMatchers("/doc/file/download").permitAll()
                 .antMatchers("/expertise/conclusion/file_download_for_view").permitAll()
+                .antMatchers("/expertise/invoice_modification").permitAll()
+                .antMatchers("/expertise/api/**").permitAll()
                 .antMatchers("/expertise/conclusion/reg_file_download_for_view").permitAll()
                 .antMatchers("/expertise/conclusion/reg_word_file_download_for_view").permitAll()
                 .antMatchers(SysUrls.SelectLang).permitAll()
@@ -73,7 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mgmt/expertise/material/**").hasAuthority(Permissions.ADMIN.name())
                 .antMatchers("/mgmt/expertise/expertise_requirement/**").hasAuthority(Permissions.ADMIN.name())
                 .antMatchers("/mgmt/expertise/offer/**").hasAuthority(Permissions.ADMIN.name())
-
+                .antMatchers("/get_post").permitAll()
                 .antMatchers("/expertise/confirm/**").hasAuthority(Permissions.EXPERTISE_CONFIRM.name())
                 .antMatchers("/expertise/forwarding/").hasAuthority(Permissions.EXPERTISE_FORWARDING.name())
                 .antMatchers("/expertise/performer/**").hasAuthority(Permissions.EXPERTISE_PERFORMER.name())
@@ -85,6 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/expertise/billing/**").hasAuthority(Permissions.BILLING.name())
                 .antMatchers("/billing/payment_file/**").hasAuthority(Permissions.PAYMENT_FILE.name())
                 .antMatchers("/expertise/facture/**").hasAuthority(Permissions.FACTURE_MONITORING.name())
+                .antMatchers("/expertise/agree/**").hasAuthority(Permissions.EXPERTISE_AGREE.name())
 
                 .antMatchers("/sys/appeal_admin/**").hasAuthority(Permissions.APPEAL_ADMIN.name())
 
@@ -95,11 +98,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mgmt/**").hasAuthority(Permissions.ADMIN.name());
         http.logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout");
+                .logoutSuccessUrl("/login?logout")
+                .and().csrf().ignoringAntMatchers("/get_post");
 
 
 
-        http.csrf().ignoringAntMatchers("/login","/docEditor/","/onlyoffice/fixationCallback");
+        http.csrf().ignoringAntMatchers("/login","/docEditor/","/onlyoffice/fixationCallback","/expertise/invoice_modification");
 
         http.authorizeRequests().anyRequest().authenticated()
                 .and()

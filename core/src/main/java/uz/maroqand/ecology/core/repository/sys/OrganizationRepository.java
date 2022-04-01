@@ -17,6 +17,6 @@ public interface OrganizationRepository extends JpaRepository<Organization, Inte
     Organization getByName(String name);
 
     Organization findTop1ByRegionId(Integer regionId);
-
+    Organization findByTin(Integer tin);
     Page<Organization> findAll(Specification<Organization> filteringSpecification, Pageable pageable);
 }

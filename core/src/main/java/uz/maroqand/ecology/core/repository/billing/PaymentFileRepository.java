@@ -17,4 +17,5 @@ import java.util.List;
 public interface PaymentFileRepository extends JpaRepository<PaymentFile, Integer>,JpaSpecificationExecutor<PaymentFile> {
 
     List<PaymentFile>  findByInvoiceAndDeletedFalse(String invoice);
+
 }

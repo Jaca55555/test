@@ -107,7 +107,7 @@ public class NotificationController {
     ) {
         User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
-
+        String locale = LocaleContextHolder.getLocale().toLanguageTag();
         Page<Notification> notificationPage = notificationService.findFiltered(dateBeginStr, dateEndStr, user.getId(), null,NotificationType.Expertise,pageable);
 
         List<Notification> notificationList = notificationPage.getContent();
@@ -117,11 +117,12 @@ public class NotificationController {
                     notification.getId(),
                     notification.getType(),
                     notification.getStatus(),
-                    notification.getTitle(),
-                    notification.getMessage(),
+                    notification.getTitle()!=null? helperService.getTranslation(notification.getTitle(),locale):"",
+                    notification.getMessage()!=null? helperService.getTranslation(notification.getMessage(),locale):"",
                     notification.getUrl(),
                     notification.getCreatedAt()!=null? Common.uzbekistanDateAndTimeFormat.format(notification.getCreatedAt()):"",
-                    notification.getCreatedById()!=null? helperService.getUserFullNameById(notification.getCreatedById()):""
+                    notification.getCreatedById()!=null? helperService.getUserFullNameById(notification.getCreatedById()):"",
+                    notification.getApplicationNumber()
             });
         }
         result.put("recordsTotal", notificationPage.getTotalElements()); //Total elements

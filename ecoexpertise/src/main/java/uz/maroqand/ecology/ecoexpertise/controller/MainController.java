@@ -7,8 +7,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Option;
@@ -22,6 +25,11 @@ import uz.maroqand.ecology.ecoexpertise.constant.sys.SysTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
 import org.springframework.data.domain.Pageable;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 
 /**
@@ -49,19 +57,47 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String getPage(Model model, Pageable pageable) {
+    public String getPage() {
+        return "index";
+    }
+
+    @RequestMapping(value = "/get_news",method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String,Object> getNews(Pageable pageable){
+
+        HashMap<String,Object> result = new HashMap<>();
         String element = ecoGovService.getEcoGovApi();
         try {
             element = new String(element.getBytes("utf8"));
         }catch (Exception e){}
+        FilterDto filterDto = new FilterDto();
+        Set<RegApplicationStatus> statusForReg = new HashSet<>();
+        statusForReg.add(RegApplicationStatus.CheckSent);
+        statusForReg.add(RegApplicationStatus.CheckConfirmed);
+        statusForReg.add(RegApplicationStatus.CheckNotConfirmed);
+        statusForReg.add(RegApplicationStatus.Process);
+        statusForReg.add(RegApplicationStatus.Modification);
+        statusForReg.add(RegApplicationStatus.Approved);
+        statusForReg.add(RegApplicationStatus.NotConfirmed);
+        statusForReg.add(RegApplicationStatus.Canceled);
+        filterDto.setStatusForReg(statusForReg);
+        System.out.println("filterDto="+filterDto);
+        Long total = regApplicationService.findFiltered(filterDto, null, null, null, null, null,pageable).getTotalElements();
+        Set<RegApplicationStatus> statusForReg1 = new HashSet<>();
+        statusForReg1.add(RegApplicationStatus.CheckConfirmed);
+        statusForReg1.add(RegApplicationStatus.CheckNotConfirmed);
+        statusForReg1.add(RegApplicationStatus.Modification);
+        statusForReg1.add(RegApplicationStatus.Approved);
+        statusForReg1.add(RegApplicationStatus.NotConfirmed);
+        statusForReg1.add(RegApplicationStatus.Canceled);
+        filterDto.setStatusForReg(statusForReg1);
+        System.out.println("filterDto="+filterDto);
+        Long done = regApplicationService.findFiltered(filterDto, null, null, null, null, null,pageable).getTotalElements();
 
-        Long total = regApplicationService.findFiltered(new FilterDto(), null, null, null, null, null,pageable).getTotalElements();
-        Long done = regApplicationService.findFiltered(new FilterDto(), null, LogType.AgreementComplete, null, null, null,pageable).getTotalElements();
-
-        model.addAttribute("element", element);
-        model.addAttribute("total", total);
-        model.addAttribute("done", done);
-        return "index";
+        result.put("element", element);
+        result.put("total", total);
+        result.put("done", done);
+        return result;
     }
 
     //fileDownload
@@ -144,6 +180,10 @@ public class MainController {
     @RequestMapping(SysUrls.ErrorForbidden)
     public String getError403Page() {
         return SysTemplates.ErrorForbidden;
+    }
+    @RequestMapping(SysUrls.EDSLogin + "?failed=1")
+    public String getErrorEDSPage() {
+        return SysTemplates.ErrorEds;
     }
 
     @RequestMapping(value = SysUrls.SelectLang)

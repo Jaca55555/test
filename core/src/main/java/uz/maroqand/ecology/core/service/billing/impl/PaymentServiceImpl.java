@@ -66,6 +66,10 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentRepository.findByInvoiceIdAndDeletedFalse(id);
     }
 
+    @Override
+    public Payment getById(Integer id) {
+        return paymentRepository.findByIdAndDeletedFalse(id);
+    }
 
     /*
     * Upay

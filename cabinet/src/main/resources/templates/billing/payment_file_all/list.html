@@ -84,6 +84,14 @@
                                                 <label class="control-label" th:text="#{sys_payment_detail}"></label>
                                                 <input type="text" class="form-control" id="detail">
                                             </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                <select id="organizationId" class="form-control">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                </select>
+                                            </div>
+
 
                                             <div class="form-group col-sm-3">
                                                 <label for="isComplete" class="control-label" th:text="#{sys_payment_file.isComplete}"></label>
@@ -96,7 +104,7 @@
 
                                             <div class="clearfix"></div>
 
-                                            <div class="col-sm-12 text-right">
+                                            <div class="col-sm-9 text-right">
                                                 <label class="control-label">&nbsp;</label><br/>
                                                 <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
                                                     <span th:text="#{sys_search}">Поиск</span>
@@ -154,6 +162,8 @@
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
+    var deleteInvoiceLink = [[${T(uz.maroqand.ecology.cabinet.constant.billing.BillingUrls).PaymentFileAllDelete}]];
+
     let isAdmin = [[${isAdmin}]];
 </script>
 <script th:inline="none">
@@ -167,8 +177,13 @@
         if (row[6]){
             html+='<a class="btn btn-warning btn-sm mr-1" href="'+editLink+'?id='+row[0]+'"><i class="feather icon-edit" style="margin-right: 0px;"></i></a>';
         }
-        if (isAdmin==true && row[1]==null){
+        console.log(isAdmin);
+        console.log(row[1]);
+        if (isAdmin==true && row[1]==""){
             html+='<a class="btn btn-info btn-sm mr-1" href="'+connectInvoiceLink+'?id='+row[0]+'"><i class="feather icon-settings" style="margin-right: 0px;"></i></a>';
+        }
+        if (row[12]!=null&&isAdmin==true){
+            html+='<a class="btn btn-danger btn-sm mr-1" href="'+deleteInvoiceLink+'/'+row[0]+'"><i class="feather icon-trash" style="margin-right: 0px;"></i></a>';
         }
         return html;
     }
@@ -199,7 +214,7 @@
                 dataToSend.payerName = $("#payerName").val();
                 dataToSend.detail = $("#detail").val();
                 dataToSend.bankMfo = $("#bankMfo").val();
-
+                dataToSend.organizationId= $('#organizationId').val();
                 dataToSend.isComplete = $("#isComplete").val();
 
                 dataToSend._csrf = $("#global_csrf").val();

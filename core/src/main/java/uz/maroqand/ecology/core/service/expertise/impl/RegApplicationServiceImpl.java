@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
+import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
@@ -73,6 +74,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public RegApplication getByOfferId(Integer offerId) {
+        return regApplicationRepository.findByOfferIdAndDeletedFalse(offerId);
+    }
+
+    @Override
     public List<RegApplication> getByClientId(Integer id) {
         return regApplicationRepository.findByApplicantId(id);
     }
@@ -90,6 +96,18 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     @Override
     public RegApplication getByOneInvoiceId(Integer invoiceId) {
         return regApplicationRepository.findByInvoiceIdAndDeletedFalse(invoiceId);
+    }
+
+    @Override
+    public RegApplication getTopByOneInvoiceId(Integer invoiceId) {
+        return regApplicationRepository.findTop1ByInvoiceIdAndDeletedFalse(invoiceId);
+    }
+
+    @Override
+    public RegApplication updateBoiler(RegApplication regApplication, Integer userId) {
+        regApplication.setUpdateAt(new Date());
+        regApplication.setUpdateById(userId);
+        return  regApplicationRepository.save(regApplication);
     }
 
     @Override
@@ -141,6 +159,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public RegApplication getByContractNumber(String contractNumber) {
+        return regApplicationRepository.findByContractNumber(contractNumber);
+    }
+
+    @Override
     public RegApplication getByIdAndUserTin(Integer id, User user) {
 
         System.out.println("getByIdAndUserTin");
@@ -153,6 +176,13 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
             List<Client> clientList = clientService.getByListTin(user.getTin());
             System.out.println("if  user.getTin()!=null  " + clientList.size());
+            RegApplication regApplication = getRegApplication(id, clientList);
+            if (regApplication != null) return regApplication;
+        }
+
+        if(user.getPinfl() != null){
+            List<Client> clientList = clientService.getByListPinfl(user.getPinfl());
+            System.out.println("if  user.getPinfl()!=null  " + clientList.size());
             RegApplication regApplication = getRegApplication(id, clientList);
             if (regApplication != null) return regApplication;
         }
@@ -181,6 +211,14 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         }
         return null;
     }
+
+//    @Override
+//    public List<RegApplicationDTO> listByTin(Integer tin) {
+//        Client client=clientService.getByTin(tin);
+//        List<RegApplication> regApplicationList=getByClientIdDeletedFalse(client.getId());
+////        System.out.println("regApplicationList="+regApplicationList);
+//        return RegApplicationDTO.listFromEntity(regApplicationList);
+//    }
 
     @Override
     public RegApplication sendRegApplicationAfterPayment(RegApplication regApplication,User user, Invoice invoice, String locale) {
@@ -263,6 +301,41 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return regApplicationRepository.findAll(getFilteringSpecification(filterDto, reviewId, logType, performerId, userId,regApplicationInputType),pageable);
     }
 
+    @Override
+    public Integer countByCategoryAndStatusAndRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status, Integer regionId,Set<Integer> organizationIds) {
+        if(status!=null){
+            if (category!=null){
+                return regApplicationRepository.countByCategoryAndStatusAndRegionId(category,dateBegin,dateEnd,status,regionId,organizationIds);
+            }else{
+                return regApplicationRepository.countByStatusAndRegionId(dateBegin,dateEnd,status,regionId,organizationIds);
+            }
+        }else {
+            if (category!=null){
+                return regApplicationRepository.countByCategoryAndRegionId(category,dateBegin,dateEnd,regionId,organizationIds);
+            }else{
+                return regApplicationRepository.countByRegionId(dateBegin,dateEnd,regionId,organizationIds);
+            }
+        }
+    }
+
+    @Override
+    public Integer countByCategoryAndStatusAndSubRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status, Integer subRegionId,Set<Integer> organizationIds) {
+        if(status!=null){
+            if(category!=null){
+                return regApplicationRepository.countByCategoryAndStatusAndSubRegionId(category,dateBegin,dateEnd,status,subRegionId,organizationIds);
+            }else {
+                return regApplicationRepository.countByStatusAndSubRegionId(dateBegin,dateEnd,status,subRegionId,organizationIds);
+            }
+        }
+        else {
+            if (category!=null){
+                return regApplicationRepository.countByCategoryAndSubRegionId(category,dateBegin,dateEnd,subRegionId,organizationIds);
+            }else {
+                return regApplicationRepository.countBySubRegionId(dateBegin,dateEnd,subRegionId,organizationIds);
+            }
+        }
+    }
+
     private static Specification<RegApplication> getFilteringSpecification(
             final FilterDto filterDto,
             final Integer reviewId,
@@ -298,15 +371,21 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 }
 
                 if (filterDto!=null) {
-                    if (filterDto.getStatus()!=null){
-                        System.out.println("filterDto.getStatus()"+filterDto.getLogStatus());
-//                        System.out.println(root.get("status").get("id"));
-                        predicates.add(criteriaBuilder.equal(root.get("agreementStatus"),filterDto.getLogStatus()));
+                    if (filterDto.getRegApplicationStatus()!=null){
+//                        System.out.println(filterDto.getRegApplicationStatus().getName());
+                        predicates.add(criteriaBuilder.equal(root.get("status"),filterDto.getRegApplicationStatus()));
                     }
-
+                    if(filterDto.getRegApplicationCategoryType()!=null){
+                        predicates.add(criteriaBuilder.equal(root.get("regApplicationCategoryType"),filterDto.getRegApplicationCategoryType()));
+                    }
                     if (filterDto.getStatusForReg()!=null){
                         predicates.add(criteriaBuilder.in(root.get("status")).value(filterDto.getStatusForReg()));
                     }
+
+
+//                    if(filterDto.getContractNumber()!=null && !filterDto.getContractNumber().isEmpty()){
+//                        predicates.add(criteriaBuilder.like(root.get("contractNumber"),"%" + StringUtils.trimToNull(filterDto.getContractNumber()) + "%"));
+//                    }
                     if (filterDto.getTin() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
                     }
@@ -316,9 +395,14 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     if (filterDto.getApplicationId() != null) {
                         predicates.add(criteriaBuilder.equal(root.get("id"), filterDto.getApplicationId()));
                     }
-
+                    if(filterDto.getOrganizationId() != null){
+                        predicates.add(criteriaBuilder.equal(root.get("reviewId"),filterDto.getOrganizationId()));
+                   }
                     if (filterDto.getRegionId() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("regionId"), filterDto.getRegionId()));
+                    }
+                    if(filterDto.getCategory()!=null){
+                        predicates.add(criteriaBuilder.equal(root.get("category"),filterDto.getCategory()));
                     }
                     if (filterDto.getSubRegionId() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
@@ -335,6 +419,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     }
                     if (regDateBegin != null && regDateEnd != null) {
                         predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), regDateBegin, regDateEnd));
+                    }
+                    Date deadlineDate = DateParser.TryParse(filterDto.getDeadlineDate(), Common.uzbekistanDateFormat);
+
+                    if (deadlineDate != null) {
+                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate").as(Date.class),deadlineDate));
                     }
 
                     Date dateBegin = DateParser.TryParse(filterDto.getDateBegin(), Common.uzbekistanDateFormat);

@@ -723,6 +723,7 @@ if(document.getExecuteForm()!=null){model.addAttribute("tasksubtype1",document.g
     @RequestMapping(value = DocUrls.IncomingFileDelete, method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public File deleteAttachment(@RequestParam(name = "id")Integer id){
+        System.out.println("id====="+id);
         File file = fileService.findById(id);
         file.setDeleted(true);
         file.setDateDeleted(new Date());

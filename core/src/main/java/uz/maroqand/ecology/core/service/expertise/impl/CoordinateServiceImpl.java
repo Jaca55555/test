@@ -89,11 +89,11 @@ public class CoordinateServiceImpl implements CoordinateService {
     }
 
     public Coordinate findById(Integer id){
-        return coordinateRepository.getOne(id);
+        return coordinateRepository.findTop1ByIdOrderByIdDesc(id);
     }
 
     public void coordinateView(Integer regApplicationId, Model model){
-        Coordinate coordinate = coordinateRepository.findByRegApplicationIdAndDeletedFalse(regApplicationId);
+        Coordinate coordinate = coordinateRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplicationId);
         if(coordinate != null){
             List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
             model.addAttribute("coordinate", coordinate);

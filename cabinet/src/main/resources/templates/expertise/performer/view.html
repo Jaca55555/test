@@ -14,7 +14,17 @@
         .datepicker>.datepicker-days {
             display: block;
         }
+        th.ck-editor__editable, td.ck-editor__editable {
+            font-size: 19px !important;
+        }
+        figure.table.ck-widget.ck-widget_selectable p {
+            font-size: 19px !important;
+        }
+        div#conclusion-for-print p{
+            font-size: 19px !important;
+        }
     </style>
+
 </head>
 <body class="layout-6">
 <!-- [ Pre-loader ] start -->
@@ -68,13 +78,14 @@
                                                 <a class="nav-link show" id="action-tab" data-toggle="tab" href="#action" role="tab" aria-controls="action" aria-selected="false" th:text="#{sys_confirmation}"></a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link show" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" th:text="#{sys_chat_by_applicant}"></a>
+                                                <a class="nav-link show" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" th:text="#{sys_chat_by_applicant}" style="width: 85%;float: left"></a>
+                                                <span class="rounded-notification w-15 text-center" th:if="${commentCount}!=0" style="height: 20px;margin-top: 10%;" th:text="${commentCount}">2</span>
+
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>
                                             </li>
                                         </ul>
-
                                         <div class="tab-content" id="myTabContent">
                                             <div class="tab-pane fade" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
                                                 <object th:include="expertise/fragment/applicant :: applicant" th:remove="tag"></object>
@@ -161,13 +172,38 @@
 <!-- Ckeditor js -->
 <script>
     DecoupledEditor
-        .create(document.querySelector('.document-editor__editable'))
+        .create(document.querySelector('.document-editor__editable'),
+            {
+                fontSize: {
+                    options: [
+                        generatePtSetting( '10' ),
+                        generatePtSetting( '12' ),
+                        generatePtSetting( '14' ),
+                        generatePtSetting( '18' ),
+                        generatePtSetting( '20' ),
+                        generatePtSetting( '22' ),
+                    ]
+                }
+            }
+        )
         .then(editor => {
             const toolbarContainer = document.querySelector('#document-editor');
             toolbarContainer.appendChild(editor.ui.view.toolbar.element);
         })
         .catch(error => {
         });
+    function generatePtSetting( size ) {
+        return {
+            model: size,
+            title: size,
+            view: {
+                name: 'span',
+                styles: {
+                    'font-size': `${ size }pt`
+                }
+            }
+        };
+    }
 
     $("#test12").click(function (events) {
         $('.document-editor__editable').wordExport();

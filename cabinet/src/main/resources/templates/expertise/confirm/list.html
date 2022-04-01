@@ -83,8 +83,20 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                    <select id="organizationId" class="form-control">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label" th:text="#{conclusion.category}">:</label><br/>
+                                                    <select id="regApplicationCategoryType" class="form-control">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="regApp : ${regApplicationCategoryType}" th:value="${regApp}" th:text="${@helperService.getTranslation(regApp.getName(),#locale)}"></option>
+                                                    </select>
+                                                </div>
 
                                                 <div class="form-group col-sm-3">
                                                     <label for="activityId" class="control-label" th:text="#{sys_about.activity}"></label>
@@ -111,11 +123,11 @@
                                                     <label for="status" class="control-label" th:text="#{sys_status}"></label>
                                                     <select id="status" class="form-control">
                                                         <option value="" th:text="#{sys_select}"></option>
-                                                        <option th:each="status : ${statusList}" th:value="${status}" th:text="#{${status.getConfirmName()}}"></option>
+                                                        <option th:each="status : ${statusList}" th:value="${status}" th:text="#{${status.getName()}}"></option>
                                                     </select>
                                                 </div>
 
-                                                <div class="form-group col-sm-2 text-right">
+                                                <div class="form-group col-sm-8 text-right">
                                                     <label class="control-label">&nbsp;</label></br>
                                                     <a class="btn btn-primary text-white" onclick="getDatatableConnect();return false;">
                                                         <i class="feather icon-search mr-1"></i>
@@ -141,10 +153,8 @@
                                                     <th th:text="#{sys_tin}"></th>
                                                     <th th:text="#{sys_legal_entity_name}"></th>
                                                     <th th:text="#{reg_application.type}"></th>
-                                                    <th th:text="#{sys_opf}"></th>
-                                                    <th th:text="#{sys_oked}"></th>
-                                                    <th th:text="#{sys_region}"></th>
-                                                    <th th:text="#{sys_subregion}"></th>
+                                                    <th th:text="#{mntr_user.organization}"></th>
+                                                    <th th:text="#{reg_application_category_type}"></th>
                                                     <th th:text="#{reg_application_log.createdAt}"></th>
                                                     <th th:text="#{sys_status}"></th>
                                                     <th ></th>
@@ -187,7 +197,7 @@
     var thead;
 
     function renderActionsColumn(data, type, row, meta) {
-        var currentViewLink = ajaxRequestViewLink + '?logId=' + row[11];
+        var currentViewLink = ajaxRequestViewLink + '?logId=' + row[7];
         var html = '';
         html += '<div class="btn-group"><a class="btn btn-info btn-sm mr-1" href="'+currentViewLink+'" title="'+labelView+'"><i class="feather icon-eye" style="margin-right: 0px;"></i></a></div>';
         return html;
@@ -195,12 +205,15 @@
 
     function renderStatusColumn(data, type, row, meta) {
         var statusLabel = '';
-        if (row[10]===0)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
-        if (row[10]===1)statusLabel += '<span class="badge badge-secondary">'+row[9]+'</span>';
-        if (row[10]===2)statusLabel += '<span class="badge badge-warning">'+row[9]+'</span>';
-        if (row[10]===3)statusLabel += '<span class="badge badge-warning">'+row[9]+'</span>';
-        if (row[10]===4)statusLabel +='<span class="badge badge-success">'+row[9]+'</span>';
-        if (row[10]===5)statusLabel +='<span class="badge badge-danger">'+row[9]+'</span>';
+        if (row[6]===0)statusLabel += '<span class="badge badge-secondary">'+row[5]+'</span>';
+        if (row[6]===1)statusLabel += '<span class="badge badge-secondary">'+row[5]+'</span>';
+        if (row[6]===2)statusLabel += '<span class="badge badge-success">'+row[5]+'</span>';
+        if (row[6]===3)statusLabel += '<span class="badge badge-danger">'+row[5]+'</span>';
+        if (row[6]===4)statusLabel +='<span class="badge badge-info">'+row[5]+'</span>';
+        if (row[6]===5)statusLabel +='<span class="badge badge-warning">'+row[5]+'</span>';
+        if (row[6]===6)statusLabel += '<span class="badge badge-success">'+row[5]+'</span>';
+        if (row[6]===7)statusLabel +='<span class="badge badge-danger">'+row[5]+'</span>';
+        if (row[6]===8)statusLabel +='<span class="badge badge-danger">'+row[5]+'</span>';
         return statusLabel;
     }
 
@@ -217,8 +230,9 @@
             scrollX: true,
             pageLength: 20,
             lengthMenu: [ [20, 50, 100], [20, 50, 100] ],
-            order: [[8, 'desc']],
+            order: [[6, 'desc']],
             dom: 'lrtip',
+            stateSave: true,
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
                 var jqTable = $(api.table().node());
@@ -238,8 +252,9 @@
                 dataToSend.deadlineDateBegin = $('#deadlineDateBegin').val();
                 dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
                 dataToSend.confirmStatus = $('#confirmStatus').val();
-
-                dataToSend.logStatus = $('#status').val();
+                dataToSend.organizationId= $('#organizationId').val();
+                dataToSend.regApplicationStatus = $('#status').val();
+                dataToSend.category=$('#regApplicationCategoryType').val();
                 dataToSend.dateBegin = $('#dateBegin').val();
                 dataToSend.dateEnd = $('#dateEnd').val();
 
@@ -255,13 +270,11 @@
                 {data: 1, name: 'applicant.tin'},
                 {data: 2, name: 'applicant.name'},
                 {data: 3, name: 'applicant.type'},
-                {data: 4, name: 'applicant.opfId'},
-                {data: 5, name: 'applicant.oked'},
-                {data: 6, name: 'applicant.regionId'},
-                {data: 7, name: 'applicant.subRegionId'},
-                {data: 8, name: 'confirmLogAt'},
+                {data: 8, name: 'organization'},
+                {data: 9, name: 'regApplicationCategoryType'},
+                {data: 4, name: 'confirmLogAt'},
                 {
-                    data: 9, name: 'status',
+                    data: 5, name: 'status',
                     render:renderStatusColumn, orderable:false
                 },
                 {render: renderActionsColumn, orderable: false}

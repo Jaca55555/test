@@ -28,10 +28,7 @@ import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.*;
 
 /**
@@ -105,6 +102,8 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoice;
     }
 
+
+
     /*  payee */
     private Invoice createPayee(Invoice invoice, Organization organization) {
         invoice.setPayeeId(organization.getId());
@@ -126,10 +125,10 @@ public class InvoiceServiceImpl implements InvoiceService {
     /* invoice  */
     private Invoice createInvoice(RegApplication regApplication, Invoice invoice, Requirement requirement) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, 60);
+        calendar.add(Calendar.DATE, 30);
         String materials = helperService.getMaterialShortNames(regApplication.getMaterials(),"oz");
 
-        Contract contract = contractService.create(invoice,requirement, ContractType.NewApplication,regApplication.getAddNds());
+        Contract contract = contractService.create(invoice,requirement, ContractType.NewApplication,regApplication.getAddNds(),regApplication);
         invoice.setAmount(contract.getAmount());
         invoice.setQty(contract.getCost());
 
@@ -250,6 +249,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     public Page<Invoice> findFiltered(
+            Integer id,
             Date dateBegin,
             Date dateEnd,
             Boolean dateToday,
@@ -262,12 +262,14 @@ public class InvoiceServiceImpl implements InvoiceService {
             Integer subRegionId,
             Integer payeeId,
             Integer tin,
+
             Pageable pageable
     ) {
-        return invoiceRepository.findAll(getFilteringSpecification(dateBegin, dateEnd, dateToday, dateThisMonth, status, invoice, service, detail, regionId, subRegionId, payeeId,tin),pageable);
+        return invoiceRepository.findAll(getFilteringSpecification(id,dateBegin, dateEnd, dateToday, dateThisMonth, status, invoice, service, detail, regionId, subRegionId, payeeId,tin),pageable);
     }
 
     private static Specification<Invoice> getFilteringSpecification(
+            final Integer id,
             final Date dateBegin,
             final Date dateEnd,
             final Boolean dateToday,
@@ -289,7 +291,9 @@ public class InvoiceServiceImpl implements InvoiceService {
                 if(dateBegin != null && dateEnd != null){
                     predicates.add(criteriaBuilder.between(root.get("createdDate"), dateBegin ,dateEnd));
                 }
-
+                if (id != null){
+                    predicates.add(criteriaBuilder.equal(root.get("id"),id));
+                }
                 if(dateBegin != null && dateEnd == null){
                     predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdDate"), dateBegin));
                 }

@@ -1,20 +1,33 @@
 package uz.maroqand.ecology.cabinet.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
+import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.billing.InvoiceService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.RequirementService;
 import uz.maroqand.ecology.core.service.user.UserService;
+
+import java.util.List;
 
 /**
  * Created by Utkirbek Boltaev on 20.05.2019.
@@ -25,11 +38,17 @@ import uz.maroqand.ecology.core.service.user.UserService;
 public class MainController {
     private final UserService userService;
     private final RegApplicationService regApplicationService;
+    private final InvoiceService invoiceService;
+    private final RequirementService requirementService;
+    private final RegApplicationLogService regApplicationLogService;
 
     @Autowired
-    public MainController(UserService userService, RegApplicationService regApplicationService) {
+    public MainController(UserService userService, RegApplicationService regApplicationService, InvoiceService invoiceService, RequirementService requirementService, RegApplicationLogService regApplicationLogService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
+        this.invoiceService = invoiceService;
+        this.requirementService = requirementService;
+        this.regApplicationLogService = regApplicationLogService;
     }
 
     @RequestMapping("/")
@@ -108,6 +127,52 @@ public class MainController {
         return "redirect:" + currentUrl;
     }
 
+    @PostMapping(ExpertiseUrls.InvoiceModification)
+    @ResponseBody
+    public String invoiceModif (
+            @RequestParam(name = "id",required = false) Integer id,
+            @RequestParam(name = "invoice",required = false) String invoiceStr
+    ){
+        invoiceStr = StringUtils.trimToNull(invoiceStr);
+        if (id==null || invoiceStr==null){
+            return "error";
+        }
+        System.out.println("regId==" + id);
+        System.out.println("invoiceStr==" + invoiceStr);
+        RegApplication regApplication = regApplicationService.getById(id);
+        if (regApplication!=null){
+            Invoice invoice = invoiceService.getInvoice(invoiceStr);
+            if (invoice!=null && regApplication.getInvoiceId().equals(invoice.getId())){
+                invoiceService.modification(regApplication,invoice,requirementService.getById(regApplication.getRequirementId()));
+                invoice.setStatus(InvoiceStatus.Initial);
+                invoiceService.save(invoice);
+
+                regApplication.setStatus(RegApplicationStatus.CheckConfirmed);
+                regApplication.setLogIndex(null);
+                regApplication.setPerformerId(null);
+                regApplication.setPerformerLogId(null);
+                regApplication.setPerformerLogIdNext(null);
+                regApplication.setAgreementCompleteLogId(null);
+                regApplication.setConclusionId(null);
+                regApplication.setConclusionOnline(true);
+                regApplication.setAgreementLogs(null);
+                regApplication.setForwardingLogId(null);
+                regApplication.setPerformerLogIdNext(null);
+                regApplicationService.update(regApplication);
+
+                List<RegApplicationLog> regApplicationLogs = regApplicationLogService.getByRegApplicationId(regApplication.getId());
+                for (RegApplicationLog regApplicationLog:regApplicationLogs) {
+                    if (!regApplicationLog.getType().equals(LogType.Confirm)){
+                        regApplicationLog.setDeleted(true);
+                        regApplicationLogService.update(regApplicationLog,regApplicationLog.getStatus(),"incoice modification bo'lganligi uchun",1);
+                    }
+                }
+                return "ok";
+            }
+        }
+
+        return "error1";
+    }
     /*@RequestMapping(SysUrls.ErrorInternalServerError)
     @RequestMapping(SysUrls.ErrorInternalServerError)
     public String getError500Page() {

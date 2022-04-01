@@ -108,6 +108,15 @@
         .table td, .table th{
             white-space: unset;
         }
+        th.ck-editor__editable, td.ck-editor__editable {
+            font-size: 19px !important;
+        }
+        figure.table.ck-widget.ck-widget_selectable p {
+            font-size: 19px !important;
+        }
+        div#conclusion-for-print p{
+            font-size: 19px !important;
+        }
     </style>
 </head>
 <body class="layout-6">
@@ -157,6 +166,18 @@
                                                     <a class="nav-link show" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" th:text="#{sys_chat}"></a>
                                                 </li>
                                             </ul>
+                                            <div class="form-group  text-center" style="border: 1px dashed #b7c5d4;width: 95%;overflow-y: scroll; height:400px; padding: 40px 20px;margin: 0 auto; display: none" id="contract">
+                                                <div style="text-align: justify"  th:utext="#{${offer.tagName}}"></div>
+
+                                                <div class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
+                                                    <img th:if="${offer.documentRepoId!=null}" th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImageOffer + '?id=' + @offerServiceImpl.getById(regApplication.offerId).documentRepoId+'&rid='+regApplication.id}" class="qr-code" />
+                                                </div>
+                                            </div>
+
+                                            <button class="btn btn-primary pl-5 pr-5" id="contract_print_btn">
+                                                <i class="feather icon-printer"></i>
+                                                <span th:text="#{sys_download}"> print</span>
+                                            </button>
                                             <div class="tab-content" id="myTabContent">
                                                 <div class="tab-pane fade active show" id="status" role="tabpanel" aria-labelledby="status-tab" th:if="${regApplication.status!=null}">
                                                     <object th:include="reg/fragments/status :: status" th:remove="tag"></object>
@@ -250,7 +271,30 @@
     $('textarea.max-textarea').maxlength({
         alwaysShow: true
     });
-
+    $('#contract_print_btn').on('click',function () {
+        $("#contract").printThis({
+            debug: false,               // show the iframe for debugging
+            importCSS: true,            // import parent page css
+            importStyle: true,         // import style tags
+            printContainer: false,       // print outer container/$.selector
+            loadCSS: "/static/plugins/bootstrap/bootstrap.min.css",                // path to additional css file - use an array [] for multiple
+            pageTitle: "",              // add title to print page
+            removeInline: false,        // remove inline styles from print elements
+            removeInlineSelector: "*",  // custom selectors to filter inline styles. removeInline must be true
+            printDelay: 333,            // variable print delay
+            header: null,               // prefix to html
+            footer: null,               // postfix to html
+            base: false,                // preserve the BASE tag or accept a string for the URL
+            formValues: true,           // preserve input/form values
+            canvas: true,              // copy canvas content
+            doctypeString: '',       // enter a different doctype for older markup
+            removeScripts: true,       // remove script tags from print content
+            copyTagClasses: false,      // copy classes from the html & body tag
+            beforePrintEvent: null,     // function for printEvent in iframe
+            beforePrint: null,          // function called before iframe is filled
+            afterPrint: null            // function called before iframe is removed
+        });
+    });
     function confirmFacture() {
         window.location.href = confirmfactureUrl + "?id=" + regApplicationId;
     }

@@ -21,6 +21,8 @@ public interface InvoiceService {
 
     Invoice modification(RegApplication regApplication, Invoice invoice, Requirement requirement);
 
+
+
     Invoice getInvoice(Integer id);
 
     Invoice save(Invoice invoice);
@@ -39,20 +41,22 @@ public interface InvoiceService {
 
     Invoice cancelInvoice(Invoice invoice);
 
-    Page<Invoice> findFiltered(
-      Date dateBegin,
-      Date dateEnd,
-      Boolean dateToday,
-      Boolean dateThisMonth,
-      InvoiceStatus status,
-      String invoice,
-      String service,
-      String detail,
-      Integer regionId,
-      Integer subRegionId,
-      Integer payeeId,
-      Integer tin,
-      Pageable pageable
-    );
 
+    Page<Invoice> findFiltered(
+            Integer id,
+            Date dateBegin,
+            Date dateEnd,
+            Boolean dateToday,
+            Boolean dateThisMonth,
+            InvoiceStatus status,
+            String invoice,
+            String service,
+            String detail,
+            Integer regionId,
+            Integer subRegionId,
+            Integer payeeId,
+            Integer tin,
+
+            Pageable pageable
+    );
 }

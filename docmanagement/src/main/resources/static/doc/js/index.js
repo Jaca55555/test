@@ -183,7 +183,7 @@ function getNotificationList() {
             $("#new-notification-count").hide();
         }
         $.each(data.newNotificationList, function( index, value ){
-            appendNotification(value);
+            appendNotification(value, 'skyblue');
         });
 
         if(data.notificationList.length>0){
@@ -191,7 +191,7 @@ function getNotificationList() {
             $("#noti-body").append(notification);
         }
         $.each(data.notificationList, function( index, value ){
-            appendNotification(value);
+            appendNotification(value, 'transparent');
         });
     });
 }
@@ -202,9 +202,9 @@ $(".dropdown-toggle").on('click', function() {
     });
 });
 
-function appendNotification(value) {
+function appendNotification(value, bgColor) {
     var notification =
-        '<li class="notification"> <div class="media"> <div class="media-body">\n' +
+        '<li class="notification" style="background-color:'+bgColor+' "> <div class="media"> <div class="media-body">\n' +
         '  <p><strong>'+value.createdBy+'</strong><span class="n-time text-muted">' +
         '    <i class="icon feather icon-clock m-r-10"></i>'+value.createdAt+'</span></p>\n' +
         '  <a style="color: black" href="'+value.url+'">'+value.registrationNumber+ " " +value.message+'</a>\n' +

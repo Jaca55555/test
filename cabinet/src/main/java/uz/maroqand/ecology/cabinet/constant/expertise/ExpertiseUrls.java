@@ -9,6 +9,13 @@ public class ExpertiseUrls {
     private static final String Prefix = "/expertise";
     private static final String  ExpertiseReg = Prefix + "/reg";
 
+    public static final String InvoiceModification = Prefix + "/invoice_modification";
+
+    //API
+    public static final String Api = Prefix + "/api";
+    public static final String ApiView = Api + "/view";
+    public static final String ApiList = Api + "/list";
+
     //Birinchi tekshiruv
     private static final String Confirm = Prefix + "/confirm";
     public static final String ConfirmList = Confirm + "/list";
@@ -24,6 +31,7 @@ public class ExpertiseUrls {
     public static final String ForwardingList = Forwarding + "/list";
     public static final String ForwardingListAjax = Forwarding + "/list_ajax";
     public static final String ForwardingView = Forwarding + "/view";
+    public static final String ForwardingChangePerformer = Forwarding + "/change_performer";
     public static final String ForwardingAction = Forwarding + "/action";
     public static final String ForwardingAgreementAdd = Forwarding + "/agreement/add";
     public static final String ForwardingAgreementDelete = Forwarding + "/agreement/delete";
@@ -85,6 +93,12 @@ public class ExpertiseUrls {
     public static final String BillingInvoiceIsNol = Billing + "/amount_is_nol";
     public static final String BillingDelete = Billing + "/delete";
 
+    //Report
+    private static final String Report = Prefix + "/report";
+    public static final String ReportList = Report + "/list";
+    public static final String ReportListAjax = Report + "/list_ajax";
+    public static final String ReportSoato= Report+"/soato";
+    public static final String ReportOrganization= Report+"/organization";
 
     //Applicant
     private static final String Applicant = Prefix + "/applicant";
@@ -98,6 +112,7 @@ public class ExpertiseUrls {
     private static final String EmployeeControl= Prefix + "/employee_control";
     public static final String EmployeeControls= EmployeeControl + "s";
     public static final String EmployeeControlList = EmployeeControl + "/list";
+    public static final String EmployeeControlListForward = EmployeeControl + "/list_forward";
 
     //Coordinate
     private static final String Coordinate = Prefix + "/coordinate";
@@ -137,6 +152,28 @@ public class ExpertiseUrls {
     public static final String ExpertiseRegApplicationApplicant = ExpertiseRegApplication + "/applicant";
     public static final String ExpertiseRegApplicationSendSMSCode = ExpertiseRegApplication + "/send_sms_code";
     public static final String ExpertiseRegApplicationGetSMSCode = ExpertiseRegApplication + "/get_sms_code";
+
+
+
+
+
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsCreate = ExpertiseRegApplication + "/boiler_characteristics_create";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType1 = ExpertiseRegApplication + "/boiler_characteristics_edit1";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType2 = ExpertiseRegApplication + "/boiler_characteristics_edit2";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType3 = ExpertiseRegApplication + "/boiler_characteristics_edit3";
+    public static final String RegApplicationFourCategoryBoilerCharacteristicsDelete = ExpertiseRegApplication + "/boiler_characteristics_delete";
+
+    public static final String RegApplicationFourCategoryBoilerSave = ExpertiseRegApplication + "/boiler_characteristics_save";
+    public static final String RegApplicationFourCategoryBoilerIsSave = ExpertiseRegApplication + "/boiler_characteristics_is_save";
+
+
+
+
+
+
+
+
+
 
     public static final String ExpertiseRegApplicationAbout = ExpertiseRegApplication + "/about";
     public static final String ExpertiseRegApplicationClearCoordinates = ExpertiseRegApplication + "/clear_coordinates";
@@ -215,7 +252,7 @@ public class ExpertiseUrls {
     public static final String ExpertiseRegApplicationFourCategoryStep5 = RegApplicationFourCategory + "/step5";
 
     public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsCreate = RegApplicationFourCategory + "/boiler_characteristics_create";
-    public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsEdit = RegApplicationFourCategory + "/boiler_characteristics_edit";
+    public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsEdit1 = RegApplicationFourCategory + "/boiler_characteristics_edit";
     public static final String ExpertiseRegApplicationFourCategoryBoilerCharacteristicsDelete = RegApplicationFourCategory + "/boiler_characteristics_delete";
 
     public static final String ExpertiseRegApplicationFourCategoryBoilerSave = RegApplicationFourCategory + "/boiler_characteristics_save";
@@ -242,13 +279,18 @@ public class ExpertiseUrls {
 
     public static final String ExpertiseRegApplicationList = ExpertiseRegApplication + "/list";
     public static final String ExpertiseRegApplicationListAjax = ExpertiseRegApplication + "/list_ajax";
+    public static final String ExpertiseGetByUserId = ExpertiseRegApplication+"get_user";
 
     private static final String ExpertiseRegApplicationMonitoring = ExpertiseReg + "/mntr/application";
     public static final String ExpertiseRegApplicationMonitoringList = ExpertiseRegApplicationMonitoring + "/list";
     public static final String ExpertiseRegApplicationMonitoringListAjax = ExpertiseRegApplicationMonitoring + "/list_ajax";
     public static final String ExpertiseRegApplicationMonitoringView = ExpertiseRegApplicationMonitoring + "/view";
     public static final String ExpertiseRegApplicationMonitoringEdit = ExpertiseRegApplicationMonitoring + "/edit";
+    public static final String ExpertiseRegApplicationMonitoringChangePerformer = ExpertiseRegApplicationMonitoring + "/change_performer";
+    public static final String ExpertiseRegApplicationMonitoringChangeConclusion = ExpertiseRegApplicationMonitoring + "/change_conclusion";
     public static final String ExpertiseRegApplicationMonitoringPerformerConclusionEdit = ExpertiseRegApplicationMonitoring + "/performer_conclusion_edit"; //agar ariza yopilgan yoki tasdiqlangan bo'lsa xulosani qayta edit qilish uchun
+    public static final String ExpertiseRegApplicationMonitoringFileDelete = ExpertiseRegApplicationMonitoring + "/file/delete"; //agar ariza yopilgan yoki tasdiqlangan bo'lsa xulosani qayta edit qilish uchun
+    public static final String ExpertiseRegApplicationMonitoringFileUpload = ExpertiseRegApplicationMonitoring + "/file/upload"; //agar ariza yopilgan yoki tasdiqlangan bo'lsa xulosani qayta edit qilish uchun
 
     public static final String GetLegalEntityByTin = ExpertiseReg + "/get_legal_entity";
     public static final String GetIndividualByPinfl = ExpertiseReg + "/get_individual";
@@ -257,4 +299,9 @@ public class ExpertiseUrls {
     private static final String Facture = Prefix + "/facture";
     public static final String FactureList = Facture + "/list";
     public static final String FactureView = Facture + "/view";
+
+    private static final String  Agree = Prefix + "/agree";
+    public static final String AgreeList = Agree + "/list";
+    public static final String AgreeListAjax = Agree + "/list_ajax";
+    public static final String AgreeView = Agree + "/view";
 }

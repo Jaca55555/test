@@ -8,6 +8,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
@@ -48,6 +49,11 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     }
 
     @Override
+    public List<RegApplicationLog> findAll() {
+        return regApplicationLogRepository.findAll();
+    }
+
+    @Override
     public List<RegApplicationLog> getByRegApplicationIdAndType(Integer regApplicationId, LogType type){
         return regApplicationLogRepository.findByRegApplicationIdAndTypeAndDeletedFalseOrderByIdDesc(regApplicationId, type);
     }
@@ -70,6 +76,21 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
             return null;
         }
         return regApplicationLogRepository.findById(id).get();
+    }
+
+    @Override
+    public RegApplicationLog getByRegApplcationId(Integer id) {
+        return regApplicationLogRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(id);
+    }
+
+    @Override
+    public RegApplicationLog getByRegApplcationIdAndType(Integer id, LogType type) {
+        return regApplicationLogRepository.findTop1ByRegApplicationIdAndTypeAndDeletedFalseOrderByIdDesc(id,type);
+    }
+
+    @Override
+    public List<RegApplicationLog> getByLogStatus(LogStatus status,Integer regApplicationId) {
+        return regApplicationLogRepository.findAllByStatusAndRegApplicationIdAndDeletedFalseOrderByIdAsc(status,regApplicationId);
     }
 
     public RegApplicationLog create(
@@ -136,7 +157,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
 
     @Override
     public List<RegApplicationLog> getAllByLogType(LogType logType) {
-        return regApplicationLogRepository.findByTypeOrderByIdDesc(logType);
+        return regApplicationLogRepository.findByTypeAndDeletedFalseOrderByIdDesc(logType);
     }
 
     @Override
@@ -205,6 +226,67 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     }
 
     @Override
+    public Integer countbyLogType0AndDeletedFalseOrganizationId() {
+        Set<RegApplicationStatus> statuses=new HashSet<>();
+        statuses.add(RegApplicationStatus.Initial);
+        LogType type=LogType.Confirm;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalseAndStatus(type,organizationId,statuses);
+    }
+    @Override
+    public Integer countbyLogType1AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.Initial);
+        statuses.add(LogStatus.Resend);
+        LogType type=LogType.Forwarding;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses,false);
+
+    }
+    @Override
+    public Integer countbyLogType2AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.Initial);
+        statuses.add(LogStatus.Resend);
+        LogType type=LogType.Performer;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndUpdatedByIdAndDeletedFalse(type,organizationId,statuses,user.getId(),false);
+    }
+    @Override
+    public Integer countbyLogType3AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.New);
+        statuses.add(LogStatus.Initial);
+        LogType type=LogType.Agreement;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndUpdatedByIdAndDeletedFalse(type,organizationId,statuses,user.getId(),true);
+    }
+    @Override
+    public Integer countbyLogType4AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.Initial);
+        statuses.add(LogStatus.Resend);
+        LogType type=LogType.AgreementComplete;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses,true);
+    }
+    @Override
+    public Integer countbyLogType5AndDeletedFalseOrganizationId() {
+        Set<LogStatus> statuses=new HashSet<>();
+        statuses.add(LogStatus.Initial);
+        statuses.add(LogStatus.Resend);
+        LogType type=LogType.ConclusionComplete;
+        User user = userService.getCurrentUserFromContext();
+        Integer organizationId=user.getOrganizationId();
+        return regApplicationLogRepository.countByTypeAndOrganizationIdAndDeletedFalse(type,organizationId,statuses,true);
+    }
+
+    @Override
     public Page<RegApplicationLog> findFiltered(
             FilterDto filterDto,
             Integer createdById,
@@ -214,7 +296,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
             Pageable pageable
     ) {
         User user = userService.getCurrentUserFromContext();
-        Integer orgId = userService.isAdmin()?null:user.getOrganizationId();
+        Integer orgId = userService.isAdmin()||user.getRole().getId()==16?null:user.getOrganizationId();
         return regApplicationLogRepository.findAll(getFilteringSpecification(filterDto, createdById, updateById, type, status,orgId),pageable);
     }
 
@@ -242,9 +324,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
                 if(filterDto.getTin() != null){
                     predicates.add(criteriaBuilder.equal(root.join("regApplication").get("applicant").get("tin"), filterDto.getTin()));
                 }
-                if(orgId != null){
-                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("reviewId"), orgId));
-                }
+
                 if(StringUtils.trimToNull(filterDto.getName()) != null){
                     predicates.add(criteriaBuilder.like(root.join("regApplication").get("applicant").<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
                 }
