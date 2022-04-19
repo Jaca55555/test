@@ -44,6 +44,17 @@ public class ExpertiseUrls {
     public static final String PerformerAction = Performer + "/action";
     public static final String PerformerActionEdit = Performer + "/action/edit";
     public static final String PerformerConclusionIsOnline = Performer + "/conclusion_is_online";
+
+    public static final String RegApplicationBoilerCharacteristicsEditType1 = Performer + "/boiler_characteristics_edit1";
+    public static final String RegApplicationBoilerCharacteristicsEditType2 = Performer + "/boiler_characteristics_edit2";
+    public static final String RegApplicationBoilerCharacteristicsEditType3 = Performer + "/boiler_characteristics_edit3";
+    public static final String RegApplicationBoilerCharacteristicsConfirm = Performer + "/boiler_characteristics_confirm";
+    public static final String RegApplicationBoilerCharacteristicsCheck = Performer + "/boiler_characteristics_check";
+    public static final String RegApplicationBoilerCharacteristicsDelete = Performer + "/boiler_characteristics_delete";
+
+    public static final String RegApplicationBoilerSave = Performer + "/boiler_characteristics_save";
+    public static final String RegApplicationBoilerIsSave = Performer + "/boiler_characteristics_is_save";
+
     public static final String PerformerConclusionSave = Performer + "/conclusion_save";
     public static final String PerformerConclusionIsSave = Performer + "/conclusion_is_save";
     public static final String PerformerChangeDeadlineDate = Performer + "/change_deadline_date";

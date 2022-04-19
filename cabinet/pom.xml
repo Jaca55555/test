@@ -154,18 +154,18 @@
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
-            <version>5.0.6</version>
+            <version>5.5.13.3</version>
         </dependency>
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>html2pdf</artifactId>
-            <version>3.0.0</version>
+            <version>4.0.1</version>
         </dependency>
 
         <dependency>
             <groupId>com.itextpdf.tool</groupId>
             <artifactId>xmlworker</artifactId>
-            <version>5.4.1</version>
+            <version>5.5.13.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.zxing</groupId>

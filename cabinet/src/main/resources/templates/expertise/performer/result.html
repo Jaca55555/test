@@ -6,9 +6,16 @@
 </head>
 <body th:fragment="result">
         <div class="row">
+            <div class="alert alert-warning col-md-8 offset-2" role="alert" style="display: none" id="boiler_alert">
+                <p th:text="#{boiler.not_saved}"></p>
+            </div>
             <div class="alert alert-warning col-md-8 offset-2" role="alert" style="display: none" id="conclusion_alert">
                 <p th:text="#{conclusion.not_saved}"></p>
             </div>
+
+
+
+
             <div class="col-md-6 pr-0" >
                 <h5 th:if="${regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}" class="form-group col-md-10 offset-1" th:text="#{sys_performer.newConclusionResult}"></h5>
                 <form id="form-confirm" method="post" th:action="${action_url}" data-parsley-validate="" th:if="${performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Initial || performerLog.status==T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Resend || regApplication.agreementStatus == T(uz.maroqand.ecology.core.constant.expertise.LogStatus).Denied}">

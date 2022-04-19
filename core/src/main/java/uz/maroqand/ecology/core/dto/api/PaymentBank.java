@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.core.dto.api;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * Created by Utkirbek Boltaev on 23.07.2019.

@@ -1,6 +1,16 @@
 package uz.maroqand.ecology.core.service.sys.impl;
+//
 
+import com.itextpdf.html2pdf.ConverterProperties;
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.itextpdf.html2pdf.attach.ITagWorker;
+import com.itextpdf.html2pdf.attach.ProcessorContext;
+import com.itextpdf.html2pdf.attach.impl.DefaultTagWorkerFactory;
+import com.itextpdf.html2pdf.attach.impl.tags.SpanTagWorker;
+import com.itextpdf.html2pdf.css.apply.ICssApplier;
+import com.itextpdf.html2pdf.css.apply.impl.BlockCssApplier;
+import com.itextpdf.html2pdf.css.apply.impl.DefaultCssApplierFactory;
+import com.itextpdf.styledxmlparser.node.IElementNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +29,7 @@ import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.repository.sys.FileRepository;
 import uz.maroqand.ecology.core.service.sys.FileService;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -212,9 +223,42 @@ public class FileServiceImpl implements FileService {
 //        file.deleteOnExit();
 //        return file;
         java.io.File  f = new java.io.File("conclusion" + ".pdf");
-        HtmlConverter.convertToPdf(htmlText, new FileOutputStream(f));
+        ConverterProperties converterProperties = new ConverterProperties();
+        converterProperties.setTagWorkerFactory(
+                new DefaultTagWorkerFactory() {
+                    @Override
+                    public ITagWorker getCustomTagWorker(
+                            IElementNode tag, ProcessorContext context) {
+                        if ("path".equalsIgnoreCase(tag.name())) {
+                            return new SpanTagWorker(tag, context);
+                        }
+                        if ("g".equalsIgnoreCase(tag.name())) {
+                            return new SpanTagWorker(tag, context);
+                        }
+                        return null;
+                    }
+                } );
+        converterProperties.setCssApplierFactory(
+                new DefaultCssApplierFactory(){
+                    @Override
+                    public ICssApplier getCustomCssApplier(IElementNode tag) {
+                        if (tag.name().equals("g")) {
+                            return new BlockCssApplier();
+                        }
+                        if (tag.name().equals("path")) {
+                            return new BlockCssApplier();
+                        }
+                        return null;
+                    }
+                }
+        );
+
+        HtmlConverter.convertToPdf(htmlText, new FileOutputStream(f), converterProperties);
+
+//        HtmlConverter.convertToPdf(htmlText, new FileOutputStream(f));
         return f;
     }
+
 
     private void createAndSetNextUploadFolder() {
         String newCurrentDir = globalConfigs.getUploadedFilesFolder()

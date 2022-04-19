@@ -1,6 +1,7 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
 import lombok.Data;
+import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.SubstanceType;
 
 import javax.persistence.*;
@@ -27,6 +28,10 @@ public class BoilerCharacteristics {
     //Ўлчов бирлиги
     @Column
     private String type;
+
+    @Column(name = "boiler_type")
+    @Enumerated(EnumType.ORDINAL)
+    private BoilerCharacteristicsEnum boilerType;
 
     //qiymati
     @Column(name = "amount", precision = 20, scale = 2)

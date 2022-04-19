@@ -3,7 +3,15 @@ package uz.maroqand.ecology.core.entity.expertise;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.vladmihalcea.hibernate.type.array.IntArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -11,6 +19,7 @@ import uz.maroqand.ecology.core.entity.sys.Soato;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,6 +29,13 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "reg_application")
+@TypeDefs({
+        @TypeDef(name = "string-array", typeClass = StringArrayType.class),
+        @TypeDef(name = "int-array", typeClass = IntArrayType.class),
+        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+})
+@AllArgsConstructor
+@NoArgsConstructor
 public class RegApplication {
 
     @Transient
@@ -31,7 +47,7 @@ public class RegApplication {
     private Integer id;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "applicant_id", insertable = false, updatable = false)
     private Client applicant;
 
@@ -315,4 +331,8 @@ public class RegApplication {
 
     @Column(name = "delivery_status")
     private Short deliveryStatus;
+
+    @Type(type = "jsonb")
+    @Column(name = "boiler_groups", columnDefinition = "jsonb")
+    private List<BoilerGroupEnum> boilerGroups;
 }

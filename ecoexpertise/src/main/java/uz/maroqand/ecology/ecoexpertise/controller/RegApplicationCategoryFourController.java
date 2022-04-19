@@ -1384,14 +1384,42 @@ public class RegApplicationCategoryFourController {
     }
 
 */
+    @PostMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsGet)
+    @ResponseBody
+    public HashMap<String,Boolean> regApplicationFourCategoryBoilerCharacteristicsGet(
+            @RequestParam(name = "regId") Integer regId
+    ){
+        System.out.println("regApplicationFourCategoryBoilerCharacteristicsCreate");
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regId);
+
+        HashMap<String,Boolean> response = new HashMap<>();
+        response.put("status",false);
+
+        if (regApplication==null ){
+            return response;
+        }
+//        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regId);
+//        if (regApplicationCategoryFourAdditional==null ){
+//            return response;
+//        }
+
+        if(!regApplication.getBoilerCharacteristics().isEmpty()){
+        response.put("status",true);
+        }
+        return response;
+    }
+
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsCreate)
     @ResponseBody
     public HashMap<String,Object> regApplicationFourCategoryBoilerCharacteristicsCreate(
             @RequestParam(name = "regId") Integer regId,
             @RequestParam(name = "typeBoiler") Integer typeBoiler,
+            @RequestParam(name = "boilerEnum",required = false) Integer boilerEnum,
             @RequestParam(name = "name") String name,
-            @RequestParam(name = "type") String type,
+            @RequestParam(name = "type",required = false) String type,
             @RequestParam(name = "amount") Double amount
+
     ){
         System.out.println("regApplicationFourCategoryBoilerCharacteristicsCreate");
         Integer status = 0;
@@ -1415,6 +1443,7 @@ public class RegApplicationCategoryFourController {
         characteristics.setType(type);
         characteristics.setAmount(amount);
         characteristics.setSubstanceType(typeBoiler);
+        characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
         characteristics.setDeleted(Boolean.FALSE);
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristics.add(characteristics);
@@ -1435,7 +1464,9 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "name_boiler1") String name,
             @RequestParam(name = "type_boiler1") String type,
-            @RequestParam(name = "amount_boiler1") Double amount
+            @RequestParam(name = "amount_boiler1") Double amount,
+            @RequestParam(name = "boilerEnum",required = false) Integer boilerEnum
+
     ){
         System.out.println("regId" + regId);
         System.out.println("id" + id);
@@ -1458,6 +1489,8 @@ public class RegApplicationCategoryFourController {
         characteristics.setName(name);
         characteristics.setType(type);
         characteristics.setAmount(amount);
+        characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
+
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristicsSet.add(characteristics);
         regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
@@ -1472,7 +1505,9 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "name_boiler2") String name,
             @RequestParam(name = "type_boiler2") String type,
-            @RequestParam(name = "amount_boiler2") Double amount
+            @RequestParam(name = "amount_boiler2") Double amount,
+            @RequestParam(name = "boilerEnum",required = false) Integer boilerEnum
+
     ){
         System.out.println("regId" + regId);
         System.out.println("id" + id);
@@ -1494,6 +1529,8 @@ public class RegApplicationCategoryFourController {
         boilerCharacteristicsSet.remove(characteristics);
         characteristics.setName(name);
         characteristics.setType(type);
+        characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
+
         characteristics.setAmount(amount);
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristicsSet.add(characteristics);
@@ -1509,7 +1546,9 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "name_boiler3") String name,
             @RequestParam(name = "type_boiler3") String type,
-            @RequestParam(name = "amount_boiler3") Double amount
+            @RequestParam(name = "amount_boiler3") Double amount,
+            @RequestParam(name = "boilerEnum",required = false) Integer boilerEnum
+
     ){
         System.out.println("regId" + regId);
         System.out.println("id" + id);
@@ -1531,6 +1570,8 @@ public class RegApplicationCategoryFourController {
         boilerCharacteristicsSet.remove(characteristics);
         characteristics.setName(name);
         characteristics.setType(type);
+        characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
+
         characteristics.setAmount(amount);
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristicsSet.add(characteristics);

@@ -348,6 +348,7 @@ public class ConclusionCompleteController {
 
                 HttpEntity<MultiValueMap<String, Object>> requestEntity =
                         new HttpEntity<>(body, headers);
+                logger.info("response_entity"+requestEntity);
                 try {
                     ResponseEntity<String> response = restTemplate.exchange(
                             "http://172.16.11.234:8087/api/expertise",

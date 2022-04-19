@@ -29,6 +29,8 @@ public interface RegApplicationService {
 
     List<RegApplication> getByClientIdDeletedFalse(Integer id);
 
+    List<RegApplication> findByDelivered();
+
     List<RegApplication> getByInvoiceId(Integer invoiceId);
 
     RegApplication getByOneInvoiceId(Integer invoiceId);

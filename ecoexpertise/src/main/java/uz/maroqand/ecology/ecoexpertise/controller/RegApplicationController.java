@@ -489,6 +489,7 @@ public class RegApplicationController {
         model.addAttribute("activityList", activityService.getList());
         model.addAttribute("requirementList", requirementService.getAllList());
         model.addAttribute("categoryList", categoryList);
+        model.addAttribute("boilerEnumList",BoilerCharacteristicsEnum.getBoilerCharacteristics());
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("regions", soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());

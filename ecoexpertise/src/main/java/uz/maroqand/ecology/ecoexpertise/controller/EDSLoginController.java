@@ -44,7 +44,7 @@ public class EDSLoginController {
 
     Logger logger = LogManager.getLogger(MainController.class);
 
-    private final Pattern tinPattern = Pattern.compile("=([1-9][0-9]{8}),");
+//    private final Pattern tinPattern = Pattern.compile("=([1-9][0-9]{8}),");
     private final Pattern pinflPattern = Pattern.compile("=([1-9][0-9]{13}),");
 
     //EDS kirishda API key domenga to'g'ri bog'langan bo'lishi kerak.
@@ -100,12 +100,12 @@ public class EDSLoginController {
 
         logger.info("subjectName: {}", subjectName);
         String pinfl = subjectName.substring(subjectName.length()-30);
-        Matcher matcher1 = pinflPattern.matcher(pinfl);
-        System.out.println("matcher1"+matcher1);
-        Matcher matcher = tinPattern.matcher(subjectName);
+        Matcher matcher = pinflPattern.matcher(pinfl);
 
-        if (matcher1.find()){
-            logger.info("Pinfl: {}", matcher1.group(1));
+//        Matcher matcher = tinPattern.matcher(subjectName);
+
+        if (matcher.find()){
+            logger.info("Pinfl: {}", matcher.group(1));
         }
 
 
@@ -114,25 +114,35 @@ public class EDSLoginController {
 //        String pinfl = null;
 
         //1-fiz litso INN si keladi.
-        if (matcher.find()) {
-            logger.info("EDS found individual tin: {}", matcher.group(1));
-            tin = Integer.parseInt(matcher.group(1));
-        }
+//        if (matcher.find()) {
+//            logger.info("EDS found individual tin: {}", matcher.group(1));
+//            tin = Integer.parseInt(matcher.group(1));
+//        }
+
+        //2-yur litso INN si keladi.
+//        if (matcher.find()) {
+//            logger.info("EDS found legalEntity tin: {}", matcher.group(1));
+//            leTIN = Integer.parseInt(matcher.group(1));
+//        }
 
         //2-yur litso INN si keladi.
         if (matcher.find()) {
-            logger.info("EDS found legalEntity tin: {}", matcher.group(1));
-            leTIN = Integer.parseInt(matcher.group(1));
+            logger.info("Pinfl: {}", matcher.group(1));
+            pinfl = matcher.group(1);
         }
 
-        //2-yur litso INN si keladi.
-        if (matcher1.find()) {
-            logger.info("Pinfl: {}", matcher1.group(1));
-            pinfl = matcher1.group(1);
-        }
-
-        if (tin == null && pinfl==null) {
-            logger.info("Could not find individual TIN.");
+        System.out.println("PINFL");
+        System.out.println("PINFL");
+        System.out.println("PINFL");
+        System.out.println("PINFL");
+        System.out.println("PINFL");
+        System.out.println(pinfl);
+        System.out.println("PINFL");
+        System.out.println("PINFL");
+        System.out.println("PINFL");
+        System.out.println("PINFL");
+        if (pinfl == null) {
+            logger.info("Could not find individual PINFL.");
             return "redirect:" + SysUrls.EDSLogin + "?failed=1";
         }
 

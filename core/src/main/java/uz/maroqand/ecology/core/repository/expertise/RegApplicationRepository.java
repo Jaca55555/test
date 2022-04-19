@@ -28,6 +28,7 @@ public interface RegApplicationRepository extends DataTablesRepository<RegApplic
     List<RegApplication> findByApplicantId(Integer id);
 
     List<RegApplication> findByApplicantIdAndDeletedFalse(Integer id);
+    List<RegApplication> findAllByDeliveryStatusAndDeletedFalse(Short deliveryStatus);
 
     List<RegApplication> findByInvoiceId(Integer invoiceId);
     RegApplication findByOfferIdAndDeletedFalse(Integer offerId);
