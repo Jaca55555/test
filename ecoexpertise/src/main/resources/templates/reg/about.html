@@ -309,7 +309,7 @@
 
 
 
-                                                                            <select class="form-control" name="type_boiler" id="type_boiler1"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                            <select class="form-control" name="type_boiler" id="type_boiler1"   data-select2-tags="true">
                                                                                 <option  th:text="#{sys_select}"></option>
                                                                                 <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
                                                                             </select>
@@ -425,7 +425,7 @@
 
                                                                         <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
 <!--                                                                            <input id="type_boiler2" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
-                                                                            <select class="form-control" name="type_boiler" id="type_boiler2"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                            <select class="form-control" name="type_boiler" id="type_boiler2"   data-select2-tags="true">
                                                                                 <option  th:text="#{sys_select}"></option>
                                                                                 <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
                                                                             </select>
@@ -539,7 +539,7 @@
 
                                                                         <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
 <!--                                                                            <input id="type_boiler3" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
-                                                                            <select class="form-control" name="type_boiler" id="type_boiler3"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                            <select class="form-control" name="type_boiler" id="type_boiler3"   data-select2-tags="true">
                                                                                 <option  th:text="#{sys_select}"></option>
                                                                                 <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
                                                                             </select>
@@ -1296,16 +1296,7 @@
         }
 
 
-        $('#materials5 :checkbox').change(function() {
-            // this will contain a reference to the checkbox
-            if ($(this).is(':checked')) {
-                // the checkbox is now checked
-                console.log("checked 5")
-            } else {
-                // the checkbox is now no longer checked
-                console.log("checked 5")
-            }
-        });
+
 
         function checkAllChm () {
 
@@ -1385,13 +1376,24 @@
 
             $("#materials8").click(function(){
                 if($('#materials8').is(":checked")) {
+
+
+
                     $("#tchModalBtn").removeClass("d-none")
                     $("#ochModalBtn").removeClass("d-none")
                     $("#chModalBtn").removeClass("d-none")
+
+
                 } else {
-                    $("#tchModalBtn").addClass("d-none")
-                    $("#ochModalBtn").addClass("d-none")
-                    $("#chModalBtn").addClass("d-none")
+
+                    if (!$('#materials5').is(":checked")) $("#tchModalBtn").addClass("d-none")
+
+                    if (!$('#materials6').is(":checked")) $("#ochModalBtn").addClass("d-none")
+
+                    if (!$('#materials7').is(":checked")) $("#chModalBtn").addClass("d-none")
+
+
+
                 }
             })
 
@@ -1811,6 +1813,8 @@
                     var formBoiler = new FormData();
                     formBoiler.append("regId", regApplicationId);
                     formBoiler.append("_csrf", $("#global_csrf").val());
+
+
                     if ($('#materials5').is(":checked") || $('#materials6').is(":checked") || $('#materials7').is(":checked") || $('#materials8').is(":checked") ) {
                         $.ajax({
                             url: getBoiler,
@@ -1872,6 +1876,8 @@
                         }
                     });
                 }
+
+
             }
         }
 
@@ -1926,7 +1932,9 @@
     var substances1 = [[${substances1}]];
     var substances2 = [[${substances2}]];
     var substances3 = [[${substances3}]];
+
     var typeBoiler = [[${boilerEnumList}]];
+
     console.log("typeBoiler=",typeBoiler);
 
     var labelDelete = [[#{sys_delete}]];
@@ -1958,10 +1966,7 @@
         text1 += `<option value="` + substances1[x].name + `">` + substances1[x].name + `</option>`;
     }
 
-    var text4;
-    for (x in typeBoiler) {
-        text4 += `<option value="` + typeBoiler[x] + `">` + typeBoiler[x] + `</option>`;
-    }
+
 
     var text2;
     for (x in substances2) {
@@ -1971,6 +1976,12 @@
     for (x in substances3) {
         text3 += `<option value="` + substances3[x].name + `">` + substances3[x].name + `</option>`;
     }
+
+    var text4;
+    for (x in typeBoiler) {
+        text4 += `<option value="` + typeBoiler[x] + `">` + typeBoiler[x] + `</option>`;
+    }
+
     // console.log('substances='+substances);
     function isSaveBoilerCharacteristice(){
         $.ajax({

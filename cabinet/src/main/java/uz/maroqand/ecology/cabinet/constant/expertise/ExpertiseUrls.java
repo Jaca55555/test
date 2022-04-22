@@ -49,6 +49,7 @@ public class ExpertiseUrls {
     public static final String RegApplicationBoilerCharacteristicsEditType2 = Performer + "/boiler_characteristics_edit2";
     public static final String RegApplicationBoilerCharacteristicsEditType3 = Performer + "/boiler_characteristics_edit3";
     public static final String RegApplicationBoilerCharacteristicsConfirm = Performer + "/boiler_characteristics_confirm";
+    public static final String RegApplicationBoilerCharacteristicsCheckBoiler = Performer + "/boiler_characteristics_check_boiler";
     public static final String RegApplicationBoilerCharacteristicsCheck = Performer + "/boiler_characteristics_check";
     public static final String RegApplicationBoilerCharacteristicsDelete = Performer + "/boiler_characteristics_delete";
 

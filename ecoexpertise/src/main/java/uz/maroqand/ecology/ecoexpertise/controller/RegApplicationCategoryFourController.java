@@ -390,6 +390,7 @@ public class RegApplicationCategoryFourController {
         model.addAttribute("opfList", opfService.getOpfList());
         model.addAttribute("requirementList", requirementService.getByCategory(Category.Category4));
         model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("boilerEnumList",BoilerCharacteristicsEnum.getBoilerCharacteristics());
 
         model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));

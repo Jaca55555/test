@@ -45,7 +45,9 @@ public class SubjectDTO {
             dto.setOked(model.getApplicant().getOked());
             dto.setAccount(model.getApplicant().getBankAccount());
             dto.setMfo(model.getApplicant().getMfo());
+            if(model.getApplicant()!=null&&model.getApplicant().getBankName()!=null){
             dto.setBankName(model.getApplicant().getBankName().replace("\""," "));
+            }
 
             dto.setRegisterArea(model.getApplicant().getSubRegionId());
             dto.setRegisterAddress(model.getApplicant().getAddress());

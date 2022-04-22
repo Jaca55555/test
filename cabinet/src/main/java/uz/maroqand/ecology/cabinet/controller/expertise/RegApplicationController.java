@@ -1510,7 +1510,7 @@ public class RegApplicationController {
             @RequestParam(name = "regId") Integer regId
     ){
         System.out.println("regApplicationFourCategoryBoilerCharacteristicsCreate");
-        User user = userService.getCurrentUserFromContext();
+
         RegApplication regApplication = regApplicationService.getById(regId);
 
         HashMap<String,Boolean> response = new HashMap<>();
@@ -1556,6 +1556,58 @@ public class RegApplicationController {
 
     @PostMapping(value = ExpertiseUrls.RegApplicationBoilerCharacteristicsConfirm)
     @ResponseBody
+    public HashMap<String,Boolean> regApplicationFourCategoryBoilerCharacteristicsBoiler(
+            @RequestParam(name = "regId") Integer regId,
+            @RequestParam(name = "boiler_type") Integer boilerType
+    ){
+        System.out.println("regApplicationFourCategoryBoilerCharacteristicsCreate");
+        User user = userService.getCurrentUserFromContext();
+        RegApplication regApplication = regApplicationService.getById(regId);
+
+        HashMap<String,Boolean> response = new HashMap<>();
+        response.put("status",false);
+
+        if (regApplication==null ){
+            return response;
+        }
+        List<BoilerGroupEnum> boilerGroupEnums = new LinkedList<>();
+        switch (boilerType){
+            case 1:
+                if(regApplication.getBoilerGroups()!=null){
+                regApplication.getBoilerGroups().add(BoilerGroupEnum.TCM);
+                }else{
+                   boilerGroupEnums.add(BoilerGroupEnum.TCM);
+                   regApplication.setBoilerGroups(boilerGroupEnums);
+                }
+                regApplicationService.update(regApplication);
+                response.put("status",true);
+                break;
+            case 2:
+                if(regApplication.getBoilerGroups()!=null){
+                    regApplication.getBoilerGroups().add(BoilerGroupEnum.OCM);
+                }else{
+                    boilerGroupEnums.add(BoilerGroupEnum.OCM);
+                    regApplication.setBoilerGroups(boilerGroupEnums);
+                }
+                regApplicationService.update(regApplication);
+                response.put("status",true);
+                break;
+            case 3:
+                if(regApplication.getBoilerGroups()!=null){
+                    regApplication.getBoilerGroups().add(BoilerGroupEnum.CCM);
+                }else{
+                    boilerGroupEnums.add(BoilerGroupEnum.CCM);
+                    regApplication.setBoilerGroups(boilerGroupEnums);
+                }
+                regApplicationService.update(regApplication);
+                response.put("status",true);
+                break;
+        }
+        return response;
+    }
+
+    @PostMapping(value = ExpertiseUrls.RegApplicationBoilerCharacteristicsCheckBoiler)
+    @ResponseBody
     public HashMap<String,Boolean> regApplicationFourCategoryBoilerCharacteristicsGet(
             @RequestParam(name = "regId") Integer regId,
             @RequestParam(name = "boiler_type") Integer boilerType
@@ -1571,29 +1623,28 @@ public class RegApplicationController {
             return response;
         }
 
-        List<BoilerGroupEnum> boilerGroupEnums = new ArrayList<>();
+
         switch (boilerType){
             case 1:
-                boilerGroupEnums.add(BoilerGroupEnum.TCM);
-                regApplication.setBoilerGroups(boilerGroupEnums);
-                regApplicationService.update(regApplication);
-                response.put("status",true);
+                if(regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM)){
+                    response.put("status",true);
+                }
                 break;
             case 2:
-                boilerGroupEnums.add(BoilerGroupEnum.OCM);
-                regApplication.setBoilerGroups(boilerGroupEnums);
-                regApplicationService.update(regApplication);
-                response.put("status",true);
+                if(regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM)){
+                    response.put("status",true);
+                }
                 break;
             case 3:
-                boilerGroupEnums.add(BoilerGroupEnum.CCM);
-                regApplication.setBoilerGroups(boilerGroupEnums);
-                regApplicationService.update(regApplication);
-                response.put("status",true);
+                if(regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM)){
+                    response.put("status",true);
+                }
                 break;
         }
         return response;
     }
+
+
 
 
 

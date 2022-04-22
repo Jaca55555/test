@@ -155,7 +155,7 @@ public class PerformerController {
                 filterDto,
                 user.getOrganizationId(),
                 LogType.Performer,
-                null,
+                user.getId(),
                 null,
                 null,//todo shart kerak
                 pageable

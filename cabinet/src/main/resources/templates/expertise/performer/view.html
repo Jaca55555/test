@@ -508,6 +508,8 @@
 
 <script type="text/javascript" th:inline="javascript">
     let performerLogStatus = [[${performerLogStatus}]]
+    var checkLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationBoilerCharacteristicsCheck}]];
+    var checkBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationBoilerCharacteristicsCheckBoiler}]];
 
     var isOnlineConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionIsOnline}]];
     var saveConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionSave}]];
@@ -543,6 +545,53 @@
     }*/
 
 
+
+
+
+
+
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        $("#boiler-tab").click(function(){
+
+            for (let i = 1; i < 4; i++) {
+                var formBoiler = new FormData();
+                formBoiler.append("regId", [[${regApplication.id}]]);
+                formBoiler.append("boiler_type",i);
+                formBoiler.append("_csrf", $("#global_csrf").val());
+
+                $.ajax({
+                    url: checkBoilerLink,
+                    type:"POST",
+                    data: formBoiler,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                        if (response?.status) {
+                            if (i===1) {
+                                $("#badgeOne").hide()
+                            } else if (i===2) {
+                                $("#badgeTwo").hide()
+                            } else {
+                                $("#badgeThree").hide()
+                            }
+                        }
+                    }
+                });
+            }
+
+            if($("#boiler-tab").hasClass('active')) {
+                console.log("boiler tab was actived")
+
+
+
+            }
+
+        })
+    });
+
+
     /*function isOnlineConculision() {
         var form = new FormData();
         form.append("id",[[${regApplication.id}]]);
@@ -566,33 +615,67 @@
 
     $('#form-confirm-button').on('click',function () {
         // alert("save");
-        let conclusionOnline = $("input[name='conclusionOnline']:checked").val();
-        if (conclusionOnline==="true"){
-            console.log("save");
-            var form = new FormData();
-            form.append("id", [[${regApplication.id}]]);
-            form.append("_csrf", $("#global_csrf").val());
-            $.ajax({
-                url: isSaveConclusion,
-                type: "POST",
-                data: form,
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function (response) {
-                    console.log(response);
-                    if (response.status==1){
-                        $('#conclusion_alert').hide();
-                       $('#form-confirm').submit();
+
+
+        var formBoiler = new FormData();
+        formBoiler.append("regId", [[${regApplication.id}]]);
+        formBoiler.append("_csrf", $("#global_csrf").val());
+        $.ajax({
+            url: checkLink,
+            type:"POST",
+            data: formBoiler,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+
+
+
+                if (response?.status) {
+    console.log(response.status)
+                    $('#boiler_alert').hide();
+
+                    let conclusionOnline = $("input[name='conclusionOnline']:checked").val();
+                    if (conclusionOnline==="true"){
+
+                        console.log("save");
+                        console.log("aloooo")
+
+                        var form = new FormData();
+                        form.append("id", [[${regApplication.id}]]);
+                        form.append("_csrf", $("#global_csrf").val());
+                        $.ajax({
+                            url: isSaveConclusion,
+                            type: "POST",
+                            data: form,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+                                console.log(response);
+                                if (response.status==1){
+                                    $('#conclusion_alert').hide();
+                                    $('#form-confirm').submit();
+                                }else{
+                                    $('#conclusion_alert').show();
+                                }
+                            }
+                        });
                     }else{
-                        $('#conclusion_alert').show();
+                        $('#conclusion_alert').hide();
+                        $('#form-confirm').submit();
                     }
+
+                } else {
+
+                    $('#boiler_alert').show();
+
                 }
-            });
-        }else{
-            $('#conclusion_alert').hide();
-            $('#form-confirm').submit();
-        }
+            }
+        });
+        //hjfjhfh
+
+
     });
 
     var conclusionId= [[${conclusionId}]];

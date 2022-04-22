@@ -436,14 +436,14 @@
                                                                         Atrof muhitga ta'sir
                                                                     </h3>
 
-                                                                    <div class="right-under-item d-flex justify-content-between">
-                                                                        <button class="w-25 p-2 btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal1" style="border-radius: 5px">
+                                                                    <div class="right-under-item d-flex justify-content-around">
+                                                                        <button class="w-25 p-2 btn-primary text-center d-none" id="tchModalBtn" type="button" data-toggle="modal" data-target="#boilerModal1" style="border-radius: 5px">
                                                                             <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type1}">info</span>
                                                                         </button>
-                                                                        <button class="w-25 p-2 btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal2" style="border-radius: 5px">
+                                                                        <button class="w-25 p-2 btn-primary text-center  d-none " id="ochModalBtn" type="button" data-toggle="modal" data-target="#boilerModal2" style="border-radius: 5px">
                                                                             <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type2}">info</span>
                                                                         </button>
-                                                                        <button class="w-25 p-2  btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal3" style="border-radius: 5px">
+                                                                        <button class="w-25 p-2  btn-primary text-center d-none  " id="chModalBtn" type="button" data-toggle="modal" data-target="#boilerModal3" style="border-radius: 5px">
                                                                             <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type3}">info</span>
                                                                         </button>
                                                                     </div>
@@ -719,7 +719,13 @@
 
 
                             <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
-                                <input id="type_boiler1" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
+<!--                                <input id="type_boiler1" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
+
+                                <select class="form-control" name="type_boiler" id="type_boiler1"  style="margin-top: 16px;" data-select2-tags="true">
+                                    <option  th:text="#{sys_select}"></option>
+                                    <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
+                                </select>
+
 
                             </div>
                             <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
@@ -832,8 +838,12 @@
 
 
                             <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
-                                <input id="type_boiler2" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
+<!--                                <input id="type_boiler2" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
 
+                                <select class="form-control" name="type_boiler" id="type_boiler2"  style="margin-top: 16px;" data-select2-tags="true">
+                                    <option  th:text="#{sys_select}"></option>
+                                    <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
+                                </select>
                             </div>
                             <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
                                 <input id="amount_boiler2" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
@@ -943,7 +953,13 @@
 
 
                             <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
-                                <input id="type_boiler3" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
+<!--                                <input id="type_boiler3" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
+
+
+                                <select class="form-control" name="type_boiler" id="type_boiler3"  style="margin-top: 16px;" data-select2-tags="true">
+                                    <option  th:text="#{sys_select}"></option>
+                                    <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
+                                </select>
 
                             </div>
                             <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
@@ -1188,8 +1204,8 @@
                 }
                 $("#materialDiv").append(
                     '<div class="custom-control custom-checkbox" >\n' +
-                    '   <input type="checkbox" class="custom-control-input" id="materials'+value+'" value="'+value+'" name="materials"  required="" data-parsley-errors-container="#materialError" >\n' +
-                    '   <label class="custom-control-label" for="materials'+value+'" id="materials-'+value+'-label"></label>\n' +
+                    '   <input onclick="checkAllChm();" type="checkbox" class="custom-control-input" id="materials'+value+'" value="'+value+'" name="materials"  required="" data-parsley-errors-container="#materialError" >\n' +
+                    '   <label onclick="checkAllChm();" class="custom-control-label" for="materials'+value+'" id="materials-'+value+'-label"></label>\n' +
                     '</div>');
                 getMaterial(value);
             });
@@ -1200,6 +1216,146 @@
             }else {
                 $("#coordinates-control").hide();
             }*/
+        }
+
+        function checkAllChm () {
+
+            $("#materials5").click(function(){
+
+                if($('#materials5').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+
+                    if ($('#materials6').is(":checked")) {
+                        $("#ochModalBtn").removeClass("d-none")
+                    } else {
+                        $("#ochModalBtn").addClass("d-none")
+                    }
+
+                    if ($('#materials7').is(":checked")) {
+                        $("#chModalBtn").removeClass("d-none")
+                    } else {
+                        $("#chModalBtn").addClass("d-none")
+                    }
+                } else {
+                    $("#tchModalBtn").addClass("d-none")
+                }
+
+
+
+            })
+
+            $("#materials6").click(function(){
+
+
+
+                if($('#materials6').is(":checked")) {
+                    $("#ochModalBtn").removeClass("d-none")
+
+                    if ($('#materials5').is(":checked")) {
+                        $("#tchModalBtn").removeClass("d-none")
+                    } else {
+                        $("#tchModalBtn").addClass("d-none")
+                    }
+
+
+                    if ($('#materials7').is(":checked")) {
+                        $("#chModalBtn").removeClass("d-none")
+                    } else {
+                        $("#chModalBtn").addClass("d-none")
+                    }
+
+
+                }  else {
+                    $("#ochModalBtn").addClass("d-none")
+                }
+            })
+
+            $("#materials7").click(function(){
+
+
+                if($('#materials7').is(":checked")) {
+                    $("#chModalBtn").removeClass("d-none")
+
+                    if ($('#materials6').is(":checked")) {
+                        $("#ochModalBtn").removeClass("d-none")
+                    } else {
+                        $("#ochModalBtn").addClass("d-none")
+                    }
+
+
+                    if ($('#materials5').is(":checked")) {
+                        $("#tchModalBtn").removeClass("d-none")
+                    } else {
+                        $("#tchModalBtn").addClass("d-none")
+                    }
+                } else {
+                    $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+
+            $("#materials8").click(function(){
+                if($('#materials8').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    $("#ochModalBtn").removeClass("d-none")
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    $("#tchModalBtn").addClass("d-none")
+                    $("#ochModalBtn").addClass("d-none")
+                    $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+            $("#materials4").click(function(){
+                if($('#materials4').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    $("#ochModalBtn").removeClass("d-none")
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    $("#tchModalBtn").addClass("d-none")
+                    $("#ochModalBtn").addClass("d-none")
+                    $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+            $("#materials3").click(function(){
+                if($('#materials3').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    $("#ochModalBtn").removeClass("d-none")
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    $("#tchModalBtn").addClass("d-none")
+                    $("#ochModalBtn").addClass("d-none")
+                    $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+            $("#materials2").click(function(){
+                if($('#materials2').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    $("#ochModalBtn").removeClass("d-none")
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    $("#tchModalBtn").addClass("d-none")
+                    $("#ochModalBtn").addClass("d-none")
+                    $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+            $("#materials1").click(function(){
+                if($('#materials1').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    $("#ochModalBtn").removeClass("d-none")
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    $("#tchModalBtn").addClass("d-none")
+                    $("#ochModalBtn").addClass("d-none")
+                    $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+
+
         }
 
         function getMaterial(id) {
@@ -1538,14 +1694,78 @@
                 console.log("mapListSize=" + mapListSize);
                 console.log("coordinateListSize=" + coordinateListSize);
                 if (mapListSize>=4 || coordinateListSize>=4){
+
                     $('#error_coordinate').hide();
-                    $('#about-form').submit();
+
+                    //  check all CHMS
+
+                    // $('#about-form').submit();
+                    var formBoiler = new FormData();
+                    formBoiler.append("regId", regApplicationId);
+                    formBoiler.append("_csrf", $("#global_csrf").val());
+
+                    if ($('#materials5').is(":checked") || $('#materials6').is(":checked") || $('#materials7').is(":checked") || $('#materials8').is(":checked") ) {
+                        $.ajax({
+                            url: getBoiler,
+                            type:"POST",
+                            data: formBoiler,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+
+                                console.log(response);
+
+                                if (response?.status) {
+
+                                    //    go next step
+                                    if ( !$("#validationModalBoiler").hasClass("d-none")) {
+                                        $("#validationModalBoiler").addClass("d-none")
+                                    }
+
+                                    $('#about-form').submit();
+                                } else {
+
+                                    $("#validationModalBoiler").removeClass("d-none")
+
+                                }
+                            }
+                        });
+                    }
+
                 }else{
                     $('#add_coordinate').addClass('required-border');
                     $('#error_coordinate').show();
                 }
             }else{
-                $('#about-form').submit();
+
+                //  check all CHMS
+                // $('#about-form').submit();
+
+                if ($('#materials5').is(":checked") || $('#materials6').is(":checked") || $('#materials7').is(":checked") || $('#materials8').is(":checked") ) {
+                    $.ajax({
+                        url: getBoiler,
+                        type: "POST",
+                        success: function (response) {
+                            console.log(response);
+
+                            if (response?.status) {
+                                //    go next step
+                                if ( !$("#validationModalBoiler").hasClass("d-none")) {
+                                    $("#validationModalBoiler").addClass("d-none")
+                                }
+
+                                $('#about-form').submit();
+                            } else {
+
+                                $("#validationModalBoiler").removeClass("d-none")
+
+                            }
+                        }
+                    });
+                }
+
+
             }
         }
 
@@ -1592,6 +1812,12 @@
     var substances1 = [[${substances1}]];
     var substances2 = [[${substances2}]];
     var substances3 = [[${substances3}]];
+
+    var typeBoiler = [[${boilerEnumList}]];
+
+    console.log("typeBoiler=",typeBoiler);
+
+
     var labelDelete = [[#{sys_delete}]];
     var labelEdit = [[#{sys_edit}]];
     var editLink1 = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType1}]];
@@ -1627,6 +1853,13 @@
     for (x in substances3) {
         text3 += `<option value="` + substances3[x].name + `">` + substances3[x].name + `</option>`;
     }
+
+
+    var text4;
+    for (x in typeBoiler) {
+        text4 += `<option value="` + typeBoiler[x] + `">` + typeBoiler[x] + `</option>`;
+    }
+
     // console.log('substances='+substances);
     function isSaveBoilerCharacteristice(){
         $.ajax({
@@ -1763,7 +1996,9 @@
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
-                            '<td  style="width: 20%" >' + type + '</td>' +
+
+                            '<td  style="width: 20%" >' + typeBoiler[type]  + '</td>' +
+
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '    \n" >' + amount + '</td>' +
@@ -1828,7 +2063,7 @@
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
-                            '<td  style="width: 20%" >' + type + '</td>' +
+                            '<td  style="width: 20%" >' + typeBoiler[type] + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '    \n" >' + amount + '</td>' +
@@ -1891,7 +2126,7 @@
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
-                            '<td  style="width: 20%" >' + type + '</td>' +
+                            '<td  style="width: 20%" >' + typeBoiler[type] + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '    \n" >' + amount + '</td>' +
