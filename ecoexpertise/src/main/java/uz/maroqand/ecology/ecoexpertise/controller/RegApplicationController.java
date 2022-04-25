@@ -199,7 +199,8 @@ public class RegApplicationController {
                     regApplication.getStatus()!=null? helperService.getRegApplicationStatus(regApplication.getStatus().getId(),locale):"",
                     regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
                     regApplication.getApplicant()!=null?regApplication.getApplicant().getName():" ",
-                    regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():" "
+                    regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():" ",
+                    regApplication.getName()
             });
         }
         result.put("data",convenientForJSONArray);

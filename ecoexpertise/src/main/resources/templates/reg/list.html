@@ -52,6 +52,7 @@
                                                         <th th:text="#{sys_expertise.objectExpertise}"></th>
                                                         <th th:text="#{sys_expertise.material}"></th>
                                                         <th th:text="#{sys_legal_entity_name}+'/'+#{applicant}"></th>
+                                                        <th th:text="#{sys_about.name}"></th>
                                                         <th th:text="#{sys_tin_individual}"></th>
                                                         <th th:text="#{reg_application.createdAt}"></th>
                                                         <th th:text="#{reg_application.status}"></th>
@@ -120,6 +121,11 @@
                     {data: 6, name: 'name',
                         render: function (data, type, row, meta) {
                             return '<span class="">'+row[6]+'</span>';
+                        },orderable:false
+                    },
+                    {data: 6, name: 'object_name',
+                        render: function (data, type, row, meta) {
+                            return '<span class="">'+row[8]+'</span>';
                         },orderable:false
                     },
                     {data: 7, name: 'tin',

@@ -1405,6 +1405,7 @@ public class RegApplicationCategoryFourController {
 //            return response;
 //        }
 
+
         if(!regApplication.getBoilerCharacteristics().isEmpty()){
         response.put("status",true);
         }

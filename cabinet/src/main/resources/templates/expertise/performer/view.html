@@ -616,7 +616,7 @@
     $('#form-confirm-button').on('click',function () {
         // alert("save");
 
-
+        console.log("form-confirm-button  ishlayapti")
         var formBoiler = new FormData();
         formBoiler.append("regId", [[${regApplication.id}]]);
         formBoiler.append("_csrf", $("#global_csrf").val());
@@ -629,10 +629,10 @@
             cache: false,
             success: function (response) {
 
-
+                console.log(response?.status)
 
                 if (response?.status) {
-    console.log(response.status)
+                    console.log(response.status)
                     $('#boiler_alert').hide();
 
                     let conclusionOnline = $("input[name='conclusionOnline']:checked").val();
@@ -666,8 +666,11 @@
                         $('#form-confirm').submit();
                     }
 
-                } else {
+                }
 
+
+                else {
+                    console.log(response?.status)
                     $('#boiler_alert').show();
 
                 }
@@ -921,7 +924,6 @@
     var deleteLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsDelete}]];
     var createLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsCreate}]];
     var confirmLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationBoilerCharacteristicsConfirm}]];
-    var checkLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationBoilerCharacteristicsCheck}]];
     var saveBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerSave}]];
     var isSaveBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerIsSave}]];
     var _csrf = [[${_csrf.token}]];
@@ -981,36 +983,7 @@
     }
 
     //Bu yerda tasdiqlash bo'ladi
-    var formBoiler = new FormData();
-    formBoiler.append("regId", regApplicationId);
-    formBoiler.append("boiler_type",1);
-    formBoiler.append("_csrf", $("#global_csrf").val());
-    $.ajax({
-            url: confirmLink,
-            type:"POST",
-            data: formBoiler,
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: function (response) {
 
-
-
-                if (response?.status) {
-
-                    //    go next step
-                    if ( !$("#validationModalBoiler").hasClass("d-none")) {
-                        $("#validationModalBoiler").addClass("d-none")
-                    }
-
-                    $('#about-form').submit();
-                } else {
-
-                    $("#validationModalBoiler").removeClass("d-none")
-
-                }
-            }
-        });
     //Bu yerda tasdiqlash bo'ladi
 
 

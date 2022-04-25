@@ -47,6 +47,7 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class RegApplicationController {
@@ -1417,6 +1418,7 @@ public class RegApplicationController {
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristicsSet.add(characteristics);
         regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplication.setBoilerGroups(null);
         regApplicationService.updateBoiler(regApplication,user.getId());
         return 1 + "";
     }
@@ -1458,6 +1460,7 @@ public class RegApplicationController {
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristicsSet.add(characteristics);
         regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplication.setBoilerGroups(null);
         regApplicationService.updateBoiler(regApplication,user.getId());
         return 1 + "";
     }
@@ -1500,6 +1503,7 @@ public class RegApplicationController {
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristicsSet.add(characteristics);
         regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplication.setBoilerGroups(null);
         regApplicationService.updateBoiler(regApplication,user.getId());
         return 1 + "";
     }
@@ -1520,30 +1524,16 @@ public class RegApplicationController {
             return response;
         }
         Set<Integer> materials = regApplication.getMaterials();
-        if(materials.contains(5) && !regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM)){
+        if(materials.contains(5)  && (regApplication.getBoilerGroups()==null || !regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM))){
             response.put("status",false);
         }
-        else
-        {
-            response.put("status",true);
-        }
-
-        if(materials.contains(6) && !regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM)){
+        else  if(materials.contains(6)  &&(regApplication.getBoilerGroups()==null || !regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM))){
             response.put("status",false);
         }
-        else
-        {
-            response.put("status",true);
-        }
-
-        if(materials.contains(7) && !regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM)){
+        else if(materials.contains(7)  &&(regApplication.getBoilerGroups()==null || !regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM))){
             response.put("status",false);
         }
-        else
-        {
-            response.put("status",true);
-        }
-        if(materials.contains(8) && !(regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM)||regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM)||regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM))){
+        else if(materials.contains(8)  &&(regApplication.getBoilerGroups()==null || !(regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM) && regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM) && regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM)))){
             response.put("status",false);
         }
         else
@@ -1608,7 +1598,7 @@ public class RegApplicationController {
 
     @PostMapping(value = ExpertiseUrls.RegApplicationBoilerCharacteristicsCheckBoiler)
     @ResponseBody
-    public HashMap<String,Boolean> regApplicationFourCategoryBoilerCharacteristicsGet(
+    public HashMap<String,Integer> regApplicationFourCategoryBoilerCharacteristicsGet(
             @RequestParam(name = "regId") Integer regId,
             @RequestParam(name = "boiler_type") Integer boilerType
     ){
@@ -1616,29 +1606,47 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(regId);
 
-        HashMap<String,Boolean> response = new HashMap<>();
-        response.put("status",false);
+        HashMap<String,Integer> response = new HashMap<>();
+        response.put("status",0);
 
         if (regApplication==null ){
             return response;
         }
-
+        List<BoilerCharacteristics> boilerCharacteristics1 =regApplication.getBoilerCharacteristics().stream().filter(boilerCharacteristic->boilerCharacteristic.getSubstanceType()==1).collect(Collectors.toList());
+        List<BoilerCharacteristics> boilerCharacteristics2 =regApplication.getBoilerCharacteristics().stream().filter(boilerCharacteristic->boilerCharacteristic.getSubstanceType()==2).collect(Collectors.toList());
+        List<BoilerCharacteristics> boilerCharacteristics3 =regApplication.getBoilerCharacteristics().stream().filter(boilerCharacteristic->boilerCharacteristic.getSubstanceType()==3).collect(Collectors.toList());
 
         switch (boilerType){
+
             case 1:
+                if(boilerCharacteristics1.isEmpty()){
+                    response.put("status",2);
+                }else
                 if(regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM)){
-                    response.put("status",true);
+                    response.put("status",1);
+                    System.out.println( "boiler_type"+boilerType);
                 }
                 break;
             case 2:
+                if(boilerCharacteristics2.isEmpty()){
+                    response.put("status",2);
+                }else
                 if(regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM)){
-                    response.put("status",true);
+                    response.put("status",1);
+                    System.out.println( "boiler_type"+boilerType);
                 }
+
                 break;
             case 3:
-                if(regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM)){
-                    response.put("status",true);
+                if(boilerCharacteristics3.isEmpty()){
+                    response.put("status",2);
                 }
+                else
+                if(regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM)){
+                    response.put("status",1);
+                    System.out.println( "boiler_type"+boilerType);
+                }
+
                 break;
         }
         return response;
@@ -1678,6 +1686,7 @@ public class RegApplicationController {
         }
         boilerCharacteristicsSet.remove(characteristics);
         regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
+        regApplication.setBoilerGroups(null);
         regApplicationService.updateBoiler(regApplication,user.getId());
 
         characteristics.setDeleted(Boolean.TRUE);

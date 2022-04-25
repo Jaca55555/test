@@ -1301,99 +1301,95 @@
         function checkAllChm () {
 
             $("#materials5").click(function(){
-
                 if($('#materials5').is(":checked")) {
                     $("#tchModalBtn").removeClass("d-none")
-
                     if ($('#materials6').is(":checked")) {
                         $("#ochModalBtn").removeClass("d-none")
                     } else {
-                        $("#ochModalBtn").addClass("d-none")
+                        if(!$('#materials8').is(":checked")) {
+                            $("#ochModalBtn").addClass("d-none")
+                        }
                     }
-
                     if ($('#materials7').is(":checked")) {
                         $("#chModalBtn").removeClass("d-none")
                     } else {
-                        $("#chModalBtn").addClass("d-none")
+                        if(!$('#materials8').is(":checked")) {
+                            $("#chModalBtn").addClass("d-none")
+                        }
                     }
                 } else {
-                    $("#tchModalBtn").addClass("d-none")
+                    if(!$('#materials8').is(":checked")) {
+                        $("#tchModalBtn").addClass("d-none")
+                    }
                 }
-
-
-
             })
 
             $("#materials6").click(function(){
-
-
-
                 if($('#materials6').is(":checked")) {
                     $("#ochModalBtn").removeClass("d-none")
-
                     if ($('#materials5').is(":checked")) {
                         $("#tchModalBtn").removeClass("d-none")
                     } else {
-                        $("#tchModalBtn").addClass("d-none")
+                        if(!$('#materials8').is(":checked")){
+                            $("#tchModalBtn").addClass("d-none")
+                        }
                     }
-
-
                     if ($('#materials7').is(":checked")) {
                         $("#chModalBtn").removeClass("d-none")
                     } else {
-                        $("#chModalBtn").addClass("d-none")
+                        if(!$('#materials8').is(":checked")) {
+                            $("#chModalBtn").addClass("d-none")
+                        }
+                    }
+                }  else {
+
+                    if(!$('#materials8').is(":checked")) {
+                        $("#ochModalBtn").addClass("d-none")
                     }
 
-
-                }  else {
-                    $("#ochModalBtn").addClass("d-none")
                 }
             })
 
             $("#materials7").click(function(){
-
-
                 if($('#materials7').is(":checked")) {
                     $("#chModalBtn").removeClass("d-none")
 
                     if ($('#materials6').is(":checked")) {
                         $("#ochModalBtn").removeClass("d-none")
                     } else {
-                        $("#ochModalBtn").addClass("d-none")
+
+                        if(!$('#materials8').is(":checked")) {
+                            $("#ochModalBtn").addClass("d-none")
+                        }
+
+
                     }
-
-
                     if ($('#materials5').is(":checked")) {
                         $("#tchModalBtn").removeClass("d-none")
                     } else {
-                        $("#tchModalBtn").addClass("d-none")
+                        if(!$('#materials8').is(":checked")){
+                            $("#tchModalBtn").addClass("d-none")
+                        }
+
                     }
                 } else {
-                    $("#chModalBtn").addClass("d-none")
+                    if(!$('#materials8').is(":checked")){
+                        $("#chModalBtn").addClass("d-none")
+                    }
+
                 }
             })
 
 
             $("#materials8").click(function(){
                 if($('#materials8').is(":checked")) {
-
-
-
                     $("#tchModalBtn").removeClass("d-none")
                     $("#ochModalBtn").removeClass("d-none")
                     $("#chModalBtn").removeClass("d-none")
-
-
                 } else {
-
                     if (!$('#materials5').is(":checked")) $("#tchModalBtn").addClass("d-none")
-
                     if (!$('#materials6').is(":checked")) $("#ochModalBtn").addClass("d-none")
-
                     if (!$('#materials7').is(":checked")) $("#chModalBtn").addClass("d-none")
-
-
-
                 }
             })
 
@@ -1591,6 +1587,7 @@
 
     </script>
     <script>
+
         var Map = ol.Map;
         var View = ol.View;
         var Draw = ol.interaction.Draw;
@@ -1778,14 +1775,6 @@
         function submitForm() {
             console.log("submitForm");
 
-            // tchm check
-
-
-
-
-
-
-
 
 
             var coordinatesListForSubmit = [];
@@ -1833,8 +1822,8 @@
                                     if ( !$("#validationModalBoiler").hasClass("d-none")) {
                                         $("#validationModalBoiler").addClass("d-none")
                                     }
-
                                     $('#about-form').submit();
+
                                 } else {
 
                                     $("#validationModalBoiler").removeClass("d-none")
@@ -1843,6 +1832,13 @@
                             }
                         });
                     }
+                    else{
+                        $('#about-form').submit();
+                    }
+
+
+
+
 
 
                 }else{
@@ -1853,11 +1849,18 @@
 
                 //  check all CHMS
                 // $('#about-form').submit();
+                var formBoiler = new FormData();
+                formBoiler.append("regId", regApplicationId);
+                formBoiler.append("_csrf", $("#global_csrf").val());
 
                 if ($('#materials5').is(":checked") || $('#materials6').is(":checked") || $('#materials7').is(":checked") || $('#materials8').is(":checked") ) {
                     $.ajax({
                         url: getBoiler,
-                        type: "POST",
+                        type:"POST",
+                        data: formBoiler,
+                        processData: false,
+                        contentType: false,
+                        cache: false,
                         success: function (response) {
                             console.log(response);
 
@@ -1877,6 +1880,9 @@
                     });
                 }
 
+                else{
+                    $('#about-form').submit();
+                }
 
             }
         }
