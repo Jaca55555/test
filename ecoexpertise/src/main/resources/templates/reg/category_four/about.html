@@ -1682,6 +1682,9 @@
 
         function submitForm() {
             console.log("submitForm");
+
+
+
             var coordinatesListForSubmit = [];
             $('.coord-input').each(function () {
                 coordinatesListForSubmit.push(parseFloat($(this).val()));
@@ -1690,13 +1693,15 @@
                 $('input[name="coordinates"]').remove();
             $('#about-form').append('<input type="hidden" name="coordinates" value="'+coordinatesListForSubmit+'">');
 
+
+
+
             if (isCoordinate){
                 let mapListSize = $('#coordinates-map-list').children().length;
                 let coordinateListSize = $('#coordinates-list').children().length;
                 console.log("mapListSize=" + mapListSize);
                 console.log("coordinateListSize=" + coordinateListSize);
                 if (mapListSize>=4 || coordinateListSize>=4){
-
                     $('#error_coordinate').hide();
 
                     //  check all CHMS
@@ -1705,6 +1710,7 @@
                     var formBoiler = new FormData();
                     formBoiler.append("regId", regApplicationId);
                     formBoiler.append("_csrf", $("#global_csrf").val());
+
 
                     if ($('#materials5').is(":checked") || $('#materials6').is(":checked") || $('#materials7').is(":checked") || $('#materials8').is(":checked") ) {
                         $.ajax({
@@ -1724,8 +1730,8 @@
                                     if ( !$("#validationModalBoiler").hasClass("d-none")) {
                                         $("#validationModalBoiler").addClass("d-none")
                                     }
-
                                     $('#about-form').submit();
+
                                 } else {
 
                                     $("#validationModalBoiler").removeClass("d-none")
@@ -1734,6 +1740,14 @@
                             }
                         });
                     }
+                    else{
+                        $('#about-form').submit();
+                    }
+
+
+
+
+
 
                 }else{
                     $('#add_coordinate').addClass('required-border');
@@ -1743,11 +1757,18 @@
 
                 //  check all CHMS
                 // $('#about-form').submit();
+                var formBoiler = new FormData();
+                formBoiler.append("regId", regApplicationId);
+                formBoiler.append("_csrf", $("#global_csrf").val());
 
                 if ($('#materials5').is(":checked") || $('#materials6').is(":checked") || $('#materials7').is(":checked") || $('#materials8').is(":checked") ) {
                     $.ajax({
                         url: getBoiler,
-                        type: "POST",
+                        type:"POST",
+                        data: formBoiler,
+                        processData: false,
+                        contentType: false,
+                        cache: false,
                         success: function (response) {
                             console.log(response);
 
@@ -1767,6 +1788,9 @@
                     });
                 }
 
+                else{
+                    $('#about-form').submit();
+                }
 
             }
         }

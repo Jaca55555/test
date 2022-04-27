@@ -1371,6 +1371,7 @@ public class RegApplicationController {
         characteristics.setDeleted(Boolean.FALSE);
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristics.add(characteristics);
+        regApplication.setBoilerGroups(null);
         regApplication.setBoilerCharacteristics(boilerCharacteristics);
         regApplicationService.updateBoiler(regApplication,user.getId());
 
@@ -1387,16 +1388,15 @@ public class RegApplicationController {
             @RequestParam(name = "regId") Integer regId,
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "name_boiler1") String name,
-            @RequestParam(name = "type_boiler1") String type,
             @RequestParam(name = "amount_boiler1") Double amount,
-            @RequestParam(name = "boilerEnum",required = false) Integer boilerEnum
+            @RequestParam(name = "type_boiler1",required = false) Integer boilerEnum
 
     ){
         System.out.println("regId" + regId);
         System.out.println("id" + id);
         System.out.println("name_boiler" + name);
-        System.out.println("type_boiler" + type);
         System.out.println("amount_boiler" + amount);
+        System.out.println("boiler_enum"+boilerEnum);
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(regId);
         if (regApplication==null ){
@@ -1411,7 +1411,6 @@ public class RegApplicationController {
         }
         boilerCharacteristicsSet.remove(characteristics);
         characteristics.setName(name);
-        characteristics.setType(type);
         characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
 
         characteristics.setAmount(amount);
@@ -1429,15 +1428,13 @@ public class RegApplicationController {
             @RequestParam(name = "regId") Integer regId,
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "name_boiler2") String name,
-            @RequestParam(name = "type_boiler2") String type,
             @RequestParam(name = "amount_boiler2") Double amount,
-            @RequestParam(name = "boilerEnum",required = false) Integer boilerEnum
+            @RequestParam(name = "type_boiler1",required = false) Integer boilerEnum
 
     ){
         System.out.println("regId" + regId);
         System.out.println("id" + id);
         System.out.println("name_boiler" + name);
-        System.out.println("type_boiler" + type);
         System.out.println("amount_boiler" + amount);
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(regId);
@@ -1453,7 +1450,6 @@ public class RegApplicationController {
         }
         boilerCharacteristicsSet.remove(characteristics);
         characteristics.setName(name);
-        characteristics.setType(type);
         characteristics.setAmount(amount);
         characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
 
@@ -1471,15 +1467,13 @@ public class RegApplicationController {
             @RequestParam(name = "regId") Integer regId,
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "name_boiler3") String name,
-            @RequestParam(name = "type_boiler3") String type,
             @RequestParam(name = "amount_boiler3") Double amount,
-            @RequestParam(name = "boilerEnum",required = false) Integer boilerEnum
+            @RequestParam(name = "type_boiler1",required = false) Integer boilerEnum
 
     ){
         System.out.println("regId" + regId);
         System.out.println("id" + id);
         System.out.println("name_boiler" + name);
-        System.out.println("type_boiler" + type);
         System.out.println("amount_boiler" + amount);
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(regId);
@@ -1495,9 +1489,6 @@ public class RegApplicationController {
         }
         boilerCharacteristicsSet.remove(characteristics);
         characteristics.setName(name);
-        characteristics.setType(type);
-        characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
-
         characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
         characteristics.setAmount(amount);
         characteristics = boilerCharacteristicsService.save(characteristics);
@@ -1546,7 +1537,7 @@ public class RegApplicationController {
 
     @PostMapping(value = ExpertiseUrls.RegApplicationBoilerCharacteristicsConfirm)
     @ResponseBody
-    public HashMap<String,Boolean> regApplicationFourCategoryBoilerCharacteristicsBoiler(
+    public HashMap<String,Integer> regApplicationFourCategoryBoilerCharacteristicsBoiler(
             @RequestParam(name = "regId") Integer regId,
             @RequestParam(name = "boiler_type") Integer boilerType
     ){
@@ -1554,8 +1545,8 @@ public class RegApplicationController {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(regId);
 
-        HashMap<String,Boolean> response = new HashMap<>();
-        response.put("status",false);
+        HashMap<String,Integer> response = new HashMap<>();
+        response.put("status",0);
 
         if (regApplication==null ){
             return response;
@@ -1570,7 +1561,7 @@ public class RegApplicationController {
                    regApplication.setBoilerGroups(boilerGroupEnums);
                 }
                 regApplicationService.update(regApplication);
-                response.put("status",true);
+                response.put("status",1);
                 break;
             case 2:
                 if(regApplication.getBoilerGroups()!=null){
@@ -1580,7 +1571,7 @@ public class RegApplicationController {
                     regApplication.setBoilerGroups(boilerGroupEnums);
                 }
                 regApplicationService.update(regApplication);
-                response.put("status",true);
+                response.put("status",1);
                 break;
             case 3:
                 if(regApplication.getBoilerGroups()!=null){
@@ -1590,7 +1581,7 @@ public class RegApplicationController {
                     regApplication.setBoilerGroups(boilerGroupEnums);
                 }
                 regApplicationService.update(regApplication);
-                response.put("status",true);
+                response.put("status",1);
                 break;
         }
         return response;
@@ -1622,7 +1613,7 @@ public class RegApplicationController {
                 if(boilerCharacteristics1.isEmpty()){
                     response.put("status",2);
                 }else
-                if(regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM)){
+                if(regApplication.getBoilerGroups()!=null && regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM)){
                     response.put("status",1);
                     System.out.println( "boiler_type"+boilerType);
                 }
@@ -1631,7 +1622,7 @@ public class RegApplicationController {
                 if(boilerCharacteristics2.isEmpty()){
                     response.put("status",2);
                 }else
-                if(regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM)){
+                if(regApplication.getBoilerGroups()!=null && regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM)){
                     response.put("status",1);
                     System.out.println( "boiler_type"+boilerType);
                 }
@@ -1642,7 +1633,7 @@ public class RegApplicationController {
                     response.put("status",2);
                 }
                 else
-                if(regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM)){
+                if(regApplication.getBoilerGroups()!=null && regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM)){
                     response.put("status",1);
                     System.out.println( "boiler_type"+boilerType);
                 }
@@ -1701,18 +1692,7 @@ public class RegApplicationController {
 //            @RequestParam(name = "boiler_name") String boilerName,
             @RequestBody MultiValueMap<String, String> formData
     ){
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println("regCategoryId=="+regCategoryId);
+
         User user = userService.getCurrentUserFromContext();
         HashMap<String,Object> result = new HashMap<>();
         result.put("status",0);

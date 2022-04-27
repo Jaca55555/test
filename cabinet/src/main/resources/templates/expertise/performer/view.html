@@ -546,6 +546,133 @@
 
 
 
+    function setBadgeInformation (status, number) {
+        if (number===1) {
+            switch (status) {
+                case 1 :
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-success")
+                    $("#badgeOne").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-info")
+                    $("#badgeOne").append("To'ldirilmagan")
+                    break;
+
+                case 0 :
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-danger")
+                    $("#badgeOne").append("Tasdiqlanmagan")
+                    break;
+
+
+
+                default:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+                    $("#badgeOne").hide()
+
+            }
+        } else if ( number===2 ) {
+            switch (status) {
+                case 1 :
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-success")
+                    $("#badgeTwo").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-info")
+                    $("#badgeTwo").append("To'ldirilmagan")
+                    break;
+
+                case 0 :
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-danger")
+                    $("#badgeTwo").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+                    $("#badgeTwo").hide()
+
+            }
+        } else {
+            switch (status) {
+                case 1 :
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-success")
+                    $("#badgeThree").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-info")
+                    $("#badgeThree").append("To'ldirilmagan")
+                    break;
+
+                case 0 :
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-danger")
+                    $("#badgeThree").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+                    $("#badgeThree").hide()
+
+            }
+        }
+    }
+
+
 
 
 
@@ -555,6 +682,7 @@
         $("#boiler-tab").click(function(){
 
             for (let i = 1; i < 4; i++) {
+
                 var formBoiler = new FormData();
                 formBoiler.append("regId", [[${regApplication.id}]]);
                 formBoiler.append("boiler_type",i);
@@ -568,13 +696,22 @@
                     contentType: false,
                     cache: false,
                     success: function (response) {
+                        console.log("tab status : ", response?.status)
                         if (response?.status) {
                             if (i===1) {
-                                $("#badgeOne").hide()
+
+                                setBadgeInformation(response?.status, 1)
+
                             } else if (i===2) {
-                                $("#badgeTwo").hide()
+
+                                setBadgeInformation(response?.status, 2)
+
+
                             } else {
-                                $("#badgeThree").hide()
+
+                                setBadgeInformation(response?.status, 3)
+
+
                             }
                         }
                     }
@@ -583,9 +720,6 @@
 
             if($("#boiler-tab").hasClass('active')) {
                 console.log("boiler tab was actived")
-
-
-
             }
 
         })
@@ -929,6 +1063,7 @@
     var _csrf = [[${_csrf.token}]];
     var isSavingTitle = [[#{sys_is_saving}]];
     var isNotSavingTitle = [[#{sys_is_not_saving}]];
+    var checkBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationBoilerCharacteristicsCheckBoiler}]];
 
 
 
@@ -987,8 +1122,157 @@
     //Bu yerda tasdiqlash bo'ladi
 
 
+    function setBadgeInformationForCreate (status, number) {
+
+        console.log("status", status )
+        console.log("number", number)
+
+        if (number===1) {
+            switch (status) {
+                case 1 :
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-success")
+                    $("#badgeOne").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-info")
+                    $("#badgeOne").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-danger")
+                    $("#badgeOne").append("Tasdiqlanmagan")
+                    break;
+
+
+
+                default:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+                    $("#badgeOne").hide()
+
+            }
+        } else if ( number===2 ) {
+
+            switch (status) {
+                case 1:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-success")
+                    $("#badgeTwo").append("Tasdiqlandi")
+                    break;
+                case 2:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-info")
+                    $("#badgeTwo").append("To'ldirilmagan")
+                    break;
+                case 0:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-danger")
+                    $("#badgeTwo").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+                    $("#badgeTwo").hide()
+
+            }
+        } else {
+            switch (status) {
+                case 1:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-success")
+                    $("#badgeThree").append("Tasdiqlandi")
+                    break;
+
+                case 2:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-info")
+                    $("#badgeThree").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-danger")
+                    $("#badgeThree").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+                    $("#badgeThree").hide()
+
+            }
+        }
+    }
+
+    function deleteItemForCreate () {
+        for (let i = 1; i < 4; i++) {
+            var formBoiler = new FormData();
+            formBoiler.append("regId", [[${regApplication.id}]]);
+            formBoiler.append("boiler_type",i);
+            formBoiler.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: checkBoilerLink,
+                type:"POST",
+                data: formBoiler,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+                    setBadgeInformationForCreate(response?.status, i)
+                }
+            });
+        }
+    }
+
+
     function saveBoiler(tabId) {
-        console.log(typeof tabId)
+
         var formBoiler = new FormData();
         formBoiler.append("regId", regApplicationId);
         formBoiler.append("boiler_type",tabId);
@@ -1005,11 +1289,21 @@
                 if (response?.status) {
                     //    go next step
                     if (tabId===1) {
-                        $("#badgeOne").hide()
+
+
+                        setBadgeInformation(response?.status, 1)
+
+
+
                     } else if (tabId===2) {
-                        $("#badgeTwo").hide()
+                        setBadgeInformation(response?.status, 2)
+
+
                     } else {
-                        $("#badgeThree").hide()
+
+                        setBadgeInformation(response?.status, 3)
+
+
                     }
                 }
             }
@@ -1021,6 +1315,8 @@
 
 
     var n=0;
+
+
 
 
     //add base
@@ -1061,10 +1357,13 @@
                 success: function (response) {
 
 
-
+                    deleteItemForCreate()
                     $('#amount_boiler1').val(null);
 
                     if (response.status==1){
+
+
+
                         const tableRows = document.querySelectorAll('#boiler-table1 tbody tr');
 
                         var id = response.data.id;
@@ -1126,13 +1425,15 @@
 
 
                     $('#amount_boiler2').val(null);
+
                     const tableRows = document.querySelectorAll('#boiler-table2 tbody tr');
 
 
+                    deleteItemForCreate()
 
 
+                    if (response.status===1){
 
-                    if (response.status==1){
                         var id = response.data.id;
                         var name = response.data.name;
                         var type = response.data.type;
@@ -1192,9 +1493,10 @@
 
                     $('#amount_boiler3').val(null);
 
-
+                    deleteItemForCreate()
 
                     if (response.status==1){
+
                         const tableRows = document.querySelectorAll('#boiler-table3 tbody tr');
                         var id = response.data.id;
                         var name = response.data.name;
@@ -1225,6 +1527,157 @@
         $('#input_add').remove();
     }
 
+
+    //delete item
+
+    function setBadgeInformationForDelete (status, number) {
+
+        console.log("status", status )
+        console.log("number", number)
+
+        if (number===1) {
+            switch (status) {
+                case 1 :
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-success")
+                    $("#badgeOne").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-info")
+                    $("#badgeOne").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-danger")
+                    $("#badgeOne").append("Tasdiqlanmagan")
+                    break;
+
+
+
+                default:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+                    $("#badgeOne").hide()
+
+            }
+        } else if ( number===2 ) {
+
+            switch (status) {
+                case 1:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-success")
+                    $("#badgeTwo").append("Tasdiqlandi")
+                    break;
+                case 2:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-info")
+                    $("#badgeTwo").append("To'ldirilmagan")
+                    break;
+                case 0:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-danger")
+                    $("#badgeTwo").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+                    $("#badgeTwo").hide()
+
+            }
+        } else {
+            switch (status) {
+                case 1:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-success")
+                    $("#badgeThree").append("Tasdiqlandi")
+                    break;
+
+                case 2:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-info")
+                    $("#badgeThree").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-danger")
+                    $("#badgeThree").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+                    $("#badgeThree").hide()
+
+            }
+        }
+    }
+
+    function deleteItemForDelete () {
+        for (let i = 1; i < 4; i++) {
+            var formBoiler = new FormData();
+            formBoiler.append("regId", [[${regApplication.id}]]);
+            formBoiler.append("boiler_type",i);
+            formBoiler.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: checkBoilerLink,
+                type:"POST",
+                data: formBoiler,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+                    setBadgeInformationForDelete(response?.status, i)
+                }
+            });
+        }
+    }
+
     /*delete modal*/
     function mymodal(id){
 
@@ -1237,6 +1690,11 @@
             url:deleteLink,
             data:form,
             success: function(){
+
+                console.log("delete clicked")
+
+                deleteItemForDelete()
+
                 $('#row_'+id).remove();
             },
             processData: false,
@@ -1244,6 +1702,8 @@
             cache:false
         });
     }
+
+
 
     $('#boiler-table').css("width", "100%");
 </script>
@@ -1263,6 +1723,155 @@
             dropdownParent: $("#boilerModal3")
         });
     });
+
+
+    function setBadgeInformationForEdit (status, number) {
+
+        console.log("status", status )
+        console.log("number", number)
+
+        if (number===1) {
+            switch (status) {
+                case 1 :
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-success")
+                    $("#badgeOne").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-info")
+                    $("#badgeOne").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-danger")
+                    $("#badgeOne").append("Tasdiqlanmagan")
+                    break;
+
+
+
+                default:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+                    $("#badgeOne").hide()
+
+            }
+        } else if ( number===2 ) {
+
+            switch (status) {
+                case 1:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-success")
+                    $("#badgeTwo").append("Tasdiqlandi")
+                    break;
+                case 2:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-info")
+                    $("#badgeTwo").append("To'ldirilmagan")
+                    break;
+                case 0:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-danger")
+                    $("#badgeTwo").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+                    $("#badgeTwo").hide()
+
+            }
+        } else {
+            switch (status) {
+                case 1:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-success")
+                    $("#badgeThree").append("Tasdiqlandi")
+                    break;
+
+                case 2:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-info")
+                    $("#badgeThree").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-danger")
+                    $("#badgeThree").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+                    $("#badgeThree").hide()
+
+            }
+        }
+    }
+
+    function deleteItemForEdit () {
+        for (let i = 1; i < 4; i++) {
+            var formBoiler = new FormData();
+            formBoiler.append("regId", [[${regApplication.id}]]);
+            formBoiler.append("boiler_type",i);
+            formBoiler.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: checkBoilerLink,
+                type:"POST",
+                data: formBoiler,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+                    setBadgeInformationForEdit(response?.status, i)
+                }
+            });
+        }
+    }
 
 
     $("#boiler-table1").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
@@ -1302,6 +1911,7 @@
         });
     });
 
+
     $("#boiler-table1").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
         console.log("Bu qism edit uchun")
         var $row = $(this).closest("tr");
@@ -1325,7 +1935,7 @@
                     var text = $(this).find("select").val();
                     var textId = $(this).find("select").attr('id');
                     console.log("txt=" + txt + "   txtId=" + txtId);
-                    form.append(textId,text);
+                    form.append(textId, text);
                     $(this).html(text);
                 }else if($(this).has('input').length){
                     console.log("inputni ichiga kiryapti");
@@ -1338,6 +1948,8 @@
 
                 $(this).html(txt);
             });
+
+
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);
@@ -1348,7 +1960,8 @@
                 url:editLink1,
                 data:form,
                 success: function(e){
-                    console.log("refresh");
+
+                    deleteItemForEdit()
                 },
                 processData: false,
                 contentType: false,
@@ -1356,6 +1969,9 @@
             });
         }
     });
+
+
+
 
     $("#boiler-table2").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
         $(this).removeClass().addClass("feather icon-check-circle mr-0");
@@ -1428,6 +2044,8 @@
                 console.log("txt=" + txt + "   txtId=" + txtId);
                 $(this).html(txt);
             });
+            var type = $('#type_boiler2').val();
+            form.append("boilerEnum", type);
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);
@@ -1438,6 +2056,25 @@
                 url:editLink2,
                 data:form,
                 success: function(e){
+                    for (let i = 1; i < 4; i++) {
+
+                        var formBoiler = new FormData();
+                        formBoiler.append("regId", [[${regApplication.id}]]);
+                        formBoiler.append("boiler_type",i);
+                        formBoiler.append("_csrf", $("#global_csrf").val());
+
+                        $.ajax({
+                            url: checkBoilerLink,
+                            type:"POST",
+                            data: formBoiler,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+                                deleteItemForEdit()
+                            }
+                        });
+                    }
                     console.log("refresh");
                 },
                 processData: false,
@@ -1446,6 +2083,8 @@
             });
         }
     });
+
+
     $("#boiler-table3").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
         $(this).removeClass().addClass("feather icon-check-circle mr-0");
         var $row = $(this).closest("tr").off("mousedown");
@@ -1517,6 +2156,8 @@
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);
+            var type = $('#type_boiler3').val();
+            form.append("boilerEnum", type);
             $(this).removeClass().addClass("feather icon-edit-1 mr-0");
 
             $.ajax({
@@ -1524,6 +2165,28 @@
                 url:editLink3,
                 data:form,
                 success: function(e){
+                    for (let i = 1; i < 4; i++) {
+
+                        var formBoiler = new FormData();
+                        formBoiler.append("regId", [[${regApplication.id}]]);
+                        formBoiler.append("boiler_type",i);
+                        formBoiler.append("_csrf", $("#global_csrf").val());
+
+                        $.ajax({
+                            url: checkBoilerLink,
+                            type:"POST",
+                            data: formBoiler,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+
+
+                                deleteItemForEdit()
+
+                            }
+                        });
+                    }
                     console.log("refresh");
                 },
                 processData: false,
