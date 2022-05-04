@@ -155,7 +155,7 @@ public class PerformerController {
                 filterDto,
                 user.getOrganizationId(),
                 LogType.Performer,
-                null,
+                user.getId(),
                 null,
                 null,//todo shart kerak
                 pageable
@@ -261,6 +261,7 @@ public class PerformerController {
         model.addAttribute("changeDeadlineDateList", changeDeadlineDateService.getListByRegApplicationId(regApplicationId));
         model.addAttribute("changeDeadlineDate", changeDeadlineDateService.getByRegApplicationId(regApplicationId));
         model.addAttribute("boilerEnumList",BoilerCharacteristicsEnum.getBoilerCharacteristics());
+        System.out.println("BoilerCharacteristicsEnum.getBoilerCharacteristics()"+BoilerCharacteristicsEnum.getBoilerCharacteristics());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));

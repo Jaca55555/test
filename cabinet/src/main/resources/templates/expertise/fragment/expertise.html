@@ -248,7 +248,8 @@
                                         <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==1}">
                                             <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
                                             <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; padding: 0 20px"></td>
-                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                            <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
+                                            <td th:unless="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
                                             <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 30%"></td>
 
 
@@ -280,7 +281,9 @@
                                         <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==2}">
                                             <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
                                             <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; padding: 0 20px"></td>
-                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                            <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
+                                            <td th:unless="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+
                                             <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 30%"></td>
 
 
@@ -312,7 +315,8 @@
                                         <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==3}">
                                             <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
                                             <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; padding: 0 20px"></td>
-                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                            <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
+                                            <td th:unless="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
                                             <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 30%"></td>
 
 

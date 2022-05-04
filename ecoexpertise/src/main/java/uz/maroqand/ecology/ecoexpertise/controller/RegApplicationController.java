@@ -31,6 +31,7 @@ import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.Notification;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.repository.user.UserRepository;
 import uz.maroqand.ecology.core.service.sys.*;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
@@ -57,6 +58,7 @@ import java.util.*;
 public class RegApplicationController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final SoatoService soatoService;
     private final OpfService opfService;
     private final RegApplicationService regApplicationService;
@@ -93,7 +95,7 @@ public class RegApplicationController {
     @Autowired
     public RegApplicationController(
             UserService userService,
-            SoatoService soatoService,
+            UserRepository userRepository, SoatoService soatoService,
             OpfService opfService,
             RegApplicationService regApplicationService,
             ClientService clientService,
@@ -123,6 +125,7 @@ public class RegApplicationController {
             NotificationService notificationService,
             FactureService factureService, GlobalConfigs globalConfigs, SubstanceService substanceService) {
         this.userService = userService;
+        this.userRepository = userRepository;
         this.soatoService = soatoService;
         this.opfService = opfService;
         this.regApplicationService = regApplicationService;
@@ -173,7 +176,6 @@ public class RegApplicationController {
         FilterDto filterDto = new FilterDto();
         filterDto.setByLeTin(user.getLeTin());
         filterDto.setByTin(user.getTin());
-
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
                 null,

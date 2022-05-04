@@ -283,7 +283,7 @@
                                                                             <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
                                                                             <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
                                                                             <td style="width: 15%">
-                                                                                <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                                <a class="btn btn-warning btn-sm list-btn link-edit-1 mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
                                                                                 <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -311,7 +311,7 @@
 
                                                                             <select class="form-control" name="type_boiler" id="type_boiler1"   data-select2-tags="true">
                                                                                 <option  th:text="#{sys_select}"></option>
-                                                                                <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
+                                                                                <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="#{${b.name}}">UZSubstance</option>
                                                                             </select>
 
 
@@ -402,7 +402,7 @@
                                                                             <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
                                                                             <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
                                                                             <td style="width: 15%">
-                                                                                <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                                <a class="btn btn-warning btn-sm link-edit-1 list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
                                                                                 <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -427,7 +427,7 @@
 <!--                                                                            <input id="type_boiler2" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
                                                                             <select class="form-control" name="type_boiler" id="type_boiler2"   data-select2-tags="true">
                                                                                 <option  th:text="#{sys_select}"></option>
-                                                                                <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
+                                                                                <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="#{${b.name}}">UZSubstance</option>
                                                                             </select>
                                                                         </div>
                                                                         <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
@@ -516,7 +516,7 @@
                                                                             <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
                                                                             <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%">
                                                                             <td style="width: 15%">
-                                                                            <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                            <a class="btn btn-warning btn-sm link-edit-1 list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
                                                                             <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -541,7 +541,7 @@
 <!--                                                                            <input id="type_boiler3" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
                                                                             <select class="form-control" name="type_boiler" id="type_boiler3"   data-select2-tags="true">
                                                                                 <option  th:text="#{sys_select}"></option>
-                                                                                <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
+                                                                                <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="#{${b.name}}">UZSubstance</option>
                                                                             </select>
                                                                         </div>
                                                                         <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
@@ -808,8 +808,8 @@
 
 
                                                                     </div>
-                                                                    <div class=" d-none my-3 text-danger " id="validationModalBoiler" >
-                                                                        Please provide a valid city.
+                                                                    <div class=" d-none my-3 text-danger " id="validationModalBoiler" th:text="#{not_boiler}">
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1985,7 +1985,16 @@
 
     var text4;
     for (x in typeBoiler) {
-        text4 += `<option value="` + typeBoiler[x] + `">` + typeBoiler[x] + `</option>`;
+        if(x==0){
+            text4 += `<option value="` + x + `">` + [[#{tonna}]] + `</option>`;
+        }
+        if(x==1){
+            text4 += `<option value="` + x + `">` + [[#{m3}]] + `</option>`;
+        }
+        if(x==2){
+            text4 += `<option value="` + x + `">` + [[#{kg}]] + `</option>`;
+        }
+
     }
 
     // console.log('substances='+substances);
@@ -2124,7 +2133,7 @@
                         var name = response.data.name;
                         var type = response.data.type;
                         var amount = response.data.amount;
-                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                        var actions = '<a class="btn btn-warning btn-sm link-edit-1 list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
                             '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
                         cancelExecutive();
                         $('#boiler-table1 tbody tr:last').after('' +
@@ -2190,7 +2199,7 @@
                         var name = response.data.name;
                         var type = response.data.type;
                         var amount = response.data.amount;
-                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                        var actions = '<a class="btn btn-warning btn-sm link-edit-1 list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
                             '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
                         cancelExecutive();
                         $('#boiler-table2 tbody tr:last').after('' +
@@ -2253,7 +2262,7 @@
                         var name = response.data.name;
                         var type = response.data.type;
                         var amount = response.data.amount;
-                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                        var actions = '<a class="btn btn-warning btn-sm link-edit-1 list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
                             '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
                         cancelExecutive();
                         $('#boiler-table3 tbody tr:last').after('' +
@@ -2318,12 +2327,17 @@
     });
 
 
-    $("#boiler-table1").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
-        $(this).removeClass().addClass("feather icon-check-circle mr-0");
+
+
+    $("#boiler-table1").on('mousedown.edit', "a.link-edit-1", function(e) {
+
+        $(this).removeClass('link-edit-1 btn-warning').addClass("link-save-1 btn-success");
+        $(this).children('i.feather.icon-edit-1').removeClass().addClass("feather icon-check-circle mr-0");
         var $row = $(this).closest("tr").off("mousedown");
         var $tds = $row.find("td").not(':last');
         var $idn=0;
         $.each($tds, function(i, el) {
+
             console.log("i ", i)
             console.log("el ", el)
             console.log("idn", $idn)
@@ -2355,7 +2369,9 @@
         });
     });
 
-    $("#boiler-table1").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
+    $("#boiler-table1").on('mousedown.save', "a.link-save-1", function(e) {
+
+        $(this).removeClass('link-save-1 btn-success').addClass("link-edit-1 btn-warning");
         console.log("Bu qism edit uchun")
         var $row = $(this).closest("tr");
         var $tds = $row.find("td").not(':last');
@@ -2377,9 +2393,14 @@
                     console.log("selectni ichiga kiryapti");
                     var text = $(this).find("select").val();
                     var textId = $(this).find("select").attr('id');
-                    console.log("txt=" + txt + "   txtId=" + txtId);
-                    form.append(textId,text);
-                    $(this).html(text);
+                    console.log("txt=" + text + "   txtId=" + textId);
+                    form.append(textId, text);
+
+                    var selectText = $(this).find("select option:selected").text()
+                    if(textId==='type_boiler1') $(this).html(selectText);
+                    else  $(this).html(text);
+
+
                 }else if($(this).has('input').length){
                     console.log("inputni ichiga kiryapti");
                     var txt = $(this).find("input").val();
@@ -2391,17 +2412,21 @@
 
                 $(this).html(txt);
             });
+
+
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);
-            $(this).removeClass().addClass("feather icon-edit-1 mr-0");
+
+            $(this).children('i.feather.icon-check-circle').removeClass().addClass("feather icon-edit-1 mr-0");
 
             $.ajax({
                 type: "POST",
                 url:editLink1,
                 data:form,
                 success: function(e){
-                    console.log("refresh");
+
+                    console.log("data edited")
                 },
                 processData: false,
                 contentType: false,
@@ -2410,8 +2435,10 @@
         }
     });
 
-    $("#boiler-table2").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
-        $(this).removeClass().addClass("feather icon-check-circle mr-0");
+    $("#boiler-table2").on('mousedown.edit', "a.link-edit-1", function(e) {
+
+        $(this).removeClass('link-edit-1 btn-warning').addClass("link-save-1 btn-success");
+        $(this).children('i.feather.icon-edit-1').removeClass().addClass("feather icon-check-circle mr-0");
         var $row = $(this).closest("tr").off("mousedown");
         var $tds = $row.find("td").not(':last');
         var $idn=0;
@@ -2429,7 +2456,6 @@
             if ($idn==3){
 
 
-                // $(this).html("").append("<input id='type_boiler2' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
 
                 $(this).html("").append(``+
                     `<select class="form-control" id="type_boiler2"  >`+
@@ -2445,8 +2471,9 @@
         });
     });
 
-    $("#boiler-table2").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
+    $("#boiler-table2").on('mousedown.save', "a.link-save-1", function(e) {
         console.log("Bu qism edit uchun")
+        $(this).removeClass('link-save-1 btn-success').addClass("link-edit-1 btn-warning");
         var $row = $(this).closest("tr");
         var $tds = $row.find("td").not(':last');
         var id=$row.find("td").first().attr('id');
@@ -2467,9 +2494,11 @@
                     console.log("selectni ichiga kiryapti");
                     var text = $(this).find("select").val();
                     var textId = $(this).find("select").attr('id');
-                    console.log("txt=" + txt + "   txtId=" + txtId);
-                    form.append(textId,text);
-                    $(this).html(text);
+                    console.log("txt=" + text + "   txtId=" + textId);
+                    form.append(textId, text);
+                    var selectText =$(this).find("select option:selected").text();
+                    if(textId==='type_boiler2') $(this).html(selectText);
+                    else  $(this).html(text);
                 }else if($(this).has('input').length){
                     console.log("inputni ichiga kiryapti");
                     var txt = $(this).find("input").val();
@@ -2484,13 +2513,32 @@
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);
-            $(this).removeClass().addClass("feather icon-edit-1 mr-0");
+            $(this).children('i.feather.icon-check-circle').removeClass().addClass("feather icon-edit-1 mr-0");
 
             $.ajax({
                 type: "POST",
                 url:editLink2,
                 data:form,
                 success: function(e){
+                    for (let i = 1; i < 4; i++) {
+
+                        var formBoiler = new FormData();
+                        formBoiler.append("regId", [[${regApplication.id}]]);
+                        formBoiler.append("boiler_type",i);
+                        formBoiler.append("_csrf", $("#global_csrf").val());
+
+                        $.ajax({
+                            url: checkBoilerLink,
+                            type:"POST",
+                            data: formBoiler,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+                                console.log("data edited")
+                            }
+                        });
+                    }
                     console.log("refresh");
                 },
                 processData: false,
@@ -2499,11 +2547,15 @@
             });
         }
     });
-    $("#boiler-table3").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
-        $(this).removeClass().addClass("feather icon-check-circle mr-0");
+
+    $("#boiler-table3").on('mousedown.edit', "a.link-edit-1", function(e) {
+        $(this).removeClass('link-edit-1 btn-warning').addClass("link-save-1 btn-success");
+        $(this).children('i.feather.icon-edit-1').removeClass().addClass("feather icon-check-circle mr-0");
         var $row = $(this).closest("tr").off("mousedown");
         var $tds = $row.find("td").not(':last');
         var $idn=0;
+
+        console.log(text4)
         $.each($tds, function(i, el) {
             var txt = $(this).text();
             $idn++;
@@ -2531,8 +2583,9 @@
         });
     });
 
-    $("#boiler-table3").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
-        console.log("Bu qism edit uchun 3-table")
+    $("#boiler-table3").on('mousedown.save', "a.link-save-1", function(e) {
+        console.log("Bu qism edit uchun")
+        $(this).removeClass('link-save-1 btn-success').addClass("link-edit-1 btn-warning");
         var $row = $(this).closest("tr");
         var $tds = $row.find("td").not(':last');
         var id=$row.find("td").first().attr('id');
@@ -2552,10 +2605,15 @@
                     console.log($(this).has('select'));
                     console.log("selectni ichiga kiryapti");
                     var text = $(this).find("select").val();
+
                     var textId = $(this).find("select").attr('id');
-                    console.log("txt=" + txt + "   txtId=" + txtId);
+                    console.log("txt=" + text + "   txtId=" + textId);
                     form.append(textId,text);
-                    $(this).html(text);
+                    var selectText =$(this).find("select option:selected").text();
+                    if(textId==='type_boiler3') $(this).html(selectText);
+                    else  $(this).html(text);
+
+
                 }else if($(this).has('input').length){
                     console.log("inputni ichiga kiryapti");
                     var txt = $(this).find("input").val();
@@ -2570,13 +2628,37 @@
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);
-            $(this).removeClass().addClass("feather icon-edit-1 mr-0");
+            var type = $('#type_boiler3').val();
+            form.append("boilerEnum", type);
+            $(this).children('i.feather.icon-check-circle').removeClass().addClass("feather icon-edit-1 mr-0");
 
             $.ajax({
                 type: "POST",
                 url:editLink3,
                 data:form,
                 success: function(e){
+                    for (let i = 1; i < 4; i++) {
+
+                        var formBoiler = new FormData();
+                        formBoiler.append("regId", [[${regApplication.id}]]);
+                        formBoiler.append("boiler_type",i);
+                        formBoiler.append("_csrf", $("#global_csrf").val());
+
+                        $.ajax({
+                            url: checkBoilerLink,
+                            type:"POST",
+                            data: formBoiler,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+
+
+                                console.log("data edited")
+
+                            }
+                        });
+                    }
                     console.log("refresh");
                 },
                 processData: false,
@@ -2585,6 +2667,9 @@
             });
         }
     });
+
+
+
 </script>
 </body>
 </html>

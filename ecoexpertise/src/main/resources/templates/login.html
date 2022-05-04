@@ -171,13 +171,9 @@
                                                         '                   <span style="font-weight: bold">' + vo.O + '</span><br/>\n' +
                                                         '                   <span style="font-weight: bold" >' + sysFullName +': </span>:&nbsp;<span>' + vo.CN + '</span><br/>\n' +
                                                         '                   <span style="font-weight: bold" >' + sysTin + ':</span>:&nbsp;<span> ' + vo.TIN + ' </span><br/>\n' ;
-                                                        '                   <span style="font-weight: bold" >' + sysPinfl + ':</span>:&nbsp;<span> ' + vo.PINFL + ' </span><br/>\n' ;
+                                                         if((vo.PINFL!=null||vo.PINFL!=='') && todayDate<vo.validTo){
 
-                                                         if(vo.PINFL==null||vo.PINFL===''||todayDate>vo.validTo){
                                                              createDiv +=   '                   <span style="font-weight: bold" >' + sysPinfl + ':</span>:&nbsp;<span> ' + vo.PINFL + ' </span><br/>\n' ;
-                                                             createDiv +=    '                   <span style="font-weight: bold;color:red" >' + expiredDate + ':</span>:&nbsp;<span style="color:red"> ' + vo.validFrom.toLocaleDateString("en-US") + ' </span>\n' +'-</span>&nbsp;<span style="color:red"> ' + vo.validTo.toLocaleDateString("en-US") + ' </span><br/>\n' ;
-
-                                                         }else{
                                                              createDiv +=    '                   <span style="font-weight: bold" >' + expiredDate + ':</span>:&nbsp;<span> ' + vo.validFrom.toLocaleDateString("en-US") + ' </span>\n' +'-</span>&nbsp;<span> ' + vo.validTo.toLocaleDateString("en-US") + ' </span><br/>\n' ;
                                                              createDiv +=  '               </p>\n' +
                                                                  '               <div class="text-right">\n' +
@@ -186,6 +182,10 @@
                                                                  '                   </button>\n' +
                                                                  '               </div>\n' +
                                                                  '            </div>';
+                                                         }else{
+                                                             createDiv +=   '                   <span style="font-weight: bold" >' + sysPinfl + ':</span>:&nbsp;<span> ' + vo.PINFL + ' </span><br/>\n' ;
+                                                             createDiv +=    '                   <span style="font-weight: bold;color:red" >' + expiredDate + ':</span>:&nbsp;<span style="color:red"> ' + vo.validFrom.toLocaleDateString("en-US") + ' </span>\n' +'-</span>&nbsp;<span style="color:red"> ' + vo.validTo.toLocaleDateString("en-US") + ' </span><br/>\n' ;
+
                                                          }
 
                                                      $('#e-imzo-legal-div').append(createDiv);

@@ -1366,8 +1366,6 @@ public class RegApplicationController {
         characteristics.setAmount(amount);
         characteristics.setSubstanceType(typeBoiler);
         characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
-
-
         characteristics.setDeleted(Boolean.FALSE);
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristics.add(characteristics);
@@ -1413,6 +1411,7 @@ public class RegApplicationController {
         characteristics.setName(name);
         characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
 
+
         characteristics.setAmount(amount);
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristicsSet.add(characteristics);
@@ -1429,7 +1428,7 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "name_boiler2") String name,
             @RequestParam(name = "amount_boiler2") Double amount,
-            @RequestParam(name = "type_boiler1",required = false) Integer boilerEnum
+            @RequestParam(name = "type_boiler2",required = false) Integer boilerEnum
 
     ){
         System.out.println("regId" + regId);
@@ -1453,6 +1452,7 @@ public class RegApplicationController {
         characteristics.setAmount(amount);
         characteristics.setBoilerType(BoilerCharacteristicsEnum.getBoilerCharacteristicById(boilerEnum));
 
+
         characteristics = boilerCharacteristicsService.save(characteristics);
         boilerCharacteristicsSet.add(characteristics);
         regApplication.setBoilerCharacteristics(boilerCharacteristicsSet);
@@ -1468,7 +1468,7 @@ public class RegApplicationController {
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "name_boiler3") String name,
             @RequestParam(name = "amount_boiler3") Double amount,
-            @RequestParam(name = "type_boiler1",required = false) Integer boilerEnum
+            @RequestParam(name = "type_boiler3",required = false) Integer boilerEnum
 
     ){
         System.out.println("regId" + regId);
@@ -1514,21 +1514,32 @@ public class RegApplicationController {
         if (regApplication==null ){
             return response;
         }
-        Set<Integer> materials = regApplication.getMaterials();
-        if(materials.contains(5)  && (regApplication.getBoilerGroups()==null || !regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM))){
-            response.put("status",false);
-        }
-        else  if(materials.contains(6)  &&(regApplication.getBoilerGroups()==null || !regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM))){
-            response.put("status",false);
-        }
-        else if(materials.contains(7)  &&(regApplication.getBoilerGroups()==null || !regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM))){
-            response.put("status",false);
-        }
-        else if(materials.contains(8)  &&(regApplication.getBoilerGroups()==null || !(regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM) && regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM) && regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM)))){
-            response.put("status",false);
-        }
-        else
-        {
+
+        String dateStr ="29.04.2022";
+        Date dateBegin = DateParser.TryParse(dateStr, Common.uzbekistanDateFormat);
+        if(regApplication.getRegistrationDate().after(dateBegin)){
+            List<BoilerCharacteristics> boilerCharacteristics1 =regApplication.getBoilerCharacteristics().stream().filter(boilerCharacteristic->boilerCharacteristic.getSubstanceType()==1).collect(Collectors.toList());
+            List<BoilerCharacteristics> boilerCharacteristics2 =regApplication.getBoilerCharacteristics().stream().filter(boilerCharacteristic->boilerCharacteristic.getSubstanceType()==2).collect(Collectors.toList());
+            List<BoilerCharacteristics> boilerCharacteristics3 =regApplication.getBoilerCharacteristics().stream().filter(boilerCharacteristic->boilerCharacteristic.getSubstanceType()==3).collect(Collectors.toList());
+
+            Set<Integer> materials = regApplication.getMaterials();
+            if(materials.contains(5)  && (regApplication.getBoilerGroups()==null || !regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM)) && (!boilerCharacteristics2.isEmpty() && !regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM))  && (!boilerCharacteristics3.isEmpty() && !regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM) )){
+                response.put("status",false);
+            }
+            else  if(materials.contains(6)  &&(regApplication.getBoilerGroups()==null || !regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM)) && (!boilerCharacteristics1.isEmpty() && !regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM))  && (!boilerCharacteristics3.isEmpty() && !regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM))){
+                response.put("status",false);
+            }
+            else if(materials.contains(7)  &&(regApplication.getBoilerGroups()==null || !regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM)) && (!boilerCharacteristics1.isEmpty() && !regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM))  && (!boilerCharacteristics2.isEmpty() && !regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM)) ){
+                response.put("status",false);
+            }
+            else if(materials.contains(8)  &&(regApplication.getBoilerGroups()==null || !(regApplication.getBoilerGroups().contains(BoilerGroupEnum.TCM) && regApplication.getBoilerGroups().contains(BoilerGroupEnum.OCM) && regApplication.getBoilerGroups().contains(BoilerGroupEnum.CCM))) ){
+                response.put("status",false);
+            }
+            else
+            {
+                response.put("status",true);
+            }
+        }else{
             response.put("status",true);
         }
 
