@@ -1221,6 +1221,8 @@
             }*/
         }
 
+
+
         function checkAllChm () {
 
             $("#materials5").click(function(){
@@ -2209,6 +2211,122 @@
         $("#name_boiler3").select2({
             dropdownParent: $("#boilerModal3")
         });
+        if($('#materials1').is(":checked")) {
+            $("#tchModalBtn").removeClass("d-none")
+            $("#ochModalBtn").removeClass("d-none")
+            $("#chModalBtn").removeClass("d-none")
+        } else {
+            $("#tchModalBtn").addClass("d-none")
+            $("#ochModalBtn").addClass("d-none")
+            $("#chModalBtn").addClass("d-none")
+        }
+        if($('#materials2').is(":checked")) {
+            $("#tchModalBtn").removeClass("d-none")
+            $("#ochModalBtn").removeClass("d-none")
+            $("#chModalBtn").removeClass("d-none")
+        } else {
+            $("#tchModalBtn").addClass("d-none")
+            $("#ochModalBtn").addClass("d-none")
+            $("#chModalBtn").addClass("d-none")
+        }
+        if($('#materials3').is(":checked")) {
+            $("#tchModalBtn").removeClass("d-none")
+            $("#ochModalBtn").removeClass("d-none")
+            $("#chModalBtn").removeClass("d-none")
+        } else {
+            $("#tchModalBtn").addClass("d-none")
+            $("#ochModalBtn").addClass("d-none")
+            $("#chModalBtn").addClass("d-none")
+        }
+        if($('#materials4').is(":checked")) {
+            $("#tchModalBtn").removeClass("d-none")
+            $("#ochModalBtn").removeClass("d-none")
+            $("#chModalBtn").removeClass("d-none")
+        } else {
+            $("#tchModalBtn").addClass("d-none")
+            $("#ochModalBtn").addClass("d-none")
+            $("#chModalBtn").addClass("d-none")
+        }
+        if($('#materials5').is(":checked")) {
+            $("#tchModalBtn").removeClass("d-none")
+            if ($('#materials6').is(":checked")) {
+                $("#ochModalBtn").removeClass("d-none")
+            } else {
+                if(!$('#materials8').is(":checked")) {
+                    $("#ochModalBtn").addClass("d-none")
+                }
+            }
+            if ($('#materials7').is(":checked")) {
+                $("#chModalBtn").removeClass("d-none")
+            } else {
+                if(!$('#materials8').is(":checked")) {
+                    $("#chModalBtn").addClass("d-none")
+                }
+            }
+        } else {
+            if(!$('#materials8').is(":checked")) {
+                $("#tchModalBtn").addClass("d-none")
+            }
+        }
+        if($('#materials6').is(":checked")) {
+            $("#ochModalBtn").removeClass("d-none")
+            if ($('#materials5').is(":checked")) {
+                $("#tchModalBtn").removeClass("d-none")
+            } else {
+                if(!$('#materials8').is(":checked")){
+                    $("#tchModalBtn").addClass("d-none")
+                }
+            }
+            if ($('#materials7').is(":checked")) {
+                $("#chModalBtn").removeClass("d-none")
+            } else {
+                if(!$('#materials8').is(":checked")) {
+                    $("#chModalBtn").addClass("d-none")
+                }
+            }
+        }  else {
+
+            if(!$('#materials8').is(":checked")) {
+                $("#ochModalBtn").addClass("d-none")
+            }
+
+        }
+        if($('#materials7').is(":checked")) {
+            $("#chModalBtn").removeClass("d-none")
+
+            if ($('#materials6').is(":checked")) {
+                $("#ochModalBtn").removeClass("d-none")
+            } else {
+
+                if(!$('#materials8').is(":checked")) {
+                    $("#ochModalBtn").addClass("d-none")
+                }
+
+
+            }
+            if ($('#materials5').is(":checked")) {
+                $("#tchModalBtn").removeClass("d-none")
+            } else {
+                if(!$('#materials8').is(":checked")){
+                    $("#tchModalBtn").addClass("d-none")
+                }
+
+            }
+        } else {
+            if(!$('#materials8').is(":checked")){
+                $("#chModalBtn").addClass("d-none")
+            }
+
+        }
+        if($('#materials8').is(":checked")) {
+            $("#tchModalBtn").removeClass("d-none")
+            $("#ochModalBtn").removeClass("d-none")
+            $("#chModalBtn").removeClass("d-none")
+        } else {
+            if (!$('#materials5').is(":checked")) $("#tchModalBtn").addClass("d-none")
+            if (!$('#materials6').is(":checked")) $("#ochModalBtn").addClass("d-none")
+            if (!$('#materials7').is(":checked")) $("#chModalBtn").addClass("d-none")
+        }
     });
     $("#boiler-table1").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
         $(this).removeClass().addClass("feather icon-check-circle mr-0");

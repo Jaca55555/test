@@ -192,7 +192,7 @@ public class EDSLoginController {
             if(userListPinfl.size()>0){
                 user.setUsername(userEds.getPinfl()+"_"+userListPinfl.size());
             }else {
-                user.setUsername(userEds.getTin().toString());
+                user.setUsername(userEds.getPinfl());
             }
         }
         user.setFirstname(userEds.getFirstname());

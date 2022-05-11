@@ -88,9 +88,9 @@
                                             <li class="nav-item">
                                                 <a class="nav-link show" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false" th:text="#{sys_payment}"></a>
                                             </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link show" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>
-                                            </li>
+<!--                                            <li class="nav-item">-->
+<!--                                                <a class="nav-link show" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>-->
+<!--                                            </li>-->
                                         </ul>
 
                                         <div class="tab-content" id="myTabContent">
@@ -114,9 +114,9 @@
                                             <div class="tab-pane fade" id="payment" role="tabpanel" aria-labelledby="payment-tab">
                                                 <object th:include="expertise/fragment/payment :: payment" th:remove="tag" th:if="${regApplication.invoiceId!=null}"></object>
                                             </div>
-                                            <div class="tab-pane fade" id="log" role="tabpanel" aria-labelledby="log-tab">
-                                                <object th:include="expertise/fragment/log :: log" th:remove="tag"></object>
-                                            </div>
+<!--                                            <div class="tab-pane fade" id="log" role="tabpanel" aria-labelledby="log-tab">-->
+<!--                                                <object th:include="expertise/fragment/log :: log" th:remove="tag"></object>-->
+<!--                                            </div>-->
                                         </div>
 
                                     </div>
