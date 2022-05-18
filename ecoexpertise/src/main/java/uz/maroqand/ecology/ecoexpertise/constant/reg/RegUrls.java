@@ -87,6 +87,7 @@ public class RegUrls {
     public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType2 = RegApplicationFourCategory + "/boiler_characteristics_edit2";
     public static final String RegApplicationFourCategoryBoilerCharacteristicsEditType3 = RegApplicationFourCategory + "/boiler_characteristics_edit3";
     public static final String RegApplicationFourCategoryBoilerCharacteristicsDelete = RegApplicationFourCategory + "/boiler_characteristics_delete";
+    public static final String RegApplicationModificationGet = RegApplicationFourCategory + "/get_modification";
 
     public static final String RegApplicationFourCategoryBoilerSave = RegApplicationFourCategory + "/boiler_characteristics_save";
     public static final String RegApplicationFourCategoryBoilerIsSave = RegApplicationFourCategory + "/boiler_characteristics_is_save";

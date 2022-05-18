@@ -13,6 +13,7 @@ import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
+import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
@@ -1496,6 +1497,16 @@ public class RegApplicationCategoryFourController {
         regApplicationService.updateBoiler(regApplication,user.getId());
         return 1 + "";
     }
+
+    @RequestMapping(value = RegUrls.RegApplicationModificationGet)
+    @ResponseBody
+    public RegApplicationDTO regApplicationModificationGet(
+            @RequestParam(name = "regId") Integer regId
+    ){
+
+        return null;
+    }
+
     @RequestMapping(value = RegUrls.RegApplicationFourCategoryBoilerCharacteristicsEditType2)
     @ResponseBody
     public Object regApplicationFourCategoryBoilerCharacteristicsEdit2(

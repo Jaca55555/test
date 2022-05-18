@@ -189,8 +189,8 @@
                         <tbody>
                         <tr th:each="history,stat:${histories}">
                             <th scope="row" style="padding: 20px 0px" th:text="${stat.count}">1</th>
-                            <td th:text="${@userServiceImpl.findById(history.beforePerformer).getFName()}">Mark</td>
-                            <td th:text="${@userServiceImpl.findById(history.afterPerformer).getFName()}">Mark</td>
+                            <td th:if="${history.beforePerformer!=null}" th:text="${@userServiceImpl.findById(history.beforePerformer).getFName()}">Mark</td>
+                            <td th:if="${history.afterPerformer!=null}" th:text="${@userServiceImpl.findById(history.afterPerformer).getFName()}">Mark</td>
                             <td th:text="${history.createdAt!=null? #dates.format(history.createdAt,'dd.MM.yyyy HH:mm'):''}">Mark</td>
                             <td th:text="${@userServiceImpl.findById(history.createdById).getFName()}">Mark</td>
                         </tr>

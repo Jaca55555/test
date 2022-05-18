@@ -35,6 +35,7 @@ public enum Permissions {
 
     EXPERTISE_REG(23, 2, "sys_permissions.expertise_reg"), //
     EXPERTISE_MONITORING(24, 2, "sys_permissions.expertise_monitoring"), //
+    EXPERTISE_MONITORING_CONCLUSION(55, 2, "sys_permissions.expertise_monitoring_conclusion"), //
     FACTURE_MONITORING(25, 2, "sys_permissions.facture_monitoring"),
     EXPERTISE_AGREE(26, 2, "sys_permissions.expertise_agree"), //
 

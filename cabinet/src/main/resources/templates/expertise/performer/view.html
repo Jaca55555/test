@@ -991,98 +991,103 @@
 
 
 </script>
-<script th:if="${coordinate!=null}">
-    var Map = ol.Map;
-    var View = ol.View;
-    var Draw = ol.interaction.Draw;
-    var TileLayer = ol.layer.Tile;
-    var VectorLayer = ol.layer.Vector;
-    var OSM = ol.source.OSM;
-    var VectorSource = ol.source.Vector;
 
-        var raster = new TileLayer({
-            source: new OSM()
-        });
-
-        var source = new VectorSource({wrapX: false});
-
-        var vector = new VectorLayer({
-            source: source
-        });
-
-        var polyCoords = [];
-        // var coords = "41.30881,69.28178 41.30860,69.28136 41.30790,69.28209 41.30812,69.28250".split(' ');
-        // var coords = "69.28178,41.30881 69.28136,41.30860 69.28209,41.30790 69.28250,41.30812".split(' ');
-        var coords = [];
-
-        coords.push(coordinateLat + "," + coordinateLong);
-        for(var i in coordinateLatLongList){
-            coords.push(coordinateLatLongList[i].latitude + "," + coordinateLatLongList[i].longitude);
-        }
-
-        for (var i in coords) {
-            var c = coords[i].split(',');
-            polyCoords.push(ol.proj.transform([parseFloat(c[0]), parseFloat(c[1])], 'EPSG:4326', 'EPSG:3857'));
-
-            /*$('#mapModal').append('<div class="col-md-12 row form-group">\n' +
-                '                                                <div class="col-md-2">\n' +
-                '                                                    <h4 class="text-right pad-top">#'+(parseInt(i)+1)+'</h4>\n' +
-                '                                                </div>\n' +
-                '                                                <div class="col-md-3">\n' +
-                '                                                    <input type="text" class="form-control" readonly="" value="'+parseFloat(c[1])+'">\n' +
-                '                                                </div>\n' +
-                '                                                <div class="col-md-3 offset-md-2">\n' +
-                '                                                    <input type="text" class="form-control" readonly="" value="'+parseFloat(c[0])+'">\n' +
-                '                                                </div>\n' +
-                '                                            </div>')*/
-        }
-
-        var feature = new ol.Feature({
-            geometry: new ol.geom.Polygon([polyCoords])
-        });
-
-        var layer = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: [feature]
-            })
-        });
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=3d185fb5-c22a-4e5f-a22f-4a5eb5f30744"
+        type="text/javascript"></script>
 
 
-        var map = new Map({
-            layers: [raster, vector, layer],
-            target: 'map',
-            view: new View({
-                // center: ol.proj.fromLonLat([coordinateLat, coordinateLong]),
-                center: ol.proj.transform([parseFloat(coordinateLat), parseFloat(coordinateLong)], 'EPSG:4326', 'EPSG:3857'),
-                zoom: 16
-            })
-        });
+<script th:inline="javascript" th:if="${coordinate!=null}">
 
-        var draw = new Draw({
-            source: source,
-            type: "Polygon"
-        });
-        // map.addInteraction(draw);
+    var coordinateLatLongList = [[${coordinateLatLongList}]];
 
-        map.on("click", function () {
-            var features = vector.getSource().getFeatures();
-            features.forEach(function (feature) {
-                console.log(feature.getGeometry().getCoordinates()[0][0]);
-                var lonlat = new ol.proj.toLonLat(feature.getGeometry().getCoordinates()[0][0]);
-                console.log(lonlat[0]);
-                console.log(lonlat[1]);
-            })
-        });
+    console.log(coordinateLatLongList)
 
-        document.addEventListener('keydown', function(e) {
-            if (e.which == 8)
-                vector.getSource().clear();
-        });
+    var correctCoordinates = coordinateLatLongList.map((item, index)=>([parseFloat(item.longitude), parseFloat(item.latitude)]))
 
-        $('#openMapModal').on('click',function () {
-            setTimeout( function() { map.updateSize();}, 200);
-        })
+    correctCoordinates.push([
+        ...correctCoordinates[0]
+    ])
+
+
+
+    var lats = coordinateLatLongList.map((item, index)=>parseFloat(item.latitude))
+    var sumLats = 0
+    lats.forEach(element => {
+        sumLats += element
+    });
+    var midLat = sumLats/(lats.length)
+
+    var longs = coordinateLatLongList.map((item, index)=>parseFloat(item.longitude))
+    var sumLongs = 0
+    longs.forEach(element => {
+        sumLongs += element
+    });
+    var midLong = sumLongs/(longs.length)
+
+    console.log(correctCoordinates)
+    console.log("midLat", midLat, "midLong", midLong)
+
+    ymaps.ready( init );
+    var myMap;
+    function init () {
+        // Параметры карты можно задать в конструкторе.
+
+
+        myMap = new ymaps.Map(
+            // ID DOM-элемента, в который будет добавлена карта.
+            'map',
+            // Параметры карты.
+            {
+                // Географические координаты центра отображаемой карты.
+                center: [ midLong, midLat  ],
+                // Масштаб.
+                zoom: 15,
+                // Тип покрытия карты: "Спутник".
+                type: 'yandex#satellite'
+            }, {
+                // Поиск по организациям.
+                searchControlProvider: 'yandex#search'
+            }
+        );
+
+        // Создаем ломаную, используя класс GeoObject.
+        var myGeoObject = new ymaps.GeoObject( {
+            // Описываем геометрию геообъекта.
+            geometry: {
+                // Тип геометрии - "Ломаная линия".
+                type: "LineString",
+                // Указываем координаты вершин ломаной.
+                coordinates: correctCoordinates
+            },
+            // Описываем свойства геообъекта.
+            properties: {
+                // Содержимое хинта.
+                hintContent: "Я геообъект",
+                // Содержимое балуна.
+                balloonContent: "Меня можно перетащить"
+            }
+        }, {
+            // Задаем опции геообъекта.
+            // Включаем возможность перетаскивания ломаной.
+            draggable: true,
+            // Цвет линии.
+            strokeColor: "#FFFF00",
+            // Ширина линии.
+            strokeWidth: 5
+        } );
+
+        // Добавляем линии на карту.
+        myMap.geoObjects
+            .add( myGeoObject )
     }
+
+
+    console.log(correctCoordinates)
+
+
+
+
+
 </script>
 
 <!--for table boiler -->
