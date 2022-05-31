@@ -10,6 +10,7 @@ import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 
 import java.util.List;
 import java.util.Set;
@@ -27,11 +28,13 @@ public interface RegApplicationLogRepository extends JpaRepository<RegApplicatio
     List<RegApplicationLog> findByRegApplicationIdAndTypeAndDeletedFalseOrderByIdDesc(Integer regApplicationId, LogType type);
 
     List<RegApplicationLog> findByIdInOrderByIdDesc(Set<Integer> ids);
+    List<RegApplicationLog> findByRegApplicationIdAndStatusAndTypeAndDeletedFalse(Integer regApplicationId,LogStatus status,LogType type);
     List<RegApplicationLog> findAllByStatusAndRegApplicationIdAndDeletedFalseOrderByIdAsc(LogStatus status,Integer regApplicationId);
     RegApplicationLog findTopByRegApplicationIdAndTypeAndIndexAndDeletedFalseOrderByIdDesc(Integer regApplicationId, LogType type, Integer index);
 
     RegApplicationLog findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(Integer regApplicationId);
     RegApplicationLog findTop1ByRegApplicationIdAndTypeAndDeletedFalseOrderByIdDesc(Integer regApplicationId,LogType type);
+    RegApplicationLog findTop1ByStatusAndRegApplicationIdAndTypeAndDeletedFalseOrderByIdAsc(LogStatus status,Integer regApplicationId,LogType type);
 
     List<RegApplicationLog> findByRegApplicationIdAndTypeAndIndexAndDeletedFalseOrderByIdDesc(Integer regApplicationId, LogType type, Integer index);
 

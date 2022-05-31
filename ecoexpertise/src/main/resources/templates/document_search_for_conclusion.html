@@ -83,6 +83,11 @@
                                                         <th class="w-50" th:text="${regApplication.name}"></th>
                                                     </tr>
                                                     <tr>
+                                                        <th class="w-50" th:text="#{sys_about.activity}"></th>
+                                                        <th class="w-50" th:if="${regApplication.activityId}"  th:text="${@helperService.getActivity(regApplication.activityId, #locale)}"></th>
+                                                    </tr>
+
+                                                    <tr>
                                                         <th class="w-50" th:text="#{mntr_expertise_requirement.qty}"></th>
                                                         <th class="w-50" th:if="${invoice!=null}" th:text="*{#numbers.formatDecimal(invoice.amount, 1, 'WHITESPACE', 2, 'POINT')}"></th>
                                                         <th class="w-50" th:unless="${invoice!=null}"></th>

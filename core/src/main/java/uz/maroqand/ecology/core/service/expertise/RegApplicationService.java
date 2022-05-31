@@ -22,6 +22,8 @@ public interface RegApplicationService {
     Integer sendSMSCode(String mobilePhone,Integer regApplicationId);
 
     void update(RegApplication regApplication);
+    void cancelModification();
+    void closeModificationTimer();
 
     RegApplication create(User user, RegApplicationInputType inputType, RegApplicationCategoryType categoryType);
     RegApplication getByOfferId(Integer offerId);

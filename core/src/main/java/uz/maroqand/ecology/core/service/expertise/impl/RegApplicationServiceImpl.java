@@ -32,6 +32,7 @@ import uz.maroqand.ecology.core.util.DateParser;
 
 import javax.persistence.criteria.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RegApplicationServiceImpl implements RegApplicationService {
@@ -156,6 +157,60 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     public void update(RegApplication regApplication){
         regApplication.setUpdateAt(new Date());
         regApplicationRepository.save(regApplication);
+    }
+
+    @Override
+    public void cancelModification() {
+        List<RegApplicationStatus> statusList = new LinkedList<>();
+        statusList.add(RegApplicationStatus.ModificationCanceled);
+        statusList.add(RegApplicationStatus.Modification);
+        statusList.add(RegApplicationStatus.Process);
+        List<RegApplication> regApplicationIds = regApplicationRepository.findAllByStatusInAndDeletedFalseOrderByIdDesc(statusList);
+        for(RegApplication regApplication:regApplicationIds){
+            List<RegApplicationLog> modificationRegApplicationLogList = regApplicationLogService.findByStatusAndType(regApplication.getId(),LogStatus.Modification,LogType.Performer);
+            List<RegApplicationLog> agreementRegApplicationLogList = regApplicationLogService.findByStatusAndType(regApplication.getId(),LogStatus.Approved,LogType.Agreement);
+            List<RegApplicationLog> agreementCompleteRegApplicationLogList = regApplicationLogService.findByStatusAndType(regApplication.getId(),LogStatus.Approved,LogType.AgreementComplete);
+            List<RegApplicationLog> conclusionCompleteRegApplicationLogList = regApplicationLogService.findByStatusAndType(regApplication.getId(),LogStatus.Approved,LogType.ConclusionComplete);
+
+            if(modificationRegApplicationLogList.size()>=2 && agreementCompleteRegApplicationLogList.size()%2==0 && agreementRegApplicationLogList.size()%2==0 && conclusionCompleteRegApplicationLogList.size()%2==0){
+                regApplication.setStatus(RegApplicationStatus.ModificationCanceled);
+                regApplication.setUpdateAt(new Date());
+                regApplicationRepository.save(regApplication);
+    }
+        }
+    }
+
+    @Override
+    public void closeModificationTimer() {
+        List<RegApplicationStatus> statusList = new LinkedList<>();
+        statusList.add(RegApplicationStatus.ModificationCanceled);
+        statusList.add(RegApplicationStatus.Modification);
+        statusList.add(RegApplicationStatus.Process);
+        List<RegApplication> regApplicationIds = regApplicationRepository.findAllByStatusInAndDeletedFalseOrderByIdDesc(statusList);
+        for(RegApplication regApplication:regApplicationIds){
+            RegApplicationLog regApplicationLog = regApplicationLogService.findTop1ByStatusAndType(regApplication.getId(),LogStatus.Modification,LogType.Performer);
+            if(regApplicationLog!=null){
+                Date createdDate = regApplicationLog.getCreatedAt();
+                Calendar c = Calendar.getInstance();
+                Date date = new Date();
+                c.setTime(date);
+                c.add(Calendar.DATE,-61);    // shu kunning o'zi ham qo'shildi
+                Date expireDate = c.getTime();
+
+                if (createdDate.before(expireDate)){
+                    if(regApplication.getStatus()==RegApplicationStatus.Modification){
+                        regApplication.setStatus(RegApplicationStatus.ModificationCanceled);
+                        regApplication.setUpdateAt(new Date());
+                        regApplicationRepository.save(regApplication);
+                    }
+                }
+            }
+
+        }
+
+
+
+
     }
 
     public RegApplication getById(Integer id) {

@@ -116,12 +116,12 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client saveIndividual(IndividualDto individualDto, User user, String message) {
 
-        Client client = clientRepository.findTop1ByPinflAndDeletedFalseOrderByIdDesc(individualDto.getIndividualPinfl());
-        if(client==null){
-            client = new Client();
+//         client = clientRepository.findTop1ByPinflAndDeletedFalseOrderByIdDesc(individualDto.getIndividualPinfl());
+//        if(client==null){
+        Client   client = new Client();
             client.setCreatedAt(new Date());
             client.setCreatedById(user.getId());
-        }
+//        }
         client = clientRepository.save(client);
         String before = gson.toJson(client);
 

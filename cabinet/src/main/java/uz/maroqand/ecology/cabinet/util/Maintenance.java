@@ -13,6 +13,7 @@ import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.billing.PaymentType;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.telegram.SendQueryType;
 import uz.maroqand.ecology.core.dto.api.*;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
@@ -24,6 +25,8 @@ import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.expertise.Requirement;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.repository.expertise.RegApplicationLogRepository;
+import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
@@ -44,6 +47,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Utkirbek Boltaev on 21.06.2018.
@@ -269,6 +273,13 @@ public class Maintenance {
 
     }
 
+    public static void closeModificationRegApplications( RegApplicationService regApplicationService){
+                    regApplicationService.cancelModification();
+
+    }
+    public static void closeModificationTime(RegApplicationLogService regApplicationLogService,RegApplicationService regApplicationService){
+       regApplicationService.closeModificationTimer();
+    }
 
     public static void sendRegApplicationNotDeliver(Integer regApplicationId, RegApplicationLogService regApplicationLogService,RegApplicationService regApplicationService, ConclusionService conclusionService, FileService fileService, RestTemplate restTemplate) throws IOException {
             RegApplication regApplication = regApplicationService.getById(regApplicationId);

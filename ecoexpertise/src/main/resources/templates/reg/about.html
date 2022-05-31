@@ -344,7 +344,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler1()"><span th:text="#{sys_save}"></span></button>
+<!--                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler1()"><span th:text="#{sys_save}"></span></button>-->
 <!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
                                                         </div>
                                                     </div>
@@ -458,7 +458,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler2()"><span th:text="#{sys_save}"></span></button>
+<!--                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler2()"><span th:text="#{sys_save}"></span></button>-->
 <!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
                                                         </div>
                                                     </div>
@@ -572,7 +572,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler3()"><span th:text="#{sys_save}"></span></button>
+<!--                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler3()"><span th:text="#{sys_save}"></span></button>-->
 <!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
                                                         </div>
                                                     </div>
@@ -941,7 +941,7 @@
                             <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
                                <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
                             </span>
-                            <input name="uploaded_file" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+                            <input name="uploaded_file" required="required" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
                           </span>
                         <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" placeholder="sdfsdfsdfsdf">
 
@@ -2132,66 +2132,7 @@
     }
 
 
-    function saveBoiler1() {
-        // $('#boiler_name').parsley().validate();
 
-        $.ajax({
-            url: saveBoilerLink,
-            data: $("#boiler_form1").serialize()+"&typeBoiler=1",
-            type: 'post',
-            dataType: 'json',
-            success: function (response) {
-
-                if (response.status == 1) {
-                    $('#alert-isSave1').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                } else {
-                    $('#alert-isSave1').html('<div class="alert alert-warning alert-dismissible" role="alert">' + isNotSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                }
-            },
-            error: function () {
-            }
-        });
-    }
-
-
-    function saveBoiler2() {
-        // $('#boiler_name').parsley().validate();
-        $.ajax({
-            url: saveBoilerLink,
-            data: $("#boiler_form2").serialize()+"&typeBoiler=2",
-            type: 'post',
-            dataType: 'json',
-            success: function (response) {
-
-                if (response.status == 1) {
-                    $('#alert-isSave2').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                } else {
-                    $('#alert-isSave2').html('<div class="alert alert-warning alert-dismissible" role="alert">' + isNotSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                }
-            },
-            error: function () {
-            }
-        });
-    }
-    function saveBoiler3() {
-        // $('#boiler_name').parsley().validate();
-        $.ajax({
-            url: saveBoilerLink,
-            data: $("#boiler_form3").serialize()+"&typeBoiler=3",
-            type: 'post',
-            dataType: 'json',
-            success: function (response) {
-
-                if (response.status == 1) {
-                    $('#alert-isSave3').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                } else {
-                    $('#alert-isSave3').html('<div class="alert alert-warning alert-dismissible" role="alert">' + isNotSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                }
-            },
-            error: function () {
-            }
-        });
-    }
     var n=0;
 
 
@@ -2251,7 +2192,7 @@
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
 
-                            '<td  style="width: 20%" >' + typeBoiler[type]  + '</td>' +
+                            '<td  style="width: 20%" >'+'[[#{' + typeBoiler[type] +'}]]' + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '    \n" >' + amount + '</td>' +
@@ -2316,7 +2257,7 @@
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
-                            '<td  style="width: 20%" >' + typeBoiler[type] + '</td>' +
+                            '<td  style="width: 20%" >' +'[[#{' + typeBoiler[type] +'}]]' + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '    \n" >' + amount + '</td>' +
@@ -2379,7 +2320,7 @@
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
-                            '<td  style="width: 20%" >' + typeBoiler[type] + '</td>' +
+                            '<td  style="width: 20%" >' +'[[#{' + typeBoiler[type] +'}]]' + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '   \n" >' + amount + '</td>' +

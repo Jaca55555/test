@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
@@ -18,8 +19,6 @@ import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.cabinet.util.Maintenance;
 import uz.maroqand.ecology.docmanagement.service.Bot;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
-
-import java.io.IOException;
 
 /**
  * Created by Sadullayev Akmal on 04.05.2020.
@@ -36,6 +35,7 @@ public class ScheduledTasks {
     private final Bot bot;
     private final PaymentService paymentService;
     private final OrganizationService organizationService;
+    private final RegApplicationRepository regApplicationRepository;
     private final PaymentFileService paymentFileService;
     private final RegApplicationLogService regApplicationLogService;
     private final RequirementService requirementService;
@@ -45,7 +45,7 @@ public class ScheduledTasks {
 
     private Logger logger = LogManager.getLogger(ScheduledTasks.class);
 
-    public ScheduledTasks(InvoiceService invoiceService, RegApplicationService regApplicationService, UserService userService, DocumentTaskSubService documentTaskSubService, Bot bot, PaymentService paymentService, OrganizationService organizationService, PaymentFileService paymentFileService, RegApplicationLogService regApplicationLogService, RequirementService requirementService, ConclusionService conclusionService, FileService fileService, RestTemplate restTemplate) {
+    public ScheduledTasks(InvoiceService invoiceService, RegApplicationService regApplicationService, UserService userService, DocumentTaskSubService documentTaskSubService, Bot bot, PaymentService paymentService, OrganizationService organizationService, RegApplicationRepository regApplicationRepository, PaymentFileService paymentFileService, RegApplicationLogService regApplicationLogService, RequirementService requirementService, ConclusionService conclusionService, FileService fileService, RestTemplate restTemplate) {
         this.invoiceService = invoiceService;
         this.regApplicationService = regApplicationService;
         this.userService = userService;
@@ -53,6 +53,7 @@ public class ScheduledTasks {
         this.bot = bot;
         this.paymentService = paymentService;
         this.organizationService = organizationService;
+        this.regApplicationRepository = regApplicationRepository;
         this.paymentFileService = paymentFileService;
         this.regApplicationLogService = regApplicationLogService;
         this.requirementService = requirementService;
@@ -80,33 +81,15 @@ public class ScheduledTasks {
 
     }
 
-    @Scheduled(cron = "0 55 15 * * *")
-    public void sendEcoFonds() throws IOException {
-        logger.info("\n" +
-                "/*****************************/\n" +
-                "/       CRON TASK STARTED      /\n" +
-                "/*****************************/\n"
-        );
-
-        Maintenance.sendEcoFonds(conclusionService,regApplicationService,regApplicationLogService,restTemplate, fileService);
-
-        logger.info("\n" +
-                "/*****************************/\n" +
-                "/       CRON TASK FINISHED     /\n" +
-                "/*****************************/\n"
-        );
-
-    }
-
-//    @Scheduled(cron = "0 20 15 * * *")
-//    public void importPayment() {
+//    @Scheduled(cron = "0 55 15 * * *")
+//    public void sendEcoFonds() throws IOException {
 //        logger.info("\n" +
 //                "/*****************************/\n" +
 //                "/       CRON TASK STARTED      /\n" +
 //                "/*****************************/\n"
 //        );
-//        System.out.println("--removeInvoice--");
-//        Maintenance.recievePaymentFiles(paymentFileService,invoiceService,paymentService,regApplicationService,organizationService);
+//
+//        Maintenance.sendEcoFonds(conclusionService,regApplicationService,regApplicationLogService,restTemplate, fileService);
 //
 //        logger.info("\n" +
 //                "/*****************************/\n" +
@@ -115,6 +98,40 @@ public class ScheduledTasks {
 //        );
 //
 //    }
+
+
+    @Scheduled(cron = "0 50 8 * * *")
+    public void cancelModification() {
+        logger.info("\n" +
+                "/*****************************/\n" +
+                "/       CRON TASK STARTED      /\n" +
+                "/*****************************/\n"
+        );
+        Maintenance.closeModificationRegApplications(regApplicationService);
+        logger.info("\n" +
+                "/*****************************/\n" +
+                "/       CRON TASK FINISHED     /\n" +
+                "/*****************************/\n"
+        );
+
+    }
+
+    @Scheduled(cron = "0 20 10 * * *")
+    public void cancelModificationTimer() {
+        logger.info("\n" +
+                "/*****************************/\n" +
+                "/       CRON TASK STARTED      /\n" +
+                "/*****************************/\n"
+        );
+
+        Maintenance.closeModificationTime(regApplicationLogService,regApplicationService);
+        logger.info("\n" +
+                "/*****************************/\n" +
+                "/       CRON TASK FINISHED     /\n" +
+                "/*****************************/\n"
+        );
+
+    }
 
 //    @Scheduled(cron = "0 40 13 * * *")
 //    public void sendRegApplicationNotDeliver() throws IOException {
