@@ -2061,6 +2061,7 @@
             form.append("regId", regApplicationId);
             form.append("name", name);
             form.append("type", type);
+            form.append("boilerEnum", type);
             form.append("amount", amount);
             form.append("typeBoiler",1);
             form.append("_csrf", _csrf);
@@ -2087,12 +2088,20 @@
                         var amount = response.data.amount;
                         var actions = '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
                         cancelExecutive();
+                        let boilerT;
+                        if(typeBoiler[type] =='TONNA'){
+                            boilerT=[[#{tonna}]]
+                        }else if(typeBoiler[type] =='KG'){
+                            boilerT=[[#{kg}]]
+                        }else{
+                            boilerT=[[#{m3}]]
+                        }
                         $('#boiler-table1 tbody tr:last').after('' +
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
 
-                            '<td  style="width: 20%" >' +'[[#{' + typeBoiler[type] +'}]]' + '</td>' +
+                            '<td  style="width: 20%" >' +boilerT + '</td>' +
 
                             '<td style="\n' +
                             '    width: 15%;\n' +
@@ -2124,6 +2133,7 @@
             form.append("regId", regApplicationId);
             form.append("name", name);
             form.append("type", type);
+            form.append("boilerEnum", type);
             form.append("amount", amount);
             form.append("typeBoiler",2);
             form.append("_csrf", _csrf);
@@ -2153,11 +2163,19 @@
                         var amount = response.data.amount;
                         var actions =     '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
                         cancelExecutive();
+                        let boilerT2;
+                        if(typeBoiler[type] =='TONNA'){
+                            boilerT2=[[#{tonna}]]
+                        }else if(typeBoiler[type] =='KG'){
+                            boilerT2=[[#{kg}]]
+                        }else{
+                            boilerT2=[[#{m3}]]
+                        }
                         $('#boiler-table2 tbody tr:last').after('' +
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
-                            '<td  style="width: 20%" >' +'[[#{' + typeBoiler[type] +'}]]' + '</td>' +
+                            '<td  style="width: 20%" >'+boilerT2 + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '    \n" >' + amount + '</td>' +
@@ -2188,6 +2206,7 @@
             form.append("regId", regApplicationId);
             form.append("name", name);
             form.append("type", type);
+            form.append("boilerEnum", type);
             form.append("amount", amount);
             form.append("typeBoiler",3);
             form.append("_csrf", _csrf);
@@ -2215,11 +2234,19 @@
                         var amount = response.data.amount;
                         var actions =    '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
                         cancelExecutive();
+                        let boilerT3;
+                        if(typeBoiler[type] =='TONNA'){
+                            boilerT3=[[#{tonna}]]
+                        }else if(typeBoiler[type] =='KG'){
+                            boilerT3=[[#{kg}]]
+                        }else{
+                            boilerT3=[[#{m3}]]
+                        }
                         $('#boiler-table3 tbody tr:last').after('' +
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
-                            '<td  style="width: 20%" >' +'[[#{' + typeBoiler[type] +'}]]' + '</td>' +
+                            '<td  style="width: 20%" >' +boilerT3 + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '    \n" >' + amount + '</td>' +

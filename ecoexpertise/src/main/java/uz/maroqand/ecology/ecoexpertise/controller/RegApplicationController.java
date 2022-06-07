@@ -264,6 +264,9 @@ public class RegApplicationController {
         if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
             return "redirect:" + RegUrls.RegApplicationFourCategoryResume + "?id=" + regApplication.getId();
         }
+        if(regApplication.getStatus()==RegApplicationStatus.ModificationCanceled){
+            return "redirect:" + RegUrls.RegApplicationList;
+        }
 
         switch (regApplication.getStep()){
             case APPLICANT: return "redirect:" + RegUrls.RegApplicationApplicant + "?id=" + regApplication.getId();

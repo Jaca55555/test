@@ -208,7 +208,7 @@ public class DocumentEditorServiceImpl implements DocumentEditorService {
                     int white = 255 << 16 | 255 << 8 | 255;
                     int black = 0;
 
-                    String url = "http://cb.eco-service.uz/repository/get-document";
+                    String url = "https://cb.eco-service.uz/repository/get-document";
 
                     try {
                         BitMatrix bitMatrix = writer.encode(url + "/" + documentRepo.getUuid(), BarcodeFormat.QR_CODE, width, height);

@@ -13,15 +13,11 @@ import java.io.IOException;
 @Data
 public class RegApplicationDTO {
     private SubjectDTO subject;
-    //normativ hujjatlar
     private DocumentDTO document;
     public static RegApplicationDTO fromEntity(RegApplication model, ConclusionService conclusionService, FileService fileService) {
         RegApplicationDTO dto = new RegApplicationDTO();
         dto.setSubject(SubjectDTO.fromEntity(model));
-        //normativ hujjatlar
         dto.setDocument(DocumentDTO.fromEntity(model,conclusionService,fileService));
-
-
         return dto;
     }
 

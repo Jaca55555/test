@@ -98,7 +98,7 @@ public class ApplicantController {
     @RequestMapping(value = ExpertiseUrls.ApplicantListAjax,produces = "application/json")
     @ResponseBody
     public HashMap<String,Object> appealUserListAjax(
-            @RequestParam(name = "type", required = false) ApplicantType type,
+            @RequestParam(name = "type", required = false) Integer type,
             @RequestParam(name = "tin", required = false) String tin,
             @RequestParam(name = "name", required = false) String name,
             @RequestParam(name = "opfId", required = false) Integer opfId,
@@ -115,8 +115,9 @@ public class ApplicantController {
         name=StringUtils.trimToNull(name);
         oked=StringUtils.trimToNull(oked);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
+        System.out.println("type="+type);
 
-        Page<Client> clientPage = clientService.findFiltered(type,tin,name,opfId,oked,regionId,subRegionId,dateBegin,dateEnd, pageable);
+        Page<Client> clientPage = clientService.findFiltered(ApplicantType.getApplicantType(type),tin,name,opfId,oked,regionId,subRegionId,dateBegin,dateEnd, pageable);
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", clientPage.getTotalElements()); //Total elements

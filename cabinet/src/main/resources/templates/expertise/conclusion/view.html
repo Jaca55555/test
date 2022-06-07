@@ -79,7 +79,7 @@
                                             <div class="tab-content" id="myTabContent" >
                                                 <div   th:class="${iter.index==0?'tab-pane fade show active':'tab-pane fade'}" th:each="documentFile,iter :${performerLog.documentFiles}"  th:id="${'online' + documentFile.id}" role="tabpanel" th:aria-labelledby="${'applicant'+documentFile.id+'-tab'}">
                                                     <div  style="border: #6e45e2 1px dashed;  height: 800px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >
-                                                        <iframe th:src="${'http://docs.google.com/gview?url=http://cb.eco-service.uz/expertise/conclusion/reg_file_download_for_view?id='+performerLog.id+'_' + documentFile.id +'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+                                                        <iframe th:src="${'https://docs.google.com/gview?url=http://cb.eco-service.uz/expertise/conclusion/reg_file_download_for_view?id='+performerLog.id+'_' + documentFile.id +'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
                                                     </div>
                                                 </div>
                                             </div>

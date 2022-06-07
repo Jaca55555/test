@@ -103,7 +103,7 @@ public class RegApplicationMonitoringController {
     ) {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         User user = userService.getCurrentUserFromContext();
-
+//        System.out.println("filterDto="+filterDto.getName());
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
                 userService.isAdmin()||user.getRole().getId()==16?null:user.getOrganizationId(),

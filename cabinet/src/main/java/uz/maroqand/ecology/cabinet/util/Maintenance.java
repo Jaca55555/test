@@ -278,7 +278,7 @@ public class Maintenance {
 
     }
     public static void closeModificationTime(RegApplicationLogService regApplicationLogService,RegApplicationService regApplicationService){
-       regApplicationService.closeModificationTimer();
+//       regApplicationService.closeModificationTimer();
     }
 
     public static void sendRegApplicationNotDeliver(Integer regApplicationId, RegApplicationLogService regApplicationLogService,RegApplicationService regApplicationService, ConclusionService conclusionService, FileService fileService, RestTemplate restTemplate) throws IOException {

@@ -282,7 +282,7 @@ public class ClientServiceImpl implements ClientService {
                 List<Predicate> predicates = new LinkedList<>();
 
                 if(type!=null){
-                    predicates.add(criteriaBuilder.equal(root.get("type"), type.ordinal()));
+                    predicates.add(criteriaBuilder.equal(root.get("type"), type));
                 }
 
                 if(tin!=null){

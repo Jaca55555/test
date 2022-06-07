@@ -100,7 +100,7 @@ public class ScheduledTasks {
 //    }
 
 
-    @Scheduled(cron = "0 50 8 * * *")
+    @Scheduled(cron = "0 50 18 * * *")
     public void cancelModification() {
         logger.info("\n" +
                 "/*****************************/\n" +
@@ -116,7 +116,7 @@ public class ScheduledTasks {
 
     }
 
-    @Scheduled(cron = "0 20 10 * * *")
+    @Scheduled(cron = "0 0 20 * * *")
     public void cancelModificationTimer() {
         logger.info("\n" +
                 "/*****************************/\n" +
