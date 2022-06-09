@@ -102,7 +102,6 @@ public class ForwardingController {
     @RequestMapping(ExpertiseUrls.ForwardingList)
     public String getForwardingListPage(Model model){
         List<LogStatus> logStatusList = new ArrayList<>();
-        logStatusList.add(LogStatus.Initial);
         logStatusList.add(LogStatus.Resend);
         logStatusList.add(LogStatus.Approved);
 

@@ -370,8 +370,6 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
                     predicates.add(criteriaBuilder.equal(root.join("regApplication").get("objectId"), filterDto.getObjectId()));
                 }
 
-
-
                 if(filterDto.getStatus()!=null){
                     predicates.add(criteriaBuilder.equal(root.get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
                 }

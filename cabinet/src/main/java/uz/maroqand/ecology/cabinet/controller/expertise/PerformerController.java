@@ -123,7 +123,6 @@ public class PerformerController {
     @RequestMapping(ExpertiseUrls.PerformerList)
     public String getPerformerListPage(Model model){
         List<LogStatus> logStatusList = new ArrayList<>();
-        logStatusList.add(LogStatus.Initial);
         logStatusList.add(LogStatus.Resend);
         logStatusList.add(LogStatus.Modification);
         logStatusList.add(LogStatus.Denied);

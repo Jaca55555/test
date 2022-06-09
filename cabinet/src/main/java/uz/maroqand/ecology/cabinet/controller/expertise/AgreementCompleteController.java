@@ -101,7 +101,6 @@ public class AgreementCompleteController {
     @RequestMapping(value = ExpertiseUrls.AgreementCompleteList)
     public String getConfirmListPage(Model model) {
         List<LogStatus> logStatusList = new ArrayList<>();
-        logStatusList.add(LogStatus.Initial);
         logStatusList.add(LogStatus.Denied);
         logStatusList.add(LogStatus.Approved);
 
