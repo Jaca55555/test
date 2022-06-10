@@ -405,8 +405,19 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 if (filterDto.getSubRegionId() != null) {
                     predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
                 }
+                switch (logType){
+                    case Confirm:
+
+                    case Forwarding:
+                        predicates.add(criteriaBuilder.equal(root.join("forwardingLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
+                    case Performer:
+                        predicates.add(criteriaBuilder.equal(root.get("performerLogId"), filterDto.getStatus()));
+                    case Agreement:
+                        predicates.add(criteriaBuilder.equal(root.get(""), filterDto.getStatus()));
+                    case AgreementComplete:
+                }
                 if (filterDto.getStatus() != null) {
-                    predicates.add(criteriaBuilder.equal(root.join("forwardingLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
+
                 }
 
                 Date regDateBegin = DateParser.TryParse(filterDto.getRegDateBegin(), Common.uzbekistanDateFormat);
