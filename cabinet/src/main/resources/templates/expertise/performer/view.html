@@ -145,9 +145,9 @@
                                                 <a class="nav-link show px-2" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" th:text="#{sys_chat_by_applicant}" style="width: 85%;float: left"></a>
                                                 <span class="rounded-notification w-15 text-center" th:if="${commentCount}!=0" style="height: 20px;margin-top: 10%;" th:text="${commentCount}">2</span>
                                             </li>
-<!--                                            <li class="nav-item">-->
-<!--                                                <a class="nav-link show px-2" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>-->
-<!--                                            </li>-->
+                                            <li class="nav-item">
+                                                <a class="nav-link show px-2" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>
+                                            </li>
                                         </ul>
                                         <div class="tab-content" id="myTabContent">
                                             <div class="tab-pane fade" id="applicant" role="tabpanel" aria-labelledby="applicant-tab">
@@ -462,9 +462,9 @@
                                             <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
                                                 <object th:include="expertise/performer/chat_fragment :: chat" th:remove="tag"></object>
                                             </div>
-<!--                                            <div class="tab-pane fade" id="log" role="tabpanel" aria-labelledby="log-tab">-->
-<!--                                                <object th:include="expertise/fragment/log :: log" th:remove="tag"></object>-->
-<!--                                            </div>-->
+                                            <div class="tab-pane fade" id="log" role="tabpanel" aria-labelledby="log-tab">
+                                                <object th:include="expertise/fragment/log :: log" th:remove="tag"></object>
+                                            </div>
                                         </div>
 
                                     </div>

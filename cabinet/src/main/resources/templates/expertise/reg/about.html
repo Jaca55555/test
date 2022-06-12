@@ -1439,7 +1439,8 @@
             $('#about-form').submit();
         }
 
-        $('#projectDeveloperTin').change(function () {
+        $('#projectDeveloperTin').change(function ()
+        {
             var TIN = $(this).val();
             if(TIN.length != 9) return;
             $('#projectDeveloperNameNotification').hide();

@@ -404,48 +404,72 @@ public class RegApplicationServiceImpl implements RegApplicationService {
             final Integer userId,
             final RegApplicationInputType regApplicationInputType
     ) {
-        return new Specification<RegApplication>() {
-            @Override
-            public Predicate toPredicate(Root<RegApplication> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-                List<Predicate> predicates = new LinkedList<>();
+        return (root, criteriaQuery, criteriaBuilder) -> {
+            List<Predicate> predicates = new LinkedList<>();
 
-                //Ko'rib chiquvchi organization
-                if(reviewId!=null){
-                    predicates.add(criteriaBuilder.equal(root.get("reviewId"),reviewId));
+            //Ko'rib chiquvchi organization
+            if(reviewId!=null){
+                predicates.add(criteriaBuilder.equal(root.get("reviewId"),reviewId));
+            }
+
+            System.out.println("logType="+logType);
+            if(logType!=null){
+                switch (logType){
+                    case Confirm:
+                        predicates.add(criteriaBuilder.isNotNull(root.get("confirmLogId")));break;
+                    case Forwarding:
+                        predicates.add(criteriaBuilder.isNotNull(root.get("forwardingLogId")));break;
+                    case Performer:
+                        predicates.add(criteriaBuilder.isNotNull(root.get("performerLogId")));break;
+                    /*case Agreement:
+                        predicates.add(criteriaBuilder.isNotNull(root.get("agreementLogId")));break;*/
+                    case AgreementComplete:
+                        predicates.add(criteriaBuilder.isNotNull(root.get("agreementCompleteLogId")));break;
                 }
+            }
 
-                System.out.println("logType="+logType);
-                if(logType!=null){
-                    switch (logType){
-                        case Confirm:
-                            predicates.add(criteriaBuilder.isNotNull(root.get("confirmLogId")));break;
-                        case Forwarding:
-                            predicates.add(criteriaBuilder.isNotNull(root.get("forwardingLogId")));break;
-                        case Performer:
-                            predicates.add(criteriaBuilder.isNotNull(root.get("performerLogId")));break;
-                        /*case Agreement:
-                            predicates.add(criteriaBuilder.isNotNull(root.get("agreementLogId")));break;*/
-                        case AgreementComplete:
-                            predicates.add(criteriaBuilder.isNotNull(root.get("agreementCompleteLogId")));break;
-                    }
-                }
-
-                if (filterDto!=null) {
-                    if (filterDto.getRegApplicationStatus()!=null){
+            if (filterDto!=null) {
+                if (filterDto.getRegApplicationStatus()!=null){
 //                        System.out.println(filterDto.getRegApplicationStatus().getName());
-                        predicates.add(criteriaBuilder.equal(root.get("status"),filterDto.getRegApplicationStatus()));
-                    }
-                    if(filterDto.getRegApplicationCategoryType()!=null){
-                        predicates.add(criteriaBuilder.equal(root.get("regApplicationCategoryType"),filterDto.getRegApplicationCategoryType()));
-                    }
-                    if (filterDto.getStatusForReg()!=null){
-                        predicates.add(criteriaBuilder.in(root.get("status")).value(filterDto.getStatusForReg()));
-                    }
+                    predicates.add(criteriaBuilder.equal(root.get("status"),filterDto.getRegApplicationStatus()));
+                }
+                if(filterDto.getRegApplicationCategoryType()!=null){
+                    predicates.add(criteriaBuilder.equal(root.get("regApplicationCategoryType"),filterDto.getRegApplicationCategoryType()));
+                }
+                if (filterDto.getStatusForReg()!=null){
+                    predicates.add(criteriaBuilder.in(root.get("status")).value(filterDto.getStatusForReg()));
+                }
 
 
 //                    if(filterDto.getContractNumber()!=null && !filterDto.getContractNumber().isEmpty()){
 //                        predicates.add(criteriaBuilder.like(root.get("contractNumber"),"%" + StringUtils.trimToNull(filterDto.getContractNumber()) + "%"));
 //                    }
+                if (filterDto.getTin() != null) {
+                    predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
+                }
+                if (StringUtils.trimToNull(filterDto.getName()) != null) {
+                    predicates.add(criteriaBuilder.like(root.join("applicant").<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
+                }
+                if (filterDto.getApplicationId() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("id"), filterDto.getApplicationId()));
+                }
+                if(filterDto.getOrganizationId() != null){
+                    predicates.add(criteriaBuilder.equal(root.get("reviewId"),filterDto.getOrganizationId()));
+               }
+                if (filterDto.getRegionId() != null) {
+                    predicates.add(criteriaBuilder.equal(root.join("applicant").get("regionId"), filterDto.getRegionId()));
+                }
+                if(filterDto.getCategory()!=null){
+                    predicates.add(criteriaBuilder.equal(root.get("category"),filterDto.getCategory()));
+                }
+                if (filterDto.getSubRegionId() != null) {
+                    predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
+                }
+                if (filterDto.getStatus() != null) {
+                    predicates.add(criteriaBuilder.equal(root.join("forwardingLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
+                }
+
+
                     if (filterDto.getTin() != null) {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
                     }
@@ -468,101 +492,100 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                         predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
                     }
 
-                    Date regDateBegin = DateParser.TryParse(filterDto.getRegDateBegin(), Common.uzbekistanDateFormat);
-                    Date regDateEnd = DateParser.TryParse(filterDto.getRegDateEnd(), Common.uzbekistanDateFormat);
+                Date regDateBegin = DateParser.TryParse(filterDto.getRegDateBegin(), Common.uzbekistanDateFormat);
+                Date regDateEnd = DateParser.TryParse(filterDto.getRegDateEnd(), Common.uzbekistanDateFormat);
 
-                    if (regDateBegin != null && regDateEnd == null) {
-                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), regDateBegin));
-                    }
-                    if (regDateEnd != null && regDateBegin == null) {
-                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), regDateEnd));
-                    }
-                    if (regDateBegin != null && regDateEnd != null) {
-                        predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), regDateBegin, regDateEnd));
-                    }
-                    Date deadlineDate = DateParser.TryParse(filterDto.getDeadlineDate(), Common.uzbekistanDateFormat);
+                if (regDateBegin != null && regDateEnd == null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createdAt").as(Date.class), regDateBegin));
+                }
+                if (regDateEnd != null && regDateBegin == null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt").as(Date.class), regDateEnd));
+                }
+                if (regDateBegin != null && regDateEnd != null) {
+                    predicates.add(criteriaBuilder.between(root.get("createdAt").as(Date.class), regDateBegin, regDateEnd));
+                }
+                Date deadlineDate = DateParser.TryParse(filterDto.getDeadlineDate(), Common.uzbekistanDateFormat);
 
-                    if (deadlineDate != null) {
-                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate").as(Date.class),deadlineDate));
-                    }
+                if (deadlineDate != null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate").as(Date.class),deadlineDate));
+                }
 
-                    Date dateBegin = DateParser.TryParse(filterDto.getDateBegin(), Common.uzbekistanDateFormat);
-                    Date dateEnd = DateParser.TryParse(filterDto.getDateEnd(), Common.uzbekistanDateFormat);
+                Date dateBegin = DateParser.TryParse(filterDto.getDateBegin(), Common.uzbekistanDateFormat);
+                Date dateEnd = DateParser.TryParse(filterDto.getDateEnd(), Common.uzbekistanDateFormat);
 //                    System.out.println("dateBegin"+dateBegin);
 //                    System.out.println("dateEnd"+dateEnd);
-                    if (dateBegin != null && dateEnd == null) {
-                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("confirmLogAt").as(Date.class), dateBegin));
-                    }
-                    if (dateEnd != null && dateBegin == null) {
-                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("confirmLogAt").as(Date.class), dateEnd));
-                    }
-                    if (dateBegin != null && dateEnd != null) {
-                        predicates.add(criteriaBuilder.between(root.get("confirmLogAt").as(Date.class), dateBegin, dateEnd));
-                    }
-
-                    Date deadlineDateBegin = DateParser.TryParse(filterDto.getDeadlineDateBegin(), Common.uzbekistanDateFormat);
-                    Date deadlineDateEnd = DateParser.TryParse(filterDto.getDeadlineDateEnd(), Common.uzbekistanDateFormat);
-                    if (deadlineDateBegin != null && deadlineDateEnd == null) {
-                        predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("deadlineDate").as(Date.class), deadlineDateBegin));
-                    }
-                    if (deadlineDateEnd != null && deadlineDateBegin == null) {
-                        predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate").as(Date.class), deadlineDateEnd));
-                    }
-                    if (deadlineDateBegin != null && deadlineDateEnd != null) {
-                        predicates.add(criteriaBuilder.between(root.get("deadlineDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
-                    }
-
-                    if (filterDto.getActivityId() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("activityId"), filterDto.getActivityId()));
-                    }
-
-                    if (filterDto.getConclusionOnline() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("conclusionOnline"), filterDto.getConclusionOnline()));
-                    }
-
-                    if (filterDto.getObjectId() != null) {
-                        predicates.add(criteriaBuilder.equal(root.get("objectId"), filterDto.getObjectId()));
-                    }
+                if (dateBegin != null && dateEnd == null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("confirmLogAt").as(Date.class), dateBegin));
                 }
-                if(performerId!=null){
-                    predicates.add(criteriaBuilder.equal(root.get("performerId"), performerId));
+                if (dateEnd != null && dateBegin == null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("confirmLogAt").as(Date.class), dateEnd));
+                }
+                if (dateBegin != null && dateEnd != null) {
+                    predicates.add(criteriaBuilder.between(root.get("confirmLogAt").as(Date.class), dateBegin, dateEnd));
                 }
 
-                if(userId!=null){
-                    System.out.println("userId");
-                    Predicate byUserId, byLeTin, byTin;
-                    byUserId = criteriaBuilder.equal(root.get("createdById"), userId);
-                    if (filterDto!=null && (filterDto.getByLeTin()!=null || filterDto.getByTin()!=null)
-                            && regApplicationInputType!=null && regApplicationInputType.equals(RegApplicationInputType.ecoService)
-                    ){
-                        if (filterDto.getByLeTin()!=null && filterDto.getByTin()!=null){
-                            byLeTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByLeTin());
+                Date deadlineDateBegin = DateParser.TryParse(filterDto.getDeadlineDateBegin(), Common.uzbekistanDateFormat);
+                Date deadlineDateEnd = DateParser.TryParse(filterDto.getDeadlineDateEnd(), Common.uzbekistanDateFormat);
+                if (deadlineDateBegin != null && deadlineDateEnd == null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("deadlineDate").as(Date.class), deadlineDateBegin));
+                }
+                if (deadlineDateEnd != null && deadlineDateBegin == null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("deadlineDate").as(Date.class), deadlineDateEnd));
+                }
+                if (deadlineDateBegin != null && deadlineDateEnd != null) {
+                    predicates.add(criteriaBuilder.between(root.get("deadlineDate").as(Date.class), deadlineDateBegin, deadlineDateEnd));
+                }
+
+                if (filterDto.getActivityId() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("activityId"), filterDto.getActivityId()));
+                }
+
+                if (filterDto.getConclusionOnline() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("conclusionOnline"), filterDto.getConclusionOnline()));
+                }
+
+                if (filterDto.getObjectId() != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("objectId"), filterDto.getObjectId()));
+                }
+            }
+            if(performerId!=null){
+                predicates.add(criteriaBuilder.equal(root.get("performerId"), performerId));
+            }
+
+            if(userId!=null){
+                System.out.println("userId");
+                Predicate byUserId, byLeTin, byTin;
+                byUserId = criteriaBuilder.equal(root.get("createdById"), userId);
+                if (filterDto!=null && (filterDto.getByLeTin()!=null || filterDto.getByTin()!=null)
+                        && regApplicationInputType!=null && regApplicationInputType.equals(RegApplicationInputType.ecoService)
+                ){
+                    if (filterDto.getByLeTin()!=null && filterDto.getByTin()!=null){
+                        byLeTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByLeTin());
+                        byTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByTin());
+                        predicates.add(criteriaBuilder.or(byLeTin, byTin,byUserId));
+                    }else{
+                        if (filterDto.getByTin()!=null && filterDto.getByLeTin()==null){
                             byTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByTin());
-                            predicates.add(criteriaBuilder.or(byLeTin, byTin,byUserId));
+                            predicates.add(criteriaBuilder.or(byTin, byUserId));
                         }else{
-                            if (filterDto.getByTin()!=null && filterDto.getByLeTin()==null){
-                                byTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByTin());
-                                predicates.add(criteriaBuilder.or(byTin, byUserId));
-                            }else{
-                                if (filterDto.getByTin()==null && filterDto.getByLeTin()!=null) {
-                                    byLeTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByLeTin());
-                                    predicates.add(criteriaBuilder.or(byLeTin,byUserId));
-                                }
+                            if (filterDto.getByTin()==null && filterDto.getByLeTin()!=null) {
+                                byLeTin = criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getByLeTin());
+                                predicates.add(criteriaBuilder.or(byLeTin,byUserId));
                             }
                         }
-                    }else{
-                        predicates.add(byUserId);
                     }
+                }else{
+                    predicates.add(byUserId);
                 }
-
-                if(regApplicationInputType!=null){
-                    predicates.add(criteriaBuilder.equal(root.get("inputType"), regApplicationInputType.ordinal()));
-                }
-
-                Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
-                predicates.add( notDeleted );
-                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
             }
+
+            if(regApplicationInputType!=null){
+                predicates.add(criteriaBuilder.equal(root.get("inputType"), regApplicationInputType.ordinal()));
+            }
+
+            Predicate notDeleted = criteriaBuilder.equal(root.get("deleted"), false);
+            predicates.add( notDeleted );
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
 

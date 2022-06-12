@@ -129,14 +129,27 @@
                                             </form>
                                         </div>
                                     </div>
+
                                 </div>
                                         <!-- dataTable card begins here -->
 
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 th:text="#{sys_menu.performerList}"></h5>
-                                    </div>
-                                    <div class="card-body">
+                                <div class="parent-card col-xl-12 mh-1000">
+<!--                                    <div class="card-header">-->
+<!--                                        <h5 th:text="#{sys_menu.performerList}"></h5>-->
+<!--                                    </div>-->
+
+                                    <ul class="nav nav-tabs w-auto" id="myTab" role="tablist">
+
+                                        <li class="nav-item card-nav-item w-50 text-center">
+                                            <a class="nav-link text-uppercase active show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(1)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_forwardingStatus.all}">Xammasi</span>
+                                            </a>
+                                        </li>
+                                        <li class="nav-item card-nav-item w-50 text-center">
+                                            <a class="nav-link text-uppercase show" id="executing-tab1" data-toggle="tab" href="#profile" onclick="getDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_forwardingStatus.initial}"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
                                         <div class="table-responsive break-word" id="result" >
                                             <table id="data-table" class="table table-striped table-hover dataTable" style="width: 100%">
                                                 <thead>
@@ -177,6 +190,7 @@
 <script type="text/javascript" th:src="@{/static/js/select2.min.js}"></script>
 
 <script th:inline="javascript">
+    var logId = 0;
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerListAjax}]];
     var ajaxRequestViewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerView}]];
     function getCurrentLanguage() {
@@ -256,7 +270,24 @@
         return statusLabel;
     }
 
-    function datatableConnect() {
+    function datatableConnect(tab) {
+        let filterTab = "";
+        if (tab === 0){
+            if (logId === 1){
+                filterTab = $('#status').val();
+            }else{
+                filterTab = 0;
+                logId = tab;
+            }
+        }
+        if (tab === 1){
+            logId = tab;
+        }
+        if (tab === 2){
+            filterTab = 0;
+            logId = tab;
+        }
+
             dataDatatableSelector.DataTable({
             processing: true,
             serverSide: true,
@@ -284,7 +315,7 @@
                 dataToSend.objectId = $('#objectId').val();
                 dataToSend.deadlineDateBegin = $('#deadlineDateBegin').val();
                 dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
-                dataToSend.status = $('#status').val();
+                dataToSend.status =filterTab;
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
@@ -313,10 +344,10 @@
             } );
     }
 
-    function getDatatableConnect() {
+    function getDatatableConnect(tab = 4) {
         dataDatatableSelector.DataTable().destroy();
         dataDatatableSelector.html(thead);
-        datatableConnect();
+        datatableConnect(tab);
     }
 
 
