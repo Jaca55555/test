@@ -3,12 +3,12 @@ package uz.maroqand.ecology.core.service.expertise.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
-import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
@@ -336,6 +336,17 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         }
     }
 
+
+    @Override
+    public long findFilteredNumber(LogType logType, Integer integer) {
+        FilterDto filterDto = new FilterDto();
+        filterDto.setStatusing(1);
+        Pageable pageable =new PageRequest(0,10);
+
+        long returnElement = regApplicationRepository.findAll(getFilteringSpecification(filterDto, integer, logType, null, null,null),pageable).getTotalElements();
+        return returnElement;
+    }
+
     private static Specification<RegApplication> getFilteringSpecification(
             final FilterDto filterDto,
             final Integer reviewId,
@@ -405,17 +416,34 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 if (filterDto.getSubRegionId() != null) {
                     predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
                 }
-                if (logType != null) {
-                    switch (logType) {
-                        case Confirm:
 
-                        case Forwarding:
-                            predicates.add(criteriaBuilder.equal(root.join("forwardingLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
-                        case Performer:
-                            predicates.add(criteriaBuilder.equal(root.get("performerLogId"), filterDto.getStatus()));
-//                        case Agreement:
-//                            predicates.add(criteriaBuilder.equal(root.get(""), filterDto.getStatus()));
-//                        case AgreementComplete:
+                if (filterDto.getStatusing() == null){
+                    if (logType != null && filterDto.getStatus() != null) {
+                        switch (logType) {
+                            case Forwarding:
+                                predicates.add(criteriaBuilder.equal(root.join("forwardingLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
+                                break;
+                            case Performer:
+                                predicates.add(criteriaBuilder.equal(root.join("performerLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
+                                break;
+                        }
+                    }
+                }else {
+                    if (logType != null) {
+                        List<LogStatus> init = new ArrayList<>();
+                        init.add(LogStatus.Initial);
+                        init.add(LogStatus.Resend);
+                        List<Integer> initInteger = new ArrayList<>();
+                        initInteger.add(0);
+                        initInteger.add(1);
+                        switch (logType) {
+                            case Forwarding:
+                                predicates.add(criteriaBuilder.in(root.join("forwardingLog").get("status")).value(init));
+                                break;
+                            case Performer:
+                                predicates.add(criteriaBuilder.in(root.get("performerLogId")).value(initInteger));
+                                break;
+                        }
                     }
                 }
 

@@ -13,6 +13,14 @@
         .datepicker>.datepicker-days {
             display: block;
         }
+        .circles {
+            height: 20px;
+            width: 24px;
+            background-color: #DC3445;
+            border-radius: 40%;
+            display: inline-block;
+            margin-top: -2px;
+        }
     </style>
 </head>
 <body class="layout-6">
@@ -121,7 +129,7 @@
                                                 </div>
 
                                                 <div class="form-group col-sm-12 text-right">
-                                                    <a class="btn btn-primary text-white" onclick="getDatatableConnect();return false;">
+                                                    <a class="btn btn-primary text-white" onclick="getDatatableConnect(0);return false;">
                                                         <i class="feather icon-search mr-1"></i>
                                                         <span th:text="#{sys_search}">Search</span>
                                                     </a>
@@ -145,7 +153,9 @@
                                             </a>
                                         </li>
                                         <li class="nav-item card-nav-item w-50 text-center">
-                                            <a class="nav-link text-uppercase show" id="executing-tab1" data-toggle="tab" href="#profile" onclick="getDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_forwardingStatus.initial}"></span>
+                                            <a class="nav-link text-uppercase " id="executing-tab1" data-toggle="tab" href="#profile" onclick="getDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false">
+                                                <span th:text="#{sys_forwardingStatus.initial}"></span>
+                                                <span class="circles ml-2 text-white" id="circles">0</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -272,20 +282,14 @@
 
     function datatableConnect(tab) {
         let filterTab = "";
-        if (tab === 0){
-            if (logId === 1){
-                filterTab = $('#status').val();
-            }else{
-                filterTab = 0;
-                logId = tab;
+
+        if (tab !== 2){
+            if ($('#status').val() !== ''){
+                $('#executing-tab').setClass('active')
+                $('#executing-tab1').removeClass('active');
             }
-        }
-        if (tab === 1){
-            logId = tab;
-        }
-        if (tab === 2){
-            filterTab = 0;
-            logId = tab;
+        }else {
+            filterTab = tab;
         }
 
             dataDatatableSelector.DataTable({
@@ -315,12 +319,14 @@
                 dataToSend.objectId = $('#objectId').val();
                 dataToSend.deadlineDateBegin = $('#deadlineDateBegin').val();
                 dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
-                dataToSend.status =filterTab;
+                dataToSend.status = $('#status').val();
+                dataToSend.statusing = filterTab;
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
 
                 $.get(ajaxRequestLink, dataToSend, function(data){
+                    $('#circles').text(data.initials);
                     callback(data);
                 });
             },

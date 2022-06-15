@@ -44,4 +44,6 @@ public class FilterDto {
     private Integer byLeTin;
     private RegApplicationCategoryType regApplicationCategoryType;
     private Category category;
+
+    private Integer statusing;
 }
