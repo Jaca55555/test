@@ -129,7 +129,7 @@
                                         <label class="control-label"  th:text="#{user_name}"></label><br/>
                                         <select class="singleSelect col-sm-12 select2-hidden-accessible" id="userId" name="userId">
                                             <option value="" th:text="#{sys_select}"></option>
-                                            <option th:each="user: ${userList}" th:value="${user.id}" th:text="${user.getFullName()}" ></option>
+                                            <option th:each="user : ${performerList}" th:value="${user.id}" th:if="${user.id != regApplication.getPerformerId()}" th:text="${user.getFullName()}"></option>
                                         </select>
 
                                     </div>

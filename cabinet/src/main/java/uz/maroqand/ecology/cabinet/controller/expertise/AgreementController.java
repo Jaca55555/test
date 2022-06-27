@@ -168,6 +168,7 @@ public class AgreementController {
 
         result.put("recordsTotal", regApplicationLogs.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationLogs.getTotalElements()); //Filtered elements
+        result.put("initials", regApplicationLogService.findFilteredNumber(LogType.Agreement, userService.isAdmin() ? null : user.getId()));
         result.put("data",convenientForJSONArray);
         return result;
     }

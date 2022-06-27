@@ -178,6 +178,7 @@ public class AgreementCompleteController {
 
         result.put("recordsTotal", regApplicationLogPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationLogPage.getTotalElements()); //Filtered elements
+        result.put("initials", regApplicationLogService.findFilteredNumber(LogType.AgreementComplete, null));
         result.put("data",convenientForJSONArray);
         return result;
     }

@@ -122,6 +122,13 @@
         .undo-btn button {
             cursor: pointer;
         }
+        .text_error {
+            background-color: #990055;
+            color: white;
+            justify-content: center;
+            height: 50%;
+        }
+
        /* #loader_box {
             width: 100%;
             height: 100%;
@@ -865,6 +872,7 @@
                                                                     <i class="feather icon-plus" id="plus-icon"></i>
                                                                 </div>
                                                             </a>
+                                                            <p id="file_error" class="text_error" th:text="#{sys_about_file_error}"></p>
                                                             <div class="col-md-3" th:each="file : ${regApplication.documentFiles}" th:id="${'file-block-' + file.id}">
                                                                 <div class="file">
                                                                     <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileDownload + '?file_id=' + file.id}">
@@ -974,6 +982,8 @@
         var regApplicationId = [[${regApplication.id}]];
         var coordinate = [[${coordinate}]];
         let regCategory = null;
+        let fileError = false;
+        let fileSubmit = false;
         if([[${regApplication.category}]]!=null){
          regCategory =  getCategoryId([[${regApplication.category}]]);
         }
@@ -1006,6 +1016,8 @@
                 dropdownParent: $("#boilerModal1"),
                 tags: true
             });
+            $('#file_error').hide();
+
             $("#name_boiler2").select2({
                 dropdownParent: $("#boilerModal2"),
                 tags: true
@@ -1601,12 +1613,14 @@
 
         function openModalFile() {
             $('#upload-file-modal').modal('show');
+            $('#file_error').show();
         }
 
         function uploadFile(){
             $('#file-name').parsley().validate();
             if(!$('#file-name').val() || !$('#file-input').val()){
                 $('#fileDescription').addClass('is-invalid');
+
                 return;
             }
 
@@ -1639,6 +1653,9 @@
                             '                                                        </button>\n' +
                             '                                                    </div>\n' +
                             '                                                </div>');
+
+                        $('#file_error').hide();
+                        fileSubmit = true
                     }
                 },
                 beforeSend: function () {
@@ -1994,6 +2011,26 @@
                     $('#about-form').submit();
                 }
 
+
+
+            if(fileSubmit) {
+                if (isCoordinate) {
+                    let mapListSize = $('#coordinates-map-list').children().length;
+                    let coordinateListSize = $('#coordinates-list').children().length;
+                    console.log("mapListSize=" + mapListSize);
+                    console.log("coordinateListSize=" + coordinateListSize);
+                    if (mapListSize >= 4 || coordinateListSize >= 4) {
+                        $('#error_coordinate').hide();
+                        $('#about-form').submit();
+                    } else {
+                        $('#add_coordinate').addClass('required-border');
+                        $('#error_coordinate').show();
+                    }
+                } else {
+                    $('#about-form').submit();
+                }
+            }else{
+                $('#file_error').show();
             }
         }
 
@@ -2651,7 +2688,6 @@
                     `</select>`+
                     ``);
             }
-
             if ($idn==4){
                 $(this).html("").append("<input id='amount_boiler3' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
             }

@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.service.expertise.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -311,6 +312,15 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
         return regApplicationLogRepository.findAll(getFilteringSpecification(filterDto, createdById, updateById, type, status,orgId),pageable);
     }
 
+    @Override
+    public long findFilteredNumber(LogType agreement, Integer integer) {
+        FilterDto filterDto = new FilterDto();
+        filterDto.setStatusing(1);
+        Pageable pageable = new PageRequest(0,10);
+        long returnValue = regApplicationLogRepository.findAll(getFilteringSpecification(filterDto, null, integer, agreement, null,null),pageable).getTotalElements();
+        return returnValue;
+    }
+
     private static Specification<RegApplicationLog> getFilteringSpecification(
             final FilterDto filterDto,
             final Integer createdById,
@@ -383,9 +393,16 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
                     predicates.add(criteriaBuilder.equal(root.join("regApplication").get("objectId"), filterDto.getObjectId()));
                 }
 
-                if(filterDto.getStatus()!=null){
+                if (filterDto.getStatusing() != null){
+                    List<LogStatus> list = new ArrayList<>();
+                    list.add(LogStatus.Initial);
+                    list.add(LogStatus.Resend);
+                    predicates.add(criteriaBuilder.in(root.get("status")).value(list));
+                }else if (filterDto.getStatus() != null){
                     predicates.add(criteriaBuilder.equal(root.get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
                 }
+
+
                 if(createdById!=null){
                     predicates.add(criteriaBuilder.equal(root.get("createdById"), createdById));
                 }

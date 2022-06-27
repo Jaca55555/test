@@ -62,4 +62,5 @@ public interface RegApplicationLogService {
             Pageable pageable
     );
 
+    long findFilteredNumber(LogType agreement, Integer integer);
 }
