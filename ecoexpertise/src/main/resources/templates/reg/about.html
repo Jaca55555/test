@@ -964,7 +964,7 @@
         var coordinate = [[${coordinate}]];
         let regCategory = null;
         let fileError = false;
-        let fileSubmit = false;
+        let files = 0;
         if([[${regApplication.category}]]!=null){
          regCategory =  getCategoryId([[${regApplication.category}]]);
         }
@@ -979,7 +979,7 @@
                 tags: true
             });
             $('#file_error').hide();
-
+            console.log($("#files-div").has("div"));
             $("#name_boiler2").select2({
                 dropdownParent: $("#boilerModal2"),
                 tags: true
@@ -1287,7 +1287,6 @@
 
         function openModalFile() {
             $('#upload-file-modal').modal('show');
-            $('#file_error').show();
         }
 
         function uploadFile(){
@@ -1329,7 +1328,7 @@
                             '                                                </div>');
 
                         $('#file_error').hide();
-                        fileSubmit = true
+                        files ++;
                     }
                 },
                 beforeSend: function () {
@@ -1371,6 +1370,7 @@
                 success: function (response) {
                     if(response.status == 1) {
                         $('#file-block-' + fileId).remove();
+                        files --;
                     }
                 }
             });
@@ -1581,7 +1581,7 @@
 
 
 
-            if(fileSubmit) {
+            if(files > 0) {
                 if (isCoordinate) {
                     let mapListSize = $('#coordinates-map-list').children().length;
                     let coordinateListSize = $('#coordinates-list').children().length;
