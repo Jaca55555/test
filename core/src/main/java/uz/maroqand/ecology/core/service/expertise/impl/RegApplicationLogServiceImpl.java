@@ -383,6 +383,7 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
                 if (filterDto.getStatusing() != null){
                     List<LogStatus> list = new ArrayList<>();
                     list.add(LogStatus.Initial);
+                    list.add(LogStatus.New);
                     list.add(LogStatus.Resend);
                     predicates.add(criteriaBuilder.in(root.get("status")).value(list));
                 }else if (filterDto.getStatus() != null){
