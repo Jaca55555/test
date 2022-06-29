@@ -59,6 +59,7 @@
             <object th:include="reg/fragments/conclusion :: conclusion" th:remove="tag"></object>
         </div>
     </div>
+    <div class="col-md-12 text-justify" th:if="${ regApplication.status!=null and (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
     <div class="col-md-12 task-attachment" th:if="${performerLog!=null && #lists.size(performerLog.documentFiles)>0}">
         <h5  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
         <ul class="media-list p-0">
@@ -78,6 +79,8 @@
             </li>
         </ul>
     </div>
+    </div>
+
 
     <!--Modification-->
     <div class="col-md-12 text-center" th:if="${regApplication.status!=null &&  regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification && regApplication.regApplicationCategoryType==T(uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryType).oneToTree}">
