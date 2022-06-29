@@ -7,6 +7,7 @@ import uz.maroqand.ecology.core.entity.sys.File;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -16,6 +17,7 @@ import java.io.IOException;
 public interface FileService {
 
     File findById(Integer fileId);
+    List<File> findListByRegApplicationId(Integer fileId);
 
     ResponseEntity<Resource> getFileAsResourceForDownloading(File file);
 

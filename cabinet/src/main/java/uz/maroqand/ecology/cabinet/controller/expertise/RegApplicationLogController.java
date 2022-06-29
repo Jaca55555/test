@@ -17,9 +17,7 @@ import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Utkirbek Boltaev on 23.06.2019.
@@ -72,6 +70,26 @@ public class RegApplicationLogController {
         }
         return responseMap;
     }
+
+    @RequestMapping(ExpertiseUrls.FileListApplication)
+    public List<Object> fileListApplication(
+            @RequestParam(name = "id") Integer id
+    ){
+        Set<File> files = regApplicationLogService.getById(id).getDocumentFiles() ;
+        List<Object> list = new ArrayList<>();
+
+        for (File file: files){
+            HashMap<String, Object> responseMap = new HashMap<>();
+            responseMap.put("status", 1);
+            responseMap.put("name", file.getName());
+            responseMap.put("description", file.getDescription());
+            responseMap.put("link", ExpertiseUrls.FileDownload + "?file_id=" + file.getId());
+            responseMap.put("fileId", file.getId());
+            list.add(responseMap);
+        }
+        return list;
+    }
+
 
     @RequestMapping(ExpertiseUrls.FileDownload)
     public ResponseEntity<Resource> downloadFile(

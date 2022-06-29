@@ -493,15 +493,12 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                         List<LogStatus> init = new ArrayList<>();
                         init.add(LogStatus.Initial);
                         init.add(LogStatus.Resend);
-                        List<Integer> initInteger = new ArrayList<>();
-                        initInteger.add(0);
-                        initInteger.add(1);
                         switch (logType) {
                             case Forwarding:
                                 predicates.add(criteriaBuilder.in(root.join("forwardingLog").get("status")).value(init));
                                 break;
                             case Performer:
-                                predicates.add(criteriaBuilder.in(root.get("performerLogId")).value(initInteger));
+                                predicates.add(criteriaBuilder.in(root.get("performerLog").get("status")).value(init));
                                 break;
                         }
                     }

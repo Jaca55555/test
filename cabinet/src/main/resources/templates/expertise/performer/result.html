@@ -66,6 +66,30 @@
                                         <i class="feather icon-plus" id="plus-icon"></i>
                                     </div>
                                 </a>
+
+                                <div class="col-md-3" th:each="file : ${performerLog.documentFiles}" th:id="${'file-block-' + file.id}">
+                                    <div class="file">
+                                        <a th:href="${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).FileDownload + '?file_id=' + file.id}">
+                                            <i th:if="${file.extension=='doc' || file.extension=='docx'}" class="mdi mdi-file-word file-icon"></i>
+                                            <i th:if="${file.extension=='xls' || file.extension=='xlsx'}" class="mdi mdi-file-excel file-icon"></i>
+                                            <i th:if="${file.extension=='pdf'}" class="mdi mdi-file-pdf file-icon"></i>
+                                            <i th:if="${file.extension=='png' || file.extension=='jpg' || file.extension=='jpeg'}" class="mdi mdi-image file-icon"></i>
+                                            <i th:if="${file.extension!='doc'
+                                                                                    && file.extension!='docx'
+                                                                                    && file.extension!='xls'
+                                                                                    && file.extension!='xlsx'
+                                                                                    && file.extension!='pdf'
+                                                                                    && file.extension!='png'
+                                                                                    && file.extension!='jpg'
+                                                                                    && file.extension!='jpeg'}" class="mdi mdi-file file-icon"></i>
+                                            <span th:text="${file.description}"></span>
+                                            <p th:text="${file.name}"></p>
+                                        </a>
+                                        <button type="button" class="file-delete-btn" th:onclick="'deleteFile(' + ${file.id} + ')'">
+                                            <i class="feather icon-x"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -38,6 +38,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Utkirbek Boltaev on 20.05.2019.
@@ -275,6 +276,9 @@ public class FileServiceImpl implements FileService {
     }
 
 
+    @Override
+    public List<File> findListByRegApplicationId(Integer fileId) {
 
-
+        return null;
+    }
 }

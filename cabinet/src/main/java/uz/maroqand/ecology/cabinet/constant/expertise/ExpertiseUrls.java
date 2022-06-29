@@ -89,6 +89,7 @@ public class ExpertiseUrls {
     public static final String FileUpload = Prefix + "/file/upload";
     public static final String FileDownload = Prefix + "/file/download";
     public static final String FileDelete = Prefix + "/file/delete";
+    public static final String FileListApplication = Prefix + "/file/list";
 
     //Comment File
     public static final String CommentAdd = Prefix + "/comment/add";
