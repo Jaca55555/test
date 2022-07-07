@@ -234,7 +234,7 @@ public class RegApplication {
     private RegApplicationLog forwardingLog;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "performer_log_id", insertable = false, updatable = false)
     private RegApplicationLog performerLog;
 

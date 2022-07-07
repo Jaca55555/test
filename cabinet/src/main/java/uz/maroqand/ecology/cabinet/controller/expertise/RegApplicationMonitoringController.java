@@ -122,7 +122,8 @@ public class RegApplicationMonitoringController {
         for (RegApplication regApplication : regApplicationList){
             RegApplicationLog performerLog = null;
             if (regApplication.getPerformerId()!=null){
-                performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+//                performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+                performerLog = regApplication.getPerformerLog();
             }
 
             convenientForJSONArray.add(new Object[]{
