@@ -9,7 +9,8 @@ public enum AppealType {
 
     Applications(0,"appeal_type.applications"),
     Suggestions(1,"appeal_type.suggestions"),
-    Complaints(2,"appeal_type.complaints");
+    Complaints(2,"appeal_type.complaints"),
+    Landing_Suggestion(3,"appeal_type.landing_suggestion");
 
     private Integer id;
     private String name;

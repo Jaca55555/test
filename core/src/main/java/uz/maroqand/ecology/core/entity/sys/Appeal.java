@@ -37,6 +37,15 @@ public class Appeal {
 
     private String phone;
 
+    @Column(name = "person_full_name")
+    private String personFullName;
+
+    @Column(name = "company_name")
+    private String companyName;
+
+    @Column(name = "person_email")
+    private String personEmail;
+
     @Column(name = "description",columnDefinition = "TEXT")
     private String description;
 

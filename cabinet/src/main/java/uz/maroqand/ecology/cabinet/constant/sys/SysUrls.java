@@ -33,5 +33,4 @@ public class SysUrls {
 
     public static final String SelectLang = Prefix + "/select_lang";
 
-
 }

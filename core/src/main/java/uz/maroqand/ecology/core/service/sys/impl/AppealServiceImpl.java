@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.sys.AppealStatus;
+import uz.maroqand.ecology.core.constant.sys.AppealType;
 import uz.maroqand.ecology.core.entity.sys.Appeal;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.sys.AppealRepository;
@@ -155,4 +156,18 @@ public class AppealServiceImpl implements AppealService {
         };
     }
 
+    @Override
+    public void createAppealLanding(String fullName, String companyName, String email, String phone, String message) {
+        Appeal appeal = new Appeal();
+        appeal.setAppealStatus(AppealStatus.Open);
+        appeal.setAppealType(AppealType.Landing_Suggestion);
+        appeal.setCompanyName(companyName);
+        appeal.setDescription(message);
+        appeal.setPersonEmail(email);
+        appeal.setPhone(phone);
+        appeal.setPersonFullName(fullName);
+        appeal.setTitle("landing page Suggestion");
+        appeal.setCreatedAt(new Date());
+        appealRepository.save(appeal);
+    }
 }

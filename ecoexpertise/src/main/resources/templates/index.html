@@ -33,20 +33,26 @@
                             <div class="flex-center media-w-100">
                                 <ul>
                                     <li>
-                                        <a formtarget="_blank" href="https://www.facebook.com/ecoekspertiza/">
-                                            <img src="/static/eco_fo/img/facebook-logo.svg" alt="">
+                                        <a href="https://t.me/ecoserviceuz" target="_blank" >
+                                            <i style="color: white" class="icon mdi mdi-telegram"></i>
+                                            <span style="color: white" th:text="#{group_telegarm_support}"></span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="https://t.me/ecoserviceuz">
-                                            <img src="/static/eco_fo/img/instagram-logo.svg" alt="">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img src="/static/eco_fo/img/instagram-logo.svg" alt="">
-                                        </a>
-                                    </li>
+<!--                                    <li>-->
+<!--                                        <a formtarget="_blank" href="https://www.facebook.com/ecoekspertiza/">-->
+<!--                                            <img src="/static/eco_fo/img/facebook-logo.svg" alt="">-->
+<!--                                        </a>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <a href="https://t.me/ecoserviceuz">-->
+<!--                                            <img src="/static/eco_fo/img/instagram-logo.svg" alt="">-->
+<!--                                        </a>-->
+<!--                                    </li>-->
+<!--                                    <li>-->
+<!--                                        <a href="#">-->
+<!--                                            <img src="/static/eco_fo/img/instagram-logo.svg" alt="">-->
+<!--                                        </a>-->
+<!--                                    </li>-->
                                 </ul>
                                 <div class="lang-wrapper">
                                     <div class="current-lang">Uzb</div>
@@ -107,7 +113,7 @@
                             <div class="container">
                                 <div class="slider-text-block" style="margin-top: 17%">
                                     <div class="info">
-                                        <div class="title"><span>O’zbekiston Respublikasi Ekologiya va atrof muhitni muhofaza qilish davlat qo’mitasining interaktiv xizmatlari portali</span>
+                                        <div class="title"><span>Davlat ekologik ekspertizasi markazining interaktiv xizmatlari portali</span>
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +126,7 @@
                             <div class="container">
                                 <div class="slider-text-block" style="margin-top: 17%">
                                     <div class="info">
-                                        <div class="title"><span>O’zbekiston Respublikasi Ekologiya va atrof muhitni muhofaza qilish davlat qo’mitasining interaktiv xizmatlari portali</span>
+                                        <div class="title"><span>Davlat ekologik ekspertizasi markazining interaktiv xizmatlari portali</span>
                                         </div>
                                     </div>
                                 </div>
@@ -263,27 +269,27 @@
             <div class="container">
                 <div class="contact-wrapper">
                     <div class="contact-info">
-                        <form action="">
+                        <form action="" id="form_form">
                             <div class="contact-form">
                                 <div class="title"><span th:text="#{front.contact-form-title}">Contact Us!</span>
                                 </div>
                                 <div class="form-input-wrapper">
                                     <div class="form-group user">
-                                        <input type="text" th:placeholder="#{front.user_name}">
+                                        <input type="text" id="front_full_name" name="full_name"  th:placeholder="#{front.user_name}">
                                     </div>
                                     <div class="form-group star">
-                                        <input type="text" th:placeholder="#{front.company_name}">
+                                        <input type="text" id="front_company_name" name="company_name" th:placeholder="#{front.company_name}">
                                     </div>
                                     <div class="form-group message">
-                                        <input type="text" th:placeholder="#{front.user_mail}">
+                                        <input type="text" id="front_email" name="email" th:placeholder="#{front.user_mail}">
                                     </div>
                                     <div class="form-group phone">
-                                        <input type="text" th:placeholder="#{front.user_phone}">
+                                        <input type="text" id="front_phone" name="phone" th:placeholder="#{front.user_phone}" >
                                     </div>
                                     <div class="form-group w-100">
-                                        <textarea name="" th:placeholder="#{front.user_message}"></textarea>
+                                        <textarea id="front_message" name="message" th:placeholder="#{front.user_message}"></textarea>
                                     </div>
-                                    <button class="form-btn"><i class="mdi mdi-telegram mr-2"></i><span th:text="#{front.send-contact-btn}">send</span>
+                                    <button type="button" class="form-btn" id="suggest_button"><i class="mdi mdi-telegram mr-2"></i><span th:text="#{front.send-contact-btn}">send</span>
                                     </button>
                                 </div>
                             </div>
@@ -419,26 +425,22 @@
                 <div class="container">
                     <div class="footer-bottom-wrapper">
                         <a href="#" class="logo">
-                            <img src="/static/eco_fo/img/eco-logo.png" alt="">
+                            <img src="/static/eco_fo/img/bottom.png" alt="">
                             <div class="menu-nav"><span class="bold-style" th:text="#{front.logo_info}">O'zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo'mitasi</span>
                             </div>
                         </a>
                         <ul class="social-list">
                             <li>
+                                <a formtarget="_blank" href="https://t.me/ecoekspertiza">
+                                    <img src="/static/eco_fo/img/telegram-scom.svg" alt="">
+                                </a>
+                            </li>
+                            <li>
                                 <a formtarget="_blank" href="https://www.facebook.com/ecoekspertiza/">
                                     <img src="/static/eco_fo/img/facebook-logo.svg" alt="">
                                 </a>
                             </li>
-                            <li>
-                                <a formtarget="_blank" href="https://t.me/ecoekspertiza">
-                                    <img src="/static/eco_fo/img/instagram-logo.svg" alt="">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="/static/eco_fo/img/twitter-logo.svg" alt="">
-                                </a>
-                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -506,10 +508,22 @@
             $('#myModal').modal('show');
         }
 
+        $("#suggest_button").click(function(e){
+            console.log("button clicked")
+            var form = $('#form_form');
+            $.ajax({
+                url: [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).SuggestAppealLanding}]],
+                data: form.serialize(),
+                type: 'post',
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+        });
 
         $(document).ready(function () {
             /*image,created_at,titleUz,descriptionUz,contentUz,titleRU,descriptionRU,contentRu*/
-
 
             if (apitext!=null && apitext['status']) {
                 var html = '';

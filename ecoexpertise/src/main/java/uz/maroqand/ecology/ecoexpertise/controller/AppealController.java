@@ -246,4 +246,22 @@ public class AppealController {
             return fileService.getFileAsResourceForDownloading(file);
         }
     }
+
+    @RequestMapping(value = RegUrls.SuggestAppealLanding, produces = "application/json")
+    @ResponseBody
+    public boolean suggestAppeallanding(
+            @RequestParam(name = "full_name", defaultValue = "") String fullName,
+            @RequestParam(name = "company_name", defaultValue = "") String companyName,
+            @RequestParam(name = "email", defaultValue = "") String email,
+            @RequestParam(name = "phone", defaultValue = "") String phone,
+            @RequestParam(name = "message", defaultValue = "") String message
+    ){
+        if (fullName == null) return false;
+        try {
+            appealService.createAppealLanding(fullName, companyName, email, phone, message);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
 }
