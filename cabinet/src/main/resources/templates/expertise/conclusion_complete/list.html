@@ -15,7 +15,7 @@
         }
         .circles {
             height: 20px;
-            width: 24px;
+            width: 30px;
             background-color: #DC3445;
             border-radius: 40%;
             display: inline-block;
@@ -152,14 +152,15 @@
 <!--                                    </div>-->
                                     <ul class="nav nav-tabs w-auto" id="myTab" role="tablist">
 
+
                                         <li class="nav-item card-nav-item w-50 text-center">
-                                            <a class="nav-link text-uppercase active show" id="executing-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(1)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_forwardingStatus.all}">Xammasi</span>
+                                            <a class="nav-link text-uppercase active show" id="executing-tab1" data-toggle="tab" href="#profile" onclick="getDatatableConnect(1)" role="tab" aria-controls="profile" aria-selected="false">
+                                                <span th:text="#{sys_forwardingStatus.initial}"></span>
+                                                <span class="circles ml-2 text-white" id="circles">0</span>
                                             </a>
                                         </li>
                                         <li class="nav-item card-nav-item w-50 text-center">
-                                            <a class="nav-link text-uppercase " id="executing-tab1" data-toggle="tab" href="#profile" onclick="getDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false">
-                                                <span th:text="#{sys_forwardingStatus.initial}"></span>
-                                                <span class="circles ml-2 text-white" id="circles">0</span>
+                                            <a class="nav-link text-uppercase" id="executing-tab" data-toggle="tab" href="#profile" onclick="getDatatableConnect(2)" role="tab" aria-controls="profile" aria-selected="false"><span th:text="#{sys_forwardingStatus.all}">Xammasi</span>
                                             </a>
                                         </li>
                                     </ul>
@@ -284,10 +285,10 @@
     function datatableConnect(tab) {
         let filterTab = "";
 
-        if (tab !== 2){
+        if (tab !== 1){
             if ($('#status').val() !== ''){
-                $('#executing-tab').setClass('active')
-                $('#executing-tab1').removeClass('active');
+                $('#executing-tab1').setClass('active')
+                $('#executing-tab2').removeClass('active');
             }
         }else {
             filterTab = tab;
@@ -359,7 +360,7 @@
         bindSubRegionSelectToRegionSelect('#subRegionId', '#regionId');
         dataDatatableSelector = $('#data-table');
         thead = dataDatatableSelector.html();
-        datatableConnect();
+        datatableConnect(1);
         $('#activityId').select2();
 
         $('.datepicker').datepicker({
