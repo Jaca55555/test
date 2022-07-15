@@ -57,5 +57,5 @@ public interface RegApplicationService {
     Integer countByCategoryAndStatusAndRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status, Integer regionId, Set<Integer> organizationIds);
     Integer countByCategoryAndStatusAndSubRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status,Integer subRegionId,Set<Integer> organizationIds);
 
-    long findFilteredNumber(LogType logType, Integer integer);
+    long findFilteredNumber(LogType logType, Integer integer, Integer performerId);
 }

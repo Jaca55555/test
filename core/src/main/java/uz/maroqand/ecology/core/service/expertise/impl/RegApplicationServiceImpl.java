@@ -394,12 +394,12 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
 
     @Override
-    public long findFilteredNumber(LogType logType, Integer integer) {
+    public long findFilteredNumber(LogType logType, Integer integer, Integer performerId) {
         FilterDto filterDto = new FilterDto();
         filterDto.setStatusing(1);
         Pageable pageable = new PageRequest(0, 10);
 
-        long returnElement = regApplicationRepository.findAll(getFilteringSpecification(filterDto, integer, logType, null, null, null), pageable).getTotalElements();
+        long returnElement = regApplicationRepository.findAll(getFilteringSpecification(filterDto, integer, logType, performerId, null, null), pageable).getTotalElements();
         return returnElement;
     }
 

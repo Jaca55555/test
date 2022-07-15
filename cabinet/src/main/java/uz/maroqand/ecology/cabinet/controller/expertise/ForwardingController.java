@@ -159,7 +159,7 @@ public class ForwardingController {
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
 
-        result.put("initials", regApplicationService.findFilteredNumber(LogType.Forwarding, user.getRole().getId()!=16?user.getOrganizationId():null));
+        result.put("initials", regApplicationService.findFilteredNumber(LogType.Forwarding, user.getRole().getId()!=16?user.getOrganizationId():null, null));
 
         result.put("data",convenientForJSONArray);
         return result;
