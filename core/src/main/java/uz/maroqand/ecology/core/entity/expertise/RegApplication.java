@@ -249,6 +249,10 @@ public class RegApplication {
     @JoinColumn(name = "forwarding_log_id", insertable = false, updatable = false)
     private RegApplicationLog forwardingLog;
 
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "performer_log_id", insertable = false, updatable = false)
+    private RegApplicationLog performerLog;
 
 
     @Column(name = "performer_log_id")

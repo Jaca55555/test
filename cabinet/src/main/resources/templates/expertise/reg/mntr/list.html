@@ -219,6 +219,7 @@
                     dataToSend.regApplicationStatus = $('#status').val();
                     dataToSend.dateBegin = $('#dateBegin').val();
                     dataToSend.dateEnd = $('#dateEnd').val();
+                    dataToSend.statusing = 0;
 
                     dataToSend._csrf = $("#global_csrf").val();
                     dataToSend.sort = api.order().length > 0 ? dataToSend.columns[ api.order()[0][0] ].name + ',' + api.order()[0][1] : "id,DESC";

@@ -145,4 +145,7 @@ public class RegUrls {
     public static final String GetLegalEntityByTin = Prefix + "/get_legal_entity";
     public static final String GetIndividualByPinfl = Prefix + "/get_individual";
 
+    public static final String SuggestAppealLanding = Prefix + "/appeal_landing";
+
+
 }
