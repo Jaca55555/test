@@ -489,33 +489,33 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     if (filterDto.getApplicationId() != null) {
                         predicates.add(criteriaBuilder.equal(root.get("id"), filterDto.getApplicationId()));
                 }else {
-                    if (logType != null) {
-                        List<Integer> init = new ArrayList<>();
-                        init.add(0);
-                        init.add(1);
-                        init.add(2);
-                        switch (logType) {
-                            case Forwarding:
-                                predicates.add(criteriaBuilder.in(root.get("forwardingLogId")).value(init));
-                                break;
-                            case Performer:
-                                predicates.add(criteriaBuilder.in(root.get("performerLogId")).value(init));
-                                break;
+                        if (logType != null) {
+                            List<Integer> init = new ArrayList<>();
+                            init.add(0);
+                            init.add(1);
+                            init.add(2);
+                            switch (logType) {
+                                case Forwarding:
+                                    predicates.add(criteriaBuilder.in(root.get("forwardingLogId")).value(init));
+                                    break;
+                                case Performer:
+                                    predicates.add(criteriaBuilder.in(root.get("performerLogId")).value(init));
+                                    break;
+                            }
+                        }
+                        if (filterDto.getOrganizationId() != null) {
+                            predicates.add(criteriaBuilder.equal(root.get("reviewId"), filterDto.getOrganizationId()));
+                        }
+                        if (filterDto.getRegionId() != null) {
+                            predicates.add(criteriaBuilder.equal(root.join("applicant").get("regionId"), filterDto.getRegionId()));
+                        }
+                        if (filterDto.getCategory() != null) {
+                            predicates.add(criteriaBuilder.equal(root.get("category"), filterDto.getCategory()));
+                        }
+                        if (filterDto.getSubRegionId() != null) {
+                            predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
                         }
                     }
-                    if(filterDto.getOrganizationId() != null){
-                        predicates.add(criteriaBuilder.equal(root.get("reviewId"),filterDto.getOrganizationId()));
-                   }
-                    if (filterDto.getRegionId() != null) {
-                        predicates.add(criteriaBuilder.equal(root.join("applicant").get("regionId"), filterDto.getRegionId()));
-                    }
-                    if(filterDto.getCategory()!=null){
-                        predicates.add(criteriaBuilder.equal(root.get("category"),filterDto.getCategory()));
-                    }
-                    if (filterDto.getSubRegionId() != null) {
-                        predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
-                    }
-
                 Date regDateBegin = DateParser.TryParse(filterDto.getRegDateBegin(), Common.uzbekistanDateFormat);
                 Date regDateEnd = DateParser.TryParse(filterDto.getRegDateEnd(), Common.uzbekistanDateFormat);
 
