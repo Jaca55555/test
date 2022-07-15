@@ -1,11 +1,18 @@
 package uz.maroqand.ecology.core.entity.sys;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.vladmihalcea.hibernate.type.array.IntArrayType;
+import com.vladmihalcea.hibernate.type.array.StringArrayType;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.Data;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+import org.hibernate.annotations.TypeDefs;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 /**
  * Created by Utkirbek Boltaev on 14.06.2019.
@@ -15,6 +22,11 @@ import javax.validation.constraints.Size;
 @Data
 @Entity
 @Table(name = "organization")
+@TypeDefs({
+        @TypeDef(name = "string-array", typeClass = StringArrayType.class),
+        @TypeDef(name = "int-array", typeClass = IntArrayType.class),
+        @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+})
 public class Organization {
 
     @Transient
@@ -36,6 +48,13 @@ public class Organization {
 
     @Column(name = "account")
     private String account;
+
+    @Column(name = "old_account")
+    private String oldAccount;
+
+//    @Type(type = "jsonb")
+//    @Column(name = "old_accounts", columnDefinition = "jsonb")
+//    private List<String> oldAccounts;
 
     @Column(name = "mfo")
     private String mfo;

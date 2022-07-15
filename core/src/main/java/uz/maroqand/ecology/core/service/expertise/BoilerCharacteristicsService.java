@@ -9,4 +9,6 @@ public interface BoilerCharacteristicsService {
 
     BoilerCharacteristics getById(Integer id);
 
+
+
 }

@@ -152,30 +152,42 @@
                                             const sysFullName = [[#{sys_full_name}]];
                                             const sysTin = [[#{sys_tin}]];
                                             const sysPinfl = [[#{sys_pinfl}]];
+                                            const expiredDate = [[#{expired_date}]];
                                             const eImzoLegal = [[#{e_imzo_legal}]];
                                             const eImzoIndividual = [[#{e_imzo_individual}]];
 
                                             function createKeyDiv(itmKey,vo) {
                                                 let createDiv= "";
+                                                console.log("vo==");
                                                 console.log("UID==" + vo.UID + "--");
                                                 console.log("PINFL==" + vo.PINFL + "--");
                                                 if (vo.UID && vo.UID!==""){
                                                     /*if (document.getElementById('e-imzo-legal-div').childElementCount==0){
                                                         createDiv='<h4>' + eImzoLegal + '</h4>'
                                                     }*/
+                                                    var todayDate = new Date()
                                                      createDiv += '<div class="card mb-2 p-2 text-left"  >\n' +
                                                         '               <p class="m-0">\n' +
                                                         '                   <span style="font-weight: bold">' + vo.O + '</span><br/>\n' +
                                                         '                   <span style="font-weight: bold" >' + sysFullName +': </span>:&nbsp;<span>' + vo.CN + '</span><br/>\n' +
-                                                        '                   <span style="font-weight: bold" >' + sysTin + ':</span>:&nbsp;<span> ' + vo.TIN + ' </span><br/>\n' +
-                                                        '                   <span style="font-weight: bold" >' + sysPinfl + ':</span>:&nbsp;<span> ' + vo.PINFL + ' </span><br/>\n' +
-                                                        '               </p>\n' +
-                                                        '               <div class="text-right">\n' +
-                                                        '                   <button type="button" class="btn btn-primary btn-sm  mr-0" onclick="selectKey(\''+itmKey+'\')">\n' +
-                                                        '                       <span >'+sysSign+'</span>\n' +
-                                                        '                   </button>\n' +
-                                                        '               </div>\n' +
-                                                        '            </div>';
+                                                        '                   <span style="font-weight: bold" >' + sysTin + ':</span>:&nbsp;<span> ' + vo.TIN + ' </span><br/>\n' ;
+                                                         if((vo.PINFL!=null||vo.PINFL!=='') && todayDate<vo.validTo){
+
+                                                             createDiv +=   '                   <span style="font-weight: bold" >' + sysPinfl + ':</span>:&nbsp;<span> ' + vo.PINFL + ' </span><br/>\n' ;
+                                                             createDiv +=    '                   <span style="font-weight: bold" >' + expiredDate + ':</span>:&nbsp;<span> ' + vo.validFrom.toLocaleDateString("en-US") + ' </span>\n' +'-</span>&nbsp;<span> ' + vo.validTo.toLocaleDateString("en-US") + ' </span><br/>\n' ;
+                                                             createDiv +=  '               </p>\n' +
+                                                                 '               <div class="text-right">\n' +
+                                                                 '                   <button type="button" class="btn btn-primary btn-sm  mr-0" onclick="selectKey(\''+itmKey+'\')">\n' +
+                                                                 '                       <span >'+sysSign+'</span>\n' +
+                                                                 '                   </button>\n' +
+                                                                 '               </div>\n' +
+                                                                 '            </div>';
+                                                         }else{
+                                                             createDiv +=   '                   <span style="font-weight: bold" >' + sysPinfl + ':</span>:&nbsp;<span> ' + vo.PINFL + ' </span><br/>\n' ;
+                                                             createDiv +=    '                   <span style="font-weight: bold;color:red" >' + expiredDate + ':</span>:&nbsp;<span style="color:red"> ' + vo.validFrom.toLocaleDateString("en-US") + ' </span>\n' +'-</span>&nbsp;<span style="color:red"> ' + vo.validTo.toLocaleDateString("en-US") + ' </span><br/>\n' ;
+
+                                                         }
+
                                                      $('#e-imzo-legal-div').append(createDiv);
                                                 }else{
                                                    /* if (document.getElementById('e-imzo-individual-div').childElementCount==0){

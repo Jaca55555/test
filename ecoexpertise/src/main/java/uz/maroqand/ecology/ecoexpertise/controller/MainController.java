@@ -57,19 +57,7 @@ public class MainController {
     }
 
     @RequestMapping("/")
-    public String getPage() {
-        return "index";
-    }
-
-    @RequestMapping(value = "/get_news",method = RequestMethod.POST)
-    @ResponseBody
-    public HashMap<String,Object> getNews(Pageable pageable){
-
-        HashMap<String,Object> result = new HashMap<>();
-        String element = ecoGovService.getEcoGovApi();
-        try {
-            element = new String(element.getBytes("utf8"));
-        }catch (Exception e){}
+    public String getPage(Model model, Pageable pageable) {
         FilterDto filterDto = new FilterDto();
         Set<RegApplicationStatus> statusForReg = new HashSet<>();
         statusForReg.add(RegApplicationStatus.CheckSent);
@@ -94,10 +82,10 @@ public class MainController {
         System.out.println("filterDto="+filterDto);
         Long done = regApplicationService.findFiltered(filterDto, null, null, null, null, null,pageable).getTotalElements();
 
-        result.put("element", element);
-        result.put("total", total);
-        result.put("done", done);
-        return result;
+//        model.addAttribute("element", element);
+        model.addAttribute("total", total);
+        model.addAttribute("done", done);
+        return "index";
     }
 
     //fileDownload

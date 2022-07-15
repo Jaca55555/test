@@ -26,7 +26,7 @@ public class SubjectDTO {
     public static SubjectDTO fromEntity(RegApplication model){
         SubjectDTO dto = new SubjectDTO();
 
-        dto.setSubjectTypes(model.getApplicant().getType().getId());
+        dto.setSubjectTypes(model.getApplicantType().getId());
         if(model.getApplicant().getType().getId()==0){
             dto.setName(model.getApplicant().getName());
         }else if(model.getApplicant().getType().getId()==1) {
@@ -45,7 +45,9 @@ public class SubjectDTO {
             dto.setOked(model.getApplicant().getOked());
             dto.setAccount(model.getApplicant().getBankAccount());
             dto.setMfo(model.getApplicant().getMfo());
-            dto.setBankName(model.getApplicant().getBankName());
+            if(model.getApplicant()!=null&&model.getApplicant().getBankName()!=null){
+            dto.setBankName(model.getApplicant().getBankName().replace("\""," "));
+            }
 
             dto.setRegisterArea(model.getApplicant().getSubRegionId());
             dto.setRegisterAddress(model.getApplicant().getAddress());

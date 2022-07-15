@@ -153,7 +153,7 @@
                         <div class="row" >
                             <div class="form-group col-md-12 text-center" >
 <!--                                <a  th:href="${back_url}" class="btn btn-danger" th:text="#{sys_back}">Отмена</a>-->
-                                <button type="submit" class="btn btn-primary" th:text="#{sys_next}"  >Далее</button><!--onclick="submitForm()"-->
+                                <button type="submit" class="btn btn-primary" th:text="#{sys_save}"  >Далее</button><!--onclick="submitForm()"-->
                             </div>
                         </div>
                     </form>
@@ -189,8 +189,8 @@
                         <tbody>
                         <tr th:each="history,stat:${histories}">
                             <th scope="row" style="padding: 20px 0px" th:text="${stat.count}">1</th>
-                            <td th:text="${@userServiceImpl.findById(history.beforePerformer).getFName()}">Mark</td>
-                            <td th:text="${@userServiceImpl.findById(history.afterPerformer).getFName()}">Mark</td>
+                            <td th:if="${history.beforePerformer!=null}" th:text="${@userServiceImpl.findById(history.beforePerformer).getFName()}">Mark</td>
+                            <td th:if="${history.afterPerformer!=null}" th:text="${@userServiceImpl.findById(history.afterPerformer).getFName()}">Mark</td>
                             <td th:text="${history.createdAt!=null? #dates.format(history.createdAt,'dd.MM.yyyy HH:mm'):''}">Mark</td>
                             <td th:text="${@userServiceImpl.findById(history.createdById).getFName()}">Mark</td>
                         </tr>
@@ -198,8 +198,8 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" th:text="#{sys_cancel}" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary"th:text="#{sys_save}" >Save changes</button>
                 </div>
             </div>
         </div>

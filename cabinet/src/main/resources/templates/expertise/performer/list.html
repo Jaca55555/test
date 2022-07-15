@@ -345,7 +345,9 @@
             language: {
                 'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
             }
-        });
+        }).columns().iterator( 'column', function (ctx, idx) {
+                $( table.column(idx).header() ).prepend('<span class="sort-icon"/>');
+            } );
     }
 
     function getDatatableConnect(tab = 4) {

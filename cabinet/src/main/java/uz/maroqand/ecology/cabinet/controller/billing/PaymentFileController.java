@@ -94,11 +94,13 @@ public class PaymentFileController {
         Date dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
         String account = null;
+        String oldAccount = null;
         if (user.getOrganizationId()!=null){
             Organization organization = organizationService.getById(user.getOrganizationId());
             if (organization!=null && organization.getAccount()!=null
                     && !organization.getAccount().isEmpty()){
                 account = organization.getAccount();
+                oldAccount = organization.getOldAccount();
             }
         }
         HashMap<String,Object> result = new HashMap<>();
@@ -113,7 +115,8 @@ public class PaymentFileController {
                 detail,
                 bankMfo,
                 isComplete,
-                user.getRole().getId()!=16?account:null,
+                user.getRole().getId()!=23 ? account:null,
+                user.getRole().getId()!=23 ? oldAccount:null,
                 pageable
         );
 
@@ -300,6 +303,7 @@ public class PaymentFileController {
                 bankMfo,
                 isComplete,
                 account,
+                null,
                 pageable
         );
 

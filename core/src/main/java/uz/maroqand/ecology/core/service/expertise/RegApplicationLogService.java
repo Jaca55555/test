@@ -23,6 +23,8 @@ public interface RegApplicationLogService {
     RegApplicationLog getById(Integer id);
     RegApplicationLog getByRegApplcationId(Integer id);
      RegApplicationLog getByRegApplcationIdAndType(Integer id,LogType type);
+     RegApplicationLog findTop1ByStatusAndType(Integer regApplicationId,LogStatus status,LogType type);
+     List<RegApplicationLog> findByStatusAndType(Integer regApplicationId,LogStatus status,LogType type);
     List<RegApplicationLog> getByLogStatus(LogStatus status,Integer regApplicationId);
     List<RegApplicationLog> getByRegApplicationId(Integer regApplicationId);
     List<RegApplicationLog> findAll();

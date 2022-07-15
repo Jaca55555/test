@@ -90,6 +90,17 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
     }
 
     @Override
+    public RegApplicationLog findTop1ByStatusAndType(Integer regApplicationId,LogStatus status, LogType type) {
+        return regApplicationLogRepository.findTop1ByStatusAndRegApplicationIdAndTypeAndDeletedFalseOrderByIdAsc(status,regApplicationId,type);
+    }
+
+    @Override
+    public List<RegApplicationLog> findByStatusAndType(Integer regApplicationId,LogStatus status, LogType type) {
+        return regApplicationLogRepository.findByRegApplicationIdAndStatusAndTypeAndDeletedFalse(regApplicationId,status,type);
+    }
+
+
+    @Override
     public List<RegApplicationLog> getByLogStatus(LogStatus status,Integer regApplicationId) {
         return regApplicationLogRepository.findAllByStatusAndRegApplicationIdAndDeletedFalseOrderByIdAsc(status,regApplicationId);
     }
@@ -334,7 +345,9 @@ public class RegApplicationLogServiceImpl implements RegApplicationLogService {
                 if(filterDto.getTin() != null){
                     predicates.add(criteriaBuilder.equal(root.join("regApplication").get("applicant").get("tin"), filterDto.getTin()));
                 }
-
+                if(orgId != null){
+                    predicates.add(criteriaBuilder.equal(root.join("regApplication").get("reviewId"), orgId));
+                }
                 if(StringUtils.trimToNull(filterDto.getName()) != null){
                     predicates.add(criteriaBuilder.like(root.join("regApplication").get("applicant").<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
                 }

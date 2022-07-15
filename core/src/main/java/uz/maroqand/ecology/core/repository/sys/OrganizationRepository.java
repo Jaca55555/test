@@ -6,6 +6,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.sys.Organization;
+
+import java.util.Date;
 import java.util.List;
 /**
  * Created by Utkirbek Boltaev on 14.06.2019.
@@ -18,5 +20,6 @@ public interface OrganizationRepository extends JpaRepository<Organization, Inte
 
     Organization findTop1ByRegionId(Integer regionId);
     Organization findByTin(Integer tin);
+
     Page<Organization> findAll(Specification<Organization> filteringSpecification, Pageable pageable);
 }

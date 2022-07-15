@@ -89,6 +89,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public List<RegApplication> findByDelivered() {
+        return regApplicationRepository.findAllByDeliveryStatusAndDeletedFalse((short) 0);
+    }
+
+    @Override
     public List<RegApplication> getByInvoiceId(Integer invoiceId) {
         return regApplicationRepository.findByInvoiceId(invoiceId);
     }
@@ -151,6 +156,60 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     public void update(RegApplication regApplication){
         regApplication.setUpdateAt(new Date());
         regApplicationRepository.save(regApplication);
+    }
+
+    @Override
+    public void cancelModification() {
+        List<RegApplicationStatus> statusList = new LinkedList<>();
+        statusList.add(RegApplicationStatus.ModificationCanceled);
+        statusList.add(RegApplicationStatus.Modification);
+        statusList.add(RegApplicationStatus.Process);
+        List<RegApplication> regApplicationIds = regApplicationRepository.findAllByStatusInAndDeletedFalseOrderByIdDesc(statusList);
+        for(RegApplication regApplication:regApplicationIds){
+            List<RegApplicationLog> modificationRegApplicationLogList = regApplicationLogService.findByStatusAndType(regApplication.getId(),LogStatus.Modification,LogType.Performer);
+            List<RegApplicationLog> agreementRegApplicationLogList = regApplicationLogService.findByStatusAndType(regApplication.getId(),LogStatus.Approved,LogType.Agreement);
+            List<RegApplicationLog> agreementCompleteRegApplicationLogList = regApplicationLogService.findByStatusAndType(regApplication.getId(),LogStatus.Approved,LogType.AgreementComplete);
+            List<RegApplicationLog> conclusionCompleteRegApplicationLogList = regApplicationLogService.findByStatusAndType(regApplication.getId(),LogStatus.Approved,LogType.ConclusionComplete);
+
+            if(modificationRegApplicationLogList.size()>=2 && agreementCompleteRegApplicationLogList.size()%2==0 && agreementRegApplicationLogList.size()%2==0 && conclusionCompleteRegApplicationLogList.size()%2==0){
+                regApplication.setStatus(RegApplicationStatus.ModificationCanceled);
+                regApplication.setUpdateAt(new Date());
+                regApplicationRepository.save(regApplication);
+    }
+        }
+    }
+
+    @Override
+    public void closeModificationTimer() {
+        List<RegApplicationStatus> statusList = new LinkedList<>();
+        statusList.add(RegApplicationStatus.ModificationCanceled);
+        statusList.add(RegApplicationStatus.Modification);
+        statusList.add(RegApplicationStatus.Process);
+        List<RegApplication> regApplicationIds = regApplicationRepository.findAllByStatusInAndDeletedFalseOrderByIdDesc(statusList);
+        for(RegApplication regApplication:regApplicationIds){
+            RegApplicationLog regApplicationLog = regApplicationLogService.findTop1ByStatusAndType(regApplication.getId(),LogStatus.Modification,LogType.Performer);
+            if(regApplicationLog!=null){
+                Date createdDate = regApplicationLog.getCreatedAt();
+                Calendar c = Calendar.getInstance();
+                Date date = new Date();
+                c.setTime(date);
+                c.add(Calendar.DATE,-61);    // shu kunning o'zi ham qo'shildi
+                Date expireDate = c.getTime();
+
+                if (createdDate.before(expireDate)){
+                    if(regApplication.getStatus()==RegApplicationStatus.Modification){
+                        regApplication.setStatus(RegApplicationStatus.ModificationCanceled);
+                        regApplication.setUpdateAt(new Date());
+                        regApplicationRepository.save(regApplication);
+                    }
+                }
+            }
+
+        }
+
+
+
+
     }
 
     public RegApplication getById(Integer id) {
@@ -416,19 +475,33 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 if (filterDto.getSubRegionId() != null) {
                     predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
                 }
+                if (filterDto.getStatus() != null) {
+                    predicates.add(criteriaBuilder.equal(root.join("forwardingLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
+                }
 
-                if (filterDto.getStatusing() == null){
-                    if (logType != null && filterDto.getStatus() != null) {
-                        switch (logType) {
-                            case Forwarding:
-                                predicates.add(criteriaBuilder.equal(root.join("forwardingLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
-                                break;
-                            case Performer:
-                                predicates.add(criteriaBuilder.equal(root.join("performerLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
-                                break;
-                        }
+
+                    if (filterDto.getTin() != null) {
+                        predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
                     }
+                    if (StringUtils.trimToNull(filterDto.getName()) != null) {
+                        predicates.add(criteriaBuilder.like(root.<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
+                    }
+                    if (filterDto.getApplicationId() != null) {
+                        predicates.add(criteriaBuilder.equal(root.get("id"), filterDto.getApplicationId()));
                 }else {
+                        if (logType != null) {
+                            List<Integer> init = new ArrayList<>();
+                            init.add(0);
+                            init.add(1);
+                            init.add(2);
+                            switch (logType) {
+                                case Forwarding:
+                                    predicates.add(criteriaBuilder.in(root.get("forwardingLogId")).value(init));
+                                    break;
+                                case Performer:
+                                    predicates.add(criteriaBuilder.in(root.get("performerLogId")).value(init));
+                                    break;
+                            }
                     if (logType != null) {
                         List<LogStatus> init = new ArrayList<>();
                         init.add(LogStatus.Initial);
@@ -442,9 +515,19 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                                 predicates.add(criteriaBuilder.in(root.join("performerLog").get("status")).value(init));
                                 break;
                         }
+                        if (filterDto.getOrganizationId() != null) {
+                            predicates.add(criteriaBuilder.equal(root.get("reviewId"), filterDto.getOrganizationId()));
+                        }
+                        if (filterDto.getRegionId() != null) {
+                            predicates.add(criteriaBuilder.equal(root.join("applicant").get("regionId"), filterDto.getRegionId()));
+                        }
+                        if (filterDto.getCategory() != null) {
+                            predicates.add(criteriaBuilder.equal(root.get("category"), filterDto.getCategory()));
+                        }
+                        if (filterDto.getSubRegionId() != null) {
+                            predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
+                        }
                     }
-                }
-
                 Date regDateBegin = DateParser.TryParse(filterDto.getRegDateBegin(), Common.uzbekistanDateFormat);
                 Date regDateEnd = DateParser.TryParse(filterDto.getRegDateEnd(), Common.uzbekistanDateFormat);
 

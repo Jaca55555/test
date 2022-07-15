@@ -23,8 +23,66 @@
         div#conclusion-for-print p{
             font-size: 19px !important;
         }
-    </style>
 
+
+        .boiler-tab-inner {
+            position: relative;
+        }
+
+        .boiler-tab-inner .inner-badge {
+
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            position: absolute;
+            right: -10px;
+            top: -10px;
+        }
+
+        .boiler-tab-inner .badge {
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            width:auto !important;
+        }
+
+
+
+    </style>
+    <style>
+        .table td, .table th{
+            white-space: pre-line;
+        }
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        .acc-wrap .acc-top {
+            background-color: #45bfe8;
+        }
+
+        .acc-wrap .acc-top i {
+            -webkit-transition: all 0.2s linear;
+            transition: all 0.2s linear;
+        }
+
+        .acc-wrap .acc-top .angle-down {
+            -webkit-transform: rotate(180deg);
+            transform: rotate(180deg);
+        }
+
+        .acc-wrap .acc-body {
+            display: none;
+        }
+        .custom-progress-modal .modal-header .modal-title::before {
+            content: "";
+            position: absolute;
+            width: 5px;
+            height: 30px;
+            background-color: #007bff;
+            left: 0;
+            top: 15px;
+        }
+    </style>
 </head>
 <body class="layout-6">
 <!-- [ Pre-loader ] start -->
@@ -57,33 +115,38 @@
                                         <hr>
                                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link show" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
+                                                <a class="nav-link show px-2" id="applicant-tab" data-toggle="tab" href="#applicant" role="tab" aria-controls="applicant" aria-selected="true" th:text="#{general_info}"></a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link show" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false" th:text="#{sys_contract}"></a>
+                                                <a class="nav-link show px-2" id="contract-tab" data-toggle="tab" href="#contract" role="tab" aria-controls="contract" aria-selected="false" th:text="#{sys_contract}"></a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link show" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false" th:text="#{sys_payment}"></a>
+                                                <a class="nav-link show px-2" id="payment-tab" data-toggle="tab" href="#payment" role="tab" aria-controls="payment" aria-selected="false" th:text="#{sys_payment}"></a>
+                                            </li>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link show" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
+                                                <a class="nav-link show px-2" id="expertise-tab" data-toggle="tab" href="#expertise" role="tab" aria-controls="expertise" aria-selected="false" th:text="#{sys_expertise}"></a>
                                             </li>
                                             <li class="nav-item" th:if="${regApplicationCategoryFourAdditional!=null}">
-                                                <a class="nav-link show" id="category-4-tab" data-toggle="tab" href="#category-4" role="tab" aria-controls="category-4" aria-selected="false" th:text="#{sys_category_4}"></a>
+                                                <a class="nav-link show px-2" id="category-4-tab" data-toggle="tab" href="#category-4" role="tab" aria-controls="category-4" aria-selected="false" th:text="#{sys_category_4}"></a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link show" id="conclusion-tab" data-toggle="tab" href="#conclusion" role="tab" aria-controls="conclusion" aria-selected="false" th:text="#{sys_conclusion}"></a>
+                                                <a class="nav-link show px-2" id="conclusion-tab" data-toggle="tab" href="#conclusion" role="tab" aria-controls="conclusion" aria-selected="false" th:text="#{sys_conclusion}"></a>
                                             </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link show" id="action-tab" data-toggle="tab" href="#action" role="tab" aria-controls="action" aria-selected="false" th:text="#{sys_confirmation}"></a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link show" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" th:text="#{sys_chat_by_applicant}" style="width: 85%;float: left"></a>
-                                                <span class="rounded-notification w-15 text-center" th:if="${commentCount}!=0" style="height: 20px;margin-top: 10%;" th:text="${commentCount}">2</span>
 
+                                            <li class="nav-item">
+                                                <a class="nav-link show px-2" id="boiler-tab" data-toggle="tab" href="#boiler" role="tab" aria-controls="boiler" aria-selected="false" th:text="#{boiler}"> boiler </a>
+                                            </li>
+<!--                                            fdsf-->
+                                            <li class="nav-item">
+                                                <a class="nav-link show px-2" id="action-tab" data-toggle="tab" href="#action" role="tab" aria-controls="action" aria-selected="false" th:text="#{sys_confirmation}"></a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link show" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>
+                                                <a class="nav-link show px-2" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="chat" aria-selected="false" th:text="#{sys_chat_by_applicant}" style="width: 85%;float: left"></a>
+                                                <span class="rounded-notification w-15 text-center" th:if="${commentCount}!=0" style="height: 20px;margin-top: 10%;" th:text="${commentCount}">2</span>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link show px-2" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="false" th:text="#{sys_log}"></a>
                                             </li>
                                         </ul>
                                         <div class="tab-content" id="myTabContent">
@@ -105,8 +168,270 @@
                                             <div class="tab-pane fade" id="expertise" role="tabpanel" aria-labelledby="expertise-tab">
                                                 <object th:include="expertise/fragment/expertise :: expertise" th:remove="tag"></object>
                                             </div>
+
+
                                             <div class="tab-pane fade" id="category-4" role="tabpanel" aria-labelledby="category-4" th:if="${regApplicationCategoryFourAdditional!=null}">
                                                 <object th:include="expertise/fragment/category_four/category_4_all_add :: category_step_add" th:remove="tag" ></object>
+                                            </div>
+
+                                            <div class="tab-pane fade" id="boiler" role="tabpanel" aria-labelledby="boiler-tab" >
+                                                <ul class="nav nav-pills shadow-none mb-3 d-flex justify-content-around" id="pills-tab" role="tablist">
+                                                    <li class="nav-item w-25">
+                                                        <a class="nav-link active p-4 border border-info d-flex  boiler-tab-inner justify-content-center align-content-center align-items-center" style="height:140px" id="boiler-tab-one" data-toggle="pill" href="#boiler-one" role="tab" aria-controls="boiler-one" aria-selected="true">  Аtmosfera havosiga chiqariladigan ifloslantiruvchi moddalar <span class="badge badge-danger" id="badgeOne" > Tasdiqlanmagan </span>  </a>
+                                                    </li>
+                                                    <li class="nav-item w-25">
+                                                        <a class="nav-link p-4 border border-info d-flex  boiler-tab-inner justify-content-center align-content-center align-items-center" id="boiler-tab-two" style="height:140px" data-toggle="pill" href="#boiler-two" role="tab" aria-controls="boiler-two" aria-selected="false">  Chiqindi suvlarni (ifloslantiruvchi moddalarni) er usti suv havzalariga va relyefga tashlash <span class="badge badge-danger" id="badgeTwo" > Tasdiqlanmagan </span> </a>
+                                                    </li>
+                                                    <li class="nav-item w-25">
+                                                        <a class="nav-link p-4 border border-info  boiler-tab-inner d-flex justify-content-center align-content-center align-items-center" style="height:140px" id="boiler-tab-three" data-toggle="pill" href="#boiler-three" role="tab" aria-controls="boiler-three" aria-selected="false"> Qurilish, ishlab chiqarish va isteʼmol qilish jarayonida hosil boʼlgan chiqindilar <span class="badge badge-danger" id="badgeThree" > Tasdiqlanmagan </span>  </a>
+                                                    </li>
+                                                </ul>
+
+                                                <div class="tab-content" id="pills-tabContent">
+                                                    <div class="tab-pane fade show active" id="boiler-one" role="tabpanel" aria-labelledby="boiler-tab-one">
+
+                                                        <form id="boiler_form1" action="">
+                                                            <table class="table  shadow-none table-striped" id="boiler-table1">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th  style="width: 10%" >№</th>
+                                                                    <th th:text="#{substance_type}">Modda turi</th>
+                                                                    <th th:text="#{substance_weight.type}"></th>
+                                                                    <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
+                                                                        <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <!--                            <tbody>-->
+                                                                <tbody  style=" overflow-y: auto;" >
+                                                                <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==1}">
+                                                                    <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
+                                                                    <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
+                                                                    <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
+                                                                    <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
+                                                                    <td style="width: 15%">
+                                                                        <a class="btn btn-warning btn-sm list-btn mr-1 link-edit-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                        <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr></tr>
+                                                                </tbody>
+                                                            </table>
+
+
+
+                                                            <div class="w-100 d-flex justify-content-start row ">
+                                                                <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
+                                                                    <div class="form-group">
+                                                                        <select class="form-control" id="name_boiler1"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                            <option  th:text="#{sys_select}"></option>
+                                                                            <option th:each="s:${substances1}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
+                                                                    <!--                                                                            <input id="type_boiler1" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
+
+
+
+                                                                    <select class="form-control" name="type_boiler" id="type_boiler1"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                        <option  th:text="#{sys_select}"></option>
+                                                                        <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
+                                                                    </select>
+
+
+                                                                </div>
+                                                                <div class="pt-3 ml-4 mr-5" style="width: 14%; margin-top: 15px">
+                                                                    <input id="amount_boiler1" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
+                                                                </div>
+                                                                <div class="pt-3" >
+                                                                    <div class="d-flex justify-content-center">
+                                                                        <button type="button" onclick="addExecutive1()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
+                                                                        <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
+                                                            <input type="hidden" id="_csrf1" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+
+                                                            <div class="d-flex justify-content-end w-100">
+                                                            <button type="button" class="btn btn-primary" data-dismiss="modal"  onclick="saveBoiler(1)"  ><span th:text="#{sys_phone.confirm}"></span></button>
+                                                            </div>
+                                                        </form>
+
+
+                                                    </div>
+                                                    <div class="tab-pane fade" id="boiler-two" role="tabpanel" aria-labelledby="boiler-tab-two">
+                                                        <form id="boiler_form2" action="">
+                                                            <table class="table  table-striped" id="boiler-table2">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th  style="width: 10%" >№</th>
+                                                                    <th th:text="#{substance_type}">Modda turi</th>
+                                                                    <th th:text="#{substance_weight.type}"></th>
+                                                                    <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
+                                                                        <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <!--                            <tbody>-->
+                                                                <tbody  style=" overflow-y: auto;" >
+                                                                <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==2}">
+                                                                    <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
+                                                                    <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
+                                                                    <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
+                                                                    <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
+                                                                    <td style="width: 15%">
+                                                                        <a class="btn btn-warning btn-sm list-btn mr-1 link-edit-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                        <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr></tr>
+                                                                </tbody>
+                                                            </table>
+
+
+
+                                                            <div class="w-100 d-flex justify-content-start row ">
+                                                                <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
+                                                                    <div class="form-group">
+                                                                        <select class="form-control" id="name_boiler2"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                            <option  th:text="#{sys_select}"></option>
+                                                                            <option th:each="s:${substances2}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
+                                                                    <!--                                                                            <input id="type_boiler1" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
+
+
+
+                                                                    <select class="form-control" name="type_boiler" id="type_boiler2"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                        <option  th:text="#{sys_select}"></option>
+                                                                        <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
+                                                                    </select>
+
+
+                                                                </div>
+                                                                <div class="  pt-3 ml-4 mr-5" style="width: 14%; margin-top: 15px">
+                                                                    <input id="amount_boiler2" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
+
+                                                                </div>
+
+
+                                                                <div class="pt-3">
+                                                                    <div class="d-flex justify-content-center">
+
+                                                                        <button type="button" onclick="addExecutive2()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
+                                                                        <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
+
+                                                                    </div>
+
+
+                                                                </div>
+
+
+                                                            </div>
+
+
+                                                            <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
+                                                            <input type="hidden" id="_csrf2" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+
+                                                         <div class="d-flex w-100 justify-content-end">
+                                                             <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler(2)"><span th:text="#{sys_phone.confirm}"></span></button>
+
+                                                         </div>
+
+                                                        </form>
+
+                                                    </div>
+                                                    <div class="tab-pane fade" id="boiler-three" role="tabpanel" aria-labelledby="boiler-tab-three">
+                                                        <form id="boiler_form3" action="">
+                                                            <table class="table  table-striped" id="boiler-table3">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th  style="width: 10%" >№</th>
+                                                                    <th th:text="#{substance_type}">Modda turi</th>
+                                                                    <th th:text="#{substance_weight.type}"></th>
+                                                                    <th th:text="#{substance_weight}" style="width: 30%" colspan="2">
+                                                                        <!--                                    <input class="form-control col-md-10" type="text" id="boiler_name" name="boiler_name" th:value="${regApplication.boilerName}"  required="" maxlength="254" th:placeholder="#{sys_boiler_name}" />-->
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+                                                                <!--                            <tbody>-->
+                                                                <tbody  style=" overflow-y: auto;" >
+                                                                <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==3}">
+                                                                    <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
+                                                                    <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
+                                                                    <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" idNumber="6"  style="width: 20%"></td>
+                                                                    <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
+                                                                    <td style="width: 15%">
+                                                                        <a class="btn btn-warning btn-sm list-btn mr-1 link-edit-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                        <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr></tr>
+                                                                </tbody>
+                                                            </table>
+
+
+
+                                                            <div class="w-100 d-flex justify-content-start row ">
+                                                                <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
+                                                                    <div class="form-group">
+                                                                        <select class="form-control" id="name_boiler3"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                            <option  th:text="#{sys_select}"></option>
+                                                                            <option th:each="s:${substances3}" th:value="${s.getNameTranslation(#locale)}" th:text="${s.getNameTranslation(#locale)}">UZSubstance</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+
+                                                                <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
+                                                                    <!--                                                                            <input id="type_boiler1" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
+
+
+
+                                                                    <select class="form-control" name="type_boiler" id="type_boiler3"  style="margin-top: 16px;" data-select2-tags="true">
+                                                                        <option  th:text="#{sys_select}"></option>
+                                                                        <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="${b.name}">UZSubstance</option>
+                                                                    </select>
+
+
+                                                                </div>
+                                                                <div class="  pt-3 ml-4 mr-5" style="width: 14%; margin-top: 15px">
+                                                                    <input id="amount_boiler3" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
+
+                                                                </div>
+
+
+                                                                <div class="pt-3">
+                                                                    <div class="d-flex justify-content-center">
+
+                                                                        <button type="button" onclick="addExecutive3()" class="btn btn-sm btn-outline-info mr-1" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-check-square mr-0" aria-hidden="true"></i></button>
+                                                                        <!--                                    <button type="button" onclick="cancelExecutive()" class="btn btn-sm btn-outline-danger" style="display: flex;padding: 14px; margin-top: 16px"><i class="feather icon-x-square mr-0" aria-hidden="true"></i></button>-->
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
+                                                            <input type="hidden" id="_csrf3" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                         <div class="w-100 d-flex justify-content-end">
+                                                             <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler(3)"><span th:text="#{sys_phone.confirm}"></span></button>
+                                                         </div>
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+
+
                                             </div>
 
                                             <div class="tab-pane fade" id="conclusion" role="tabpanel" aria-labelledby="conclusion-tab">
@@ -210,12 +535,25 @@
     });
 
 </script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        const accordion = $('.acc-top');
 
+        $(accordion).click(function() {
+            $(this).next().slideToggle(500);
+            accordion.not(this).next().slideUp(500);
+            $(this).children("i").toggleClass("angle-down");
+            accordion.not(this).children("i").removeClass("angle-down");
+        });
+    })
+</script>
 
 <!--<script type="text/javascript" th:src="@{${ServerIp + '/web-apps/apps/api/documents/api.js'}}"></script>-->
 
 <script type="text/javascript" th:inline="javascript">
     let performerLogStatus = [[${performerLogStatus}]]
+    var checkLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationBoilerCharacteristicsCheck}]];
+    var checkBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationBoilerCharacteristicsCheckBoiler}]];
 
     var isOnlineConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionIsOnline}]];
     var saveConculisionUrl = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).PerformerConclusionSave}]];
@@ -251,6 +589,187 @@
     }*/
 
 
+
+    function setBadgeInformation (status, number) {
+        if (number===1) {
+            switch (status) {
+                case 1 :
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-success")
+                    $("#badgeOne").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-info")
+                    $("#badgeOne").append("To'ldirilmagan")
+                    break;
+
+                case 0 :
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-danger")
+                    $("#badgeOne").append("Tasdiqlanmagan")
+                    break;
+
+
+
+                default:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+                    $("#badgeOne").hide()
+
+            }
+        } else if ( number===2 ) {
+            switch (status) {
+                case 1 :
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-success")
+                    $("#badgeTwo").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-info")
+                    $("#badgeTwo").append("To'ldirilmagan")
+                    break;
+
+                case 0 :
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-danger")
+                    $("#badgeTwo").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+                    $("#badgeTwo").hide()
+
+            }
+        } else {
+            switch (status) {
+                case 1 :
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-success")
+                    $("#badgeThree").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-info")
+                    $("#badgeThree").append("To'ldirilmagan")
+                    break;
+
+                case 0 :
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-danger")
+                    $("#badgeThree").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+                    $("#badgeThree").hide()
+
+            }
+        }
+    }
+
+
+
+
+
+
+    $( document ).ready(function() {
+        console.log( "ready!" );
+        $("#boiler-tab").click(function(){
+
+            for (let i = 1; i < 4; i++) {
+
+                var formBoiler = new FormData();
+                formBoiler.append("regId", [[${regApplication.id}]]);
+                formBoiler.append("boiler_type",i);
+                formBoiler.append("_csrf", $("#global_csrf").val());
+
+                $.ajax({
+                    url: checkBoilerLink,
+                    type:"POST",
+                    data: formBoiler,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function (response) {
+                        console.log("tab status : ", response?.status)
+                        if (response?.status) {
+                            if (i===1) {
+
+                                setBadgeInformation(response?.status, 1)
+
+                            } else if (i===2) {
+
+                                setBadgeInformation(response?.status, 2)
+
+
+                            } else {
+
+                                setBadgeInformation(response?.status, 3)
+
+
+                            }
+                        }
+                    }
+                });
+            }
+
+            if($("#boiler-tab").hasClass('active')) {
+                console.log("boiler tab was actived")
+            }
+
+        })
+    });
+
+
     /*function isOnlineConculision() {
         var form = new FormData();
         form.append("id",[[${regApplication.id}]]);
@@ -274,33 +793,70 @@
 
     $('#form-confirm-button').on('click',function () {
         // alert("save");
-        let conclusionOnline = $("input[name='conclusionOnline']:checked").val();
-        if (conclusionOnline==="true"){
-            console.log("save");
-            var form = new FormData();
-            form.append("id", [[${regApplication.id}]]);
-            form.append("_csrf", $("#global_csrf").val());
-            $.ajax({
-                url: isSaveConclusion,
-                type: "POST",
-                data: form,
-                processData: false,
-                contentType: false,
-                cache: false,
-                success: function (response) {
-                    console.log(response);
-                    if (response.status==1){
-                        $('#conclusion_alert').hide();
-                       $('#form-confirm').submit();
+
+        console.log("form-confirm-button  ishlayapti")
+        var formBoiler = new FormData();
+        formBoiler.append("regId", [[${regApplication.id}]]);
+        formBoiler.append("_csrf", $("#global_csrf").val());
+        $.ajax({
+            url: checkLink,
+            type:"POST",
+            data: formBoiler,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+
+                console.log(response?.status)
+
+                if (response?.status) {
+                    console.log(response.status)
+                    $('#boiler_alert').hide();
+
+                    let conclusionOnline = $("input[name='conclusionOnline']:checked").val();
+                    if (conclusionOnline==="true"){
+
+                        console.log("save");
+                        console.log("aloooo")
+
+                        var form = new FormData();
+                        form.append("id", [[${regApplication.id}]]);
+                        form.append("_csrf", $("#global_csrf").val());
+                        $.ajax({
+                            url: isSaveConclusion,
+                            type: "POST",
+                            data: form,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+                                console.log(response);
+                                if (response.status==1){
+                                    $('#conclusion_alert').hide();
+                                    $('#form-confirm').submit();
+                                }else{
+                                    $('#conclusion_alert').show();
+                                }
+                            }
+                        });
                     }else{
-                        $('#conclusion_alert').show();
+                        $('#conclusion_alert').hide();
+                        $('#form-confirm').submit();
                     }
+
                 }
-            });
-        }else{
-            $('#conclusion_alert').hide();
-            $('#form-confirm').submit();
-        }
+
+
+                else {
+                    console.log(response?.status)
+                    $('#boiler_alert').show();
+
+                }
+            }
+        });
+        //hjfjhfh
+
+
     });
 
     var conclusionId= [[${conclusionId}]];
@@ -435,98 +991,1288 @@
 
 
 </script>
-<script th:if="${coordinate!=null}">
-    var Map = ol.Map;
-    var View = ol.View;
-    var Draw = ol.interaction.Draw;
-    var TileLayer = ol.layer.Tile;
-    var VectorLayer = ol.layer.Vector;
-    var OSM = ol.source.OSM;
-    var VectorSource = ol.source.Vector;
 
-        var raster = new TileLayer({
-            source: new OSM()
-        });
-
-        var source = new VectorSource({wrapX: false});
-
-        var vector = new VectorLayer({
-            source: source
-        });
-
-        var polyCoords = [];
-        // var coords = "41.30881,69.28178 41.30860,69.28136 41.30790,69.28209 41.30812,69.28250".split(' ');
-        // var coords = "69.28178,41.30881 69.28136,41.30860 69.28209,41.30790 69.28250,41.30812".split(' ');
-        var coords = [];
-
-        coords.push(coordinateLat + "," + coordinateLong);
-        for(var i in coordinateLatLongList){
-            coords.push(coordinateLatLongList[i].latitude + "," + coordinateLatLongList[i].longitude);
-        }
-
-        for (var i in coords) {
-            var c = coords[i].split(',');
-            polyCoords.push(ol.proj.transform([parseFloat(c[0]), parseFloat(c[1])], 'EPSG:4326', 'EPSG:3857'));
-
-            /*$('#mapModal').append('<div class="col-md-12 row form-group">\n' +
-                '                                                <div class="col-md-2">\n' +
-                '                                                    <h4 class="text-right pad-top">#'+(parseInt(i)+1)+'</h4>\n' +
-                '                                                </div>\n' +
-                '                                                <div class="col-md-3">\n' +
-                '                                                    <input type="text" class="form-control" readonly="" value="'+parseFloat(c[1])+'">\n' +
-                '                                                </div>\n' +
-                '                                                <div class="col-md-3 offset-md-2">\n' +
-                '                                                    <input type="text" class="form-control" readonly="" value="'+parseFloat(c[0])+'">\n' +
-                '                                                </div>\n' +
-                '                                            </div>')*/
-        }
-
-        var feature = new ol.Feature({
-            geometry: new ol.geom.Polygon([polyCoords])
-        });
-
-        var layer = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                features: [feature]
-            })
-        });
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=3d185fb5-c22a-4e5f-a22f-4a5eb5f30744"
+        type="text/javascript"></script>
 
 
-        var map = new Map({
-            layers: [raster, vector, layer],
-            target: 'map',
-            view: new View({
-                // center: ol.proj.fromLonLat([coordinateLat, coordinateLong]),
-                center: ol.proj.transform([parseFloat(coordinateLat), parseFloat(coordinateLong)], 'EPSG:4326', 'EPSG:3857'),
-                zoom: 16
-            })
-        });
+<script th:inline="javascript" th:if="${coordinate!=null}">
 
-        var draw = new Draw({
-            source: source,
-            type: "Polygon"
-        });
-        // map.addInteraction(draw);
+    var coordinateLatLongList = [[${coordinateLatLongList}]];
 
-        map.on("click", function () {
-            var features = vector.getSource().getFeatures();
-            features.forEach(function (feature) {
-                console.log(feature.getGeometry().getCoordinates()[0][0]);
-                var lonlat = new ol.proj.toLonLat(feature.getGeometry().getCoordinates()[0][0]);
-                console.log(lonlat[0]);
-                console.log(lonlat[1]);
-            })
-        });
+    console.log(coordinateLatLongList)
 
-        document.addEventListener('keydown', function(e) {
-            if (e.which == 8)
-                vector.getSource().clear();
-        });
+    var correctCoordinates = coordinateLatLongList.map((item, index)=>([parseFloat(item.longitude), parseFloat(item.latitude)]))
 
-        $('#openMapModal').on('click',function () {
-            setTimeout( function() { map.updateSize();}, 200);
-        })
+    correctCoordinates.push([
+        ...correctCoordinates[0]
+    ])
+
+
+
+    var lats = coordinateLatLongList.map((item, index)=>parseFloat(item.latitude))
+    var sumLats = 0
+    lats.forEach(element => {
+        sumLats += element
+    });
+    var midLat = sumLats/(lats.length)
+
+    var longs = coordinateLatLongList.map((item, index)=>parseFloat(item.longitude))
+    var sumLongs = 0
+    longs.forEach(element => {
+        sumLongs += element
+    });
+    var midLong = sumLongs/(longs.length)
+
+    console.log(correctCoordinates)
+    console.log("midLat", midLat, "midLong", midLong)
+
+    ymaps.ready( init );
+    var myMap;
+    function init () {
+        // Параметры карты можно задать в конструкторе.
+
+
+        myMap = new ymaps.Map(
+            // ID DOM-элемента, в который будет добавлена карта.
+            'map',
+            // Параметры карты.
+            {
+                // Географические координаты центра отображаемой карты.
+                center: [ midLong, midLat  ],
+                // Масштаб.
+                zoom: 15,
+                // Тип покрытия карты: "Спутник".
+                type: 'yandex#satellite'
+            }, {
+                // Поиск по организациям.
+                searchControlProvider: 'yandex#search'
+            }
+        );
+
+        // Создаем ломаную, используя класс GeoObject.
+        var myGeoObject = new ymaps.GeoObject( {
+            // Описываем геометрию геообъекта.
+            geometry: {
+                // Тип геометрии - "Ломаная линия".
+                type: "LineString",
+                // Указываем координаты вершин ломаной.
+                coordinates: correctCoordinates
+            },
+            // Описываем свойства геообъекта.
+            properties: {
+                // Содержимое хинта.
+                hintContent: "Я геообъект",
+                // Содержимое балуна.
+                balloonContent: "Меня можно перетащить"
+            }
+        }, {
+            // Задаем опции геообъекта.
+            // Включаем возможность перетаскивания ломаной.
+            draggable: true,
+            // Цвет линии.
+            strokeColor: "#FFFF00",
+            // Ширина линии.
+            strokeWidth: 5
+        } );
+
+        // Добавляем линии на карту.
+        myMap.geoObjects
+            .add( myGeoObject )
     }
+
+
+    console.log(correctCoordinates)
+
+
+
+
+
 </script>
+
+<!--for table boiler -->
+
+<script th:inline="javascript">
+    var regApplicationId = [[${regApplication.id}]];
+    var regAddId = [[${regApplication.id}]];
+    var substances1 = [[${substances1}]];
+    var substances2 = [[${substances2}]];
+    var substances3 = [[${substances3}]];
+    var typeBoiler = [[${boilerEnumList}]];
+    var labelDelete = [[#{sys_delete}]];
+    var labelEdit = [[#{sys_edit}]];
+    var editLink1 = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType1}]];
+    var editLink2 = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType2}]];
+    var editLink3 = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType3}]];
+    var deleteLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsDelete}]];
+    var createLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerCharacteristicsCreate}]];
+    var confirmLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationBoilerCharacteristicsConfirm}]];
+    var saveBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerSave}]];
+    var isSaveBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationFourCategoryBoilerIsSave}]];
+    var _csrf = [[${_csrf.token}]];
+    var isSavingTitle = [[#{sys_is_saving}]];
+    var isNotSavingTitle = [[#{sys_is_not_saving}]];
+    var checkBoilerLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).RegApplicationBoilerCharacteristicsCheckBoiler}]];
+
+
+
+
+
+
+
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+
+    var text1;
+    for (x in substances1) {
+        text1 += `<option value="` + substances1[x].name + `">` + substances1[x].name + `</option>`;
+    }
+
+    var text4;
+    console.log("typeBoiler", typeBoiler)
+    for (x in typeBoiler) {
+        text4 += `<option value="` + x + `">` + typeBoiler[x] + `</option>`;
+    }
+
+    var text2;
+    for (x in substances2) {
+        text2 += `<option value="` + substances2[x].name + `">` + substances2[x].name + `</option>`;
+    }
+    var text3;
+    for (x in substances3) {
+        text3 += `<option value="` + substances3[x].name + `">` + substances3[x].name + `</option>`;
+    }
+    // console.log('substances='+substances);
+    function isSaveBoilerCharacteristice(){
+        $.ajax({
+            url: isSaveBoilerLink,
+            data: {
+                id: regAddId,
+                _csrf: _csrf
+            },
+            type: 'post',
+            dataType: 'json',
+            success: function (response) {
+
+                if (response==true){
+                    $('#alert-not_save-characteristics').html('');
+                    $('#form-step5').submit();
+                }else{
+                    $('#alert-not_save-characteristics').html('<div class="alert alert-warning alert-dismissible" role="alert">'+ [[#{sys_not_saved_boiler_characteristics}]]  +'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
+                }
+            },
+            error: function () {
+            }
+        });
+    }
+
+    //Bu yerda tasdiqlash bo'ladi
+
+    //Bu yerda tasdiqlash bo'ladi
+
+
+    function setBadgeInformationForCreate (status, number) {
+
+        console.log("status", status )
+        console.log("number", number)
+
+        if (number===1) {
+            switch (status) {
+                case 1 :
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-success")
+                    $("#badgeOne").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-info")
+                    $("#badgeOne").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-danger")
+                    $("#badgeOne").append("Tasdiqlanmagan")
+                    break;
+
+
+
+                default:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+                    $("#badgeOne").hide()
+
+            }
+        } else if ( number===2 ) {
+
+            switch (status) {
+                case 1:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-success")
+                    $("#badgeTwo").append("Tasdiqlandi")
+                    break;
+                case 2:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-info")
+                    $("#badgeTwo").append("To'ldirilmagan")
+                    break;
+                case 0:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-danger")
+                    $("#badgeTwo").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+                    $("#badgeTwo").hide()
+
+            }
+        } else {
+            switch (status) {
+                case 1:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-success")
+                    $("#badgeThree").append("Tasdiqlandi")
+                    break;
+
+                case 2:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-info")
+                    $("#badgeThree").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-danger")
+                    $("#badgeThree").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+                    $("#badgeThree").hide()
+
+            }
+        }
+    }
+
+    function deleteItemForCreate () {
+        for (let i = 1; i < 4; i++) {
+            var formBoiler = new FormData();
+            formBoiler.append("regId", [[${regApplication.id}]]);
+            formBoiler.append("boiler_type",i);
+            formBoiler.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: checkBoilerLink,
+                type:"POST",
+                data: formBoiler,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+                    setBadgeInformationForCreate(response?.status, i)
+                }
+            });
+        }
+    }
+
+
+    function saveBoiler(tabId) {
+
+        var formBoiler = new FormData();
+        formBoiler.append("regId", regApplicationId);
+        formBoiler.append("boiler_type",tabId);
+        formBoiler.append("_csrf", $("#global_csrf").val());
+        $.ajax({
+            url: confirmLink,
+            type:"POST",
+            data: formBoiler,
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                if (response?.status) {
+                    //    go next step
+                    if (tabId===1) {
+
+
+                        setBadgeInformation(response?.status, 1)
+
+
+
+                    } else if (tabId===2) {
+                        setBadgeInformation(response?.status, 2)
+
+
+                    } else {
+
+                        setBadgeInformation(response?.status, 3)
+
+
+                    }
+                }
+            }
+        });
+    }
+
+
+
+
+
+    var n=0;
+
+
+
+
+    //add base
+    function addExecutive1(){
+        $('#name_boiler1').parsley().validate();
+
+        $('#type_boiler1').parsley().validate();
+
+        $('#amount_boiler1').parsley().validate();
+
+        var name = $('#name_boiler1').val();
+
+        var type = $('#type_boiler1').val();
+
+        var amount = $('#amount_boiler1').val();
+
+        if( $('#name_boiler1').parsley().isValid()
+            && $('#type_boiler1').parsley().isValid()
+            && $('#amount_boiler1').parsley().isValid()) {
+
+            var form = new FormData();
+            form.append("regId", regApplicationId);
+            form.append("name", name);
+            form.append("type", type);
+            form.append("boilerEnum", type);
+            console.log("type123",type);
+            form.append("amount", amount);
+            form.append("typeBoiler",1);
+            form.append("_csrf", _csrf);
+
+            $.ajax({
+                type: "POST",
+                url: createLink,
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+
+                    deleteItemForCreate()
+                    $('#amount_boiler1').val(null);
+
+                    if (response.status==1){
+
+
+
+                        const tableRows = document.querySelectorAll('#boiler-table1 tbody tr');
+
+                        var id = response.data.id;
+                        var name = response.data.name;
+                        var type = response.data.type;
+                        var amount = response.data.amount;
+                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1 link-edit-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                            '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
+                        cancelExecutive();
+                        $('#boiler-table1 tbody tr:last').after('' +
+                            '<tr id="row_' + id + '">' +
+                            '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
+                            '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
+
+                            '<td  style="width: 20%" >' + typeBoiler[type]  + '</td>' +
+                            '<td style="\n' +
+                            '    width: 15%;\n' +
+                            '    \n" >' + amount + '</td>' +
+                            '<td style="width: 15%">' + actions + '</td></tr>');
+
+                    }
+                }
+            });
+        }
+    }
+    function addExecutive2(){
+        $('#name_boiler2').parsley().validate();
+        $('#type_boiler2').parsley().validate();
+        $('#amount_boiler2').parsley().validate();
+
+        var name = $('#name_boiler2').val();
+        var type = $('#type_boiler2').val();
+        var amount = $('#amount_boiler2').val();
+
+        if( $('#name_boiler2').parsley().isValid()
+            && $('#type_boiler2').parsley().isValid()
+            && $('#amount_boiler2').parsley().isValid()) {
+            console.log("regId" + regApplicationId)
+            console.log("name" + name)
+            console.log("type" + type)
+            console.log("amount" + amount)
+            var form = new FormData();
+            form.append("regId", regApplicationId);
+            form.append("name", name);
+            form.append("type", type);
+            form.append("boilerEnum", type);
+            form.append("amount", amount);
+            form.append("typeBoiler",2);
+            form.append("_csrf", _csrf);
+
+            $.ajax({
+                type: "POST",
+                url: createLink,
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+
+                    $('#amount_boiler2').val(null);
+
+                    const tableRows = document.querySelectorAll('#boiler-table2 tbody tr');
+
+
+                    deleteItemForCreate()
+
+
+                    if (response.status===1){
+
+                        var id = response.data.id;
+                        var name = response.data.name;
+                        var type = response.data.type;
+                        var amount = response.data.amount;
+                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1 link-edit-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                            '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
+                        cancelExecutive();
+                        $('#boiler-table2 tbody tr:last').after('' +
+                            '<tr id="row_' + id + '">' +
+                            '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
+                            '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
+                            '<td  style="width: 20%" >' + typeBoiler[type] + '</td>' +
+                            '<td style="\n' +
+                            '    width: 15%;\n' +
+                            '    \n" >' + amount + '</td>' +
+                            '<td style="width: 15%">' + actions + '</td></tr>');
+
+                    }
+                }
+            });
+        }
+    }
+    function addExecutive3(){
+        $('#name_boiler3').parsley().validate();
+        $('#type_boiler3').parsley().validate();
+        $('#amount_boiler3').parsley().validate();
+
+        var name = $('#name_boiler3').val();
+        var type = $('#type_boiler3').val();
+        var amount = $('#amount_boiler3').val();
+
+        if( $('#name_boiler3').parsley().isValid()
+            && $('#type_boiler3').parsley().isValid()
+            && $('#amount_boiler3').parsley().isValid()) {
+            console.log("regId" + regApplicationId)
+            console.log("name" + name)
+            console.log("type" + type)
+            console.log("amount" + amount)
+            var form = new FormData();
+            form.append("regId", regApplicationId);
+            form.append("name", name);
+            form.append("type", type);
+            form.append("boilerEnum", type);
+            form.append("amount", amount);
+            form.append("typeBoiler",3);
+            form.append("_csrf", _csrf);
+
+            $.ajax({
+                type: "POST",
+                url: createLink,
+                data: form,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+
+                    $('#amount_boiler3').val(null);
+
+                    deleteItemForCreate()
+
+                    if (response.status==1){
+                        console.log("response",response)
+                        const tableRows = document.querySelectorAll('#boiler-table3 tbody tr');
+                        var id = response.data.id;
+                        var name = response.data.name;
+                        var type = response.data.type;
+                        var amount = response.data.amount;
+                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1 link-edit-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                            '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
+                        cancelExecutive();
+                        $('#boiler-table3 tbody tr:last').after('' +
+                            '<tr id="row_' + id + '">' +
+                            '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
+                            '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
+                            '<td  style="width: 20%" >' + typeBoiler[type] + '</td>' +
+                            '<td style="\n' +
+                            '    width: 15%;\n' +
+                            '   \n" >' + amount + '</td>' +
+                            '<td style="width: 15%">' + actions + '</td></tr>');
+
+                    }
+                }
+            });
+        }
+    }
+
+
+    function cancelExecutive(){
+        n=0;
+        $('#input_add').remove();
+    }
+
+
+    //delete item
+
+    function setBadgeInformationForDelete (status, number) {
+
+        console.log("status", status )
+        console.log("number", number)
+
+        if (number===1) {
+            switch (status) {
+                case 1 :
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-success")
+                    $("#badgeOne").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-info")
+                    $("#badgeOne").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-danger")
+                    $("#badgeOne").append("Tasdiqlanmagan")
+                    break;
+
+
+
+                default:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+                    $("#badgeOne").hide()
+
+            }
+        } else if ( number===2 ) {
+
+            switch (status) {
+                case 1:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-success")
+                    $("#badgeTwo").append("Tasdiqlandi")
+                    break;
+                case 2:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-info")
+                    $("#badgeTwo").append("To'ldirilmagan")
+                    break;
+                case 0:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-danger")
+                    $("#badgeTwo").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+                    $("#badgeTwo").hide()
+
+            }
+        } else {
+            switch (status) {
+                case 1:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-success")
+                    $("#badgeThree").append("Tasdiqlandi")
+                    break;
+
+                case 2:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-info")
+                    $("#badgeThree").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-danger")
+                    $("#badgeThree").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+                    $("#badgeThree").hide()
+
+            }
+        }
+    }
+
+    function deleteItemForDelete () {
+        for (let i = 1; i < 4; i++) {
+            var formBoiler = new FormData();
+            formBoiler.append("regId", [[${regApplication.id}]]);
+            formBoiler.append("boiler_type",i);
+            formBoiler.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: checkBoilerLink,
+                type:"POST",
+                data: formBoiler,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+                    setBadgeInformationForDelete(response?.status, i)
+                }
+            });
+        }
+    }
+
+    /*delete modal*/
+    function mymodal(id){
+
+        var form = new FormData();
+        form.append("id",id);
+        form.append("regAddId",regAddId);
+        form.append("_csrf", _csrf);
+        $.ajax({
+            type: "POST",
+            url:deleteLink,
+            data:form,
+            success: function(){
+
+                console.log("delete clicked")
+
+                deleteItemForDelete()
+
+                $('#row_'+id).remove();
+            },
+            processData: false,
+            contentType: false,
+            cache:false
+        });
+    }
+
+
+
+    $('#boiler-table').css("width", "100%");
+</script>
+<script th:inline="javascript">
+    $(document).ready(function() {
+        $("#name_boiler1").select2({
+            dropdownParent: $("#boilerModal1")
+        });
+        $("#type_boiler1").select2({
+            dropdownParent: $("#boilerModal1")
+        });
+
+        $("#name_boiler2").select2({
+            dropdownParent: $("#boilerModal2")
+        });
+        $("#name_boiler3").select2({
+            dropdownParent: $("#boilerModal3")
+        });
+    });
+
+
+    function setBadgeInformationForEdit (status, number) {
+
+        console.log("status", status )
+        console.log("number", number)
+
+        if (number===1) {
+            switch (status) {
+                case 1 :
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-success")
+                    $("#badgeOne").append("Tasdiqlandi")
+
+                    break;
+
+                case 2:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-info")
+                    $("#badgeOne").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+
+                    $("#badgeOne").html("")
+                    $("#badgeOne").addClass("badge-danger")
+                    $("#badgeOne").append("Tasdiqlanmagan")
+                    break;
+
+
+
+                default:
+                    $("#badgeOne").removeClass("badge-success")
+                    $("#badgeOne").removeClass("badge-danger")
+                    $("#badgeOne").removeClass("badge-info")
+                    $("#badgeOne").hide()
+
+            }
+        } else if ( number===2 ) {
+
+            switch (status) {
+                case 1:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-success")
+                    $("#badgeTwo").append("Tasdiqlandi")
+                    break;
+                case 2:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-info")
+                    $("#badgeTwo").append("To'ldirilmagan")
+                    break;
+                case 0:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+
+                    $("#badgeTwo").html("")
+                    $("#badgeTwo").addClass("badge-danger")
+                    $("#badgeTwo").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeTwo").removeClass("badge-success")
+                    $("#badgeTwo").removeClass("badge-danger")
+                    $("#badgeTwo").removeClass("badge-info")
+                    $("#badgeTwo").hide()
+
+            }
+        } else {
+            switch (status) {
+                case 1:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-success")
+                    $("#badgeThree").append("Tasdiqlandi")
+                    break;
+
+                case 2:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-info")
+                    $("#badgeThree").append("To'ldirilmagan")
+                    break;
+
+                case 0:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+
+                    $("#badgeThree").html("")
+                    $("#badgeThree").addClass("badge-danger")
+                    $("#badgeThree").append("Tasdiqlanmagan")
+                    break;
+
+                default:
+                    $("#badgeThree").removeClass("badge-success")
+                    $("#badgeThree").removeClass("badge-danger")
+                    $("#badgeThree").removeClass("badge-info")
+                    $("#badgeThree").hide()
+
+            }
+        }
+    }
+
+    function deleteItemForEdit () {
+        for (let i = 1; i < 4; i++) {
+            var formBoiler = new FormData();
+            formBoiler.append("regId", [[${regApplication.id}]]);
+            formBoiler.append("boiler_type",i);
+            formBoiler.append("_csrf", $("#global_csrf").val());
+            $.ajax({
+                url: checkBoilerLink,
+                type:"POST",
+                data: formBoiler,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function (response) {
+
+                    setBadgeInformationForEdit(response?.status, i)
+                }
+            });
+        }
+    }
+
+
+
+
+    $("#boiler-table1").on('mousedown.edit', "a.link-edit-1", function(e) {
+
+        $(this).removeClass('link-edit-1 btn-warning').addClass("link-save-1  btn-success");
+        $(this).children('i.feather.icon-edit-1').removeClass().addClass("feather icon-check-circle mr-0");
+        var $row = $(this).closest("tr").off("mousedown");
+        var $tds = $row.find("td").not(':last');
+        var $idn=0;
+        $.each($tds, function(i, el) {
+
+            console.log("i ", i)
+            console.log("el ", el)
+            console.log("idn", $idn)
+            var txt = $(this).text();
+            $idn++;
+            console.log("idn", $idn)
+
+
+            if ($idn==2) {
+                $(this).html("").append(``+
+                    ` <select class="form-control" id="name_boiler1"  >`+
+                    text1+
+                    `<option selected="selected" value="` +txt+`">`+txt+`</option>`+
+                    `  </select>`+
+                    ``);
+            }
+
+            if ($idn==3){
+                $(this).html("").append(``+
+                    `<select class="form-control" id="type_boiler1"  >`+
+                    text4+
+                    `<option selected="selected" value="`+txt+`">`+txt+`</option>`+
+                    `</select>`+
+                    ``);}
+            if ($idn==4){
+                $(this).html("").append("<input id='amount_boiler1' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
+            }
+
+        });
+    });
+
+    $("#boiler-table1").on('mousedown.save', "a.link-save-1", function(e) {
+
+        $(this).removeClass('link-save-1  btn-success').addClass("link-edit-1 btn-warning ");
+        console.log("Bu qism edit uchun")
+        var $row = $(this).closest("tr");
+        var $tds = $row.find("td").not(':last');
+        var id=$row.find("td").first().attr('id');
+        $('#name_boiler1').parsley().validate();
+        $('#type_boiler1').parsley().validate();
+        $('#amount_boiler1').parsley().validate();
+
+        if( $('#name_boiler1').parsley().isValid()
+            && $('#type_boiler1').parsley().isValid()
+            && $('#amount_boiler1').parsley().isValid()
+        ){
+
+            var form = new FormData();
+
+            $.each($tds, function(i, el) {
+                if($(this).has('select').length){
+                    console.log($(this).has('select'));
+                    console.log("selectni ichiga kiryapti");
+                    var text = $(this).find("select").val();
+                    var textId = $(this).find("select").attr('id');
+                    console.log("txt=" + text + "   txtId=" + textId);
+                    form.append(textId, text);
+
+                    var selectText = $(this).find("select option:selected").text()
+                    if(textId==='type_boiler1') $(this).html(selectText);
+                    else  $(this).html(text);
+
+
+                }else if($(this).has('input').length){
+                    console.log("inputni ichiga kiryapti");
+                    var txt = $(this).find("input").val();
+                    var txtId = $(this).find("input").attr('id');
+                    console.log("txt=" + txt + "   txtId=" + txtId);
+                    form.append(txtId,txt);
+                    $(this).html(txt);
+                }
+
+                $(this).html(txt);
+            });
+
+
+            form.append('id',id);
+            form.append('regId',regApplicationId);
+            form.append("_csrf", _csrf);
+
+            $(this).children('i.feather.icon-check-circle').removeClass().addClass("feather icon-edit-1 mr-0");
+
+            $.ajax({
+                type: "POST",
+                url:editLink1,
+                data:form,
+                success: function(e){
+
+                    deleteItemForEdit()
+                },
+                processData: false,
+                contentType: false,
+                cache:false
+            });
+        }
+    });
+
+
+    $("#boiler-table2").on('mousedown.edit', "a.link-edit-1", function(e) {
+
+        $(this).removeClass('link-edit-1 btn-warning ').addClass("link-save-1  btn-success");
+        $(this).children('i.feather.icon-edit-1').removeClass().addClass("feather icon-check-circle mr-0");
+        var $row = $(this).closest("tr").off("mousedown");
+        var $tds = $row.find("td").not(':last');
+        var $idn=0;
+        $.each($tds, function(i, el) {
+            var txt = $(this).text();
+            $idn++;
+            if ($idn==2) {
+                $(this).html("").append(``+
+                    ` <select class="form-control" id="name_boiler2"  >`+
+                    text2+
+                    `<option selected="selected" value="` +txt+`">`+txt+`</option>`+
+                    `  </select>`+
+                    ``);
+            }
+            if ($idn==3){
+
+
+
+                $(this).html("").append(``+
+                    `<select class="form-control" id="type_boiler2"  >`+
+                    text4+
+                    `<option selected="selected" value="`+txt+`">`+txt+`</option>`+
+                    `</select>`+
+                    ``);
+            }
+
+            if ($idn==4){
+                $(this).html("").append("<input id='amount_boiler2' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
+            }
+        });
+    });
+
+    $("#boiler-table2").on('mousedown.save', "a.link-save-1", function(e) {
+        console.log("Bu qism edit uchun")
+        $(this).removeClass('link-save-1 btn-success').addClass("link-edit-1 btn-warning ");
+        var $row = $(this).closest("tr");
+        var $tds = $row.find("td").not(':last');
+        var id=$row.find("td").first().attr('id');
+        $('#name_boiler2').parsley().validate();
+        $('#type_boiler2').parsley().validate();
+        $('#amount_boiler2').parsley().validate();
+
+        if( $('#name_boiler2').parsley().isValid()
+            && $('#type_boiler2').parsley().isValid()
+            && $('#amount_boiler2').parsley().isValid()
+        ){
+
+            var form = new FormData();
+
+            $.each($tds, function(i, el) {
+                if($(this).has('select').length){
+                    console.log($(this).has('select'));
+                    console.log("selectni ichiga kiryapti");
+                    var text = $(this).find("select").val();
+                    var textId = $(this).find("select").attr('id');
+                    console.log("txt=" + text + "   txtId=" + textId);
+                    form.append(textId, text);
+                    var selectText =$(this).find("select option:selected").text();
+                    if(textId==='type_boiler2') $(this).html(selectText);
+                    else  $(this).html(text);
+                }else if($(this).has('input').length){
+                    console.log("inputni ichiga kiryapti");
+                    var txt = $(this).find("input").val();
+                    var txtId = $(this).find("input").attr('id');
+                    console.log("txt=" + txt + "   txtId=" + txtId);
+                    form.append(txtId,txt);
+                    $(this).html(txt);
+                }
+                console.log("txt=" + txt + "   txtId=" + txtId);
+                $(this).html(txt);
+            });
+            var type = $('#type_boiler2').val();
+            form.append("boilerEnum", type);
+            form.append('id',id);
+            form.append('regId',regApplicationId);
+            form.append("_csrf", _csrf);
+            $(this).children('i.feather.icon-check-circle').removeClass().addClass("feather icon-edit-1 mr-0");
+
+            $.ajax({
+                type: "POST",
+                url:editLink2,
+                data:form,
+                success: function(e){
+                    for (let i = 1; i < 4; i++) {
+
+                        var formBoiler = new FormData();
+                        formBoiler.append("regId", [[${regApplication.id}]]);
+                        formBoiler.append("boiler_type",i);
+                        formBoiler.append("_csrf", $("#global_csrf").val());
+
+                        $.ajax({
+                            url: checkBoilerLink,
+                            type:"POST",
+                            data: formBoiler,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+                                deleteItemForEdit()
+                            }
+                        });
+                    }
+                    console.log("refresh");
+                },
+                processData: false,
+                contentType: false,
+                cache:false
+            });
+        }
+    });
+
+
+    $("#boiler-table3").on('mousedown.edit', "a.link-edit-1", function(e) {
+        $(this).removeClass('link-edit-1 btn-warning').addClass("link-save-1  btn-success");
+        $(this).children('i.feather.icon-edit-1').removeClass().addClass("feather icon-check-circle mr-0");
+        var $row = $(this).closest("tr").off("mousedown");
+        var $tds = $row.find("td").not(':last');
+        var $idn=0;
+
+        console.log(text4)
+        $.each($tds, function(i, el) {
+            var txt = $(this).text();
+            $idn++;
+            if ($idn==2) {
+                $(this).html("").append(``+
+                    ` <select class="form-control" id="name_boiler3"  >`+
+                    text3+
+                    `<option selected="selected" value="` +txt+`">`+txt+`</option>`+
+                    `  </select>`+
+                    ``);
+            }
+            if ($idn==3){
+                // $(this).html("").append("<input id='type_boiler3' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
+                $(this).html("").append(``+
+                    `<select class="form-control" id="type_boiler3"  >`+
+                    text4+
+                    `<option selected="selected" value="`+txt+`">`+txt+`</option>`+
+                    `</select>`+
+                    ``);
+            }
+
+            if ($idn==4){
+                $(this).html("").append("<input id='amount_boiler3' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
+            }
+        });
+    });
+
+    $("#boiler-table3").on('mousedown.save', "a.link-save-1", function(e) {
+        console.log("Bu qism edit uchun")
+        $(this).removeClass('link-save-1  btn-success').addClass("link-edit-1 btn-warning ");
+        var $row = $(this).closest("tr");
+        var $tds = $row.find("td").not(':last');
+        var id=$row.find("td").first().attr('id');
+        $('#name_boiler3').parsley().validate();
+        $('#type_boiler3').parsley().validate();
+        $('#amount_boiler3').parsley().validate();
+
+        if( $('#name_boiler3').parsley().isValid()
+            && $('#type_boiler3').parsley().isValid()
+            && $('#amount_boiler3').parsley().isValid()
+        ){
+
+            var form = new FormData();
+
+            $.each($tds, function(i, el) {
+                if($(this).has('select').length){
+                    console.log($(this).has('select'));
+                    console.log("selectni ichiga kiryapti");
+                    var text = $(this).find("select").val();
+
+                    var textId = $(this).find("select").attr('id');
+                    console.log("txt=" + text + "   txtId=" + textId);
+                    form.append(textId,text);
+                    var selectText =$(this).find("select option:selected").text();
+                    if(textId==='type_boiler3') $(this).html(selectText);
+                    else  $(this).html(text);
+
+
+                }else if($(this).has('input').length){
+                    console.log("inputni ichiga kiryapti");
+                    var txt = $(this).find("input").val();
+                    var txtId = $(this).find("input").attr('id');
+                    console.log("txt=" + txt + "   txtId=" + txtId);
+                    form.append(txtId,txt);
+                    $(this).html(txt);
+                }
+                console.log("txt=" + txt + "   txtId=" + txtId);
+                $(this).html(txt);
+            });
+            form.append('id',id);
+            form.append('regId',regApplicationId);
+            form.append("_csrf", _csrf);
+            var type = $('#type_boiler3').val();
+            form.append("boilerEnum", type);
+            $(this).children('i.feather.icon-check-circle').removeClass().addClass("feather icon-edit-1 mr-0");
+
+            $.ajax({
+                type: "POST",
+                url:editLink3,
+                data:form,
+                success: function(e){
+                    for (let i = 1; i < 4; i++) {
+
+                        var formBoiler = new FormData();
+                        formBoiler.append("regId", [[${regApplication.id}]]);
+                        formBoiler.append("boiler_type",i);
+                        formBoiler.append("_csrf", $("#global_csrf").val());
+
+                        $.ajax({
+                            url: checkBoilerLink,
+                            type:"POST",
+                            data: formBoiler,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+
+
+                                deleteItemForEdit()
+
+                            }
+                        });
+                    }
+                    console.log("refresh");
+                },
+                processData: false,
+                contentType: false,
+                cache:false
+            });
+        }
+    });
+
+
+</script>
+
+
+
 </body>
 </html>

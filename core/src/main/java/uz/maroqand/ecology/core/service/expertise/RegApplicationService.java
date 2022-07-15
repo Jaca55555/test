@@ -20,12 +20,16 @@ public interface RegApplicationService {
     Integer sendSMSCode(String mobilePhone,Integer regApplicationId);
 
     void update(RegApplication regApplication);
+    void cancelModification();
+    void closeModificationTimer();
 
     RegApplication create(User user, RegApplicationInputType inputType, RegApplicationCategoryType categoryType);
     RegApplication getByOfferId(Integer offerId);
     List<RegApplication> getByClientId(Integer id);
 
     List<RegApplication> getByClientIdDeletedFalse(Integer id);
+
+    List<RegApplication> findByDelivered();
 
     List<RegApplication> getByInvoiceId(Integer invoiceId);
 

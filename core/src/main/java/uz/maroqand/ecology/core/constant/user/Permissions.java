@@ -14,29 +14,30 @@ public enum Permissions {
     ADMIN_USER(2, 1, "sys_permissions.user"),
 
     //eco_expertise
-    EXPERTISE(10, 2, "sys_permissions.eco_expertise"),
-    EXPERTISE_USER(11, 2, "sys_permissions.eco_expertise_user"),//user qo'shish o'zgartirishga dostup
-    EXPERTISE_CONFIRM(12, 2, "sys_permissions.expertise_confirm"),// Arizani tasdiqash
-    EXPERTISE_FORWARDING(13, 2, "sys_permissions.expertise_forwarding"),// Ariza ko'rb chiquvchini tasdilash, va natijani tasdiqalsh
-    EXPERTISE_PERFORMER(14, 2, "sys_permissions.expertise_performer"),// Ariza natijani kirituvchi (ijrochi)
-    EXPERTISE_AGREEMENT(15, 2, "sys_permissions.expertise_agreement"),// Ariza natijasini tasdiqlash
-    EXPERTISE_AGREEMENT_COMPLETE(16, 2, "sys_permissions.expertise_agreement_complete"), // Ariza natijasini tasdiqlash va ariza tugatish
-    EXPERTISE_CONCLUSION_COMPLETE(52, 2, "sys_permissions.expertise_conclusion_complete"), // Ariza Rais tasdiqlagandan keyin yakunlash uchun Xulosaga raqam va sana qo'yish
-    EXPERTISE_ARCHIVE_COMPLETE(54,2,"sys_permissions.expertise_archive_complete"),
+    EXPERTISE(10, 2, "sys_permissions.ecoExpertise"),
+    EXPERTISE_USER(11, 2, "sys_permissions.ecoExpertiseUser"),//user qo'shish o'zgartirishga dostup
+    EXPERTISE_CONFIRM(12, 2, "sys_permissions.expertiseConfirm"),// Arizani tasdiqash
+    EXPERTISE_FORWARDING(13, 2, "sys_permissions.expertiseForwarding"),// Ariza ko'rb chiquvchini tasdilash, va natijani tasdiqalsh
+    EXPERTISE_PERFORMER(14, 2, "sys_permissions.expertisePerformer"),// Ariza natijani kirituvchi (ijrochi)
+    EXPERTISE_AGREEMENT(15, 2, "sys_permissions.expertiseAgreement"),// Ariza natijasini tasdiqlash
+    EXPERTISE_AGREEMENT_COMPLETE(16, 2, "sys_permissions.expertiseAgreementComplete"), // Ariza natijasini tasdiqlash va ariza tugatish
+    EXPERTISE_CONCLUSION_COMPLETE(52, 2, "sys_permissions.expertiseConclusionComplete"), // Ariza Rais tasdiqlagandan keyin yakunlash uchun Xulosaga raqam va sana qo'yish
+    EXPERTISE_ARCHIVE_COMPLETE(54,2,"sys_permissions.expertiseArchiveComplete"),
 
-    ENTERPRISE_REGISTER(17, 2, "sys_permissions.enterprise_register"), //
+    ENTERPRISE_REGISTER(17, 2, "sys_permissions.enterpriseRegister"), //
     BILLING(18, 2, "sys_permissions.billing"), //
-    PAYMENT_FILE(19, 2, "sys_permissions.payment_file"), //
-    PAYMENT_FILE_ALL(53, 2, "sys_permissions.payment_file_all"), //
-    COORDINATE_REGISTER(20, 2, "sys_permissions.coordinate_register"), //
+    PAYMENT_FILE(19, 2, "sys_permissions.paymentFile"), //
+    PAYMENT_FILE_ALL(53, 2, "sys_permissions.paymentFileAll"), //
+    COORDINATE_REGISTER(20, 2, "sys_permissions.coordinateRegister"), //
 
-    APPEAL_ADMIN(21, 2, "sys_permissions.appeal_admin"), //
-    EMPLOYEE_CONTROL(22, 2, "sys_permissions.employee_control"), //
+    APPEAL_ADMIN(21, 2, "sys_permissions.appealAdmin"), //
+    EMPLOYEE_CONTROL(22, 2, "sys_permissions.employeeControl"), //
 
-    EXPERTISE_REG(23, 2, "sys_permissions.expertise_reg"), //
-    EXPERTISE_MONITORING(24, 2, "sys_permissions.expertise_monitoring"), //
-    FACTURE_MONITORING(25, 2, "sys_permissions.facture_monitoring"),
-    EXPERTISE_AGREE(26, 2, "sys_permissions.expertise_agree"), //
+    EXPERTISE_REG(23, 2, "sys_permissions.expertiseReg"), //
+    EXPERTISE_MONITORING(24, 2, "sys_permissions.expertiseMonitoring"), //
+    EXPERTISE_MONITORING_CONCLUSION(55, 2, "sys_permissions.expertiseMonitoringConclusion"), //
+    FACTURE_MONITORING(25, 2, "sys_permissions.factureMonitoring"),
+    EXPERTISE_AGREE(26, 2, "sys_permissions.expertiseAgree"), //
 
     //doc management
     DOC_MANAGEMENT(40, 3, "sys_permissions.docManagement"), //Электрон Хужжатлар Юритиш Тизимига кириш

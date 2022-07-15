@@ -287,10 +287,10 @@
                                                                         <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==1}">
                                                                             <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
                                                                             <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                                                            <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
                                                                             <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
                                                                             <td style="width: 15%">
-                                                                                <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                                <a class="btn btn-warning btn-sm list-btn link-edit-1 mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
                                                                                 <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -312,7 +312,15 @@
 
 
                                                                         <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
-                                                                            <input id="type_boiler1" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
+<!--                                                                            <input id="type_boiler1" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
+
+
+
+                                                                            <select class="form-control" name="type_boiler" id="type_boiler1"   data-select2-tags="true">
+                                                                                <option  th:text="#{sys_select}"></option>
+                                                                                <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="#{${b.name}}">UZSubstance</option>
+                                                                            </select>
+
 
                                                                         </div>
                                                                         <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
@@ -343,7 +351,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler1()"><span th:text="#{sys_save}"></span></button>
+<!--                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler1()"><span th:text="#{sys_save}"></span></button>-->
 <!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
                                                         </div>
                                                     </div>
@@ -398,10 +406,10 @@
                                                                         <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==2}">
                                                                             <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
                                                                             <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                                                            <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
                                                                             <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%"></td>
                                                                             <td style="width: 15%">
-                                                                                <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                                <a class="btn btn-warning btn-sm link-edit-1 list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
                                                                                 <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -423,8 +431,11 @@
 
 
                                                                         <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
-                                                                            <input id="type_boiler2" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
-
+<!--                                                                            <input id="type_boiler2" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
+                                                                            <select class="form-control" name="type_boiler" id="type_boiler2"   data-select2-tags="true">
+                                                                                <option  th:text="#{sys_select}"></option>
+                                                                                <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="#{${b.name}}">UZSubstance</option>
+                                                                            </select>
                                                                         </div>
                                                                         <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
                                                                             <input id="amount_boiler2" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
@@ -454,7 +465,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler2()"><span th:text="#{sys_save}"></span></button>
+<!--                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler2()"><span th:text="#{sys_save}"></span></button>-->
 <!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
                                                         </div>
                                                     </div>
@@ -509,10 +520,10 @@
                                                                         <tr th:id="${'row_' + boilerCharacteristic.id}" th:each="boilerCharacteristic,index :${regApplication.boilerCharacteristics}" th:if="${#lists.size(regApplication.boilerCharacteristics)>0} AND ${boilerCharacteristic.substanceType==3}">
                                                                             <td th:id="${boilerCharacteristic.id}" th:utext="${index.index+1}" style="width: 10%"></td>
                                                                             <td th:utext="#{${boilerCharacteristic.name}}" style="width: 40%; "></td>
-                                                                            <td th:utext="#{${boilerCharacteristic.type}}" style="width: 20%"></td>
+                                                                            <td th:if="${boilerCharacteristic.boilerType!=null}" th:utext="#{${boilerCharacteristic.boilerType}}" style="width: 20%"></td>
                                                                             <td th:utext="#{${boilerCharacteristic.amount}}" style="width: 15%">
                                                                             <td style="width: 15%">
-                                                                            <a class="btn btn-warning btn-sm list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
+                                                                            <a class="btn btn-warning btn-sm link-edit-1 list-btn mr-1" title="edit" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>
                                                                             <a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" th:onclick="'mymodal(' + ${boilerCharacteristic.id} + ')'" title="delete"><i class="feather text-white  icon-x-square mr-0"></i></a>
                                                                             </td>
                                                                         </tr>
@@ -534,8 +545,11 @@
 
 
                                                                         <div class=" pt-3 mr-1 pl-4 ml-5" style="width: 22%;">
-                                                                            <input id="type_boiler3" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">
-
+<!--                                                                            <input id="type_boiler3" name="type_boiler" class="form-control " type="text" required="" data-parsley-maxlength="255">-->
+                                                                            <select class="form-control" name="type_boiler" id="type_boiler3"   data-select2-tags="true">
+                                                                                <option  th:text="#{sys_select}"></option>
+                                                                                <option th:each="b:${boilerEnumList}" th:value="${b.id}" th:text="#{${b.name}}">UZSubstance</option>
+                                                                            </select>
                                                                         </div>
                                                                         <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
                                                                             <input id="amount_boiler3" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
@@ -565,7 +579,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler3()"><span th:text="#{sys_save}"></span></button>
+<!--                                                            <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="saveBoiler3()"><span th:text="#{sys_save}"></span></button>-->
 <!--                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"><span th:text="#{modal_close}"></span></button>-->
                                                         </div>
                                                     </div>
@@ -787,17 +801,22 @@
                                                                             Atrof muhitga ta'sir
                                                                         </h3>
 
-                                                                        <div class="right-under-item d-flex justify-content-between">
-                                                                            <button class="w-25 p-2 btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal1" style="border-radius: 5px">
+                                                                        <div class="right-under-item d-flex justify-content-around">
+                                                                            <button class="w-25 p-2 btn-primary text-center d-none" id="tchModalBtn" type="button" data-toggle="modal" data-target="#boilerModal1" style="border-radius: 5px">
                                                                                 <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type1}">info</span>
                                                                             </button>
-                                                                            <button class="w-25 p-2 btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal2" style="border-radius: 5px">
+                                                                            <button class="w-25 p-2 btn-primary text-center  d-none " id="ochModalBtn" type="button" data-toggle="modal" data-target="#boilerModal2" style="border-radius: 5px">
                                                                                 <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type2}">info</span>
                                                                             </button>
-                                                                            <button class="w-25 p-2  btn-primary text-center" type="button" data-toggle="modal" data-target="#boilerModal3" style="border-radius: 5px">
+                                                                            <button class="w-25 p-2  btn-primary text-center d-none  " id="chModalBtn" type="button" data-toggle="modal" data-target="#boilerModal3" style="border-radius: 5px">
                                                                                 <i class="feather icon-alert-triangle"></i><span th:text="#{substance_type3}">info</span>
                                                                             </button>
                                                                         </div>
+
+
+                                                                    </div>
+                                                                    <div class=" d-none my-3 text-danger " id="validationModalBoiler" th:text="#{not_boiler}">
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -930,7 +949,7 @@
                             <span class="btn btn-primary" style="border-bottom-right-radius: 0px;border-top-right-radius: 0px" onclick="$(this).parent().find('input[type=file]').click();">
                                <i class="mdi mdi-file-download-outline"></i> <span th:text="#{file_select}"></span>
                             </span>
-                            <input name="uploaded_file" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+                            <input name="uploaded_file" required="required" id="file-input" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
                           </span>
                         <span class="form-control" onclick="$(this).parent().find('input[type=file]').click();" id="fileDescription" style="border-bottom-left-radius: 0px;border-top-left-radius: 0px" placeholder="sdfsdfsdfsdf">
 
@@ -952,7 +971,7 @@
     <script src="/static/plugins/ol/ol.js"></script>
     <script th:src="@{'/static/parsley/i18n/' + __${#locale}__ + '.js'}"></script>
     <script type="text/javascript" src="/static/js/select2/js/select2.full.min.js"></script>
-<script type="text/javascript" src="/static/plugins/input-mask/jquery.mask.min.js"></script>
+    <script type="text/javascript" src="/static/plugins/input-mask/jquery.mask.min.js"></script>
 
 
 <script th:inline="javascript">
@@ -964,7 +983,7 @@
         var coordinate = [[${coordinate}]];
         let regCategory = null;
         let fileError = false;
-        let files = 0;
+        let fileSubmit = false;
         if([[${regApplication.category}]]!=null){
          regCategory =  getCategoryId([[${regApplication.category}]]);
         }
@@ -972,14 +991,33 @@
             $('#exampleModal2').modal('show');
         }
 
+
+
+
+        // check checkbox divs
+
+
+
+
+
+
+
+
+
         var isCoordinate = false; //agar koordinate qo'shilishi kerak bo'lsa
+
+
         $(document).ready(function () {
+            $("#type_boiler1").select2({
+                dropdownParent: $("#boilerModal1"),
+                tags: true
+            });
             $("#name_boiler1").select2({
                 dropdownParent: $("#boilerModal1"),
                 tags: true
             });
             $('#file_error').hide();
-            console.log($("#files-div").has("div"));
+
             $("#name_boiler2").select2({
                 dropdownParent: $("#boilerModal2"),
                 tags: true
@@ -988,9 +1026,132 @@
                 dropdownParent: $("#boilerModal3"),
                 tags: true
             });
-            console.log("hello world")
+
+            if($('#materials1').is(":checked")) {
+                $("#tchModalBtn").removeClass("d-none")
+                $("#ochModalBtn").removeClass("d-none")
+                $("#chModalBtn").removeClass("d-none")
+            } else {
+                $("#tchModalBtn").addClass("d-none")
+                $("#ochModalBtn").addClass("d-none")
+                $("#chModalBtn").addClass("d-none")
+            }
+            if($('#materials2').is(":checked")) {
+                $("#tchModalBtn").removeClass("d-none")
+                $("#ochModalBtn").removeClass("d-none")
+                $("#chModalBtn").removeClass("d-none")
+            } else {
+                $("#tchModalBtn").addClass("d-none")
+                $("#ochModalBtn").addClass("d-none")
+                $("#chModalBtn").addClass("d-none")
+            }
+            if($('#materials3').is(":checked")) {
+                $("#tchModalBtn").removeClass("d-none")
+                $("#ochModalBtn").removeClass("d-none")
+                $("#chModalBtn").removeClass("d-none")
+            } else {
+                $("#tchModalBtn").addClass("d-none")
+                $("#ochModalBtn").addClass("d-none")
+                $("#chModalBtn").addClass("d-none")
+            }
+            if($('#materials4').is(":checked")) {
+                $("#tchModalBtn").removeClass("d-none")
+                $("#ochModalBtn").removeClass("d-none")
+                $("#chModalBtn").removeClass("d-none")
+            } else {
+                $("#tchModalBtn").addClass("d-none")
+                $("#ochModalBtn").addClass("d-none")
+                $("#chModalBtn").addClass("d-none")
+            }
+            if($('#materials5').is(":checked")) {
+                $("#tchModalBtn").removeClass("d-none")
+                if ($('#materials6').is(":checked")) {
+                    $("#ochModalBtn").removeClass("d-none")
+                } else {
+                    if(!$('#materials8').is(":checked")) {
+                        $("#ochModalBtn").addClass("d-none")
+                    }
+                }
+                if ($('#materials7').is(":checked")) {
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    if(!$('#materials8').is(":checked")) {
+                        $("#chModalBtn").addClass("d-none")
+                    }
+                }
+            } else {
+                if(!$('#materials8').is(":checked")) {
+                    $("#tchModalBtn").addClass("d-none")
+                }
+            }
+            if($('#materials6').is(":checked")) {
+                $("#ochModalBtn").removeClass("d-none")
+                if ($('#materials5').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                } else {
+                    if(!$('#materials8').is(":checked")){
+                        $("#tchModalBtn").addClass("d-none")
+                    }
+                }
+                if ($('#materials7').is(":checked")) {
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    if(!$('#materials8').is(":checked")) {
+                        $("#chModalBtn").addClass("d-none")
+                    }
+                }
+            }  else {
+
+                if(!$('#materials8').is(":checked")) {
+                    $("#ochModalBtn").addClass("d-none")
+                }
+
+            }
+            if($('#materials7').is(":checked")) {
+                $("#chModalBtn").removeClass("d-none")
+
+                if ($('#materials6').is(":checked")) {
+                    $("#ochModalBtn").removeClass("d-none")
+                } else {
+
+                    if(!$('#materials8').is(":checked")) {
+                        $("#ochModalBtn").addClass("d-none")
+                    }
+
+
+                }
+                if ($('#materials5').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                } else {
+                    if(!$('#materials8').is(":checked")){
+                        $("#tchModalBtn").addClass("d-none")
+                    }
+
+                }
+            } else {
+                if(!$('#materials8').is(":checked")){
+                    $("#chModalBtn").addClass("d-none")
+                }
+
+            }
+            if($('#materials8').is(":checked")) {
+                $("#tchModalBtn").removeClass("d-none")
+                $("#ochModalBtn").removeClass("d-none")
+                $("#chModalBtn").removeClass("d-none")
+            } else {
+                if (!$('#materials5').is(":checked")) $("#tchModalBtn").addClass("d-none")
+                if (!$('#materials6').is(":checked")) $("#ochModalBtn").addClass("d-none")
+                if (!$('#materials7').is(":checked")) $("#chModalBtn").addClass("d-none")
+            }
+
+
+
+
+
             $(".phone").mask('+999(99)999-99-99');
+
             bindSubRegionSelectToRegionSelect('#subRegionId', '#region');
+
             var srSelector = $('#materialId');
             srSelector.find('option:selected').show();
             if(coordinate != null){
@@ -1004,7 +1165,11 @@
 
             $('#objectId').select2();
             // $('#activityId').select2();
+
             const inputs = document.querySelectorAll( '.modal-table-input' );
+
+
+
 
 
             const addBtn = document.querySelector( '.add-btn' );
@@ -1065,6 +1230,10 @@
                 $('#regionId').prop('required',true);
             }
         });
+
+
+
+
         function openInputFile() {
             document.getElementById("file-input").click();
         };
@@ -1230,8 +1399,8 @@
                 }
                 $("#materialDiv").append(
                     '<div class="custom-control custom-checkbox" >\n' +
-                    '   <input type="checkbox" class="custom-control-input" id="materials'+value+'" value="'+value+'" name="materials"  required="" data-parsley-errors-container="#materialError" >\n' +
-                    '   <label class="custom-control-label" for="materials'+value+'" id="materials-'+value+'-label"></label>\n' +
+                    '   <input type="checkbox" class="custom-control-input" onclick="checkAllChm();" id="materials'+value+'" value="'+value+'" name="materials"  required="" data-parsley-errors-container="#materialError" >\n' +
+                    '   <label class="custom-control-label" for="materials'+value+'" onclick="checkAllChm();" id="materials-'+value+'-label"></label>\n' +
                     '</div>');
                 getMaterial(value);
             });
@@ -1243,6 +1412,163 @@
                 $("#coordinates-control").hide();
             }
         }
+
+        //uzgarishlar
+
+
+
+
+
+
+        function checkAllChm () {
+
+            $("#materials5").click(function(){
+                if($('#materials5').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    if ($('#materials6').is(":checked")) {
+                        $("#ochModalBtn").removeClass("d-none")
+                    } else {
+                        if(!$('#materials8').is(":checked")) {
+                            $("#ochModalBtn").addClass("d-none")
+                        }
+                    }
+                    if ($('#materials7').is(":checked")) {
+                        $("#chModalBtn").removeClass("d-none")
+                    } else {
+                        if(!$('#materials8').is(":checked")) {
+                            $("#chModalBtn").addClass("d-none")
+                        }
+                    }
+                } else {
+                    if(!$('#materials8').is(":checked")) {
+                        $("#tchModalBtn").addClass("d-none")
+                    }
+                }
+            })
+
+            $("#materials6").click(function(){
+                if($('#materials6').is(":checked")) {
+                    $("#ochModalBtn").removeClass("d-none")
+                    if ($('#materials5').is(":checked")) {
+                        $("#tchModalBtn").removeClass("d-none")
+                    } else {
+                        if(!$('#materials8').is(":checked")){
+                            $("#tchModalBtn").addClass("d-none")
+                        }
+                    }
+                    if ($('#materials7').is(":checked")) {
+                        $("#chModalBtn").removeClass("d-none")
+                    } else {
+                        if(!$('#materials8').is(":checked")) {
+                            $("#chModalBtn").addClass("d-none")
+                        }
+                    }
+                }  else {
+
+                    if(!$('#materials8').is(":checked")) {
+                        $("#ochModalBtn").addClass("d-none")
+                    }
+
+                }
+            })
+
+            $("#materials7").click(function(){
+                if($('#materials7').is(":checked")) {
+                    $("#chModalBtn").removeClass("d-none")
+
+                    if ($('#materials6').is(":checked")) {
+                        $("#ochModalBtn").removeClass("d-none")
+                    } else {
+
+                        if(!$('#materials8').is(":checked")) {
+                            $("#ochModalBtn").addClass("d-none")
+                        }
+
+
+                    }
+                    if ($('#materials5').is(":checked")) {
+                        $("#tchModalBtn").removeClass("d-none")
+                    } else {
+                        if(!$('#materials8').is(":checked")){
+                            $("#tchModalBtn").addClass("d-none")
+                        }
+
+                    }
+                } else {
+                    if(!$('#materials8').is(":checked")){
+                        $("#chModalBtn").addClass("d-none")
+                    }
+
+                }
+            })
+
+
+            $("#materials8").click(function(){
+                if($('#materials8').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    $("#ochModalBtn").removeClass("d-none")
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    if (!$('#materials5').is(":checked")) $("#tchModalBtn").addClass("d-none")
+                    if (!$('#materials6').is(":checked")) $("#ochModalBtn").addClass("d-none")
+                    if (!$('#materials7').is(":checked")) $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+            $("#materials4").click(function(){
+                if($('#materials4').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    $("#ochModalBtn").removeClass("d-none")
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    $("#tchModalBtn").addClass("d-none")
+                    $("#ochModalBtn").addClass("d-none")
+                    $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+            $("#materials3").click(function(){
+                if($('#materials3').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    $("#ochModalBtn").removeClass("d-none")
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    $("#tchModalBtn").addClass("d-none")
+                    $("#ochModalBtn").addClass("d-none")
+                    $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+            $("#materials2").click(function(){
+                if($('#materials2').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    $("#ochModalBtn").removeClass("d-none")
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    $("#tchModalBtn").addClass("d-none")
+                    $("#ochModalBtn").addClass("d-none")
+                    $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+            $("#materials1").click(function(){
+                if($('#materials1').is(":checked")) {
+                    $("#tchModalBtn").removeClass("d-none")
+                    $("#ochModalBtn").removeClass("d-none")
+                    $("#chModalBtn").removeClass("d-none")
+                } else {
+                    $("#tchModalBtn").addClass("d-none")
+                    $("#ochModalBtn").addClass("d-none")
+                    $("#chModalBtn").addClass("d-none")
+                }
+            })
+
+
+
+        }
+
+
+
 
         function getMaterial(id) {
             $.post('/reg/application/material', {materialId:id, _csrf:$("#global_csrf").val()}, function(response){
@@ -1287,6 +1613,7 @@
 
         function openModalFile() {
             $('#upload-file-modal').modal('show');
+            $('#file_error').show();
         }
 
         function uploadFile(){
@@ -1328,7 +1655,7 @@
                             '                                                </div>');
 
                         $('#file_error').hide();
-                        files ++;
+                        fileSubmit = true
                     }
                 },
                 beforeSend: function () {
@@ -1370,7 +1697,6 @@
                 success: function (response) {
                     if(response.status == 1) {
                         $('#file-block-' + fileId).remove();
-                        files --;
                     }
                 }
             });
@@ -1388,6 +1714,7 @@
 
     </script>
     <script>
+
         var Map = ol.Map;
         var View = ol.View;
         var Draw = ol.interaction.Draw;
@@ -1569,8 +1896,14 @@
             });
         }
 
+
+
+
         function submitForm() {
             console.log("submitForm");
+
+
+
             var coordinatesListForSubmit = [];
             $('.coord-input').each(function () {
                 coordinatesListForSubmit.push(parseFloat($(this).val()));
@@ -1581,7 +1914,106 @@
 
 
 
-            if(files > 0) {
+
+            if (isCoordinate){
+                let mapListSize = $('#coordinates-map-list').children().length;
+                let coordinateListSize = $('#coordinates-list').children().length;
+                console.log("mapListSize=" + mapListSize);
+                console.log("coordinateListSize=" + coordinateListSize);
+                if (mapListSize>=4 || coordinateListSize>=4){
+                    $('#error_coordinate').hide();
+
+                    //  check all CHMS
+
+                    // $('#about-form').submit();
+                    var formBoiler = new FormData();
+                    formBoiler.append("regId", regApplicationId);
+                    formBoiler.append("_csrf", $("#global_csrf").val());
+
+
+                    if ($('#materials5').is(":checked") || $('#materials6').is(":checked") || $('#materials7').is(":checked") || $('#materials8').is(":checked") ) {
+                        $.ajax({
+                            url: getBoiler,
+                            type:"POST",
+                            data: formBoiler,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+
+                                console.log(response);
+
+                                if (response.status) {
+
+                                    //    go next step
+                                    if ( !$("#validationModalBoiler").hasClass("d-none")) {
+                                        $("#validationModalBoiler").addClass("d-none")
+                                    }
+                                    $('#about-form').submit();
+
+                                } else {
+
+                                    $("#validationModalBoiler").removeClass("d-none")
+
+                                }
+                            }
+                        });
+                    }
+                    else{
+                        $('#about-form').submit();
+                    }
+
+
+
+
+
+
+                }else{
+                    $('#add_coordinate').addClass('required-border');
+                    $('#error_coordinate').show();
+                }
+            }else{
+
+                //  check all CHMS
+                // $('#about-form').submit();
+                var formBoiler = new FormData();
+                formBoiler.append("regId", regApplicationId);
+                formBoiler.append("_csrf", $("#global_csrf").val());
+
+                if ($('#materials5').is(":checked") || $('#materials6').is(":checked") || $('#materials7').is(":checked") || $('#materials8').is(":checked") ) {
+                    $.ajax({
+                        url: getBoiler,
+                        type:"POST",
+                        data: formBoiler,
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        success: function (response) {
+                            console.log(response);
+
+                            if (response.status) {
+                                //    go next step
+                                if ( !$("#validationModalBoiler").hasClass("d-none")) {
+                                    $("#validationModalBoiler").addClass("d-none")
+                                }
+
+                                $('#about-form').submit();
+                            } else {
+
+                                $("#validationModalBoiler").removeClass("d-none")
+
+                            }
+                        }
+                    });
+                }
+
+                else{
+                    $('#about-form').submit();
+                }
+
+
+
+            if(fileSubmit) {
                 if (isCoordinate) {
                     let mapListSize = $('#coordinates-map-list').children().length;
                     let coordinateListSize = $('#coordinates-list').children().length;
@@ -1601,6 +2033,11 @@
                 $('#file_error').show();
             }
         }
+
+
+
+
+
 
         function removeCoordinatedivBorder(){
             $('#add_coordinate').removeClass('required-border');
@@ -1622,7 +2059,6 @@
                 dataType: 'json',
                 cache: true,
                 success: function (response) {
-                    // $("#loader_box").css("display", "none");
                     console.log("response="+response);
                     console.log("response.err_code="+response.err_code);
                     if(response.err_code==='0'){
@@ -1639,12 +2075,20 @@
 
         }).change();
     </script>
+
+
+
 <script th:inline="javascript">
     var regApplicationId = [[${regApplication.id}]];
     var regAddId = [[${regApplication.id}]];
     var substances1 = [[${substances1}]];
     var substances2 = [[${substances2}]];
     var substances3 = [[${substances3}]];
+
+    var typeBoiler = [[${boilerEnumList}]];
+
+    console.log("typeBoiler=",typeBoiler);
+
     var labelDelete = [[#{sys_delete}]];
     var labelEdit = [[#{sys_edit}]];
     var editLink1 = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType1}]];
@@ -1652,6 +2096,7 @@
     var editLink3 = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsEditType3}]];
     var deleteLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsDelete}]];
     var createLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsCreate}]];
+    var getBoiler = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerCharacteristicsGet}]];
     var saveBoilerLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerSave}]];
     var isSaveBoilerLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFourCategoryBoilerIsSave}]];
     var _csrf = [[${_csrf.token}]];
@@ -1672,6 +2117,9 @@
     for (x in substances1) {
         text1 += `<option value="` + substances1[x].name + `">` + substances1[x].name + `</option>`;
     }
+
+
+
     var text2;
     for (x in substances2) {
         text2 += `<option value="` + substances2[x].name + `">` + substances2[x].name + `</option>`;
@@ -1680,6 +2128,21 @@
     for (x in substances3) {
         text3 += `<option value="` + substances3[x].name + `">` + substances3[x].name + `</option>`;
     }
+
+    var text4;
+    for (x in typeBoiler) {
+        if(x==0){
+            text4 += `<option value="` + x + `">` + [[#{tonna}]] + `</option>`;
+        }
+        if(x==1){
+            text4 += `<option value="` + x + `">` + [[#{m3}]] + `</option>`;
+        }
+        if(x==2){
+            text4 += `<option value="` + x + `">` + [[#{kg}]] + `</option>`;
+        }
+
+    }
+
     // console.log('substances='+substances);
     function isSaveBoilerCharacteristice(){
         $.ajax({
@@ -1703,75 +2166,24 @@
             }
         });
     }
-    function saveBoiler1() {
-        // $('#boiler_name').parsley().validate();
 
-        $.ajax({
-            url: saveBoilerLink,
-            data: $("#boiler_form1").serialize()+"&typeBoiler=1",
-            type: 'post',
-            dataType: 'json',
-            success: function (response) {
 
-                if (response.status == 1) {
-                    $('#alert-isSave1').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                } else {
-                    $('#alert-isSave1').html('<div class="alert alert-warning alert-dismissible" role="alert">' + isNotSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                }
-            },
-            error: function () {
-            }
-        });
-    }
-    function saveBoiler2() {
-        // $('#boiler_name').parsley().validate();
-        $.ajax({
-            url: saveBoilerLink,
-            data: $("#boiler_form2").serialize()+"&typeBoiler=2",
-            type: 'post',
-            dataType: 'json',
-            success: function (response) {
 
-                if (response.status == 1) {
-                    $('#alert-isSave2').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                } else {
-                    $('#alert-isSave2').html('<div class="alert alert-warning alert-dismissible" role="alert">' + isNotSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                }
-            },
-            error: function () {
-            }
-        });
-    }
-    function saveBoiler3() {
-        // $('#boiler_name').parsley().validate();
-        $.ajax({
-            url: saveBoilerLink,
-            data: $("#boiler_form3").serialize()+"&typeBoiler=3",
-            type: 'post',
-            dataType: 'json',
-            success: function (response) {
-
-                if (response.status == 1) {
-                    $('#alert-isSave3').html('<div class="alert alert-success alert-dismissible" role="alert">' + isSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                } else {
-                    $('#alert-isSave3').html('<div class="alert alert-warning alert-dismissible" role="alert">' + isNotSavingTitle + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button></div>')
-                }
-            },
-            error: function () {
-            }
-        });
-    }
     var n=0;
 
 
     //add base
     function addExecutive1(){
         $('#name_boiler1').parsley().validate();
+
         $('#type_boiler1').parsley().validate();
+
         $('#amount_boiler1').parsley().validate();
 
         var name = $('#name_boiler1').val();
+
         var type = $('#type_boiler1').val();
+
         var amount = $('#amount_boiler1').val();
 
         if( $('#name_boiler1').parsley().isValid()
@@ -1782,6 +2194,7 @@
             form.append("regId", regApplicationId);
             form.append("name", name);
             form.append("type", type);
+            form.append("boilerEnum", type);
             form.append("amount", amount);
             form.append("typeBoiler",1);
             form.append("_csrf", _csrf);
@@ -1795,7 +2208,8 @@
                 cache: false,
                 success: function (response) {
 
-                    $('#type_boiler1').val(" ");
+
+
                     $('#amount_boiler1').val(null);
 
                     if (response.status==1){
@@ -1805,14 +2219,23 @@
                         var name = response.data.name;
                         var type = response.data.type;
                         var amount = response.data.amount;
-                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                        var actions = '<a class="btn btn-warning btn-sm link-edit-1 list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
                             '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
                         cancelExecutive();
+                        let boilerT;
+                        if(typeBoiler[type] =='TONNA'){
+                            boilerT=[[#{tonna}]]
+                        }else if(typeBoiler[type] =='KG'){
+                            boilerT=[[#{kg}]]
+                        }else{
+                            boilerT=[[#{m3}]]
+                        }
                         $('#boiler-table1 tbody tr:last').after('' +
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
-                            '<td  style="width: 20%" >' + type + '</td>' +
+
+                            '<td  style="width: 20%" >'+boilerT + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '    \n" >' + amount + '</td>' +
@@ -1843,6 +2266,7 @@
             form.append("regId", regApplicationId);
             form.append("name", name);
             form.append("type", type);
+            form.append("boilerEnum", type);
             form.append("amount", amount);
             form.append("typeBoiler",2);
             form.append("_csrf", _csrf);
@@ -1856,7 +2280,7 @@
                 cache: false,
                 success: function (response) {
 
-                    $('#type_boiler2').val(" ");
+
                     $('#amount_boiler2').val(null);
                     const tableRows = document.querySelectorAll('#boiler-table2 tbody tr');
 
@@ -1869,14 +2293,22 @@
                         var name = response.data.name;
                         var type = response.data.type;
                         var amount = response.data.amount;
-                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                        var actions = '<a class="btn btn-warning btn-sm link-edit-1 list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
                             '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
                         cancelExecutive();
+                        let boilerT2
+                        if(typeBoiler[type] =='TONNA'){
+                            boilerT2=[[#{tonna}]]
+                        }else if(typeBoiler[type] =='KG'){
+                            boilerT2=[[#{kg}]]
+                        }else{
+                            boilerT2=[[#{m3}]]
+                        }
                         $('#boiler-table2 tbody tr:last').after('' +
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
-                            '<td  style="width: 20%" >' + type + '</td>' +
+                            '<td  style="width: 20%" >' +boilerT2 + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '    \n" >' + amount + '</td>' +
@@ -1907,6 +2339,7 @@
             form.append("regId", regApplicationId);
             form.append("name", name);
             form.append("type", type);
+            form.append("boilerEnum", type);
             form.append("amount", amount);
             form.append("typeBoiler",3);
             form.append("_csrf", _csrf);
@@ -1920,7 +2353,7 @@
                 cache: false,
                 success: function (response) {
 
-                    $('#type_boiler3').val(" ");
+
                     $('#amount_boiler3').val(null);
 
 
@@ -1931,14 +2364,22 @@
                         var name = response.data.name;
                         var type = response.data.type;
                         var amount = response.data.amount;
-                        var actions = '<a class="btn btn-warning btn-sm list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
+                        var actions = '<a class="btn btn-warning btn-sm link-edit-1 list-btn mr-1" title="'+labelEdit+'" style="padding: 10px 15px;"><i class="feather text-white icon-edit-1 mr-0"></i></a>' +
                             '<a class="btn btn-danger btn-sm list-btn" style="padding: 10px 15px;" onclick="mymodal('+id+')" title="'+labelDelete+'"><i class="feather text-white  icon-x-square mr-0"></i></a>';
                         cancelExecutive();
+                        let boilerT3
+                        if(typeBoiler[type] =='TONNA'){
+                            boilerT3=[[#{tonna}]]
+                        }else if(typeBoiler[type] =='KG'){
+                            boilerT3=[[#{kg}]]
+                        }else{
+                            boilerT3=[[#{m3}]]
+                        }
                         $('#boiler-table3 tbody tr:last').after('' +
                             '<tr id="row_' + id + '">' +
                             '<td id="'+id+'" style="width: 10%">' + ( tableRows.length  )  + '</td>' +
                             '<td id="'+id+'"  style="width: 40%">' + name + '</td>' +
-                            '<td  style="width: 20%" >' + type + '</td>' +
+                            '<td  style="width: 20%" >' +boilerT3 + '</td>' +
                             '<td style="\n' +
                             '    width: 15%;\n' +
                             '   \n" >' + amount + '</td>' +
@@ -1983,21 +2424,40 @@
         $("#name_boiler1").select2({
             dropdownParent: $("#boilerModal1")
         });
+        $("#type_boiler1").select2({
+            dropdownParent: $("#boilerModal1")
+        });
+
         $("#name_boiler2").select2({
             dropdownParent: $("#boilerModal2")
         });
         $("#name_boiler3").select2({
             dropdownParent: $("#boilerModal3")
         });
+
+
     });
-    $("#boiler-table1").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
-        $(this).removeClass().addClass("feather icon-check-circle mr-0");
+
+
+
+
+    $("#boiler-table1").on('mousedown.edit', "a.link-edit-1", function(e) {
+
+        $(this).removeClass('link-edit-1 btn-warning').addClass("link-save-1 btn-success");
+        $(this).children('i.feather.icon-edit-1').removeClass().addClass("feather icon-check-circle mr-0");
         var $row = $(this).closest("tr").off("mousedown");
         var $tds = $row.find("td").not(':last');
         var $idn=0;
         $.each($tds, function(i, el) {
+
+            console.log("i ", i)
+            console.log("el ", el)
+            console.log("idn", $idn)
             var txt = $(this).text();
             $idn++;
+            console.log("idn", $idn)
+
+
             if ($idn==2) {
                 $(this).html("").append(``+
                     ` <select class="form-control" id="name_boiler1"  >`+
@@ -2006,16 +2466,24 @@
                     `  </select>`+
                     ``);
             }
+
             if ($idn==3){
-                $(this).html("").append("<input id='type_boiler1' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
-            }
+                $(this).html("").append(``+
+                    `<select class="form-control" id="type_boiler1"  >`+
+                    text4+
+                    `<option selected="selected" value="`+txt+`">`+txt+`</option>`+
+                    `</select>`+
+                    ``);}
             if ($idn==4){
                 $(this).html("").append("<input id='amount_boiler1' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
             }
+
         });
     });
 
-    $("#boiler-table1").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
+    $("#boiler-table1").on('mousedown.save', "a.link-save-1", function(e) {
+
+        $(this).removeClass('link-save-1 btn-success').addClass("link-edit-1 btn-warning");
         console.log("Bu qism edit uchun")
         var $row = $(this).closest("tr");
         var $tds = $row.find("td").not(':last');
@@ -2035,31 +2503,42 @@
                 if($(this).has('select').length){
                     console.log($(this).has('select'));
                     console.log("selectni ichiga kiryapti");
-                    text = $(this).find("select").val();
-                    textId = $(this).find("select").attr('id');
-                    form.append(textId,text);
-                    $(this).html(text);
+                    var text = $(this).find("select").val();
+                    var textId = $(this).find("select").attr('id');
+                    console.log("txt=" + text + "   txtId=" + textId);
+                    form.append(textId, text);
+
+                    var selectText = $(this).find("select option:selected").text()
+                    if(textId==='type_boiler1') $(this).html(selectText);
+                    else  $(this).html(text);
+
+
                 }else if($(this).has('input').length){
                     console.log("inputni ichiga kiryapti");
                     var txt = $(this).find("input").val();
                     var txtId = $(this).find("input").attr('id');
+                    console.log("txt=" + txt + "   txtId=" + txtId);
                     form.append(txtId,txt);
                     $(this).html(txt);
                 }
-                console.log("txt=" + txt + "   txtId=" + txtId);
+
                 $(this).html(txt);
             });
+
+
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);
-            $(this).removeClass().addClass("feather icon-edit-1 mr-0");
+
+            $(this).children('i.feather.icon-check-circle').removeClass().addClass("feather icon-edit-1 mr-0");
 
             $.ajax({
                 type: "POST",
                 url:editLink1,
                 data:form,
                 success: function(e){
-                    console.log("refresh");
+
+                    console.log("data edited")
                 },
                 processData: false,
                 contentType: false,
@@ -2068,8 +2547,10 @@
         }
     });
 
-    $("#boiler-table2").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
-        $(this).removeClass().addClass("feather icon-check-circle mr-0");
+    $("#boiler-table2").on('mousedown.edit', "a.link-edit-1", function(e) {
+
+        $(this).removeClass('link-edit-1 btn-warning').addClass("link-save-1 btn-success");
+        $(this).children('i.feather.icon-edit-1').removeClass().addClass("feather icon-check-circle mr-0");
         var $row = $(this).closest("tr").off("mousedown");
         var $tds = $row.find("td").not(':last');
         var $idn=0;
@@ -2085,16 +2566,26 @@
                     ``);
             }
             if ($idn==3){
-                $(this).html("").append("<input id='type_boiler2' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
+
+
+
+                $(this).html("").append(``+
+                    `<select class="form-control" id="type_boiler2"  >`+
+                    text4+
+                    `<option selected="selected" value="`+txt+`">`+txt+`</option>`+
+                    `</select>`+
+                    ``);
             }
+
             if ($idn==4){
                 $(this).html("").append("<input id='amount_boiler2' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
             }
         });
     });
 
-    $("#boiler-table2").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
+    $("#boiler-table2").on('mousedown.save', "a.link-save-1", function(e) {
         console.log("Bu qism edit uchun")
+        $(this).removeClass('link-save-1 btn-success').addClass("link-edit-1 btn-warning");
         var $row = $(this).closest("tr");
         var $tds = $row.find("td").not(':last');
         var id=$row.find("td").first().attr('id');
@@ -2113,14 +2604,18 @@
                 if($(this).has('select').length){
                     console.log($(this).has('select'));
                     console.log("selectni ichiga kiryapti");
-                    text = $(this).find("select").val();
-                    textId = $(this).find("select").attr('id');
-                    form.append(textId,text);
-                    $(this).html(text);
+                    var text = $(this).find("select").val();
+                    var textId = $(this).find("select").attr('id');
+                    console.log("txt=" + text + "   txtId=" + textId);
+                    form.append(textId, text);
+                    var selectText =$(this).find("select option:selected").text();
+                    if(textId==='type_boiler2') $(this).html(selectText);
+                    else  $(this).html(text);
                 }else if($(this).has('input').length){
                     console.log("inputni ichiga kiryapti");
                     var txt = $(this).find("input").val();
                     var txtId = $(this).find("input").attr('id');
+                    console.log("txt=" + txt + "   txtId=" + txtId);
                     form.append(txtId,txt);
                     $(this).html(txt);
                 }
@@ -2130,13 +2625,32 @@
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);
-            $(this).removeClass().addClass("feather icon-edit-1 mr-0");
+            $(this).children('i.feather.icon-check-circle').removeClass().addClass("feather icon-edit-1 mr-0");
 
             $.ajax({
                 type: "POST",
                 url:editLink2,
                 data:form,
                 success: function(e){
+                    for (let i = 1; i < 4; i++) {
+
+                        var formBoiler = new FormData();
+                        formBoiler.append("regId", [[${regApplication.id}]]);
+                        formBoiler.append("boiler_type",i);
+                        formBoiler.append("_csrf", $("#global_csrf").val());
+
+                        $.ajax({
+                            url: checkBoilerLink,
+                            type:"POST",
+                            data: formBoiler,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+                                console.log("data edited")
+                            }
+                        });
+                    }
                     console.log("refresh");
                 },
                 processData: false,
@@ -2145,11 +2659,15 @@
             });
         }
     });
-    $("#boiler-table3").on('mousedown.edit', "i.feather.icon-edit-1", function(e) {
-        $(this).removeClass().addClass("feather icon-check-circle mr-0");
+
+    $("#boiler-table3").on('mousedown.edit', "a.link-edit-1", function(e) {
+        $(this).removeClass('link-edit-1 btn-warning').addClass("link-save-1 btn-success");
+        $(this).children('i.feather.icon-edit-1').removeClass().addClass("feather icon-check-circle mr-0");
         var $row = $(this).closest("tr").off("mousedown");
         var $tds = $row.find("td").not(':last');
         var $idn=0;
+
+        console.log(text4)
         $.each($tds, function(i, el) {
             var txt = $(this).text();
             $idn++;
@@ -2162,7 +2680,13 @@
                     ``);
             }
             if ($idn==3){
-                $(this).html("").append("<input id='type_boiler3' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
+                // $(this).html("").append("<input id='type_boiler3' name='type_boiler'  class='form-control' type='text' required='' data-parsley-maxlength='255' value=\""+txt+"\"/>");
+                $(this).html("").append(``+
+                    `<select class="form-control" id="type_boiler3"  >`+
+                    text4+
+                    `<option selected="selected" value="`+txt+`">`+txt+`</option>`+
+                    `</select>`+
+                    ``);
             }
             if ($idn==4){
                 $(this).html("").append("<input id='amount_boiler3' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
@@ -2170,8 +2694,9 @@
         });
     });
 
-    $("#boiler-table3").on('mousedown.save', "i.feather.icon-check-circle", function(e) {
-        console.log("Bu qism edit uchun 3-table")
+    $("#boiler-table3").on('mousedown.save', "a.link-save-1", function(e) {
+        console.log("Bu qism edit uchun")
+        $(this).removeClass('link-save-1 btn-success').addClass("link-edit-1 btn-warning");
         var $row = $(this).closest("tr");
         var $tds = $row.find("td").not(':last');
         var id=$row.find("td").first().attr('id');
@@ -2190,14 +2715,21 @@
                 if($(this).has('select').length){
                     console.log($(this).has('select'));
                     console.log("selectni ichiga kiryapti");
-                    text = $(this).find("select").val();
-                    textId = $(this).find("select").attr('id');
+                    var text = $(this).find("select").val();
+
+                    var textId = $(this).find("select").attr('id');
+                    console.log("txt=" + text + "   txtId=" + textId);
                     form.append(textId,text);
-                    $(this).html(text);
+                    var selectText =$(this).find("select option:selected").text();
+                    if(textId==='type_boiler3') $(this).html(selectText);
+                    else  $(this).html(text);
+
+
                 }else if($(this).has('input').length){
                     console.log("inputni ichiga kiryapti");
                     var txt = $(this).find("input").val();
                     var txtId = $(this).find("input").attr('id');
+                    console.log("txt=" + txt + "   txtId=" + txtId);
                     form.append(txtId,txt);
                     $(this).html(txt);
                 }
@@ -2207,13 +2739,37 @@
             form.append('id',id);
             form.append('regId',regApplicationId);
             form.append("_csrf", _csrf);
-            $(this).removeClass().addClass("feather icon-edit-1 mr-0");
+            var type = $('#type_boiler3').val();
+            form.append("boilerEnum", type);
+            $(this).children('i.feather.icon-check-circle').removeClass().addClass("feather icon-edit-1 mr-0");
 
             $.ajax({
                 type: "POST",
                 url:editLink3,
                 data:form,
                 success: function(e){
+                    for (let i = 1; i < 4; i++) {
+
+                        var formBoiler = new FormData();
+                        formBoiler.append("regId", [[${regApplication.id}]]);
+                        formBoiler.append("boiler_type",i);
+                        formBoiler.append("_csrf", $("#global_csrf").val());
+
+                        $.ajax({
+                            url: checkBoilerLink,
+                            type:"POST",
+                            data: formBoiler,
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            success: function (response) {
+
+
+                                console.log("data edited")
+
+                            }
+                        });
+                    }
                     console.log("refresh");
                 },
                 processData: false,
@@ -2222,6 +2778,9 @@
             });
         }
     });
+
+
+
 </script>
 </body>
 </html>

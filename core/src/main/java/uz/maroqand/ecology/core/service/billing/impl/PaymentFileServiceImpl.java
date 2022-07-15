@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.core.service.billing.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +36,8 @@ public class PaymentFileServiceImpl implements PaymentFileService {
     private final PaymentFileRepository paymentFileRepository;
     private final InvoiceService invoiceService;
     private final PaymentService paymentService;
+    private static final Logger logger = LogManager.getLogger(PaymentFileServiceImpl.class);
+
 
     @Autowired
     public PaymentFileServiceImpl(PaymentFileRepository paymentFileRepository, InvoiceService invoiceService, PaymentService paymentService) {
@@ -88,9 +92,10 @@ public class PaymentFileServiceImpl implements PaymentFileService {
 
             Boolean isComplete,
             String account,
+            String oldAccount,
             Pageable pageable
     ) {
-        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete,account),pageable);
+        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete,account,oldAccount),pageable);
     }
 
     private static Specification<PaymentFile> getFilteringSpecification(
@@ -103,7 +108,8 @@ public class PaymentFileServiceImpl implements PaymentFileService {
             final String details,
             final String bankMfo,
             final Boolean isComplete,
-            final String account
+            final String account,
+            final String oldAccount
 
             ) {
         return new Specification<PaymentFile>() {
@@ -151,8 +157,8 @@ public class PaymentFileServiceImpl implements PaymentFileService {
                     }
                 }
 
-                if(account != null&& !account.isEmpty()){
-                    predicates.add(criteriaBuilder.like(root.get("receiverAccount"), "%"+account+"%"));
+                if((account != null&& !account.isEmpty()) || (oldAccount != null)){
+                    predicates.add(criteriaBuilder.or(criteriaBuilder.like(root.get("receiverAccount"), "%"+account+"%"), criteriaBuilder.like(root.get("receiverAccount"), "%"+oldAccount+"%")) );
                 }
 
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));

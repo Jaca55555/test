@@ -39,6 +39,7 @@ public interface PaymentFileService {
 
             Boolean isComplete,
             String account,
+            String oldAccount,
             Pageable pageable
     );
 }

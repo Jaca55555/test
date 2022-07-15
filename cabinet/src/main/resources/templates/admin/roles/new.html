@@ -163,16 +163,16 @@
     });
 
     $( "input[type=checkbox]" ).on( "click", function () {
-       if ($(this).is(':checked')){
-           checkedList.push($(this).val());
-           checkedInput.val(checkedList);
-       }else{
-           var index = checkedList.indexOf($(this).val());
-           if (index > -1) {
-               checkedList.splice(index, 1);
+        if ($(this).is(':checked')){
+            checkedList.push($(this).val());
             checkedInput.val(checkedList);
-           }
-       }
+        }else{
+            var index = checkedList.indexOf($(this).val());
+            if (index > -1) {
+                checkedList.splice(index, 1);
+                checkedInput.val(checkedList);
+            }
+        }
     } );
 </script>
 </body>

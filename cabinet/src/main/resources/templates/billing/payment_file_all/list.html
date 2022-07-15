@@ -196,7 +196,10 @@
             pageLength: 25,
             lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
             order: [[0, 'desc']],
-            dom: 'lrtip',
+            dom: 'Blrtip',
+            buttons: [
+                 'excel'
+            ],
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
                 var jqTable = $(api.table().node());

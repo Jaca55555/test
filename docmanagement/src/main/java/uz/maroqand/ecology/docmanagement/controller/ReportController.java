@@ -37,14 +37,14 @@ public class ReportController {
     private final DocumentSubService documentSubService;
     private final DocumentTaskService documentTaskService;
     private final DocumentTaskSubService documentTaskSubService;
-    private final DocumentTaskSubRepository documentTaskSubRepository;
+//    private final DocumentTaskSubRepository documentTaskSubRepository;
     private final DocumentLogService documentLogService;
     private final DocumentOrganizationService documentOrganizationService;
     private final DocumentDescriptionService documentDescriptionService;
     private final DocumentTaskContentService documentTaskContentService;
     private final JournalService journalService;
     public ReportController(
-            DocumentTaskSubRepository documentTaskSubRepository,
+//            DocumentTaskSubRepository documentTaskSubRepository,
             DepartmentService departmentService,
             OrganizationService organizationService,
             DocumentTaskContentService documentTaskContentService,
@@ -66,7 +66,7 @@ public class ReportController {
         this.departmentService=departmentService;
         this.documentSubService = documentSubService;
         this.documentTaskService = documentTaskService;
-        this.documentTaskSubRepository=documentTaskSubRepository;
+//        this.documentTaskSubRepository=documentTaskSubRepository;
         this.documentTaskSubService = documentTaskSubService;
         this.documentLogService = documentLogService;
         this.organizationService=organizationService;
@@ -146,7 +146,7 @@ public class ReportController {
                 documentTaskSubService.countAllByDueDate(date),
                 documentTaskSubService.countAllByDueDate1(date1),
                 documentTaskSubService.countAllByStatus(6),
-                documentTaskSubRepository.count(),
+                null,
         });
         result.put("data", convenientForJSONArray);
         return result; }

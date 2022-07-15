@@ -18,6 +18,7 @@ import uz.maroqand.ecology.core.repository.user.UserEdsRepository;
 import uz.maroqand.ecology.core.repository.user.UserRepository;
 import uz.maroqand.ecology.core.service.eimzo.EimzoService;
 import uz.maroqand.ecology.core.service.user.UserAdditionalService;
+import uz.maroqand.ecology.core.util.TinParser;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
@@ -86,6 +87,7 @@ public class EDSLoginController {
         String subjectName = "";
 
         VerifyPkcs7Dto verifyPkcs7Dto = eimzoService.checkVerifyPkcs7(edsSign);
+        logger.info("verifyPkcs7Dto: {}", verifyPkcs7Dto);
         if (
                 //Sertifikat to'g'riligini va muddati tugamaganligini tekshiramiz
                 verifyPkcs7Dto.getVerified() && verifyPkcs7Dto.getCertificateVerified() &&
@@ -99,13 +101,14 @@ public class EDSLoginController {
         }
 
         logger.info("subjectName: {}", subjectName);
-        String pinfl = subjectName.substring(subjectName.length()-30);
-        Matcher matcher1 = pinflPattern.matcher(pinfl);
-        System.out.println("matcher1"+matcher1);
-        Matcher matcher = tinPattern.matcher(subjectName);
+        String pinfl = "";
+        Matcher matcher = pinflPattern.matcher(subjectName);
 
-        if (matcher1.find()){
-            logger.info("Pinfl: {}", matcher1.group(1));
+        Matcher matcher1 = tinPattern.matcher(subjectName);
+
+        if (matcher.find()){
+            logger.info("Pinfl: {}", matcher.group(1));
+            pinfl = matcher.group(1);
         }
 
 
@@ -114,27 +117,24 @@ public class EDSLoginController {
 //        String pinfl = null;
 
         //1-fiz litso INN si keladi.
-        if (matcher.find()) {
-            logger.info("EDS found individual tin: {}", matcher.group(1));
-            tin = Integer.parseInt(matcher.group(1));
-        }
-
-        //2-yur litso INN si keladi.
-        if (matcher.find()) {
-            logger.info("EDS found legalEntity tin: {}", matcher.group(1));
-            leTIN = Integer.parseInt(matcher.group(1));
+        if (matcher1.find()) {
+            logger.info("EDS found individual tin: {}", matcher1.group(1));
+            tin = Integer.parseInt(matcher1.group(1));
         }
 
         //2-yur litso INN si keladi.
         if (matcher1.find()) {
-            logger.info("Pinfl: {}", matcher1.group(1));
-            pinfl = matcher1.group(1);
+            logger.info("EDS found legalEntity tin: {}", matcher1.group(1));
+            leTIN = Integer.parseInt(matcher1.group(1));
         }
 
-        if (tin == null && pinfl==null) {
-            logger.info("Could not find individual TIN.");
-            return "redirect:" + SysUrls.EDSLogin + "?failed=1";
+        //2-yur litso INN si keladi.
+        if (matcher.find()) {
+            logger.info("Pinfl: {}", matcher.group(1));
+            pinfl = matcher.group(1);
         }
+
+
 
         /*
          * Insert userIdGov
@@ -154,7 +154,8 @@ public class EDSLoginController {
                 case "ST": userEds.setRegion(r[1]); break;//viloyat
                 case "E": userEds.setEmail(r[1]); break;//e-mail
                 case "C": userEds.setCountry(r[1]); break;//davlat
-                case "PINFL": userEds.setPinfl(r[1]); break;//pinfl
+                case "1.2.860.3.16.1.2":  userEds.setPinfl(r[1]); break;//ПИНФЛ
+
                 default:
                     if (r[1] != null && r[1].length() == 14) {
                         userEds.setPinfl(r[1]);//pinfl
@@ -186,11 +187,12 @@ public class EDSLoginController {
             user.setGender(null);
 
             List<User> userList = userRepository.findByTin(tin);
-            List<User> userListPinfl = userRepository.findAllByPinfl(pinfl);
-            if(userList.size()>0){
-                user.setUsername(pinfl+"_"+userList.size()+"_"+userListPinfl.size());
+            logger.info("Pinfl: {}", userEds.getPinfl());
+            List<User> userListPinfl = userRepository.findAllByPinfl(userEds.getPinfl());
+            if(userListPinfl.size()>0){
+                user.setUsername(userEds.getPinfl()+"_"+userListPinfl.size());
             }else {
-                user.setUsername(userEds.getTin().toString());
+                user.setUsername(userEds.getPinfl());
             }
         }
         user.setFirstname(userEds.getFirstname());

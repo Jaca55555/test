@@ -24,16 +24,19 @@ import java.util.Set;
 public interface RegApplicationRepository extends DataTablesRepository<RegApplication, Integer>, JpaRepository<RegApplication, Integer>, JpaSpecificationExecutor<RegApplication> {
 
     RegApplication findByIdAndDeletedFalse(Integer id);
+    List<RegApplication> findByDeletedFalse();
     RegApplication findByContractNumber(String contractNumber);
     List<RegApplication> findByApplicantId(Integer id);
 
     List<RegApplication> findByApplicantIdAndDeletedFalse(Integer id);
+    List<RegApplication> findAllByDeliveryStatusAndDeletedFalse(Short deliveryStatus);
 
     List<RegApplication> findByInvoiceId(Integer invoiceId);
     RegApplication findByOfferIdAndDeletedFalse(Integer offerId);
     RegApplication findByInvoiceIdAndDeletedFalse(Integer invoiceId);
     RegApplication findTop1ByInvoiceIdAndDeletedFalse(Integer invoiceId);
     List<RegApplication> findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
+    List<RegApplication> findAllByStatusInAndDeletedFalseOrderByIdDesc(List<RegApplicationStatus> status);
 
     List<RegApplication> findAllByPerformerIdAndDeletedFalseOrderByIdDesc(Integer performerId);
 //    Status!=null

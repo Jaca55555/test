@@ -10,13 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.datatables.repository.DataTablesRepositoryFactoryBean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-//import org.telegram.telegrambots.ApiContextInitializer;
-//import org.telegram.telegrambots.meta.TelegramBotsApi;
-//import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-//import uz.maroqand.ecology.docmanagement.entity.DocumentTaskSub;
-//import uz.maroqand.ecology.docmanagement.service.Bot;
-import uz.maroqand.ecology.core.service.user.UserService;
-import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
+
 
 /**
  * Created by Utkirbek Boltaev on 23.07.2019.

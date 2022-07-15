@@ -139,14 +139,15 @@ public class BankAPIController {
               RegApplication regApplication = regApplicationService.getTopByOneInvoiceId(invoice.getId());
               if (regApplication!=null) {
                   String account="";
-
+                  String oldAccount = "";
                   try {
                       account = organizationService.getById(regApplication.getReviewId()).getAccount();
+                      oldAccount = organizationService.getById(regApplication.getReviewId()).getOldAccount();
                   }catch (Exception e){
                       e.printStackTrace();
                   }
 
-                  if (!account.isEmpty() && paymentFile.getReceiverAccount().equals(account)) {
+                  if ((!account.isEmpty() && paymentFile.getReceiverAccount().equals(account))||(!oldAccount.isEmpty() && paymentFile.getReceiverAccount().equals(oldAccount))) {
                       if(paymentFile.getPayerTin()!=null && regApplication.getApplicant()!=null && regApplication.getApplicant().getTin()!=null && regApplication.getApplicant().getTin().equals(paymentFile.getPayerTin())){
                           paymentFile.setInvoice(invoice.getInvoice());
                           Payment payment = paymentService.pay(invoice.getId(), paymentFile.getAmount(), new Date(), paymentFile.getDetails(), PaymentType.BANK);

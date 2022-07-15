@@ -10,18 +10,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
-import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.expertise.*;
-import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
@@ -49,6 +48,9 @@ import java.util.*;
 public class PerformerController {
 
     private final RegApplicationService regApplicationService;
+    private final BoilerCharacteristicsService boilerCharacteristicsService;
+
+    private final SubstanceService substanceService;
     private final ClientService clientService;
     private final UserService userService;
     private final HelperService helperService;
@@ -76,7 +78,7 @@ public class PerformerController {
     @Autowired
     public PerformerController(
             RegApplicationService regApplicationService,
-            ClientService clientService,
+            BoilerCharacteristicsService boilerCharacteristicsService, SubstanceService substanceService, ClientService clientService,
             UserService userService,
             HelperService helperService,
             SoatoService soatoService,
@@ -95,6 +97,8 @@ public class PerformerController {
             SmsSendService smsSendService,
             OrganizationService organizationService, DocumentEditorService documentEditorService, GlobalConfigs globalConfigs, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, RestTemplate restTemplate, RequirementService requirementService) {
         this.regApplicationService = regApplicationService;
+        this.boilerCharacteristicsService = boilerCharacteristicsService;
+        this.substanceService = substanceService;
         this.clientService = clientService;
         this.userService = userService;
         this.helperService = helperService;
@@ -127,7 +131,6 @@ public class PerformerController {
         logStatusList.add(LogStatus.Modification);
         logStatusList.add(LogStatus.Denied);
         logStatusList.add(LogStatus.Approved);
-
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
@@ -150,7 +153,7 @@ public class PerformerController {
                 filterDto,
                 user.getOrganizationId(),
                 LogType.Performer,
-                user.getId(),
+                userService.isAdmin() ? null : user.getId(),
                 null,
                 null,//todo shart kerak
                 pageable
@@ -248,12 +251,16 @@ public class PerformerController {
         model.addAttribute("organization", organization);
         model.addAttribute("ServerIp", globalConfigs.getServerIp());
         model.addAttribute("LocalIp", globalConfigs.getLocalIp());
-
+        model.addAttribute("substances",substanceService.getList());
+        model.addAttribute("substances1",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE1));
+        model.addAttribute("substances2",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE2));
+        model.addAttribute("substances3",substanceService.getListByType(SubstanceType.SUBSTANCE_TYPE3));
         model.addAttribute("chatList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
         model.addAttribute("commentCount",commentService.CountByStatusAndPerformerId(CommentStatus.New,CommentType.CHAT,user.getId(),regApplicationId));
         model.addAttribute("changeDeadlineDateList", changeDeadlineDateService.getListByRegApplicationId(regApplicationId));
         model.addAttribute("changeDeadlineDate", changeDeadlineDateService.getByRegApplicationId(regApplicationId));
-
+        model.addAttribute("boilerEnumList",BoilerCharacteristicsEnum.getBoilerCharacteristics());
+        System.out.println("BoilerCharacteristicsEnum.getBoilerCharacteristics()"+BoilerCharacteristicsEnum.getBoilerCharacteristics());
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
@@ -265,6 +272,8 @@ public class PerformerController {
 
         return ExpertiseTemplates.PerformerView;
     }
+
+//    boiler
 
     @RequestMapping(value = ExpertiseUrls.PerformerConclusionIsOnline)
     @ResponseBody

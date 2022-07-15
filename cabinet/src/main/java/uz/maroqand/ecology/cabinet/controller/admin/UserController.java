@@ -27,6 +27,7 @@ import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.entity.user.EvidinceStatus;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.entity.user.UserEvidence;
+import uz.maroqand.ecology.core.repository.user.UserRepository;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
@@ -35,6 +36,8 @@ import uz.maroqand.ecology.core.service.user.*;
 import uz.maroqand.ecology.core.util.Common;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -46,6 +49,7 @@ import java.util.*;
 public class UserController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final PositionService positionService;
     private final DepartmentService departmentService;
     private final RoleService userRoleService;
@@ -58,8 +62,9 @@ public class UserController {
     private final FileService fileService;
 
     @Autowired
-    public UserController(UserService userService, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService, UserEvidenceService userEvidenceService, FileService fileService) {
+    public UserController(UserService userService, UserRepository userRepository, PositionService positionService, DepartmentService departmentService, TableHistoryService tableHistoryService, RoleService userRoleService, SoatoService soatoService, OrganizationService organizationService, ObjectMapper objectMapper, UserAdditionalService userAdditionalService, UserEvidenceService userEvidenceService, FileService fileService) {
         this.userService = userService;
+        this.userRepository = userRepository;
         this.positionService = positionService;
         this.departmentService = departmentService;
         this.tableHistoryService = tableHistoryService;
@@ -106,7 +111,7 @@ public class UserController {
             @RequestParam(name = "departmentId", defaultValue = "", required = false) Integer departmentId,
             @RequestParam(name = "positionId", defaultValue = "", required = false) Integer positionId,
             Pageable pageable
-    ) {
+    ) throws ParseException {
 
         firstname = StringUtils.trimToNull(firstname);
         lastname = StringUtils.trimToNull(lastname);
@@ -137,6 +142,15 @@ public class UserController {
         }
 
         result.put("data", convenientForJSONArray);
+        System.out.println("HHHHHHHHHHH");
+        System.out.println("HHHHHHHHHHH");
+        System.out.println("HHHHHHHHHHH");
+        System.out.println("HHHHHHHHHHH");
+        System.out.println(userRepository.findAllByDateRegistered( new SimpleDateFormat("yyyy-MM-dd").parse("2022-04-16")));
+        System.out.println("HHHHHHHHHHH");
+        System.out.println("HHHHHHHHHHH");
+        System.out.println("HHHHHHHHHHH");
+        System.out.println("HHHHHHHHHHH");
         return result;
     }
 

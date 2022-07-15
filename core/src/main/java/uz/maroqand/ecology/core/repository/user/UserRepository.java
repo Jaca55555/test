@@ -3,8 +3,10 @@ package uz.maroqand.ecology.core.repository.user;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +25,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     User findByTinAndLeTin(Integer tin, Integer leTin);
     List<User> findAllByPinfl(String pinfl);
     User findByIdAndOrganizationId(Integer id, Integer organizationId);
-
+    List<User> findAllByDateRegistered(Date date);
     List<User> findByTin(Integer tin);
 
     List<User> findAllByDepartmentIdNotNull();
