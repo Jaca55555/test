@@ -138,7 +138,7 @@ public class Maintenance {
 
                         logger.info("yuborishga tayyor uje");
                         ResponseEntity<String> response = restTemplate.exchange(
-                                "http://172.16.11.234:8087/api/expertise",
+                                "http://84.54.83.68:8087/api/expertise",
                                 HttpMethod.POST,
                                 requestEntity,
                                 String.class);

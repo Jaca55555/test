@@ -20,6 +20,8 @@ import uz.maroqand.ecology.cabinet.util.Maintenance;
 import uz.maroqand.ecology.docmanagement.service.Bot;
 import uz.maroqand.ecology.docmanagement.service.interfaces.DocumentTaskSubService;
 
+import java.io.IOException;
+
 /**
  * Created by Sadullayev Akmal on 04.05.2020.
  * (uz)
@@ -81,23 +83,23 @@ public class ScheduledTasks {
 
     }
 
-//    @Scheduled(cron = "0 55 15 * * *")
-//    public void sendEcoFonds() throws IOException {
-//        logger.info("\n" +
-//                "/*****************************/\n" +
-//                "/       CRON TASK STARTED      /\n" +
-//                "/*****************************/\n"
-//        );
-//
-//        Maintenance.sendEcoFonds(conclusionService,regApplicationService,regApplicationLogService,restTemplate, fileService);
-//
-//        logger.info("\n" +
-//                "/*****************************/\n" +
-//                "/       CRON TASK FINISHED     /\n" +
-//                "/*****************************/\n"
-//        );
-//
-//    }
+    @Scheduled(cron = "0 25 15 * * *")
+    public void sendEcoFonds() throws IOException {
+        logger.info("\n" +
+                "/*****************************/\n" +
+                "/       CRON TASK STARTED      /\n" +
+                "/*****************************/\n"
+        );
+
+        Maintenance.sendEcoFonds(conclusionService,regApplicationService,regApplicationLogService,restTemplate, fileService);
+
+        logger.info("\n" +
+                "/*****************************/\n" +
+                "/       CRON TASK FINISHED     /\n" +
+                "/*****************************/\n"
+        );
+
+    }
 
 
     @Scheduled(cron = "0 50 18 * * *")
@@ -168,7 +170,7 @@ public class ScheduledTasks {
 //
 //    }
 
-    @Scheduled(cron = "0 0 9 * * *")
+    @Scheduled(cron = "0 0 14 * * *")
     public void sendDocumentCount() {
         logger.info("\n" +
                 "/*****************************/\n" +

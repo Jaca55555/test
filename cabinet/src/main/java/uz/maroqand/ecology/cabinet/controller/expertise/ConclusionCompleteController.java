@@ -320,7 +320,7 @@ public class ConclusionCompleteController {
             MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
             Set<Integer> materialsInt = regApplication.getMaterials();
             Integer next =materialsInt.size()>0? materialsInt.iterator().next():0;
-            if (next == 8 && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
+            if ((next == 8 || next == 5 || next == 6 || next == 7 ) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
                 if (conclusionService.getById(conclusion.getId()).getConclusionWordFileId() != null) {
                     file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
                     String filePath = file.getPath();
@@ -352,7 +352,7 @@ public class ConclusionCompleteController {
                 logger.info("response_entity"+requestEntity);
                 try {
                     ResponseEntity<String> response = restTemplate.exchange(
-                            "http://172.16.11.234:8087/api/expertise",
+                            "http://84.54.83.68:8087/api/expertise",
                             HttpMethod.POST,
                             requestEntity,
                             String.class);

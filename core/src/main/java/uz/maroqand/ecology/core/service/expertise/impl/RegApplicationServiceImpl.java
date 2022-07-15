@@ -476,32 +476,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 if (filterDto.getSubRegionId() != null) {
                     predicates.add(criteriaBuilder.equal(root.join("applicant").get("subRegionId"), filterDto.getSubRegionId()));
                 }
-
-                if (filterDto.getStatusing() == null){
-                    if (logType != null && filterDto.getStatus() != null) {
-                        switch (logType) {
-                            case Forwarding:
-                                predicates.add(criteriaBuilder.equal(root.join("forwardingLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
-                                break;
-                            case Performer:
-                                predicates.add(criteriaBuilder.equal(root.join("performerLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
-                                break;
-                        }
-                    }
-                }else {
-                    if (logType != null) {
-                        List<LogStatus> init = new ArrayList<>();
-                        init.add(LogStatus.Initial);
-                        init.add(LogStatus.Resend);
-                        switch (logType) {
-                            case Forwarding:
-                                predicates.add(criteriaBuilder.in(root.join("forwardingLog").get("status")).value(init));
-                                break;
-                            case Performer:
-                                predicates.add(criteriaBuilder.in(root.get("performerLog").get("status")).value(init));
-                                break;
-                        }
-                    }
+                if (filterDto.getStatus() != null) {
+                    predicates.add(criteriaBuilder.equal(root.join("forwardingLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
                 }
 
 
