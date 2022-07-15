@@ -205,7 +205,16 @@ public class ConclusionCompleteController {
 
         result.put("recordsTotal", regApplicationLogPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationLogPage.getTotalElements()); //Filtered elements
-        result.put("initials", regApplicationLogService.findFilteredNumber(LogType.ConclusionComplete, null));
+        FilterDto filterDtoCount = new FilterDto();
+        filterDto.setStatusing(1);
+        result.put("initials", regApplicationLogService.findFiltered(
+                filterDtoCount,
+                null,
+                null,
+                LogType.ConclusionComplete,
+                null,
+                pageable
+        ).getTotalElements());
         result.put("data",convenientForJSONArray);
         return result;
     }
