@@ -269,25 +269,28 @@
             <div class="container">
                 <div class="contact-wrapper">
                     <div class="contact-info">
-                        <form action="" id="form_form">
+                        <form id="form_form">
                             <div class="contact-form">
                                 <div class="title"><span th:text="#{front.contact-form-title}">Contact Us!</span>
                                 </div>
                                 <div class="form-input-wrapper">
                                     <div class="form-group user">
-                                        <input type="text" id="front_full_name" name="full_name"  th:placeholder="#{front.user_name}">
+                                        <input required type="text" id="front_full_name" name="full_name"  th:placeholder="#{front.user_name}">
                                     </div>
                                     <div class="form-group star">
-                                        <input type="text" id="front_company_name" name="company_name" th:placeholder="#{front.company_name}">
+                                        <input required type="text" id="front_company_name" name="company_name" th:placeholder="#{front.company_name}">
                                     </div>
                                     <div class="form-group message">
-                                        <input type="text" id="front_email" name="email" th:placeholder="#{front.user_mail}">
+                                        <input required type="text" id="front_email" name="email" th:placeholder="#{front.user_mail}">
                                     </div>
                                     <div class="form-group phone">
-                                        <input type="text" id="front_phone" name="phone" th:placeholder="#{front.user_phone}" >
+                                        <input required type="text" id="front_phone" name="phone" th:placeholder="#{front.user_phone}" >
+                                    </div>
+                                    <div class="form-group w-100 star">
+                                        <input required type="text" id="front_title" name="title" th:placeholder="#{front.user_title}">
                                     </div>
                                     <div class="form-group w-100">
-                                        <textarea id="front_message" name="message" th:placeholder="#{front.user_message}"></textarea>
+                                        <textarea required id="front_message" name="message" th:placeholder="#{front.user_message}"></textarea>
                                     </div>
                                     <button type="button" class="form-btn" id="suggest_button"><i class="mdi mdi-telegram mr-2"></i><span th:text="#{front.send-contact-btn}">send</span>
                                     </button>
@@ -482,7 +485,9 @@
 
     <script src="/static/eco_fo/scripts/jquery-3.3.1.min.js"></script>
     <script src="/static/plugins/bootstrap/bootstrap.min.js"></script>
-
+<!--    <script src="/static/pnotify/js/pnotify.custom.min.js"></script>-->
+<!--    <script src="/static/sweetalert/js/sweetalert.min.js" type="javascript"></script>-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script th:inline="javascript">
         var apitext=JSON.parse([[${element}]]);
         var moreText = [[#{sys_more}]];
@@ -501,7 +506,7 @@
             $('#submitButton').click();
         }
     </script>
-    <script>
+    <script th:inline="javascript">
 
         function openModalFile() {
             $('#myModal').modal('show');
@@ -509,16 +514,33 @@
 
         $("#suggest_button").click(function(e){
             console.log("button clicked")
+            // $('#form_form').submit
             var form = $('#form_form');
-            $.ajax({
-                url: [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).SuggestAppealLanding}]],
-                data: form.serialize(),
-                type: 'post',
-                dataType: 'json',
-                success: function(response) {
-                    console.log(response);
-                }
-            });
+            if ($('#form_form')[0].checkValidity()) {
+                $.ajax({
+                    url: [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).SuggestAppealLanding}]],
+                    data: form.serialize(),
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response) {
+                            swal({
+                                title: "Arizangiz jo'natildi",
+                                type: "success"
+                            });
+                            $('#form_form :input').val('');
+                            // $('#form_form').reset();
+                        } else {
+                            swal({
+                                title: "Arizangizda xatolik bor",
+                                type: "error"
+                            });
+                        }
+                    }
+                });
+            }else{
+                $("#form_form")[0].reportValidity()
+            }
         });
 
         $(document).ready(function () {

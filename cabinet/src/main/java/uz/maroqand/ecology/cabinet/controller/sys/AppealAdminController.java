@@ -112,7 +112,7 @@ public class AppealAdminController {
         //UPDATE MAP
         appealService.updateByUserId(appeal.getCreatedById());
 
-        model.addAttribute("createdBy",userService.findById(appeal.getCreatedById()));
+        model.addAttribute("createdBy",appeal.getCreatedById()!=null?userService.findById(appeal.getCreatedById()): null);
         model.addAttribute("appealSub", appealSub);
         model.addAttribute("appealSubList", appealSubList);
         model.addAttribute("appeal",appeal);

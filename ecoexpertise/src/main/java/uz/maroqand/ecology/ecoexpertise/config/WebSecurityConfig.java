@@ -51,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/news").permitAll()
                 .antMatchers("/get_news").permitAll()
                 .antMatchers("/get_modal_file").permitAll()
+                .antMatchers("/reg/appeal_landing").permitAll()
                 .antMatchers("/test/login").permitAll()
                 .antMatchers(SysUrls.SelectLang).permitAll()
                 .antMatchers("/reg/application/contract/offer_download").permitAll()

@@ -39,5 +39,5 @@ public interface AppealService {
 
     Appeal findById(Integer id);
 
-    void createAppealLanding(String fullName, String companyName, String email, String phone, String message);
+    void createAppealLanding(String fullName, String companyName, String email, String phone, String message, String theme);
 }

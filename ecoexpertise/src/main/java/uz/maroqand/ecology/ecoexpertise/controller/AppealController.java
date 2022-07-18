@@ -27,6 +27,7 @@ import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.core.util.HttpRequestHelper;
 import uz.maroqand.ecology.ecoexpertise.constant.reg.RegTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls;
 
@@ -247,18 +248,19 @@ public class AppealController {
         }
     }
 
-    @RequestMapping(value = RegUrls.SuggestAppealLanding, produces = "application/json")
+    @RequestMapping(value = RegUrls.SuggestAppealLanding, produces = "application/json", method = RequestMethod.GET)
     @ResponseBody
     public boolean suggestAppeallanding(
-            @RequestParam(name = "full_name", defaultValue = "") String fullName,
-            @RequestParam(name = "company_name", defaultValue = "") String companyName,
-            @RequestParam(name = "email", defaultValue = "") String email,
-            @RequestParam(name = "phone", defaultValue = "") String phone,
-            @RequestParam(name = "message", defaultValue = "") String message
+            @RequestParam(name = "full_name") String fullName,
+            @RequestParam(name = "company_name") String companyName,
+            @RequestParam(name = "email") String email,
+            @RequestParam(name = "phone") String phone,
+            @RequestParam(name = "message") String message,
+            @RequestParam(name = "title") String title
     ){
-        if (fullName == null) return false;
+        if (fullName == null && companyName == null) return false;
         try {
-            appealService.createAppealLanding(fullName, companyName, email, phone, message);
+            appealService.createAppealLanding(fullName, companyName, email, phone, message, title);
         }catch (Exception e){
             return false;
         }

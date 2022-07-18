@@ -157,7 +157,7 @@ public class AppealServiceImpl implements AppealService {
     }
 
     @Override
-    public void createAppealLanding(String fullName, String companyName, String email, String phone, String message) {
+    public void createAppealLanding(String fullName, String companyName, String email, String phone, String message, String theme) {
         Appeal appeal = new Appeal();
         appeal.setAppealStatus(AppealStatus.Open);
         appeal.setAppealType(AppealType.Landing_Suggestion);
@@ -166,7 +166,7 @@ public class AppealServiceImpl implements AppealService {
         appeal.setPersonEmail(email);
         appeal.setPhone(phone);
         appeal.setPersonFullName(fullName);
-        appeal.setTitle("landing page Suggestion");
+        appeal.setTitle(theme);
         appeal.setCreatedAt(new Date());
         appealRepository.save(appeal);
     }
