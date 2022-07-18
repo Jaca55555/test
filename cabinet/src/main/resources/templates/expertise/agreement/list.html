@@ -135,7 +135,7 @@
                                                 </div>
 
                                                 <div class="form-group col-sm-12 text-right">
-                                                    <a class="btn btn-primary text-white" onclick="getDatatableConnect();return false;">
+                                                    <a class="btn btn-primary text-white" onclick="getDatatableConnect(0);return false;">
                                                         <i class="feather icon-search mr-1"></i>
                                                         <span th:text="#{sys_search}">Search</span>
                                                     </a>
@@ -285,12 +285,12 @@
     function datatableConnect(tab) {
         let filterTab = "";
 
-        if (tab !== 1){
-            if ($('#status').val() !== ''){
-                $('#executing-tab1').setClass('active')
-                $('#executing-tab').removeClass('active');
+        if (tab !== 1) {
+            if (tab === 0) {
+                $('#executing-tab1').removeClass('active');
+                $('#executing-tab').addClass('active')
             }
-        }else {
+        } else {
             filterTab = tab;
         }
 

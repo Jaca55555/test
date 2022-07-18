@@ -284,12 +284,12 @@
     function datatableConnect(tab) {
         let filterTab = "";
 
-        if (tab !== 1){
-            if ($('#status').val() !== ''){
-                $('#executing-tab1').setClass('active')
-                $('#executing-tab').removeClass('active');
+        if (tab !== 1) {
+            if (tab === 0) {
+                $('#executing-tab1').removeClass('active');
+                $('#executing-tab').addClass('active')
             }
-        }else {
+        } else {
             filterTab = tab;
         }
 
