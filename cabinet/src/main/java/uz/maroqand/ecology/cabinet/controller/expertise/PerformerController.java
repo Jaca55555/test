@@ -183,7 +183,7 @@ public class PerformerController {
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
-        result.put("initials", regApplicationService.findFilteredNumber(LogType.Performer, user.getOrganizationId(), userService.isAdmin() ? null : user.getId()));
+        result.put("initials", regApplicationService.findFilteredNumber(LogType.Performer, user.getOrganizationId(), userService.isAdmin() ? null : user.getId(), null));
         result.put("data",convenientForJSONArray);
         return result;
     }

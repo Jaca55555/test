@@ -172,6 +172,7 @@ public class ConfirmController {
 
         result.put("recordsTotal", regApplicationPage.getTotalElements()); //Total elements
         result.put("recordsFiltered", regApplicationPage.getTotalElements()); //Filtered elements
+        result.put("initials", regApplicationService.findFilteredNumber(LogType.Confirm, userService.isAdmin()||user.getRole().getId()==16 ? null:user.getOrganizationId(), userService.isAdmin() ? null : user.getId(), RegApplicationInputType.ecoService));
         result.put("data",convenientForJSONArray);
         return result;
     }

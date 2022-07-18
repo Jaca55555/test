@@ -394,12 +394,12 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
 
     @Override
-    public long findFilteredNumber(LogType logType, Integer integer, Integer performerId) {
+    public long findFilteredNumber(LogType logType, Integer integer, Integer performerId, RegApplicationInputType regApplicationInputType) {
         FilterDto filterDto = new FilterDto();
         filterDto.setStatusing(1);
         Pageable pageable = new PageRequest(0, 10);
 
-        long returnElement = regApplicationRepository.findAll(getFilteringSpecification(filterDto, integer, logType, performerId, null, null), pageable).getTotalElements();
+        long returnElement = regApplicationRepository.findAll(getFilteringSpecification(filterDto, integer, logType, performerId, null, regApplicationInputType), pageable).getTotalElements();
         return returnElement;
     }
 
@@ -440,10 +440,6 @@ public class RegApplicationServiceImpl implements RegApplicationService {
             }
 
             if (filterDto != null) {
-                if (filterDto.getRegApplicationStatus() != null) {
-//                        System.out.println(filterDto.getRegApplicationStatus().getName());
-                    predicates.add(criteriaBuilder.equal(root.get("status"), filterDto.getRegApplicationStatus()));
-                }
                 if (filterDto.getRegApplicationCategoryType() != null) {
                     predicates.add(criteriaBuilder.equal(root.get("regApplicationCategoryType"), filterDto.getRegApplicationCategoryType()));
                 }
@@ -480,13 +476,16 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                     predicates.add(criteriaBuilder.like(root.<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
                 }
                 if (filterDto.getStatusing() == null){
-                    if (logType != null && filterDto.getStatus() != null) {
+                    if (logType != null && (filterDto.getStatus() != null || filterDto.getRegApplicationStatus() != null)) {
                         switch (logType) {
                             case Forwarding:
                                 predicates.add(criteriaBuilder.equal(root.join("forwardingLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
                                 break;
                             case Performer:
                                 predicates.add(criteriaBuilder.equal(root.join("performerLog").get("status"), LogStatus.getLogStatus(filterDto.getStatus())));
+                                break;
+                            case Confirm:
+                                predicates.add(criteriaBuilder.equal(root.get("status"), filterDto.getRegApplicationStatus()));
                                 break;
                         }
                     }
@@ -502,6 +501,9 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                                 break;
                             case Performer:
                                 predicates.add(criteriaBuilder.in(root.join("performerLog").get("status")).value(init));
+                                break;
+                            case Confirm:
+                                predicates.add(criteriaBuilder.equal(root.get("status"), RegApplicationStatus.CheckSent));
                                 break;
                         }
                     }
