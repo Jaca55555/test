@@ -111,7 +111,7 @@ public class EventController {
         return MgmtTemplates.EventNewsCreate;
     }
 
-    @DeleteMapping(value = MgmtUrls.EventNewsDelete)
+    @GetMapping(value = MgmtUrls.EventNewsDelete)
     public String deleteEventNews(@RequestParam(name = "id") Integer id){
         User user = userService.getCurrentUserFromContext();
         EventNews eventNews = eventNewsService.getById(id, user.getId());
