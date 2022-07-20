@@ -159,7 +159,7 @@ public class MainController {
     ){
         EventNews eventNews = eventNewsService.findById(id);
         if (eventNews == null) return "redirect:index";
-        model.addAttribute("img_source","http://localhost:8080/show-image-on-web?file_id="+eventNews.getFileId());
+        model.addAttribute("img_source","http://localhost:8080/show-image-on-web?file_id="+eventNews.getFileId()); /*bu yerga saytning aniq urlini yozish kerak*/
         model.addAttribute("news", eventNews);
 
         return "news";
