@@ -6,18 +6,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.entity.sys.EventNews;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.Option;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.integration.common.EcoGovService;
+import uz.maroqand.ecology.core.service.sys.EventNewsService;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.OptionService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -26,10 +26,7 @@ import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
 import org.springframework.data.domain.Pageable;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -46,14 +43,16 @@ public class MainController {
     private final UserService userService;
     private final FileService fileService;
     private final OptionService optionService;
+    private final EventNewsService eventNewsService;
 
     @Autowired
-    public MainController(EcoGovService ecoGovService, RegApplicationService regApplicationService, UserService userService, FileService fileService, OptionService optionService) {
+    public MainController(EcoGovService ecoGovService, RegApplicationService regApplicationService, UserService userService, FileService fileService, OptionService optionService, EventNewsService eventNewsService) {
         this.ecoGovService = ecoGovService;
         this.regApplicationService = regApplicationService;
         this.userService = userService;
         this.fileService = fileService;
         this.optionService = optionService;
+        this.eventNewsService = eventNewsService;
     }
 
     @RequestMapping("/")
@@ -85,6 +84,10 @@ public class MainController {
 //        model.addAttribute("element", element);
         model.addAttribute("total", total);
         model.addAttribute("done", done);
+
+        List<EventNews> salom = eventNewsService.getNewsByDate();
+
+        model.addAttribute("data", salom);
         return "index";
     }
 
@@ -148,6 +151,19 @@ public class MainController {
         System.out.println("--news");
         return "news";
     }
+
+    @GetMapping(value = "/view-news")
+    public String getNewsView(
+            @RequestParam(name = "id", required = false) Integer id
+            ,Model model
+    ){
+        EventNews eventNews = eventNewsService.findById(id);
+        if (eventNews == null) return "redirect:index";
+        model.addAttribute("img_source","http://localhost:8080/show-image-on-web?file_id="+eventNews.getFileId());
+        model.addAttribute("news", eventNews);
+
+        return "news";
+    }
     
     @RequestMapping("/logout")
     public String logout(){
@@ -184,6 +200,15 @@ public class MainController {
         user.setLang(lang);
         userService.update(user);
         return "redirect:" + currentUrl;
+    }
+
+
+    @GetMapping("/show-image-on-web")
+    public ResponseEntity<Resource> showImageOnWeb(
+            @RequestParam(name = "file_id") Integer fileId
+    ){
+        File file = fileService.findById(fileId);
+        return fileService.getFileAsResourceForView(file);
     }
 
 }

@@ -21,18 +21,9 @@
                             <div class="flex-center media-w-100">
                                 <ul>
                                     <li>
-                                        <a href="#">
-                                            <img src="/static/eco_fo/img/facebook-logo.svg" alt="">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img src="/static/eco_fo/img/twitter-logo.svg" alt="">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <img src="/static/eco_fo/img/instagram-logo.svg" alt="">
+                                        <a href="https://t.me/ecoserviceuz" target="_blank" >
+                                            <i style="color: white" class="icon mdi mdi-telegram"></i>
+                                            <span style="color: white" th:text="#{group_telegarm_support}"></span>
                                         </a>
                                     </li>
                                 </ul>
@@ -64,9 +55,9 @@
                 <div class="container">
                     <div class="menu-wrapper">
                         <a href="#" class="logo">
-                            <img src="/static/eco_fo/img/eco-logo.png" alt="">
-                            <div class="info">
-                                <span th:text="#{front.logo_info}">O'zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo'mitasi</span>
+                            <img src="/static/eco_fo/img/logo-new.jpg" alt="">
+                            <div class="menu-nav">
+                                <span class="bold-style" th:utext="#{front.logo_info}">O'zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo'mitasi</span>
                             </div>
                         </a>
                         <ul class="menu-nav">
@@ -98,18 +89,19 @@
                     <a href="#" class="print"></a>
                 </div>
                 <div class="news-content">
-                    <div class="news-img-block">
-                        <img th:src="${img_source}" alt="">
+                    <div class="news-img-block position-relative">
+                        <img th:src="${img_source}" alt="this was been an image">
+                        <div class="news-title" style="margin: 0px 0px 0px 60px"><h2 th:text="${news.title}">Waste Collection Today</h2></div>
                     </div>
                     <div class="news-info">
-                        <div class="news-date">
-                            <div class="news-item-color-green"><span th:text="${create}">MARCH 13, 2017</span>
-                            </div>
+                        <div class="news-date" style="float: right">
+                            <div class="news-item-color-green"><span th:text="${news.createdAt}">MARCH 13, 2017</span></div>
                             <!--<div class="news-item-default"><span>IN RECYCLING</span></div>-->
                         </div>
-                        <div class="news-title"><span th:text="${title}">Waste Collection Today</span></div>
+                        <br />
+                        <br />
                         <!--<div class="news-subtitle"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque elit tortor, ullamcorper quis ultrices vitae, mattis non est. Aliquam erat volutpat.</span></div>-->
-                        <div class="news-description"><span th:utext="${newsText}">Quisque vitae turpis lacus. Aenean eu augue nunc. Sed gravida purus tellus, a varius odio euismod fermentum. Duis faucibus elit ut nulla pretium mollis. Nullam condimentum tempor massa, vehicula placerat ligula scelerisque ut. Donec tincidunt vehicula suscipit. Etiam euismod tortor id mi sodales, vitae tincidunt sem molestie. Praesent ac magna quis ex gravida varius eu sit amet turpis. Curabitur nisi dolor, facilisis a justo sed, placerat aliquet lectus. Cras pretium nec velit eget vulputate. Aenean molestie mi ligula, ut interdum lectus sodales sit amet. Aenean vehicula porttitor dui, a pellentesque neque sodales sodales. Cras ut porta libero.</span></div>
+                        <div class="news-description"><span >Quisque vitae turpis lacus. Aenean eu augue nunc. Sed gravida purus tellus, a varius odio euismod fermentum. Duis faucibus elit ut nulla pretium mollis. Nullam condimentum tempor massa, vehicula placerat ligula scelerisque ut. Donec tincidunt vehicula suscipit. Etiam euismod tortor id mi sodales, vitae tincidunt sem molestie. Praesent ac magna quis ex gravida varius eu sit amet turpis. Curabitur nisi dolor, facilisis a justo sed, placerat aliquet lectus. Cras pretium nec velit eget vulputate. Aenean molestie mi ligula, ut interdum lectus sodales sit amet. Aenean vehicula porttitor dui, a pellentesque neque sodales sodales. Cras ut porta libero.</span></div>
                     </div>
                 </div>
             </div>
@@ -169,24 +161,19 @@
                 <div class="container">
                     <div class="footer-bottom-wrapper">
                         <a href="#" class="logo">
-                            <img src="/static/eco_fo/img/eco-logo.png" alt="">
-                            <div class="info"><span th:text="#{front.logo_info}">O'zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo'mitasi</span>
+                            <img src="/static/eco_fo/img/bottom.png" alt="">
+                            <div class="menu-nav"><span style="color: white" class="bold-style" th:utext="#{front.logo_info}">O'zbekiston Respublikasi ekologiya va atrof muhitni muhofaza qilish davlat qo'mitasi</span>
                             </div>
                         </a>
                         <ul class="social-list">
                             <li>
-                                <a href="#">
+                                <a target="_blank" href="https://t.me/ecoekspertiza">
+                                    <img src="/static/eco_fo/img/telegram.png" alt="">
+                                </a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="https://www.facebook.com/ecoekspertiza/">
                                     <img src="/static/eco_fo/img/facebook-logo.svg" alt="">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="/static/eco_fo/img/instagram-logo.svg" alt="">
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <img src="/static/eco_fo/img/twitter-logo.svg" alt="">
                                 </a>
                             </li>
                         </ul>

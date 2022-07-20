@@ -1,5 +1,7 @@
 package uz.maroqand.ecology.cabinet.constant.mgmt;
 
+import org.apache.poi.ss.formula.functions.Even;
+
 public class MgmtTemplates {
     private static final String Prefix = "mgmt";
 
@@ -45,6 +47,13 @@ public class MgmtTemplates {
     //test html to Word
     private static final String Word = Prefix + "/word";
     public static final String WordEditor = Word;
+
+//    Event News
+    private static final String Event = Prefix + "/event";
+    public static final String EventNewsList = Event + "/list";
+    public static final String EventNewsView = Event + "/view";
+    public static final String EventNewsCreate = Event + "/new";
+
 
 
 }

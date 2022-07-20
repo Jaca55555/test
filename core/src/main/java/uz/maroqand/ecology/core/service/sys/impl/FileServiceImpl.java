@@ -139,6 +139,37 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    public ResponseEntity<Resource> getFileAsResourceForView(File file) {
+        Resource fileAsResource = getFileAsResource(file);
+
+        //File not found.
+        if (fileAsResource == null) return null;
+
+        MultiValueMap<String,String> headers = new LinkedMultiValueMap<>();
+
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + file.getName() + "\"");
+
+        if (file.getSize() != null) {
+            headers.add(HttpHeaders.CONTENT_LENGTH, file.getSize().toString());
+        }
+        if (file.getExtension() != null) {
+            switch (file.getExtension().toLowerCase()) {
+                case "jpeg":
+                case "jpg":
+                    headers.add(HttpHeaders.CONTENT_TYPE, "image/jpeg");
+                    break;
+                case "png":
+                    headers.add(HttpHeaders.CONTENT_TYPE, "image/png");
+                    break;
+                default:
+                    //Noma'lum fayl turlari uchun shu tip to'g'ri keladi
+                    headers.add(HttpHeaders.CONTENT_TYPE, "application/octet-stream");
+            }
+        }
+        return new ResponseEntity<Resource>(fileAsResource, headers, HttpStatus.OK);
+    }
+
+    @Override
     public File uploadFile(MultipartFile multipartFile, Integer userId, String title, String description) {
 
         if (multipartFile == null || multipartFile.isEmpty()) {

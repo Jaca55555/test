@@ -21,6 +21,8 @@ public interface FileService {
 
     ResponseEntity<Resource> getFileAsResourceForDownloading(File file);
 
+    public ResponseEntity<Resource> getFileAsResourceForView(File file);
+
     File uploadFile(MultipartFile multipartFile, Integer userId, String title, String description);
 
     File findByIdAndUploadUserId(Integer id, Integer userId);

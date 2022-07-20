@@ -82,4 +82,17 @@ public class MgmtUrls {
     public static final String WordEditor = Word;
     public static final String WordCreate = Word + "/create";
 
+//    event news
+    private static final String Event = Prefix + "/event-news";
+
+    public static final String EventNewsList = Event+"/list";
+    public static final String EventNewsAjaxLIst = Event+"/ajax-list";
+    public static final String EventNewsEdit = Event+"/edit";
+    public static final String EventNewsView = Event+"/view";
+    public static final String EventNewsDelete = Event+"/delete";
+    public static final String EventNewsCreate = Event +"/create";
+    public static final String EventNewsFileUpload = Event +"/upload-file";
+    public static final String EventNewsFileDelete = Event +"/delete-file";
+
+
 }

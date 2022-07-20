@@ -237,9 +237,9 @@
                 </div>
                 <div class="latest-articles-slider-wrapper" id="sliders">
 
-                    </div>
                 </div>
             </div>
+        </div>
         </div>
         <div class="statistic-wrapper" id="statistic">
             <div class="container">
@@ -489,7 +489,7 @@
 <!--    <script src="/static/sweetalert/js/sweetalert.min.js" type="javascript"></script>-->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script th:inline="javascript">
-        var apitext=JSON.parse([[${element}]]);
+
         var moreText = [[#{sys_more}]];
 
         function getId(id,lang) {
@@ -507,7 +507,7 @@
         }
     </script>
     <script th:inline="javascript">
-
+        var apitext = [[${data}]];
         function openModalFile() {
             $('#myModal').modal('show');
         }
@@ -545,25 +545,21 @@
 
         $(document).ready(function () {
             /*image,created_at,titleUz,descriptionUz,contentUz,titleRU,descriptionRU,contentRu*/
-
-            if (apitext!=null && apitext['status']) {
+            console.log(apitext);
+            if (apitext.length != 0) {
                 var html = '';
-                 html += ' <div class="latest-articles-slider" ><div class="swiper-wrapper">';
-                $.each(apitext['data'], function (item, val) {
-                    // console.log("item= " + item + " val=" + val);
-                    if (val.titleUZ != '') {
+                 html += ' <div class="latest-articles-slider swiper-container" ><div class="swiper-wrapper">';
+                $.each(apitext, function (item, val) {
+                    console.log("item= " + item + " val=" + val);
+                    if (val.id != null) {
                         html += '<div class="swiper-slide">' +
-                            '       <div class="latest-articles-card">' +
-                            '           <div class="header">' +
-                            '                 <div class="header-date">' + val.created_at + '</div>' +
-                            '           </div>' +
-                            '           <div class="info">' +
-                            '               <div class="title" style="overflow: hidden;height: 85px;"><span>' + val.titleUZ + '</span></div>' +
-                            '               <div class="subtitle" style="height: 80px;overflow: hidden;">' +
-                            '                   <span>' + val.descriptionUZ + '</span>\n' +
+                            '       <div class="card latest-articles-card" style="height: 420px">' +
+                            '<img class="card-img" style="height: 230px" src="http://localhost:8080/show-image-on-web?file_id='+val.fileId +'" alt="Card image cap">'+
+                            '               <div class="card-title" style="overflow: hidden;height: 30px;"><span>' + val.title+' '+val.theme + '</span></div>' +
+                            '               <div class="card-text" style="height: 80px;overflow: hidden;">' +
+                            '                   <span>' + val.description + '</span>\n' +
                             '               </div>\n' +
-                            '           </div>' +
-                            '           <button class="learn-more" onclick="getId('+item+',\'uz\')"><span>'+moreText+'</span></button>' +
+                            '           <a class="learn-more btn" href="/view-news?id='+val.id+'" ><span>'+moreText+'</span></a>' +
                             '      </div>\n' +
                             ' </div>';
                     }
