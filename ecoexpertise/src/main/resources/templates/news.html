@@ -87,9 +87,11 @@
                         <li><a href="#"><span th:text="${title}">waste collection today</span></a>
                         </li>
                     </ul>
-                    <a href="#" class="print"></a>
+                    <button class="btn btn-primary btn-sm" onclick="$('#conclusion-for-print').printThis();">
+                        <i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span>
+                    </button>
                 </div>
-                <div class="news-content">
+                <div class="news-content" id="conclusion-for-print">
                     <div class="news-img-block position-relative">
                         <img th:src="${img_source}" alt="this was been an image">
                         <div class="news-title" style="margin: 0px 0px 0px 60px"><h2 th:text="${news.title}">Waste Collection Today</h2></div>
@@ -186,6 +188,7 @@
     </div>
     <script src="/static/eco_fo/scripts/jquery-3.3.1.min.js"></script>
     <script src="/static/eco_fo/scripts/vendor.min.js"></script>
+    <script type="text/javascript" src="/static/plugins/printThis.js"></script>
     <script src="/static/eco_fo/scripts/main.js"></script>
 </body>
 
