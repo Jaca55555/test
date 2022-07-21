@@ -111,6 +111,19 @@ public class EventController {
         return MgmtTemplates.EventNewsCreate;
     }
 
+    @GetMapping(value = MgmtUrls.EventNewsView)
+    public String viewEventNews(@RequestParam(name = "id") Integer id, Model model) {
+        User user = userService.getCurrentUserFromContext();
+        EventNews eventNews = eventNewsService.getById(id, user.getId());
+        if (eventNews == null) return MgmtTemplates.EventNewsList;
+        File file = fileService.findByIdAndUploadUserId(eventNews.getFileId(), user.getId());
+
+        model.addAttribute("img_source","https://eco-service.uz/show-image-on-web?file_id="+eventNews.getFileId()); /*bu yerga saytning aniq urlini yozish kerak*/
+        model.addAttribute("news", eventNews);
+        model.addAttribute("date", eventNews.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(eventNews.getCreatedAt()):"");
+        return MgmtTemplates.EventNewsView;
+    }
+
 
     @GetMapping(value = MgmtUrls.EventNewsDelete)
     public String deleteEventNews(@RequestParam(name = "id") Integer id){
