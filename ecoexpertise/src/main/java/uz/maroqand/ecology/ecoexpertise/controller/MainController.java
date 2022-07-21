@@ -21,6 +21,7 @@ import uz.maroqand.ecology.core.service.sys.EventNewsService;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.OptionService;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
@@ -159,8 +160,9 @@ public class MainController {
     ){
         EventNews eventNews = eventNewsService.findById(id);
         if (eventNews == null) return "redirect:index";
-        model.addAttribute("img_source","http://localhost:8080/show-image-on-web?file_id="+eventNews.getFileId()); /*bu yerga saytning aniq urlini yozish kerak*/
+        model.addAttribute("img_source","https://eco-service.uz/show-image-on-web?file_id="+eventNews.getFileId()); /*bu yerga saytning aniq urlini yozish kerak*/
         model.addAttribute("news", eventNews);
+        model.addAttribute("date", eventNews.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(eventNews.getCreatedAt()):"");
 
         return "news";
     }

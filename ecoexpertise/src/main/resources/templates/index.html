@@ -550,13 +550,13 @@
                 var html = '';
                  html += ' <div class="latest-articles-slider swiper-container" ><div class="swiper-wrapper">';
                 $.each(apitext, function (item, val) {
-                    console.log("item= " + item + " val=" + val);
+                    console.log("item= " + item + " val=" + val.id);
                     //bu yerdaki ulr ga xam saytni aniq url ini qoysh kerak
                     if (val.id != null) {
                         html += '<div class="swiper-slide">' +
                             '       <div class="card latest-articles-card" style="height: 420px">' +
-                            '<img class="card-img" style="height: 230px" src="http://localhost:8080/show-image-on-web?file_id='+val.fileId +'" alt="Card image cap">'+
-                            '               <div class="card-title" style="overflow: hidden;height: 30px;"><span>' + val.title+' '+val.theme + '</span></div>' +
+                            '<img class="card-img" style="height: 230px" src="https://eco-service.uz/show-image-on-web?file_id='+val.fileId +'" alt="Card image cap">'+
+                            '               <div class="card-title" style="overflow: hidden;height: 30px;"><span>' + val.title+ '</span></div>' +
                             '               <div class="card-text" style="height: 80px;overflow: hidden;">' +
                             '                   <span>' + val.description + '</span>\n' +
                             '               </div>\n' +

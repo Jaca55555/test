@@ -40,6 +40,7 @@ public class EventNews {
     @Column(name = "delete")
     private boolean delete =  false;
 
+    @Temporal(TemporalType.DATE)
     @Column(name="created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
 

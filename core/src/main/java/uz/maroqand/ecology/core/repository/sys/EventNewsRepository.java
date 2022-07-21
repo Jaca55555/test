@@ -16,7 +16,7 @@ public interface EventNewsRepository extends JpaRepository<EventNews, Integer> {
 
     EventNews findByIdAndCreatedById(Integer id, Integer cretedById);
 
-    @Query(value = "SELECT * FROM event_news en where en.delete is false and en.status is true order by en.id ASC limit 6", nativeQuery = true)
+    @Query(value = "SELECT * FROM event_news en where en.delete is false and en.status is true order by en.id desc limit 6", nativeQuery = true)
     List<EventNews> findAllByDeleteIsFalseAndStatusIsTrueOrderByIdAscLimit();
 
 }

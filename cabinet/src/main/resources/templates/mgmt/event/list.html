@@ -101,11 +101,11 @@
                                                    style="width: 100%">
                                                 <thead>
                                                 <tr>
-                                                    <th th:text="#{appeal.id}"></th>
-                                                    <th th:text="#{appeal.title}"></th>
-                                                    <th th:text="#{appeal.description}"></th>
-                                                    <th th:text="#{appeal.createdAt}"></th>
-                                                    <th th:text="#{appeal.status}"></th>
+                                                    <th th:text="#{eventNews.id}"></th>
+                                                    <th th:text="#{eventNews.title}"></th>
+                                                    <th th:text="#{eventNews.description}"></th>
+                                                    <th th:text="#{eventNews.createdAt}"></th>
+                                                    <th th:text="#{eventNews.status}"></th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>
@@ -130,6 +130,7 @@
 <script type="text/javascript" src="/static/datatables/jquery.spring-friendly.min.js"></script>
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).EventNewsAjaxLIst}]];
@@ -153,13 +154,24 @@
     function renderActionsColumn(data, type, row, meta) {
         var currentViewLink = viewLink + '?id=' + row[0];
         var currentEditLink = editLink + "?id=" + row[0];
-        var currentDeleteLink = deleteLink + "?id=" + row[0];
+        var currentDeleteLink = row[0];
 
         var html = '';
         html += '<div class="btn-group">' +
             '<a class="btn btn-info btn-sm mr-1" href="' + currentViewLink + '" title="' + labelView + '"><i class="feather icon-eye" style="margin-right: 0px;"></i></a>' +
-            '<a class="btn btn-warning btn-sm mr-1" href="' + currentEditLink + '" title="' + labelEdit + '"><i class="feather icon-edit-2" style="margin-right: 0px;"></i></a>' +
-            '<a class="btn btn-danger btn-sm mr-1" href="' + currentDeleteLink + '" title="' + labelDelete + '"> <i class="feather icon-x" style="margin-right: 0px;"></i></a>';
+            '<a class="btn btn-warning btn-sm mr-1" href="' + currentEditLink + '" title="' + labelEdit + '"><i class="feather icon-edit-2" style="margin-right: 0px;"></i></a>';
+        return html;
+    }
+
+    function eventActiveity(data, type, row, meta) {
+        var html = '';
+
+        if (row[4]){
+            html += '<span class="text-primary" th:text="sys_active">Active</span>'
+        }else {
+            html += '<span class="text-danger" th:text="status_not_active">De active</span>'
+        }
+
         return html;
     }
 
@@ -170,10 +182,13 @@
             scrollX: true,
             pageLength: 25,
             lengthMenu: [[25, 500, 1000], [25, 500, 1000]],
-            order: [[0, 'desc']],
+            order: [[5, 'desc']],
             dom: 'lrtip',
+            stateSave: true,
             ajax: function (dataToSend, callback, settings) {
-
+                var api = this.api();
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
                 $.get(ajaxRequestLink, dataToSend, function (data) {
                     callback(data);
                 });
@@ -183,9 +198,7 @@
                 {data: 1, name: 'title'},
                 {data: 2, name: 'description'},
                 {data: 3, name: 'createdAt'},
-                {
-                    data: 4, name: 'status'
-                },
+                {render: eventActiveity},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {
@@ -198,6 +211,31 @@
         dataDatatableSelector.DataTable().destroy();
         dataDatatableSelector.html(thead);
         datatableConnect();
+    }
+
+    function deleteOne(id) {
+        swal({
+            title: "O'chirish",
+            text: "siz rostanxam o'chirmoqchimisiz",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+            .then((willDelete) => {
+                ajax:{
+
+                    $.get(deleteLink+"?id="+id, function (data) {
+                        console.log(data);
+                    });
+                }
+                if (willDelete) {
+                    swal("Sizning sorovingiz amalga oshdi", {
+                        icon: "success",
+                    });
+                } else {
+                    swal("O'chirib bo'lmadi!");
+                }
+            });
     }
 
     $(document).ready(function () {

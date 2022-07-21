@@ -16,6 +16,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.sys.EventNewsService;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
+import uz.maroqand.ecology.core.util.Common;
 
 import java.util.*;
 
@@ -52,7 +53,7 @@ public class EventController {
                     eventNews.getId(),
                     eventNews.getTitle(),
                     eventNews.getDescription(),
-                    eventNews.getCreatedAt(),
+                    eventNews.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(eventNews.getCreatedAt()):"",
                     eventNews.isStatus()
             });
         }
@@ -86,7 +87,7 @@ public class EventController {
         User user = userService.getCurrentUserFromContext();
         EventNews oldEvent = eventNewsService.getById(eventNews.getId(), user.getId());
         if (oldEvent == null) return "redirect:" + MgmtUrls.EventNewsList;
-        oldEvent.setStatus(true);
+        oldEvent.setStatus(eventNews.isStatus());
         oldEvent.setDescription(eventNews.getDescription());
         oldEvent.setTitle(eventNews.getTitle());
         oldEvent.setTheme(eventNews.getTheme());
@@ -98,7 +99,6 @@ public class EventController {
     public String editEventNews(@RequestParam(name = "id") Integer id, Model model) {
         User user = userService.getCurrentUserFromContext();
         EventNews eventNews = eventNewsService.getById(id, user.getId());
-        eventNews.setStatus(false);
         eventNews.setUpdateAt(new Date());
         eventNews.setUpdateById(user.getId());
         eventNewsService.save(eventNews);
@@ -110,6 +110,7 @@ public class EventController {
         model.addAttribute("actionUrl",MgmtUrls.EventNewsCreate );
         return MgmtTemplates.EventNewsCreate;
     }
+
 
     @GetMapping(value = MgmtUrls.EventNewsDelete)
     public String deleteEventNews(@RequestParam(name = "id") Integer id){

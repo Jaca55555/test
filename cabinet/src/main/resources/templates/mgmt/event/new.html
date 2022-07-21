@@ -35,10 +35,11 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>appeal.view</h5>
+                                        <h5 th:text="eventNews.news"></h5>
                                     </div>
                                     <div class="card-body">
-                                        <form th:action="${actionUrl}" method="post" th:object="${eventNews}" class="justify-content-center">
+                                        <form th:action="${actionUrl}" method="post" th:object="${eventNews}"
+                                              class="justify-content-center">
 
                                             <div class="ol-md-4 col-sm-4 col-xs-12 mb-3">
                                                 <div class="form-group">
@@ -52,12 +53,15 @@
                                             </div>
                                             <div class="ol-md-4 col-sm-4 col-xs-12 mb-3">
                                                 <div class="form-group">
-                                                    <label for="theme" class="control-label">
-                                                        <span th:text="#{eventNews_theme}"></span>
+                                                    <label for="choice" class="control-label">
+                                                        <span th:text="#{eventNews_status}"></span>
                                                         <span class="required">*</span>
                                                     </label>
-                                                    <input id="theme" required="required" th:field="*{theme}"
-                                                           class="form-control" type="text"/>
+                                                    <select id="choice" required="required" th:field="*{status}"
+                                                            class="form-control" type="text">
+                                                        <option value="false" th:text="sys_not_active"></option>
+                                                        <option value="true" th:text="sys_active"></option>
+                                                        <select>
                                                 </div>
                                             </div>
                                             <div class="ol-md-4 col-sm-4 col-xs-12 mb-3">
@@ -67,12 +71,13 @@
                                                         <span class="required">*</span>
                                                     </label>
                                                     <textarea id="description" required="required"
-                                                           th:field="*{description}" class="form-control"
-                                                           type="text"/>
+                                                              th:field="*{description}" class="form-control"
+                                                              type="text"/>
                                                 </div>
                                             </div>
                                             <div>
-                                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                <input type="hidden" th:name="${_csrf.parameterName}"
+                                                       th:value="${_csrf.token}"/>
                                                 <input type="hidden" name="id" th:field="*{id}"/>
                                             </div>
                                             <div>
@@ -129,8 +134,11 @@
                                         </div>
 
                                         <div class="col-md-6 text-center">
-                                            <a class="btn btn-secondary" th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).EventNewsList}" th:text="#{sys_cancel}"></a>
-                                            <input type="submit" th:value="#{sys_add}" class="btn btn-success" onclick="submitForm()"/>
+                                            <a class="btn btn-secondary"
+                                               th:href="${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).EventNewsList}"
+                                               th:text="#{sys_cancel}"></a>
+                                            <input type="submit" th:value="#{sys_add}" class="btn btn-success"
+                                                   onclick="submitForm()"/>
                                         </div>
 
                                     </div>
@@ -196,6 +204,7 @@
 <script th:inline="javascript">
 
     var regApplicationId = [[${eventNews.id}]];
+    var eventNewsFileId = [[${eventNews.fileId}]];
     var uploadFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).EventNewsFileUpload}]];
     var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).EventNewsFileDelete}]];
     let fileError = false;
@@ -285,8 +294,8 @@
     }
 
 
-    function submitForm(){
-        if (fileSubmit) {
+    function submitForm() {
+        if (fileSubmit || eventNewsFileId) {
             $('#submit_form').click();
         }
     }
