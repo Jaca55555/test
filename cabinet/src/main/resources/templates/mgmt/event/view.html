@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <object th:include="fragments/includes_top :: top" th:remove="tag"></object>
+    <link rel="stylesheet" href="/static/eco_fo/styles/main.css">
     <style>
         .ck-editor__editable_inline {
             min-height: 200px;
@@ -35,26 +36,46 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 th:text="eventNews.news"></h5>
+                                        <h5 th:text="#{eventNews.news}"></h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="news-content" id="conclusion-for-print">
-                                            <div class="news-img-block position-relative">
-                                                <img th:src="${img_source}" alt="this was been an image">
+<!--                                        <div class="news-content">-->
+<!--                                            <div class="news-img-block position-relative">-->
+<!--                                                <img th:src="${img_source}" alt="this was been an image">-->
+<!--                                                <div class="news-title" style="margin: 0px 0px 0px 60px"><h2 th:text="${news.title}">Waste Collection Today</h2></div>-->
+<!--                                            </div>-->
+<!--                                            <div class="news-info">-->
+<!--                                                <div class="news-date" style="float: right">-->
+<!--                                                    <div class="news-item-color-green"><span th:text="${date}">MARCH 13, 2017</span></div>-->
+<!--                                                    &lt;!&ndash;<div class="news-item-default"><span>IN RECYCLING</span></div>&ndash;&gt;-->
+<!--                                                </div>-->
+<!--                                                <br />-->
+<!--                                                <br />-->
+<!--                                                &lt;!&ndash;<div class="news-subtitle"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque elit tortor, ullamcorper quis ultrices vitae, mattis non est. Aliquam erat volutpat.</span></div>&ndash;&gt;-->
+<!--                                                <div class="news-description" th:text="${news.description}"><span >Quisque vitae turpis lacus. Aenean eu augue nunc. Sed gravida purus tellus, a varius odio euismod fermentum. Duis faucibus elit ut nulla pretium mollis. Nullam condimentum tempor massa, vehicula placerat ligula scelerisque ut. Donec tincidunt vehicula suscipit. Etiam euismod tortor id mi sodales, vitae tincidunt sem molestie. Praesent ac magna quis ex gravida varius eu sit amet turpis. Curabitur nisi dolor, facilisis a justo sed, placerat aliquet lectus. Cras pretium nec velit eget vulputate. Aenean molestie mi ligula, ut interdum lectus sodales sit amet. Aenean vehicula porttitor dui, a pellentesque neque sodales sodales. Cras ut porta libero.</span></div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                        <div class="news-wrapper">
+                                            <div class="container">
+                                                <div class="news-content">
+                                                    <div class="d-flex justify-content-center overflow-hidden">
+                                                        <img th:src="${img_source}" alt="this was been an image" style="width: 100%; object-fit: cover; max-height: 550px">
+                                                    </div>
                                                 <div class="news-title" style="margin: 0px 0px 0px 60px"><h2 th:text="${news.title}">Waste Collection Today</h2></div>
-                                            </div>
-                                            <div class="news-info">
-                                                <div class="news-date" style="float: right">
-                                                    <div class="news-item-color-green"><span th:text="${date}">MARCH 13, 2017</span></div>
-                                                    <!--<div class="news-item-default"><span>IN RECYCLING</span></div>-->
+                                                    <div class="news-info">
+                                                        <div class="news-date" style="float: right">
+                                                            <div class="news-item-color-green"><span th:text="${date}">MARCH 13, 2017</span></div>
+                                                            <!--<div class="news-item-default"><span>IN RECYCLING</span></div>-->
+                                                        </div>
+                                                        <br />
+                                                        <br />
+                                                        <!--<div class="news-subtitle"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque elit tortor, ullamcorper quis ultrices vitae, mattis non est. Aliquam erat volutpat.</span></div>-->
+                                                        <div class="news-description" th:text="${news.description}"><span >Quisque vitae turpis lacus. Aenean eu augue nunc. Sed gravida purus tellus, a varius odio euismod fermentum. Duis faucibus elit ut nulla pretium mollis. Nullam condimentum tempor massa, vehicula placerat ligula scelerisque ut. Donec tincidunt vehicula suscipit. Etiam euismod tortor id mi sodales, vitae tincidunt sem molestie. Praesent ac magna quis ex gravida varius eu sit amet turpis. Curabitur nisi dolor, facilisis a justo sed, placerat aliquet lectus. Cras pretium nec velit eget vulputate. Aenean molestie mi ligula, ut interdum lectus sodales sit amet. Aenean vehicula porttitor dui, a pellentesque neque sodales sodales. Cras ut porta libero.</span></div>
+                                                    </div>
                                                 </div>
-                                                <br />
-                                                <br />
-                                                <!--<div class="news-subtitle"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi gravida fringilla neque sit amet sollicitudin. Duis aliquam dictum feugiat. Quisque elit tortor, ullamcorper quis ultrices vitae, mattis non est. Aliquam erat volutpat.</span></div>-->
-                                                <div class="news-description" th:text="${news.description}"><span >Quisque vitae turpis lacus. Aenean eu augue nunc. Sed gravida purus tellus, a varius odio euismod fermentum. Duis faucibus elit ut nulla pretium mollis. Nullam condimentum tempor massa, vehicula placerat ligula scelerisque ut. Donec tincidunt vehicula suscipit. Etiam euismod tortor id mi sodales, vitae tincidunt sem molestie. Praesent ac magna quis ex gravida varius eu sit amet turpis. Curabitur nisi dolor, facilisis a justo sed, placerat aliquet lectus. Cras pretium nec velit eget vulputate. Aenean molestie mi ligula, ut interdum lectus sodales sit amet. Aenean vehicula porttitor dui, a pellentesque neque sodales sodales. Cras ut porta libero.</span></div>
+                                            </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -69,9 +90,9 @@
 </div>
 
 <object th:include="fragments/includes_bottom :: bottom" th:remove="tag"></object>
-<script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
-<script src="/static/plugins/ckeditor/js/ckeditor.js"></script>
+<script src="/static/eco_fo/scripts/vendor.min.js"></script>
 <script type="text/javascript" src="/static/parsley/parsley.min.js"></script>
+<script src="/static/eco_fo/scripts/main.js"></script>
 <script th:inline="javascript">
 </script>
 </body>

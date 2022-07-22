@@ -35,7 +35,7 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 th:text="eventNews.news"></h5>
+                                        <h5 th:text="#{eventNews.news}"></h5>
                                     </div>
                                     <div class="card-body">
                                         <form th:action="${actionUrl}" method="post" th:object="${eventNews}"
@@ -48,8 +48,8 @@
                                                     </label>
                                                     <select id="choice" required="required" th:field="*{status}"
                                                             class="form-control" type="text">
-                                                        <option value="false" th:text="sys_not_active"></option>
-                                                        <option value="true" th:text="sys_active"></option>
+                                                        <option value="false" th:text="#{status_not_active}"></option>
+                                                        <option value="true" th:text="#{sys_active}"></option>
                                                     </select>
                                                 </div>
                                             </div>

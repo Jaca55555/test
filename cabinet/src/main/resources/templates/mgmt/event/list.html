@@ -137,7 +137,8 @@
     var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).EventNewsView}]];
     var editLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).EventNewsEdit}]];
     var deleteLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).EventNewsDelete}]];
-
+    var sysDeActive = [[#{status_not_active}]]
+    var sysActive = [[#{sys_active}]]
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -167,9 +168,9 @@
         var html = '';
 
         if (row[4]){
-            html += '<span class="text-primary" th:text="sys_active">Active</span>'
+            html += '<span class="text-primary">'+sysActive+' </span>'
         }else {
-            html += '<span class="text-danger" th:text="status_not_active">De active</span>'
+            html += '<span class="text-danger"> '+sysDeActive+'</span>'
         }
 
         return html;
