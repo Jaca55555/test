@@ -105,6 +105,7 @@ public class AgreementController {
         logStatusList.add(LogStatus.New);
         logStatusList.add(LogStatus.Denied);
         logStatusList.add(LogStatus.Approved);
+        logStatusList.add(LogStatus.Resend);
 
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());

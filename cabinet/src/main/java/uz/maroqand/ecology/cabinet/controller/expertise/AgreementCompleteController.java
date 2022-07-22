@@ -103,6 +103,7 @@ public class AgreementCompleteController {
         List<LogStatus> logStatusList = new ArrayList<>();
         logStatusList.add(LogStatus.Denied);
         logStatusList.add(LogStatus.Approved);
+        logStatusList.add(LogStatus.Resend);
 
         model.addAttribute("regions",soatoService.getRegions());
         model.addAttribute("subRegions",soatoService.getSubRegions());
