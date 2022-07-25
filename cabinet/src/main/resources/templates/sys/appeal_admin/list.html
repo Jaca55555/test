@@ -124,6 +124,11 @@
     <script th:inline="javascript">
         var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.sys.SysUrls).AppealAdminListAjax}]];
         var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.sys.SysUrls).AppealAdminView}]];
+
+        var application = [[#{appeal_type.applications}]];
+        var suggestion = [[#{appeal_type.suggestions}]];
+        var complains = [[#{appeal_type.complaints}]];
+        var landing_suggestion = [[#{appeal_type.landing_suggestion}]];
         function getCurrentLanguage() {
             return [[__${#locale}__]];
         }
@@ -149,6 +154,16 @@
             if (row[4]=='Open')statusLabel += '<span class="badge badge-secondary">'+row[4]+'</span>';
             if (row[4]=='InProgress')statusLabel += '<span class="badge badge-primary">'+row[4]+'</span>';
             if (row[4]=='Closed')statusLabel +='<span class="badge badge-success">'+row[4]+'</span>';
+            return statusLabel;
+        }
+
+        function renderForType(data, type, row, meta) {
+            var statusLabel = '';
+            console.log(row[1]);
+            if (row[1]=='Applications')statusLabel += '<span class="color-secondary">'+application+'</span>';
+            if (row[1]=='Suggestions')statusLabel += '<span class="color-primary">'+suggestion+'</span>';
+            if (row[1]=='Complaints')statusLabel +='<span class="color-success">'+complains+'</span>';
+            if (row[1]=='Landing_Suggestion')statusLabel +='<span class="color-info">'+landing_suggestion+'</span>';
             return statusLabel;
         }
 
@@ -183,7 +198,7 @@
                 },
                 columns: [
                     {data: 0, name: 'id'},
-                    {data: 1, name: 'appealType'},
+                    {data: 1, render: renderForType},
                     {data: 2, name: 'title'},
                     {data: 3, name: 'createdAt'},
                     {

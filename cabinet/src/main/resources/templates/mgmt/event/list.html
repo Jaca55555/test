@@ -139,6 +139,8 @@
     var deleteLink = [[${T(uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls).EventNewsDelete}]];
     var sysDeActive = [[#{status_not_active}]]
     var sysActive = [[#{sys_active}]]
+    var sysView = [[#{sys_view}]]
+    var sysEdit = [[#{doc.change}]]
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -159,8 +161,8 @@
 
         var html = '';
         html += '<div class="btn-group">' +
-            '<a class="btn btn-info btn-sm mr-1" href="' + currentViewLink + '" title="' + labelView + '"><i class="feather icon-eye" style="margin-right: 0px;"></i></a>' +
-            '<a class="btn btn-warning btn-sm mr-1" href="' + currentEditLink + '" title="' + labelEdit + '"><i class="feather icon-edit-2" style="margin-right: 0px;"></i></a>';
+            '<a class="btn btn-info btn-sm mr-1" href="' + currentViewLink + '" title="' + sysView + '"><i class="feather icon-eye" style="margin-right: 0px;"></i></a>' +
+            '<a class="btn btn-warning btn-sm mr-1" href="' + currentEditLink + '" title="' + sysEdit + '"><i class="feather icon-edit-2" style="margin-right: 0px;"></i></a>';
         return html;
     }
 

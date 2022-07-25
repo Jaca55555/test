@@ -40,6 +40,16 @@ public enum AppealType {
         return appealTypeList;
     }
 
+    public static List<AppealType> getAppealTypeListWithoutOne() {
+        List<AppealType> appealTypeList = new LinkedList<>();
+        for (AppealType appealType : AppealType.values()) {
+            if (appealType.getId()!=3) {
+                appealTypeList.add(appealType);
+            }
+        }
+        return appealTypeList;
+    }
+
     public Integer getId() {
         return id;
     }

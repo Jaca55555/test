@@ -79,7 +79,7 @@
                                             <div class="tab-content" id="myTabContent" >
                                                 <div   th:class="${iter.index==0?'tab-pane fade show active':'tab-pane fade'}" th:each="documentFile,iter :${performerLog.documentFiles}"  th:id="${'online' + documentFile.id}" role="tabpanel" th:aria-labelledby="${'applicant'+documentFile.id+'-tab'}">
                                                     <div  style="border: #6e45e2 1px dashed;  height: 800px; width: 100%; overflow-y: auto; padding: 0px; margin-bottom: 10px" >
-                                                        <iframe th:src="${'https://docs.google.com/gview?url=https://cb.eco-service.uz/expertise/conclusion/reg_file_download_for_view?id='+performerLog.id+'_' + documentFile.id +'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
+                                                        <iframe id="iframePrint" th:src="${'https://docs.google.com/gview?url=https://cb.eco-service.uz/expertise/conclusion/reg_file_download_for_view?id='+performerLog.id+'_' + documentFile.id +'&amp;embedded=true'}" style="width: 100%;height: 100%;"></iframe>
                                                     </div>
                                                 </div>
                                             </div>
@@ -106,30 +106,36 @@
 <script type="text/javascript" src="/static/plugins/printThis.js"></script>
 <script th:inline="javascript">
     $('#conclusion_print_btn').on('click',function () {
-        $("#conclusion").printThis({
-            debug: false,               // show the iframe for debugging
-            importCSS: true,            // import parent page css
-            importStyle: true,         // import style tags
-            printContainer: false,       // print outer container/$.selector
-            loadCSS: "/static/plugins/bootstrap/bootstrap.min.css",                // path to additional css file - use an array [] for multiple
-            pageTitle: "",              // add title to print page
-            removeInline: false,        // remove inline styles from print elements
-            removeInlineSelector: "*",  // custom selectors to filter inline styles. removeInline must be true
-            printDelay: 333,            // variable print delay
-            header: null,               // prefix to html
-            footer: null,               // postfix to html
-            base: false,                // preserve the BASE tag or accept a string for the URL
-            formValues: true,           // preserve input/form values
-            canvas: true,              // copy canvas content
-            doctypeString: '',       // enter a different doctype for older markup
-            removeScripts: true,       // remove script tags from print content
-            copyTagClasses: false,      // copy classes from the html & body tag
-            beforePrintEvent: null,     // function for printEvent in iframe
-            beforePrint: null,          // function called before iframe is filled
-            afterPrint: null            // function called before iframe is removed
-        });
+
+        let iframe = $('#iframePrint');
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print()
+        iframe.contentWindow.printThis()
+
+        // $("#conclusion").printThis({
+        //     debug: false,               // show the iframe for debugging
+        //     importCSS: true,            // import parent page css
+        //     importStyle: true,         // import style tags
+        //     printContainer: false,       // print outer container/$.selector
+        //     loadCSS: "/static/plugins/bootstrap/bootstrap.min.css",                // path to additional css file - use an array [] for multiple
+        //     pageTitle: "",              // add title to print page
+        //     removeInline: false,        // remove inline styles from print elements
+        //     removeInlineSelector: "*",  // custom selectors to filter inline styles. removeInline must be true
+        //     printDelay: 333,            // variable print delay
+        //     header: null,               // prefix to html
+        //     footer: null,               // postfix to html
+        //     base: false,                // preserve the BASE tag or accept a string for the URL
+        //     formValues: true,           // preserve input/form values
+        //     canvas: true,              // copy canvas content
+        //     doctypeString: '',       // enter a different doctype for older markup
+        //     removeScripts: true,       // remove script tags from print content
+        //     copyTagClasses: false,      // copy classes from the html & body tag
+        //     beforePrintEvent: null,     // function for printEvent in iframe
+        //     beforePrint: null,          // function called before iframe is filled
+        //     afterPrint: null            // function called before iframe is removed
+        // });
     });
-    
+
     $(document).ready(function () {
 
     });
