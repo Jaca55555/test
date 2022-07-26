@@ -56,7 +56,7 @@ public class SubjectDTO {
 
         }
 
-        dto.setSubjectActivities(1);
+        dto.setSubjectActivities(model.getActivityId());
         if (model.getCategory() != null) {
             dto.setSubjectCategories(model.getCategory().getId());
         }
