@@ -3,14 +3,13 @@ package uz.maroqand.ecology.cabinet.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
@@ -20,11 +19,13 @@ import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.expertise.RequirementService;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 import java.util.List;
@@ -41,14 +42,16 @@ public class MainController {
     private final InvoiceService invoiceService;
     private final RequirementService requirementService;
     private final RegApplicationLogService regApplicationLogService;
+    private final FileService fileService;
 
     @Autowired
-    public MainController(UserService userService, RegApplicationService regApplicationService, InvoiceService invoiceService, RequirementService requirementService, RegApplicationLogService regApplicationLogService) {
+    public MainController(UserService userService, RegApplicationService regApplicationService, InvoiceService invoiceService, RequirementService requirementService, RegApplicationLogService regApplicationLogService, FileService fileService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.invoiceService = invoiceService;
         this.requirementService = requirementService;
         this.regApplicationLogService = regApplicationLogService;
+        this.fileService = fileService;
     }
 
     @RequestMapping("/")
@@ -172,6 +175,19 @@ public class MainController {
         }
 
         return "error1";
+    }
+
+    @GetMapping("/reg/appeal/images")
+    public ResponseEntity<Resource> getImage(@RequestParam(name = "id") Integer id) {
+
+        User user = userService.getCurrentUserFromContext();
+        File file = fileService.findByIdAndUploadUserId(id, user.getId());
+
+        if (file == null) {
+            return null;
+        } else {
+            return fileService.getFileAsResourceForDownloading(file);
+        }
     }
     /*@RequestMapping(SysUrls.ErrorInternalServerError)
     @RequestMapping(SysUrls.ErrorInternalServerError)
