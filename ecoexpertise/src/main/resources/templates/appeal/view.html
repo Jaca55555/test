@@ -7,6 +7,12 @@
             min-height: 200px;
             color: black;
         }
+
+        #descriptionView img{
+            max-height: 600px;
+            width: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body class="layout-6">
@@ -35,7 +41,7 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>appeal.view</h5>
+                                        <h5 th:text="#{appeal.view}"></h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="row" th:object="${appeal}">
@@ -43,7 +49,10 @@
                                             <div class="col-md-4 col-sm-4 col-xs-12 mb-3">
                                                 <label class="control-label text-dark" th:text="#{appeal.type}">English</label>
                                                 <p>
-                                                    <span th:text="*{appealType}"></span>
+                                                    <span th:if="*{appealType == T(uz.maroqand.ecology.core.constant.sys.AppealType).Applications}" th:text="#{appeal_type.applications}"></span>
+                                                    <span th:if="*{appealType == T(uz.maroqand.ecology.core.constant.sys.AppealType).Suggestions}" th:text="#{appeal_type.suggestions}"></span>
+                                                    <span th:if="*{appealType == T(uz.maroqand.ecology.core.constant.sys.AppealType).Complaints}" th:text="#{appeal_type.complaints}"></span>
+                                                    <span th:if="*{appealType == T(uz.maroqand.ecology.core.constant.sys.AppealType).Landing_Suggestion}" th:text="#{appeal_type.landing_suggestion}"></span>
                                                 </p>
                                             </div>
 
@@ -83,7 +92,7 @@
                                                     <div class="col-md-3 col-sm-3 col-xs-12"></div>
                                                     <div class="col-md-6 col-sm-6 col-xs-12">
                                                         <h5 th:text="#{appeal.content}"></h5><hr>
-                                                        <div class="alert alert-dark rounded" th:utext="*{description}"></div>
+                                                        <div class="alert alert-dark rounded" id="descriptionView" th:utext="*{description}"></div>
                                                         <div th:if="${#lists.size(appealSubList)>0}">
                                                             <h5 th:text="#{appeal.comments}"></h5><hr>
                                                         </div>
