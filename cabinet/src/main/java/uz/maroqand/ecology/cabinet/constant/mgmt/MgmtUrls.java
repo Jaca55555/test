@@ -95,4 +95,9 @@ public class MgmtUrls {
     public static final String EventNewsFileDelete = Event +"/delete-file";
 
 
+    public static final String SendingData = Prefix +"/sendings";
+    public static final String SendingDataList = SendingData +"/list";
+    public static final String SendingDataAjaxList = SendingData +"/ajax-list";
+
+
 }

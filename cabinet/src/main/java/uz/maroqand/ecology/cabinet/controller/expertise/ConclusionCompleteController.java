@@ -33,6 +33,7 @@ import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.SendingData;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
@@ -51,10 +52,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Sadullayev Akmal on 05.10.2020.
@@ -345,11 +343,11 @@ public class ConclusionCompleteController {
                         .build();
                 fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
                 HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
-
+                SendingData sendingData = new SendingData();
                 MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
                 body.add("file", fileEntity);
                 body.add("data", RegApplicationDTO.fromEntity(regApplication, conclusionService, fileService));
-
+                sendingData.setDataSend(body.toString());
                 HttpEntity<MultiValueMap<String, Object>> requestEntity =
                         new HttpEntity<>(body, headers);
                 logger.info("response_entity"+requestEntity);
@@ -364,12 +362,14 @@ public class ConclusionCompleteController {
                     logger.info("data send to Fond ");
                     if(value){
                         regApplication.setDeliveryStatus((short) 1);
+                        sendingData.setDativeryStatus((short) 1);
                     }else{
                         regApplication.setDeliveryStatus((short) 0);
-
+                        sendingData.setDativeryStatus((short) 0);
                     }
                     regApplicationService.update(regApplication);
-
+                    sendingData.setCreatedAt(new Date());
+                    sendingData.setRegApplicationId(regApplication.getId());
 
                 } catch (ResourceAccessException e) {
                     regApplication.setDeliveryStatus((short) 0);
