@@ -360,20 +360,22 @@ public class ConclusionCompleteController {
                     logger.info("data send to Fond ");
                     if(value){
                         regApplication.setDeliveryStatus((short) 1);
-                        sendingData.setDativeryStatus((short) 1);
+                        sendingData.setDeliveryStatus((short) 1);
                     }else{
                         regApplication.setDeliveryStatus((short) 0);
-                        sendingData.setDativeryStatus((short) 0);
+                        sendingData.setDeliveryStatus((short) 0);
                     }
                     regApplicationService.update(regApplication);
                     sendingData.setCreatedAt(new Date());
                     sendingData.setRegApplicationId(regApplication.getId());
-                    sendingDataService.save(sendingData);
                 } catch (ResourceAccessException e) {
                     regApplication.setDeliveryStatus((short) 0);
+                    sendingData.setDeliveryStatus((short) 0);
+                    sendingData.setErrors(e.getMessage());
                     regApplicationService.update(regApplication);
                     logger.error("data not send to Fond ");
                 }
+                sendingDataService.save(sendingData);
             }
         }
 
