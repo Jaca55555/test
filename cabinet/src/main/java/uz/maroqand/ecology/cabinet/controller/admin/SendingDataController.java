@@ -46,9 +46,9 @@ public class SendingDataController {
                     sendingData.getId(),
                     sendingData.getDataSend(),
                     sendingData.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(sendingData.getCreatedAt()):"",
+                    sendingData.getErrors(),
                     sendingData.getDativeryStatus()
             });
-
         }
         map.put("data", convenientForJSONArray);
 
