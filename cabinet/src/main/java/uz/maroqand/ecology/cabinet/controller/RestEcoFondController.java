@@ -132,6 +132,7 @@ public class RestEcoFondController {
                 }
             }
         }
-        return "Malumotlar yuborildi";
+
+        return "mgmt/sending_data/list";
     }
 }
