@@ -20,4 +20,9 @@ public class SendingDataServiceImpl implements SendingDataService {
     public Page<SendingData> getAjaxList(Pageable pageable) {
         return sendingDataREpository.findAll(pageable);
     }
+
+    @Override
+    public void save(SendingData sendingData) {
+        sendingDataREpository.save(sendingData);
+    }
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.xml.sax.SAXException;
@@ -28,7 +27,6 @@ import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
-import uz.maroqand.ecology.core.dto.api.ResponseDTO;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
@@ -38,10 +36,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
-import uz.maroqand.ecology.core.service.sys.DocumentEditorService;
-import uz.maroqand.ecology.core.service.sys.FileService;
-import uz.maroqand.ecology.core.service.sys.SmsSendService;
-import uz.maroqand.ecology.core.service.sys.SoatoService;
+import uz.maroqand.ecology.core.service.sys.*;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.NotificationService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -83,6 +78,8 @@ public class ConclusionCompleteController {
     private final RestTemplate restTemplate;
     private final RegApplicationService applicationService;
 
+    private final SendingDataService sendingDataService;
+
     private static final Logger logger = LogManager.getLogger(ConclusionCompleteController.class);
 
     @Autowired
@@ -102,7 +99,7 @@ public class ConclusionCompleteController {
             ConclusionService conclusionService,
             NotificationService notificationService,
             SmsSendService smsSendService,
-            DocumentEditorService documentEditorService, FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, RestTemplate restTemplate, RegApplicationService applicationService) {
+            DocumentEditorService documentEditorService, FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, RestTemplate restTemplate, RegApplicationService applicationService, SendingDataService sendingDataService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -123,6 +120,7 @@ public class ConclusionCompleteController {
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
         this.restTemplate = restTemplate;
         this.applicationService = applicationService;
+        this.sendingDataService = sendingDataService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ConclusionCompleteList)
@@ -370,7 +368,7 @@ public class ConclusionCompleteController {
                     regApplicationService.update(regApplication);
                     sendingData.setCreatedAt(new Date());
                     sendingData.setRegApplicationId(regApplication.getId());
-
+                    sendingDataService.save(sendingData);
                 } catch (ResourceAccessException e) {
                     regApplication.setDeliveryStatus((short) 0);
                     regApplicationService.update(regApplication);

@@ -135,6 +135,9 @@
 
     function erroringHandle(data, type, row, meta){
         var html = '';
+        console.log(type);
+        console.log(data);
+        console.log(meta);
 
         if (row[4]){
             html += '<span class="text-primary" style="max-width: 300px; overflow: hidden" >'+none+' </span>'
@@ -167,7 +170,7 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'dataSend'},
                 {data: 2, name: 'createdAt'},
-                {render: erroringHandle},
+                {render: erroringHandle, "max-width": "30px"},
                 {render: eventActiveity},
                 {render: renderActionsColumn, orderable: false}
             ],
