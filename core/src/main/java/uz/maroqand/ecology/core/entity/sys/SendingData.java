@@ -19,7 +19,7 @@ public class SendingData {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    @Column(length = 10000, name = "data_send")
+    @Column(columnDefinition = "TEXT", name = "data_send")
     private String dataSend;
 
     @Column(name = "created_at")
@@ -28,7 +28,8 @@ public class SendingData {
     @Column(name = "delivery_status")
     private short deliveryStatus;
 
-    @Column(length = 10000)
+
+    @Column(columnDefinition = "TEXT")
     private String errors;
 
     @Column

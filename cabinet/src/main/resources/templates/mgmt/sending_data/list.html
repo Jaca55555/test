@@ -156,6 +156,10 @@
             serverSide: true,
             scrollX: false,
             pageLength: 25,
+            autoWidth: false,
+            columnDefs:[
+                { "width": "550px", "targets": 3}
+            ],
             lengthMenu: [[25, 500, 1000], [25, 500, 1000]],
             order: [[1, 'asc']],
             dom: 'lrtip',
@@ -172,7 +176,7 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'dataSend'},
                 {data: 2, name: 'createdAt'},
-                {render: erroringHandle, "max-width": "30px"},
+                {render: erroringHandle},
                 {render: eventActiveity},
                 {render: renderActionsColumn, orderable: false}
             ],
