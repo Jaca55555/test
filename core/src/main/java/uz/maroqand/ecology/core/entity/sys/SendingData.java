@@ -19,16 +19,16 @@ public class SendingData {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    @Column()
+    @Column(length = 10000, name = "data_send")
     private String dataSend;
 
-    @Column
+    @Column(name = "created_at")
     private Date createdAt;
 
-    @Column
-    private short dativeryStatus;
+    @Column(name = "delivery_status")
+    private short deliveryStatus;
 
-    @Column
+    @Column(length = 10000)
     private String errors;
 
     @Column

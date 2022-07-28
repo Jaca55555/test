@@ -6,4 +6,6 @@ import uz.maroqand.ecology.core.entity.sys.SendingData;
 
 public interface SendingDataService {
     Page<SendingData> getAjaxList(Pageable pageable);
+
+    void save(SendingData sendingData);
 }
