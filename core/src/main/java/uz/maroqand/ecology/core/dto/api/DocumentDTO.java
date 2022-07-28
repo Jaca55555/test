@@ -9,6 +9,7 @@ import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
 import uz.maroqand.ecology.core.service.sys.FileService;
 import java.util.Date;
+import java.util.Set;
 
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @Data
@@ -24,7 +25,9 @@ public class DocumentDTO {
 
     public static DocumentDTO fromEntity(RegApplication model, ConclusionService conclusionService, FileService fileService){
         DocumentDTO dto = new DocumentDTO();
-        dto.setStandartDocTypes(8);
+        Set<Integer> materialsInt = model.getMaterials();
+        Integer next =materialsInt.size()>0? materialsInt.iterator().next():0;
+        dto.setStandartDocTypes(next);
         if(model.getConclusionId()!=null){
             if (conclusionService.getById(model.getConclusionId()).getNumber() != null) {
                 dto.setDocNumber(conclusionService.getById(model.getConclusionId()).getNumber());

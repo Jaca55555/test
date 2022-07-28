@@ -56,6 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/expertise/api/**").permitAll()
                 .antMatchers("/expertise/conclusion/reg_file_download_for_view").permitAll()
                 .antMatchers("/expertise/conclusion/reg_word_file_download_for_view").permitAll()
+                .antMatchers("/api/send/eco-fond").permitAll()
+
                 .antMatchers(SysUrls.SelectLang).permitAll()
                 .antMatchers(SysUrls.GetDocument +"/**").permitAll()
                 .antMatchers(SysUrls.GetQRImage +"/**").permitAll()
@@ -103,7 +105,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-        http.csrf().ignoringAntMatchers("/login","/docEditor/","/onlyoffice/fixationCallback","/expertise/invoice_modification");
+        http.csrf().ignoringAntMatchers("/login","/docEditor/","/onlyoffice/fixationCallback","/expertise/invoice_modification","/api/send/eco-fond");
 
         http.authorizeRequests().anyRequest().authenticated()
                 .and()

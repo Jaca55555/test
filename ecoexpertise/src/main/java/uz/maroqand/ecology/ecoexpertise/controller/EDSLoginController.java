@@ -157,10 +157,10 @@ public class EDSLoginController {
                 case "1.2.860.3.16.1.2":  userEds.setPinfl(r[1]); break;//ПИНФЛ
 
                 default:
-                    if (r[1] != null && r[1].length() == 14) {
-                        userEds.setPinfl(r[1]);//pinfl
-                        break;
-                    }
+//                    if (r[1] != null && r[1].length() == 14) {
+//                        userEds.setPinfl(r[1]);//pinfl
+//                        break;
+//                    }
             }
         }
 
