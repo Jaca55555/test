@@ -193,6 +193,8 @@ public class RegApplicationController {
         List<RegApplication> regApplicationList = regApplicationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
+            Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+
             convenientForJSONArray.add(new Object[]{
                     regApplication.getId(),
                     helperService.getObjectExpertise(regApplication.getObjectId(),locale),
@@ -202,6 +204,7 @@ public class RegApplicationController {
                     regApplication.getStatus()!=null? regApplication.getStatus().getColor():"",
                     regApplication.getApplicant()!=null?regApplication.getApplicant().getName():" ",
                     regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():" ",
+                    invoice != null && invoice.getInvoice()!=null?invoice.getInvoice(): " ",
                     regApplication.getName()
             });
         }
@@ -345,6 +348,10 @@ public class RegApplicationController {
         model.addAttribute("foreignIndividual", foreignIndividualDto);
         model.addAttribute("individualEntrepreneur", individualEntrepreneurDto);
         //client end
+
+//        otmen bolgan arizalar;
+        List<RegApplication> list = regApplicationService.getListByStatusAndUserId(RegApplicationStatus.CheckNotConfirmed, user.getId());
+        model.addAttribute("applicationReg", list);
 
         model.addAttribute("opfLegalEntityList", opfService.getOpfLegalEntityList());
         model.addAttribute("opfIndividualList", opfService.getOpfIndividualList());

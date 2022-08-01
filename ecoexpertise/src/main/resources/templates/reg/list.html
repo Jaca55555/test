@@ -54,6 +54,7 @@
                                                         <th th:text="#{sys_legal_entity_name}+'/'+#{applicant}"></th>
                                                         <th th:text="#{sys_about.name}"></th>
                                                         <th th:text="#{sys_tin_individual}"></th>
+                                                        <th th:text="#{sys_invoice_individual}"></th>
                                                         <th th:text="#{reg_application.createdAt}"></th>
                                                         <th th:text="#{reg_application.status}"></th>
                                                         <th ></th>
@@ -123,14 +124,19 @@
                             return '<span class="">'+row[6]+'</span>';
                         },orderable:false
                     },
-                    {data: 6, name: 'object_name',
+                    {data: 9, name: 'object_name',
                         render: function (data, type, row, meta) {
-                            return '<span class="">'+row[8]+'</span>';
+                            return '<span class="">'+row[9]+'</span>';
                         },orderable:false
                     },
                     {data: 7, name: 'tin',
                         render: function (data, type, row, meta) {
                             return '<span class="">'+row[7]+'</span>';
+                        },orderable:false
+                    },
+                    {data: 8, name: 'invoice',
+                        render: function (data, type, row, meta) {
+                            return '<span class="">'+row[8]+'</span>';
                         },orderable:false
                     },
                     {data: 3, name: 'createdAt'},
