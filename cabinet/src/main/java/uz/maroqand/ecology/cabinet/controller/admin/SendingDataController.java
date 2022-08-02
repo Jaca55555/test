@@ -46,12 +46,12 @@ public class SendingDataController {
         List<Object[]> convenientForJSONArray = new ArrayList<>(list.getContent().size());
         for (SendingData sendingData: list.getContent()){
 
-            File file = sendingData.getFileId()!=null?fileService.findById(sendingData.getFileId()):null;
             convenientForJSONArray.add(new Object[]{
                     sendingData.getId(),
                     sendingData.getDataSend(),
                     sendingData.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(sendingData.getCreatedAt()):"",
-                    file!=null? file.getName():" ",
+                    sendingData.getFileId()!= null? sendingData.getFileId(): " ",
+                    sendingData.getRegApplicationId()!= null? sendingData.getRegApplicationId(): " ",
                     sendingData.getErrors(),
                     sendingData.getDeliveryStatus()
             });

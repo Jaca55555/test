@@ -68,7 +68,8 @@
                                                     <th th:text="#{sendingData.id}"></th>
                                                     <th th:text="#{sendingData.dataSend}"></th>
                                                     <th th:text="#{sendingData.createdAt}"></th>
-                                                    <th th:text="#{sendingData.fileName}"></th>
+                                                    <th th:text="#{sendingData.fileId}"></th>
+                                                    <th th:text="#{sendingData.regApplicationId}"></th>
                                                     <th th:text="#{sendingData.error}" ></th>
                                                     <th th:text="#{sendingData.status}"></th>
                                                     <th></th>
@@ -127,7 +128,7 @@
     function eventActiveity(data, type, row, meta) {
         var html = '';
 
-        if (row[5]){
+        if (row[6]){
             html += '<span class="text-primary">'+sending+' </span>'
         }else {
             html += '<span class="text-danger"> '+notSending+'</span>'
@@ -139,10 +140,10 @@
     function erroringHandle(data, type, row, meta){
         var html = '';
 
-        if (row[4]){
+        if (row[6]){
             html += '<span class="text-primary" style="max-width: 300px; overflow: hidden" >'+none+' </span>'
         }else {
-            html += '<span class="text-danger" style="max-width: 100px; overflow: hidden" >'+row[4]+' </span>'
+            html += '<span class="text-danger" style="max-width: 100px; overflow: hidden" >'+row[5]+' </span>'
         }
 
         return html;
@@ -174,7 +175,8 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'dataSend'},
                 {data: 2, name: 'createdAt'},
-                {data: 3, name: 'name'},
+                {data: 3, name: 'fileId'},
+                {data: 4, name: 'regApplicationId'},
                 {render: erroringHandle},
                 {render: eventActiveity},
                 {render: renderActionsColumn, orderable: false}
