@@ -164,7 +164,7 @@
             dom: 'lrtip',
             stateSave: true,
             ajax: function (dataToSend, callback, settings) {
-                @var api = this.api();
+                var api = this.api();
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
                 $.get(ajaxRequestLink, dataToSend, function (data) {
