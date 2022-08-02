@@ -611,4 +611,10 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     private String createSMSCode() {
         return String.valueOf(100000L + (long) (new Random().nextDouble() * 899999L));
     }
+
+    @Override
+    public List<RegApplication> getListByStatusAndUserId(RegApplicationStatus checkNotConfirmed, Integer id) {
+        List<RegApplication> list = regApplicationRepository.findByCreatedByIdAndStatus(id, checkNotConfirmed);
+        return list;
+    }
 }

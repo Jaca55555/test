@@ -58,4 +58,6 @@ public interface RegApplicationService {
     Integer countByCategoryAndStatusAndSubRegionId(Category category,Date dateBegin,Date dateEnd, RegApplicationStatus status,Integer subRegionId,Set<Integer> organizationIds);
 
     long findFilteredNumber(LogType logType, Integer integer, Integer performerId, RegApplicationInputType regApplicationInputType);
+
+    List<RegApplication> getListByStatusAndUserId(RegApplicationStatus checkNotConfirmed, Integer id);
 }
