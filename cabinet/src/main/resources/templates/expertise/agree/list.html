@@ -144,7 +144,7 @@
 <script th:inline="javascript">
     var ajaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AgreeListAjax}]];
     var listLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AgreeList}]];
-    var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AgreeView}]];
+    var viewLink = [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).AgreeSee}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -160,7 +160,7 @@
 
     function renderActionsColumn(data, type, row, meta) {
         if(row[1]!=null){
-            var currentViewLink = viewLink + '?id=' + row[1];
+            var currentViewLink = viewLink + '?id=' + row[0];
         }else{
             var currentViewLink = listLink;
         }
