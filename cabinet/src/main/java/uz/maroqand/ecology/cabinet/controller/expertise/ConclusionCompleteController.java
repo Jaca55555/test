@@ -312,7 +312,7 @@ public class ConclusionCompleteController {
 
             // This nested HttpEntiy is important to create the correct
             // Content-Disposition entry with metadata "name" and "filename"
-            File file;
+            File file = null;
             byte[] input_file;
             String originalFileName;
             RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationIdAndType(regApplication.getId(), LogType.Performer);
@@ -331,6 +331,7 @@ public class ConclusionCompleteController {
                     java.io.File pdfFile = fileService.renderPdf(XHtmlText);
                     originalFileName = pdfFile.getName();
                     input_file = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+                    file = fileService.filesave(pdfFile, user);
                 }
 
 
@@ -346,6 +347,7 @@ public class ConclusionCompleteController {
                 body.add("file", fileEntity);
                 body.add("data", RegApplicationDTO.fromEntity(regApplication, conclusionService, fileService));
                 sendingData.setDataSend(body.toString());
+                sendingData.setFileId(file!=null? file.getId(): null);
                 HttpEntity<MultiValueMap<String, Object>> requestEntity =
                         new HttpEntity<>(body, headers);
                 logger.info("response_entity"+requestEntity);

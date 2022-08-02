@@ -68,6 +68,7 @@
                                                     <th th:text="#{sendingData.id}"></th>
                                                     <th th:text="#{sendingData.dataSend}"></th>
                                                     <th th:text="#{sendingData.createdAt}"></th>
+                                                    <th th:text="#{sendingData.fileName}"></th>
                                                     <th th:text="#{sendingData.error}" ></th>
                                                     <th th:text="#{sendingData.status}"></th>
                                                     <th></th>
@@ -126,7 +127,7 @@
     function eventActiveity(data, type, row, meta) {
         var html = '';
 
-        if (row[4]){
+        if (row[5]){
             html += '<span class="text-primary">'+sending+' </span>'
         }else {
             html += '<span class="text-danger"> '+notSending+'</span>'
@@ -137,14 +138,11 @@
 
     function erroringHandle(data, type, row, meta){
         var html = '';
-        console.log(type);
-        console.log(data);
-        console.log(meta);
 
         if (row[4]){
             html += '<span class="text-primary" style="max-width: 300px; overflow: hidden" >'+none+' </span>'
         }else {
-            html += '<span class="text-danger" style="max-width: 100px; overflow: hidden" >'+row[3]+' </span>'
+            html += '<span class="text-danger" style="max-width: 100px; overflow: hidden" >'+row[4]+' </span>'
         }
 
         return html;
@@ -165,7 +163,7 @@
             dom: 'lrtip',
             stateSave: true,
             ajax: function (dataToSend, callback, settings) {
-                var api = this.api();
+                @var api = this.api();
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
                 $.get(ajaxRequestLink, dataToSend, function (data) {
@@ -176,6 +174,7 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'dataSend'},
                 {data: 2, name: 'createdAt'},
+                {data: 3, name: 'name'},
                 {render: erroringHandle},
                 {render: eventActiveity},
                 {render: renderActionsColumn, orderable: false}

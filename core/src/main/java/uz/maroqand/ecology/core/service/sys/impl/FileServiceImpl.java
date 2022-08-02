@@ -11,6 +11,7 @@ import com.itextpdf.html2pdf.css.apply.ICssApplier;
 import com.itextpdf.html2pdf.css.apply.impl.BlockCssApplier;
 import com.itextpdf.html2pdf.css.apply.impl.DefaultCssApplierFactory;
 import com.itextpdf.styledxmlparser.node.IElementNode;
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.sys.FileRepository;
 import uz.maroqand.ecology.core.service.sys.FileService;
 
@@ -293,8 +295,9 @@ public class FileServiceImpl implements FileService {
 
 
     private void createAndSetNextUploadFolder() {
-        String newCurrentDir = globalConfigs.getUploadedFilesFolder()
-                + "/" + uploadFolderYMFormat.format(new Date());
+//        String newCurrentDir = globalConfigs.getUploadedFilesFolder()
+//                + "/" + uploadFolderYMFormat.format(new Date());
+        String newCurrentDir = "/home/muhammad_amin/Downloads/uploadsjava";
         java.io.File root = new java.io.File(newCurrentDir);
         if (!root.exists() || !root.isDirectory()) {
             root.mkdirs();
@@ -311,5 +314,35 @@ public class FileServiceImpl implements FileService {
     public List<File> findListByRegApplicationId(Integer fileId) {
 
         return null;
+    }
+
+    @Override
+    public File filesave(java.io.File file, User user) throws IOException {
+        Date date = new Date();
+        Long dataLong = date.getTime();
+
+        String extension = getExtensionFromFileName(file.getName());
+
+        String filename = user.getId() + "_" + dataLong + "." + extension;
+        String directory = getPathForUpload();
+        Path filePath = Paths.get(directory, filename);
+
+        // save the file localy
+        Files.copy(new FileInputStream(file), filePath);
+
+        File files = new File();
+
+        files.setUploadedById(user.getId());
+        files.setDateUploaded(new Date());
+
+        files.setName(file.getName());
+        files.setExtension(extension);
+        files.setSize(Integer.valueOf(String.valueOf(FileUtils.sizeOf(file))));
+        files.setTitle(file.getName());
+        files.setDescription(file.getName());
+        System.out.println("File saved for dataSending");
+        files.setPath(directory + "/" + filename);
+
+        return fileRepository.saveAndFlush(files);
     }
 }

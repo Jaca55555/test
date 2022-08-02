@@ -317,4 +317,5 @@ public class ExpertiseUrls {
     public static final String AgreeList = Agree + "/list";
     public static final String AgreeListAjax = Agree + "/list_ajax";
     public static final String AgreeView = Agree + "/view";
+    public static final String AgreeSee = Agree + "/see";
 }

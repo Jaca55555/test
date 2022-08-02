@@ -4,10 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.mgmt.MgmtUrls;
+import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.SendingData;
+import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.sys.SendingDataService;
 import uz.maroqand.ecology.core.util.Common;
 
@@ -20,10 +21,12 @@ import java.util.Map;
 public class SendingDataController {
 
     private final SendingDataService sendingDataService;
+    private final FileService fileService;
 
 
-    public SendingDataController(SendingDataService sendingDataService) {
+    public SendingDataController(SendingDataService sendingDataService, FileService fileService) {
         this.sendingDataService = sendingDataService;
+        this.fileService = fileService;
     }
 
 
@@ -42,10 +45,13 @@ public class SendingDataController {
         map.put("recordsFiltered", list.getTotalElements()); //Filtered elements
         List<Object[]> convenientForJSONArray = new ArrayList<>(list.getContent().size());
         for (SendingData sendingData: list.getContent()){
+
+            File file = sendingData.getFileId()!=null?fileService.findById(sendingData.getFileId()):null;
             convenientForJSONArray.add(new Object[]{
                     sendingData.getId(),
                     sendingData.getDataSend(),
                     sendingData.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(sendingData.getCreatedAt()):"",
+                    file!=null? file.getName():" ",
                     sendingData.getErrors(),
                     sendingData.getDeliveryStatus()
             });

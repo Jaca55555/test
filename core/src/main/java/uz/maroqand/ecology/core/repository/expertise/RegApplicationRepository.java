@@ -38,6 +38,8 @@ public interface RegApplicationRepository extends DataTablesRepository<RegApplic
     List<RegApplication> findAllByPerformerIdNotNullAndDeletedFalseOrderByIdDesc();
     List<RegApplication> findAllByStatusInAndDeletedFalseOrderByIdDesc(List<RegApplicationStatus> status);
 
+    List<RegApplication> findByCreatedByIdAndStatus(Integer id, RegApplicationStatus status);
+
     List<RegApplication> findAllByPerformerIdAndDeletedFalseOrderByIdDesc(Integer performerId);
 //    Status!=null
     @Query("SELECT COUNT(r) FROM RegApplication r where r.category=:category and r.deadlineDate>:dateBegin and r.deadlineDate<:dateEnd and r.status=:status and r.applicant.regionId=:regionId and r.reviewId in :organizationIds")

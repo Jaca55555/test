@@ -4,6 +4,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -33,5 +34,7 @@ public interface FileService {
 
     File save(File file);
     java.io.File renderPdf(String htmlText) throws IOException;
+
+    File filesave(java.io.File file, User user) throws IOException;
 
 }

@@ -28,6 +28,9 @@ public class SendingData {
     @Column(name = "delivery_status")
     private short deliveryStatus;
 
+    @Column(name = "file_id")
+    private Integer fileId;
+
 
     @Column(columnDefinition = "TEXT")
     private String errors;
