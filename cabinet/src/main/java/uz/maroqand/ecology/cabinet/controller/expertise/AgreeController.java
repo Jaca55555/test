@@ -6,17 +6,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
+import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.Offer;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
-import uz.maroqand.ecology.core.entity.expertise.RegApplicationInputType;
-import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.OfferService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
@@ -37,16 +38,19 @@ public class AgreeController {
     private OrganizationService organizationService;
     private OfferService offerService;
 
+    private ClientService clientService;
+
 
 
     @Autowired
-    public AgreeController(UserService userService, RegApplicationService regApplicationService, HelperService helperService, SoatoService soatoService, OrganizationService organizationService, OfferService offerService) {
+    public AgreeController(UserService userService, RegApplicationService regApplicationService, HelperService helperService, SoatoService soatoService, OrganizationService organizationService, OfferService offerService, ClientService clientService) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.helperService = helperService;
         this.soatoService = soatoService;
         this.organizationService = organizationService;
         this.offerService = offerService;
+        this.clientService = clientService;
     }
 
     @RequestMapping(ExpertiseUrls.AgreeList)
@@ -108,5 +112,27 @@ public class AgreeController {
         }
         model.addAttribute("offer",offer);
         return ExpertiseTemplates.AgreeView;
-}
+    }
+
+    @GetMapping(value = ExpertiseUrls.AgreeSee)
+    public String appealUserSee(
+            @RequestParam(name = "id") Integer id,
+            Model model
+    ) {
+        RegApplication regApplication = regApplicationService.getById(id);
+        Client client = clientService.getById(regApplication.getApplicantId());
+        if (regApplication == null&& client == null) {
+            return "redirect:" + ExpertiseUrls.AgreeList;
+        }
+        Offer offer = offerService.getById(regApplication.getOfferId());
+        if(offer==null){
+            return "redirect:" + ExpertiseUrls.AgreeList;
+        }
+
+        model.addAttribute("client", client);
+        model.addAttribute("offer",offer);
+        model.addAttribute("regApp", regApplication);
+        return ExpertiseTemplates.AgreeView;
+    }
+
 }
