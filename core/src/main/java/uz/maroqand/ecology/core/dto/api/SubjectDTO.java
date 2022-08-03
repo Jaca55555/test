@@ -19,6 +19,7 @@ public class SubjectDTO {
     private Integer subjectActivities; //subyekt faoliyat turi
     private Integer subjectCategories; //subyekt kategoriyasi
     private Integer registerArea; //ro'yhatdan o'tgan tuman
+    private Integer objectArea;
     private String registerAddress; //ro'yhatdan o'tgan manzil
     private String phone;
     private String email;
@@ -55,6 +56,7 @@ public class SubjectDTO {
             dto.setEmail(model.getApplicant().getEmail());
 
         }
+        dto.setObjectArea(model.getObjectSubRegionId());
 
         dto.setSubjectActivities(model.getActivityId());
         if (model.getCategory() != null) {
