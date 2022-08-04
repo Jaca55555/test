@@ -76,6 +76,11 @@ public class ReportsController {
             @RequestParam(name = "organizationId[]", required = false) Set<Integer> organizationIds,
             Pageable pageable
     ) {
+        User user = userService.getCurrentUserFromContext();
+        if (user.getOrganizationId() != null){
+            Organization organization = organizationService.getById(user.getOrganizationId());
+            regionId = organization.getRegionId();
+        }
         System.out.println("OrganizationIds="+organizationIds);
         System.out.println("SubRegionIds="+subRegionIds);
         Date dateBegin= DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormatUz);
