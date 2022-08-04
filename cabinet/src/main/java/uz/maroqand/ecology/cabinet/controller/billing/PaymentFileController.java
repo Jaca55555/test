@@ -81,6 +81,7 @@ public class PaymentFileController {
             @RequestParam(name = "bankMfo", required = false) String bankMfo,
 
             @RequestParam(name = "isComplete", required = false) Boolean isComplete,
+            @RequestParam(name = "datefileter", required = false) Integer datefileter,
             Pageable pageable
     ){
         User user = userService.getCurrentUserFromContext();
@@ -117,6 +118,7 @@ public class PaymentFileController {
                 isComplete,
                 user.getRole().getId()!=23 ? account:null,
                 user.getRole().getId()!=23 ? oldAccount:null,
+                datefileter,
                 pageable
         );
 
@@ -303,6 +305,7 @@ public class PaymentFileController {
                 bankMfo,
                 isComplete,
                 account,
+                null,
                 null,
                 pageable
         );

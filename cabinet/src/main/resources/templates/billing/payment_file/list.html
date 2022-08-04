@@ -223,6 +223,26 @@
                                                 </a>
                                             </div>
                                         </form>
+
+                                        <div class="parent-card col-xl-12 mh-1000">
+                                        <ul class="nav nav-tabs w-auto" id="myTab" role="tablist">
+                                            <li class="nav-item card-nav-item w-50 text-center">
+                                                <a class="nav-link text-uppercase active" id="executing-tab1"
+                                                   data-toggle="tab" href="#profile" onclick="getPaymentFileUz(1)"
+                                                   role="tab" aria-controls="profile" aria-selected="false">
+                                                    <span th:text="#{sys_payment_country.this}"></span>
+                                                    <span class="circles ml-2 text-white" id="circles">0</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item card-nav-item w-50 text-center">
+                                                <a class="nav-link text-uppercase" id="executing-tab" data-toggle="tab"
+                                                   href="#profile" onclick="getPaymentFileUz()" role="tab"
+                                                   aria-controls="profile" aria-selected="false"><span
+                                                        th:text="#{sys_payment_country.other}">Xammasi</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                            <div class="tab-content">
                                         <div class="table-responsive">
                                             <table id="data-table" class="display table nowrap table-striped table-hover" style="width:100%">
                                                 <thead>
@@ -244,6 +264,8 @@
                                                 <tbody></tbody>
                                             </table>
                                         </div>
+                                            </div>
+                                            <div>
                                     </div>
                                 </div>
                             </div>
@@ -281,6 +303,7 @@
 <script th:inline="none">
 
     /*<![CDATA[*/
+    var dataSending;
     var dataDatatableSelector;
     var thead;
     function renderActionsColumn(data, type, row, meta) {
@@ -365,7 +388,8 @@
             }
         });
     }
-    function datatableConnect() {
+    function datatableConnect(tab) {
+
         dataDatatableSelector.DataTable({
             processing: true,
             serverSide: true,
@@ -398,6 +422,7 @@
                 dataToSend.isComplete = $("#isComplete").val();
 
                 dataToSend._csrf = $("#global_csrf").val();
+                dataToSend.datefileter = tab;
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
                 dataToSend.sort = dataToSend.columns[ order[0][0] ].name + ',' + order[0][1];
@@ -425,6 +450,11 @@
             }
         });
     }
+    function getPaymentFileUz(tab) {
+        dataDatatableSelector.DataTable().destroy();
+        dataDatatableSelector.html(thead);
+        datatableConnect(tab);
+    }
 
     function getDatatableConnect() {
         dataDatatableSelector.DataTable().destroy();
@@ -436,7 +466,7 @@
         bindSubRegionSelectToRegionSelect('#subRegionId', '#regionId');
         dataDatatableSelector = $('#data-table');
         thead = dataDatatableSelector.html();
-        datatableConnect();
+        datatableConnect(1);
 
         $('.datepicker').datepicker({
             format: "dd.mm.yyyy",
