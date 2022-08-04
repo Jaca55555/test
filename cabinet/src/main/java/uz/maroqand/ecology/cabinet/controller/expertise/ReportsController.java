@@ -1,6 +1,5 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
-import com.google.inject.internal.cglib.core.$Local;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -21,9 +20,11 @@ import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.Soato;
+import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
+import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 import uz.maroqand.ecology.docmanagement.dto.Select2Dto;
@@ -37,17 +38,30 @@ public class ReportsController {
     private final SoatoService soatoService;
     private final RegApplicationService regApplicationService;
     private final OrganizationService organizationService;
+    private final UserService userService;
 
     @Autowired
-    public ReportsController(SoatoService soatoService, RegApplicationService regApplicationService, OrganizationService organizationService){
+    public ReportsController(SoatoService soatoService, RegApplicationService regApplicationService, OrganizationService organizationService, UserService userService){
        this.soatoService=soatoService;
         this.regApplicationService = regApplicationService;
         this.organizationService = organizationService;
+        this.userService = userService;
     }
 
     @RequestMapping(value = ExpertiseUrls.ReportList)
     public String getReport(Model model) {
-        model.addAttribute("regions",soatoService.getRegions());
+
+
+        User user = userService.getCurrentUserFromContext();
+        List<Soato> list;
+        if (user.getOrganizationId() != null){
+            Organization organization = organizationService.getById(user.getOrganizationId());
+            list = new ArrayList<>();
+            list.add(soatoService.getById(organization.getRegionId()));
+        }else {
+                list = soatoService.getRegions();
+        }
+        model.addAttribute("regions",list);
         model.addAttribute("subRegions",soatoService.getSubRegions());
         model.addAttribute("organizationList", organizationService.getList());
         return ExpertiseTemplates.ReportList;
