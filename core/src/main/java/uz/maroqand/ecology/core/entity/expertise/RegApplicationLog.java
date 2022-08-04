@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.core.entity.expertise;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
@@ -29,7 +30,8 @@ public class RegApplicationLog {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToOne()
     @JoinColumn(name = "reg_application_id", insertable = false, updatable = false)
     private RegApplication regApplication;
 
