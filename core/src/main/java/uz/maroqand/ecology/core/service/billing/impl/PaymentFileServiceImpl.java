@@ -93,10 +93,9 @@ public class PaymentFileServiceImpl implements PaymentFileService {
             Boolean isComplete,
             String account,
             String oldAccount,
-            Integer datefileter,
             Pageable pageable
     ) {
-        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete,account,oldAccount, datefileter),pageable);
+        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete,account,oldAccount),pageable);
     }
 
     private static Specification<PaymentFile> getFilteringSpecification(
@@ -110,8 +109,7 @@ public class PaymentFileServiceImpl implements PaymentFileService {
             final String bankMfo,
             final Boolean isComplete,
             final String account,
-            final String oldAccount,
-            final Integer datafilter
+            final String oldAccount
 
             ) {
         return new Specification<PaymentFile>() {
@@ -157,10 +155,6 @@ public class PaymentFileServiceImpl implements PaymentFileService {
                     }else {
                         predicates.add(criteriaBuilder.isNull(root.get("paymentId")));
                     }
-                }
-
-                if (datafilter != null){
-                    predicates.add(criteriaBuilder.lessThan(root.join("payment").join("invoice").join("client").get("regionId"), 9999));
                 }
 
                 if((account != null&& !account.isEmpty()) || (oldAccount != null)){

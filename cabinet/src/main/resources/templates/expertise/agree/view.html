@@ -47,7 +47,7 @@
                                             <!--                                            </div>-->
                                             <div class="row">
                                                 <div class="col-sm">
-                                                    <table class="table-bordered" th:utext = "#{sys_expertise_contract}">
+                                                    <table class="table-bordered"  th:utext="#{'contract_'+ ${offer.tagName}}">
 <!--                                                        <thead>-->
 <!--                                                        <tr>-->
 <!--                                                            <th colspan="2"> Podpisan ETSP kluchom</th>-->
@@ -143,7 +143,7 @@
                                                 <div class="container-fluid mt-lg-3"
                                                      th:if="${regApp.offerId!=null}">
                                                     <img th:if="${offer.documentRepoId!=null}"
-                                                         th:src="${T(uz.maroqand.ecology.cabinet.constant.sys.SysUrls).GetQRImage + '?id=' + offer.documentRepoId}"
+                                                         th:src="${T(uz.maroqand.ecology.cabinet.constant.sys.SysUrls).GetQRImageOffer + '?id=' + @offerServiceImpl.getById(regApp.offerId).documentRepoId+'&rid='+regApp.id}"
                                                          class="qr-code"/>
                                                 </div>
                                             </div>

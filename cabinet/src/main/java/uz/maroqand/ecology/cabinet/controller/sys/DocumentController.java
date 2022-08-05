@@ -144,4 +144,42 @@ public class DocumentController {
         return new byte[]{};
     }
 
+    @RequestMapping(value = SysUrls.GetQRImageOffer, produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public byte[] getQRImage(
+            @RequestParam("id") Integer id,
+            @RequestParam("rid") Integer rid
+    ) {
+        System.out.println("regId="+rid);
+        DocumentRepo documentRepo = documentRepoService.getDocument(id);
+        if(documentRepo == null){
+            return new byte[]{};
+        }
+        QRCodeWriter writer = new QRCodeWriter();
+        int width = 116, height = 116;
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB); // create an empty image
+        int white = 255 << 16 | 255 << 8 | 255;
+        int black = 0;
+
+        String url = "http://eco-service.uz" + SysUrls.GetOffer;
+
+        try {
+            BitMatrix bitMatrix = writer.encode(url+"/"+documentRepo.getUuid()+"/"+rid, BarcodeFormat.QR_CODE, width, height);
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    image.setRGB(i, j, bitMatrix.get(i, j) ? black : white); // set pixel one by one
+                }
+            }
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write( image, "jpg", baos );
+            baos.flush();
+            byte[] imageInByte = baos.toByteArray();
+            baos.close();
+            return imageInByte;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new byte[]{};
+    }
+
 }
