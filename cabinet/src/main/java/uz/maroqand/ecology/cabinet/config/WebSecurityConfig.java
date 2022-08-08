@@ -65,6 +65,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SysUrls.ErrorForbidden).permitAll()
                 .antMatchers(SysUrls.ErrorInternalServerError).permitAll()
                 .antMatchers("/static*/**", "/map").permitAll()
+                .antMatchers("/replace/**").permitAll()
+                .antMatchers("/replace").permitAll()
                 .antMatchers("/admin/dashboard/**").hasAuthority(Permissions.ADMIN.name())
                 .antMatchers("/billing/payment_file_all/get_invoice").hasAuthority(Permissions.ADMIN_ROLE.name())
                 .antMatchers("/expertise/dashboard/**").hasAuthority(Permissions.EXPERTISE.name())
@@ -105,7 +107,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-        http.csrf().ignoringAntMatchers("/login","/docEditor/","/onlyoffice/fixationCallback","/expertise/invoice_modification","/api/send/eco-fond");
+        http.csrf().ignoringAntMatchers("/login","/docEditor/","/onlyoffice/fixationCallback","/expertise/invoice_modification","/api/send/eco-fond","/replace","/replace/**");
 
         http.authorizeRequests().anyRequest().authenticated()
                 .and()

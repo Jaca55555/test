@@ -6,7 +6,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +17,14 @@ import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
+import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.repository.expertise.ConclusionRepository;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
+import uz.maroqand.ecology.core.service.expertise.ConclusionService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.expertise.RequirementService;
@@ -29,6 +32,7 @@ import uz.maroqand.ecology.core.service.sys.FileService;
 import uz.maroqand.ecology.core.service.user.UserService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by Utkirbek Boltaev on 20.05.2019.
@@ -43,15 +47,19 @@ public class MainController {
     private final RequirementService requirementService;
     private final RegApplicationLogService regApplicationLogService;
     private final FileService fileService;
+    private final ConclusionService conclusionService;
+    private final ConclusionRepository conclusionRepository;
 
     @Autowired
-    public MainController(UserService userService, RegApplicationService regApplicationService, InvoiceService invoiceService, RequirementService requirementService, RegApplicationLogService regApplicationLogService, FileService fileService) {
+    public MainController(UserService userService, RegApplicationService regApplicationService, InvoiceService invoiceService, RequirementService requirementService, RegApplicationLogService regApplicationLogService, FileService fileService, ConclusionService conclusionService, ConclusionRepository conclusionRepository) {
         this.userService = userService;
         this.regApplicationService = regApplicationService;
         this.invoiceService = invoiceService;
         this.requirementService = requirementService;
         this.regApplicationLogService = regApplicationLogService;
         this.fileService = fileService;
+        this.conclusionService = conclusionService;
+        this.conclusionRepository = conclusionRepository;
     }
 
     @RequestMapping("/")
@@ -78,6 +86,24 @@ public class MainController {
         }
 
         return "redirect:dashboard?lang="+user.getLang();
+    }
+
+    @PostMapping("/replace")
+    public String sendEcoFond() {
+        List<Conclusion> conclusionList = conclusionRepository.findAllByDeletedFalse();
+
+        conclusionList.stream().map(conclusion -> {
+           conclusion.setHtmlText( conclusion.getHtmlText().replace("sys_conclusion.title_1700","O’ZBEKISTON RESPUBLIKASI EKOLOGIYA VA ATROF-MUHITNI MUHOFAZA QILISH DAVLAT QO’MITASI")
+                   .replace("sys_conclusion.full_adress_1700","100043, Toshkent shahri, Chilonzor tumani, Bunyodkor shoh ko`chasi, 7a-uy. Tel: 71-207-11-02,  <br> faks: 71-236-02-32 veb-sahifa: http://www.eco.gov.uz, elektron pochta: info@eco.gov.uz")
+                   .replace("sys_conclusion.description_1700","Davlat ekologik ekspertizasining <br> X U L O S A S I")
+          );
+            System.out.println("conclusionId=="+conclusion.getId());
+            conclusionRepository.saveAndFlush(conclusion);
+            return conclusion;
+        }).collect(Collectors.toList());
+        return "hello world";
+
+
     }
 
     @RequestMapping("/expertise/dashboard")

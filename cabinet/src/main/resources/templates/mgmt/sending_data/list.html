@@ -72,6 +72,7 @@
                                                     <th th:text="#{sendingData.regApplicationId}"></th>
                                                     <th th:text="#{sendingData.error}" ></th>
                                                     <th th:text="#{sendingData.status}"></th>
+                                                    <th th:text="#{sys_about.material}"></th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>
@@ -179,6 +180,7 @@
                 {data: 4, name: 'regApplicationId'},
                 {render: erroringHandle},
                 {render: eventActiveity},
+                {data: 7, orderable:false},
                 {render: renderActionsColumn, orderable: false}
             ],
             language: {
