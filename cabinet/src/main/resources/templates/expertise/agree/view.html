@@ -42,6 +42,108 @@
                                             <!--                                            <div class="container-fluid mt-lg-3" th:if="${offer.id!=null}">-->
                                             <!--                                                <img th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImage + '?id=' + offer.documentRepoId+'&rid='+regApplication.id}" class="qr-code" />-->
                                             <!--                                            </div>-->
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <table class="table-bordered"  th:utext="#{'contract_'+ ${offer.tagName}}">
+<!--                                                        <thead>-->
+<!--                                                        <tr>-->
+<!--                                                            <th colspan="2"> Podpisan ETSP kluchom</th>-->
+<!--                                                        </tr>-->
+<!--                                                        </thead>-->
+<!--                                                        <tr>-->
+<!--                                                            <th>address</th>-->
+<!--                                                            <td> amir temur</td>-->
+<!--                                                        </tr>-->
+<!--                                                        <tr>-->
+<!--                                                            <th>tel</th>-->
+<!--                                                            <td>+998 99 798 45 46</td>-->
+<!--                                                        </tr>-->
+<!--                                                        <tr>-->
+<!--                                                            <th>р/с:</th>-->
+<!--                                                            <td>2021 0000 0001 1801 4007</td>-->
+<!--                                                        </tr>-->
+<!--                                                        <tr>-->
+<!--                                                            <th>Bank</th>-->
+<!--                                                            <td>в «Узсаноаткурилишбанк»-->
+<!--                                                                Яшнабадский филиал-->
+<!--                                                            </td>-->
+<!--                                                        </tr>-->
+<!--                                                        <tr>-->
+<!--                                                            <th>МФО:</th>-->
+<!--                                                            <td>00432</td>-->
+<!--                                                        </tr>-->
+<!--                                                        <tr>-->
+<!--                                                            <th>город:</th>-->
+<!--                                                            <td>Ташкент</td>-->
+<!--                                                        </tr>-->
+<!--                                                        <tr>-->
+<!--                                                            <th>ИНН:</th>-->
+<!--                                                            <td>200934834</td>-->
+<!--                                                        </tr>-->
+<!--                                                        <tr>-->
+<!--                                                            <th>ОКЭД:</th>-->
+<!--                                                            <td>71200</td>-->
+<!--                                                        </tr>-->
+<!--                                                        <tr>-->
+<!--                                                            <th colspan="2"> <span th:text="#{sys_authenticated_by_etsp}"></span></th>-->
+<!--                                                        </tr>-->
+                                                    </table>
+                                                </div>
+                                                <div class="col-sm">
+                                                    <table class="table-bordered">
+                                                        <thead>
+                                                        <tr>
+                                                            <th colspan="2">
+                                                                <span th:text="#{sys.client.info}"></span>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tr>
+                                                            <th th:text="#{sys_address}"></th>
+                                                            <td th:text="${client.address}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th th:text="#{sys_phone}"></th>
+                                                            <td th:text="${client.phone}"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><span th:text="#{sys_client_bank.account}"></span></th>
+                                                            <td><span th:text="${client.bankAccount}"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><span th:text="#{sys_client_bank.name}"></span></th>
+                                                            <td><span th:text="${client.bankName}"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><span th:text="#{sys_client_mfo}"></span></th>
+                                                            <td><span th:text="${client.mfo}"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><span th:text="#{sys_client_region}"></span></th>
+                                                            <td><span th:text="${@soatoServiceImpl.getById(client.regionId).name} "></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><span th:text="#{sys_client_tin}"></span></th>
+                                                            <td><span th:text="${client.tin}"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th><span th:text="#{sys_client_oked}"></span></th>
+                                                            <td><span th:text="${client.oked}"></span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th colspan="2"> <span th:text="#{sys_authenticated_by_etsp}"></span></th>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="container-fluid mt-lg-3"
+                                                     th:if="${regApp.offerId!=null}">
+                                                    <img th:if="${offer.documentRepoId!=null}"
+                                                         th:src="${T(uz.maroqand.ecology.cabinet.constant.sys.SysUrls).GetQRImageOffer + '?id=' + @offerServiceImpl.getById(regApp.offerId).documentRepoId+'&rid='+regApp.id}"
+                                                         class="qr-code"/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

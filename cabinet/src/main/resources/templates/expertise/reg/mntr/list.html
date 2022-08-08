@@ -197,7 +197,11 @@
                 pageLength: 20,
                 lengthMenu: [ [20, 50, 75, 100], [20, 50, 75, 100] ],
                 order: [],
-                dom: 'lrtip',
+                dom: 'Blrtip',
+                buttons: [
+                    'excel'
+                ],
+                stateSave: true,
                 ajax : function (dataToSend, callback, settings) {
                     var api = this.api();
                     dataToSend.page = api != undefined ? api.page() : 0;
