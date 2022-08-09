@@ -10,10 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
@@ -309,6 +306,7 @@ public class RegApplicationController {
     ) {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        List<RegApplication> regApplicationList = regApplicationService.getListByStatusAndUserId(RegApplicationStatus.ModificationCanceled, user.getId());
         String check = check(regApplication,user);
         if(check != null){
             return check;
@@ -353,6 +351,7 @@ public class RegApplicationController {
         List<RegApplication> list = regApplicationService.getListByStatusAndUserId(RegApplicationStatus.CheckNotConfirmed, user.getId());
         model.addAttribute("applicationReg", list);
 
+        model.addAttribute("regAppList", regApplicationList);
         model.addAttribute("opfLegalEntityList", opfService.getOpfLegalEntityList());
         model.addAttribute("opfIndividualList", opfService.getOpfIndividualList());
         model.addAttribute("countriesList", countryService.getCountriesList(locale));
@@ -367,6 +366,7 @@ public class RegApplicationController {
     public String createRegApplication(
             @RequestParam(name = "id") Integer id,
             @RequestParam(name = "applicantType") String applicantType,
+            @RequestParam(name = "choice", defaultValue = "false", required = false) Boolean choice,
             IndividualEntrepreneurDto individualEntrepreneurDto,
             ForeignIndividualDto foreignIndividualDto,
             LegalEntityDto legalEntityDto,
@@ -406,7 +406,9 @@ public class RegApplicationController {
             return  "redirect:" + RegUrls.RegApplicationApplicant + "?id=" + id;
         }
         applicant.setMobilePhone("");*/
-
+        if (choice){
+            return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id+"&choice="+choice;
+        }
         return "redirect:" + RegUrls.RegApplicationAbout + "?id=" + id;
     }
 
@@ -463,6 +465,7 @@ public class RegApplicationController {
     @RequestMapping(value = RegUrls.RegApplicationAbout,method = RequestMethod.GET)
     public String getAboutPage(
             @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "choice", defaultValue = "false", required = false) boolean choice,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -510,6 +513,7 @@ public class RegApplicationController {
         model.addAttribute("categoryId", regApplication.getCategory() !=null ? regApplication.getCategory().getId() : null);
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("choice", choice);
         model.addAttribute("back_url", RegUrls.RegApplicationApplicant + "?id=" + id);
         model.addAttribute("step_id", RegApplicationStep.ABOUT.ordinal()+1);
         return RegTemplates.RegApplicationAbout;
@@ -1547,5 +1551,18 @@ public class RegApplicationController {
         }
         return null;
     }
+
+
+    @RequestMapping(path = RegUrls.RegApplicationReWork)
+    @ResponseBody
+    public boolean getReWorkApplication(
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "reId") Integer reId
+    ){
+        User user = userService.getCurrentUserFromContext();
+        boolean result = regApplicationService.reWorkRegApplication(id, reId, user);
+        return result;
+    }
+
 
 }

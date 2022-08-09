@@ -16,6 +16,7 @@ public class RegUrls {
     public static final String RegApplicationGetSMSCode = RegApplication + "/get_sms_code";
 
     public static final String RegApplicationAbout = RegApplication + "/about";
+    public static final String RegApplicationReWork = RegApplication + "/re-work";
     public static final String RegApplicationClearCoordinates = RegApplication + "/clear_coordinates";
     public static final String RegApplicationGetActivity = RegApplication + "/activity";
     public static final String RegApplicationGetMaterials = RegApplication + "/materials";
