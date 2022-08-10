@@ -1,5 +1,6 @@
 package uz.maroqand.ecology.core.service.expertise.impl;
 
+import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,12 +19,10 @@ import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.SmsSend;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.integration.sms.SmsSendOauth2Service;
+import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
 import uz.maroqand.ecology.core.service.client.ClientService;
-import uz.maroqand.ecology.core.service.expertise.FactureService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
-import uz.maroqand.ecology.core.service.expertise.RequirementService;
+import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SmsSendService;
 import uz.maroqand.ecology.core.service.user.UserService;
@@ -45,9 +44,15 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     private final OrganizationService organizationService;
     private final RequirementService requirementService;
     private final FactureService factureService;
+    private final CoordinateLatLongRepository coordinateLatLongRepository;
+    private final ProjectDeveloperService projectDeveloperService;
+    private final ActivityService activityService;
+    private final CoordinateService coordinateService;
+    private final BoilerCharacteristicsService boilerCharacteristicsService;
+    private final Gson gson;
 
     @Autowired
-    public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository, SmsSendService smsSendService, SmsSendOauth2Service smsSendOauth2Service, UserService userService, RegApplicationLogService regApplicationLogService, ClientService clientService, OrganizationService organizationService, RequirementService requirementService, FactureService factureService) {
+    public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository, SmsSendService smsSendService, SmsSendOauth2Service smsSendOauth2Service, UserService userService, RegApplicationLogService regApplicationLogService, ClientService clientService, OrganizationService organizationService, RequirementService requirementService, FactureService factureService, CoordinateLatLongRepository coordinateLatLongRepository, ProjectDeveloperService projectDeveloperService, ActivityService activityService, CoordinateService coordinateService, BoilerCharacteristicsService boilerCharacteristicsService, Gson gson) {
         this.regApplicationRepository = regApplicationRepository;
         this.smsSendService = smsSendService;
         this.smsSendOauth2Service = smsSendOauth2Service;
@@ -57,6 +62,12 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         this.organizationService = organizationService;
         this.requirementService = requirementService;
         this.factureService = factureService;
+        this.coordinateLatLongRepository = coordinateLatLongRepository;
+        this.projectDeveloperService = projectDeveloperService;
+        this.activityService = activityService;
+        this.coordinateService = coordinateService;
+        this.boilerCharacteristicsService = boilerCharacteristicsService;
+        this.gson = gson;
     }
 
     @Override
@@ -617,4 +628,203 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         List<RegApplication> list = regApplicationRepository.findByCreatedByIdAndStatus(id, checkNotConfirmed);
         return list;
     }
+
+    @Override
+    public boolean reWorkRegApplication(Integer id, Integer reId, User user) {
+        RegApplication regApplication = regApplicationRepository.findByIdAndCreatedByIdAndDeletedFalse(id, user.getId());
+        if (regApplication == null) return false;
+        RegApplication reRegApplication = regApplicationRepository.findByIdAndCreatedByIdAndDeletedFalse(reId, user.getId());
+
+        regApplication = convertoRegToNewReg(regApplication, reRegApplication, user);
+
+        regApplicationRepository.save(regApplication);
+
+        return true;
+    }
+
+
+    private RegApplication convertoRegToNewReg(RegApplication regApplication, RegApplication reRegApplication, User user){
+//        step 1 client
+        Client client = convertoClientToNewClient(regApplication.getApplicant()==null?new Client():reRegApplication.getApplicant(), reRegApplication.getApplicant(), user);
+        regApplication.setApplicantId(client.getId());
+        regApplicationRepository.save(regApplication);
+//        step 2 regApplication
+
+            Coordinate coordinates = coordinateService.getRegApplicationId(reRegApplication.getId());
+            if (coordinates != null) {
+                Coordinate coordinate = new Coordinate();
+                coordinate.setRegApplicationId(regApplication.getId());
+                coordinate.setClientId(coordinates.getClientId());
+                coordinate.setClientName(coordinates.getClientName());
+                coordinate.setRegionId(coordinates.getRegionId());
+                coordinate.setSubRegionId(coordinates.getSubRegionId());
+                coordinate.setName(coordinates.getName());
+                coordinate.setObjectRegionId(coordinates.getObjectRegionId());
+                coordinate.setObjectSubRegionId(coordinates.getObjectSubRegionId());
+                coordinate.setNumber(coordinates.getNumber());
+                coordinate.setLongitude(coordinates.getLongitude());
+                coordinate.setLatitude(coordinates.getLatitude());
+                coordinate = coordinateService.saveForEdit(coordinate);
+
+                List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinates.getId());
+                for (CoordinateLatLong coordinateLatLong: coordinateLatLongList){
+                    CoordinateLatLong coordinLatLang = new CoordinateLatLong();
+                    coordinLatLang.setCoordinateId(coordinate.getId());
+                    coordinLatLang.setLatitude(coordinateLatLong.getLatitude());
+                    coordinLatLang.setLongitude(coordinateLatLong.getLongitude());
+                    coordinateLatLongRepository.save(coordinLatLang);
+                }
+            }
+
+            if (reRegApplication.getDeveloperId()!=null) {
+                ProjectDeveloper projectDeveloper1 = projectDeveloperService.getById(reRegApplication.getDeveloperId());
+                ProjectDeveloper projectDeveloper = new ProjectDeveloper();
+                projectDeveloper.setName(projectDeveloper1.getName());
+                projectDeveloper.setTin(projectDeveloper1.getTin());
+                projectDeveloper.setOpfId(projectDeveloper1.getOpfId());
+                projectDeveloper = projectDeveloperService.save(projectDeveloper);
+                regApplication.setDeveloperId(projectDeveloper.getId());
+            }
+
+        regApplication.setReviewId(reRegApplication.getReviewId());
+        regApplication.setRequirementId(reRegApplication.getRequirementId());
+        regApplication.setDeadline(reRegApplication.getDeadline());
+
+        regApplication.setObjectId(reRegApplication.getObjectId());
+        regApplication.setName(reRegApplication.getName());
+        regApplication.setObjectRegionId(reRegApplication.getObjectRegionId());
+        regApplication.setObjectSubRegionId(reRegApplication.getObjectSubRegionId());
+        regApplication.setIndividualPhone(reRegApplication.getIndividualPhone());
+        regApplication.setMaterials(reRegApplication.getMaterials());
+
+        regApplication.setActivityId(reRegApplication.getActivityId());
+        regApplication.setCategory(reRegApplication.getCategory());
+
+
+        Set<BoilerCharacteristics> boilerCharacteristics = reRegApplication.getBoilerCharacteristics();
+        Set<BoilerCharacteristics> boilerCharacterRegApp = new HashSet<>();
+        if (boilerCharacteristics==null) boilerCharacteristics = new HashSet<>();
+        for (BoilerCharacteristics characteristics: boilerCharacteristics) {
+            BoilerCharacteristics characteristic = new BoilerCharacteristics();
+            characteristic.setName(characteristics.getName());
+            characteristic.setType(characteristics.getType());
+            characteristic.setAmount(characteristics.getAmount());
+            characteristic.setSubstanceType(characteristics.getSubstanceType());
+            characteristic.setBoilerType(characteristics.getBoilerType());
+            characteristic.setDeleted(characteristics.getDeleted());
+            characteristic = boilerCharacteristicsService.save(characteristic);
+            boilerCharacterRegApp.add(characteristic);
+            regApplication.setBoilerCharacteristics(boilerCharacterRegApp);
+        }
+
+        regApplication = regApplicationRepository.save(regApplication);
+        return regApplication;
+    }
+
+    private Client convertoClientToNewClient(Client client,Client reClient, User user){
+        switch (reClient.getType() != null? reClient.getType().getId(): 4 ){
+            case 0:
+                client.setType(ApplicantType.LegalEntity);
+
+                client.setTin(reClient.getTin());
+                client.setName(reClient.getName());
+                client.setOpfId(reClient.getOpfId());
+                client.setDirectorFullName(reClient.getDirectorFullName());
+                client.setOked(reClient.getOked());
+
+                client.setRegionId(reClient.getRegionId());
+                client.setSubRegionId(reClient.getSubRegionId());
+                client.setAddress(reClient.getAddress());
+
+                client.setPhone(reClient.getPhone());
+                client.setMobilePhone(reClient.getMobilePhone());
+                client.setEmail(reClient.getEmail());
+
+                client.setMfo(reClient.getMfo());
+                client.setBankName(reClient.getBankName());
+                client.setBankAccount(reClient.getBankAccount());
+
+                client.setUpdateAt(new Date());
+                client.setUpdateById(user.getId());
+                client = clientService.saveForEdit(client);
+                break;
+            case 1:
+
+                client.setType(ApplicantType.Individual);
+
+                client.setPinfl(reClient.getPinfl());
+                client.setTin(reClient.getTin());
+                client.setName(reClient.getName());
+
+                client.setPassportSerial(reClient.getPassportSerial());
+                client.setPassportNumber(reClient.getPassportNumber());
+                client.setPassportDateOfIssue(reClient.getPassportDateOfIssue());
+                client.setPassportDateOfExpiry(reClient.getPassportDateOfExpiry());
+                client.setPassportIssuedBy(reClient.getPassportIssuedBy());
+
+                client.setRegionId(reClient.getRegionId());
+                client.setSubRegionId(reClient.getSubRegionId());
+                client.setAddress(reClient.getAddress());
+
+                client.setPhone(reClient.getPhone());
+                client.setMobilePhone(reClient.getMobilePhone());
+                client.setEmail(reClient.getEmail());
+
+                client.setUpdateAt(new Date());
+                client.setUpdateById(user.getId());
+                client = clientService.saveForEdit(client);
+                break;
+            case 2:
+                client.setType(ApplicantType.IndividualEnterprise);
+                client.setOpfId(reClient.getOpfId());
+                client.setPinfl(reClient.getPinfl());
+                client.setTin(reClient.getTin());
+                client.setName(reClient.getName());
+
+                client.setPassportSerial(reClient.getPassportSerial());
+                client.setPassportNumber(reClient.getPassportNumber());
+                client.setPassportDateOfIssue(reClient.getPassportDateOfIssue());
+                client.setPassportDateOfExpiry(reClient.getPassportDateOfExpiry());
+                client.setPassportIssuedBy(reClient.getPassportIssuedBy());
+
+                client.setRegionId(reClient.getRegionId());
+                client.setSubRegionId(reClient.getSubRegionId());
+                client.setAddress(reClient.getAddress());
+
+                client.setPhone(reClient.getPhone());
+                client.setMobilePhone(reClient.getMobilePhone());
+                client.setEmail(reClient.getEmail());
+
+                client.setUpdateAt(new Date());
+                client.setUpdateById(user.getId());
+                client = clientService.saveForEdit(client);
+                break;
+            case 3:
+                client.setType(ApplicantType.ForeignIndividual);
+
+
+                client.setName(reClient.getName());
+
+                client.setPassportNumber(reClient.getPassportNumber());
+                client.setCitizenshipId(reClient.getCitizenshipId());
+
+                client.setCountryId(reClient.getCountryId());
+                client.setAddress(reClient.getAddress());
+
+                client.setPhone(reClient.getPhone());
+                client.setMobilePhone(reClient.getMobilePhone());
+                client.setEmail(reClient.getEmail());
+
+                client.setUpdateAt(new Date());
+                client.setUpdateById(user.getId());
+                client = clientService.saveForEdit(client);
+                break;
+
+            default:
+        }
+        return client;
+
+    }
+
+
 }

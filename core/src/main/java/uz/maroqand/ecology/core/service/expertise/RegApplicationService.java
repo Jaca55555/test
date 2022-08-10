@@ -60,4 +60,6 @@ public interface RegApplicationService {
     long findFilteredNumber(LogType logType, Integer integer, Integer performerId, RegApplicationInputType regApplicationInputType);
 
     List<RegApplication> getListByStatusAndUserId(RegApplicationStatus checkNotConfirmed, Integer id);
+
+    boolean reWorkRegApplication(Integer id, Integer reId, User user);
 }

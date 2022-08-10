@@ -100,4 +100,14 @@ public class CoordinateServiceImpl implements CoordinateService {
             model.addAttribute("coordinateLatLongList", coordinateLatLongList);
         }
     }
+
+    @Override
+    public Coordinate getRegApplicationId(Integer id) {
+        return coordinateRepository.findByRegApplicationIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public Coordinate saveForEdit(Coordinate coordinate) {
+        return coordinateRepository.save(coordinate);
+    }
 }

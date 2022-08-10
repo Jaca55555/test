@@ -754,7 +754,7 @@
                                                                 <option th:each="objectExpertise : ${objectExpertiseList}"
                                                                         th:value="${objectExpertise.id}"
                                                                         th:text="${objectExpertise.getNameTranslation(#locale)}"
-                                                                        th:selected="${regApplication.objectId==objectExpertise.id}"></option>
+                                                                        ></option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -819,6 +819,7 @@
                                                         </div>
                                                     </div>-->
 
+<!--                                                    vid material check box-->
                                                     <div class="form-group row">
                                                         <div class="col-md-3 text-right">
                                                             <label class="col-form-label"
@@ -1279,6 +1280,7 @@
     var deleteFileAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileDelete}]];
     var clearCoordinatesAjaxUrl = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationClearCoordinates}]];
     var regApplicationId = [[${regApplication.id}]];
+    var regApplicationChoicing = [[${regApplication}]];
     var coordinate = [[${coordinate}]];
     let regCategory = null;
     let fileError = false;
@@ -1301,6 +1303,7 @@
 
 
     $(document).ready(function () {
+
         $("#type_boiler1").select2({
             dropdownParent: $("#boilerModal1"),
             tags: true
@@ -1657,7 +1660,6 @@
             $('#regionDiv').hide();
             $('#regionId').prop('required', false);
             $('#regionId').val('');
-
         }
 
     });
@@ -2362,7 +2364,6 @@
     var substances1 = [[${substances1}]];
     var substances2 = [[${substances2}]];
     var substances3 = [[${substances3}]];
-
     var typeBoiler = [[${boilerEnumList}]];
 
     console.log("typeBoiler=", typeBoiler);
@@ -2689,6 +2690,9 @@
 </script>
 <script>
     $(document).ready(function () {
+
+        $("#objectId").val(regApplicationChoicing.objectId).change()
+
         $("#name_boiler1").select2({
             dropdownParent: $("#boilerModal1")
         });
