@@ -645,9 +645,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
     private RegApplication convertoRegToNewReg(RegApplication regApplication, RegApplication reRegApplication, User user){
 //        step 1 client
-        Client client = convertoClientToNewClient(regApplication.getApplicant()==null?new Client():reRegApplication.getApplicant(), reRegApplication.getApplicant(), user);
+        Client client = convertoClientToNewClient(regApplication.getApplicant()==null?new Client():regApplication.getApplicant(), reRegApplication.getApplicant(), user);
         regApplication.setApplicantId(client.getId());
-        regApplicationRepository.save(regApplication);
 //        step 2 regApplication
 
             Coordinate coordinates = coordinateService.getRegApplicationId(reRegApplication.getId());
@@ -695,29 +694,29 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         regApplication.setObjectRegionId(reRegApplication.getObjectRegionId());
         regApplication.setObjectSubRegionId(reRegApplication.getObjectSubRegionId());
         regApplication.setIndividualPhone(reRegApplication.getIndividualPhone());
-        regApplication.setMaterials(reRegApplication.getMaterials());
 
         regApplication.setActivityId(reRegApplication.getActivityId());
         regApplication.setCategory(reRegApplication.getCategory());
 
 
-        Set<BoilerCharacteristics> boilerCharacteristics = reRegApplication.getBoilerCharacteristics();
-        Set<BoilerCharacteristics> boilerCharacterRegApp = new HashSet<>();
-        if (boilerCharacteristics==null) boilerCharacteristics = new HashSet<>();
-        for (BoilerCharacteristics characteristics: boilerCharacteristics) {
-            BoilerCharacteristics characteristic = new BoilerCharacteristics();
-            characteristic.setName(characteristics.getName());
-            characteristic.setType(characteristics.getType());
-            characteristic.setAmount(characteristics.getAmount());
-            characteristic.setSubstanceType(characteristics.getSubstanceType());
-            characteristic.setBoilerType(characteristics.getBoilerType());
-            characteristic.setDeleted(characteristics.getDeleted());
-            characteristic = boilerCharacteristicsService.save(characteristic);
-            boilerCharacterRegApp.add(characteristic);
-            regApplication.setBoilerCharacteristics(boilerCharacterRegApp);
+        Set<BoilerCharacteristics> boilerList = reRegApplication.getBoilerCharacteristics();
+        List<BoilerCharacteristics> boilerCharacterRegApp = new ArrayList<>();
+        for (BoilerCharacteristics boilerCharacteristics: boilerList) {
+            BoilerCharacteristics addSet = new BoilerCharacteristics();
+            addSet.setName(boilerCharacteristics.getName());
+            addSet.setType(boilerCharacteristics.getType());
+            addSet.setAmount(boilerCharacteristics.getAmount());
+            addSet.setSubstanceType(boilerCharacteristics.getSubstanceType());
+            addSet.setBoilerType(boilerCharacteristics.getBoilerType());
+            addSet.setDeleted(boilerCharacteristics.getDeleted());
+            boilerCharacteristicsService.save(addSet);
+            boilerCharacterRegApp.add(addSet);
         }
+        regApplication.setBoilerGroups(null);
+        regApplication.setBoilerCharacteristics(new HashSet<>(boilerCharacterRegApp));
 
         regApplication = regApplicationRepository.save(regApplication);
+
         return regApplication;
     }
 
