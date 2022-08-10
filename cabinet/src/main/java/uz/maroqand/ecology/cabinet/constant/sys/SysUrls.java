@@ -29,8 +29,9 @@ public class SysUrls {
     private static final String Repository = "/repository";
     public static final String GetDocument = Repository + "/get-document";
     public static final String GetQRImage = Repository + "/get_qr_image";
+    public static final String GetOffer = Repository + "/get-offer";
+    public static final String GetQRImageOffer = Repository + "/get_qr_image_2";
     public static final String GetCaptcha = Repository + "/captcha";
-
     public static final String SelectLang = Prefix + "/select_lang";
 
 }

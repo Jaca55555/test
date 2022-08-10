@@ -2037,6 +2037,7 @@ public class RegApplicationCategoryFourController {
         }
 
         model.addAttribute("regApplication", regApplication);
+        model.addAttribute("client", regApplication.getApplicant());
         model.addAttribute("offer", offer);
         model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal());
         return RegTemplates.RegApplicationContract;

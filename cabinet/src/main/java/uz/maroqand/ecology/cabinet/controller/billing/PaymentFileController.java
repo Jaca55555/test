@@ -81,6 +81,7 @@ public class PaymentFileController {
             @RequestParam(name = "bankMfo", required = false) String bankMfo,
 
             @RequestParam(name = "isComplete", required = false) Boolean isComplete,
+            @RequestParam(name = "datefileter", required = false) Integer datefileter,
             Pageable pageable
     ){
         User user = userService.getCurrentUserFromContext();

@@ -15,4 +15,7 @@ public interface CoordinateService {
 
     void coordinateView(Integer regApplicationId, Model model);
 
+    Coordinate getRegApplicationId(Integer id);
+
+    Coordinate saveForEdit(Coordinate coordinate);
 }
