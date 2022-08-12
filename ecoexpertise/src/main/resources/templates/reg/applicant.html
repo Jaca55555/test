@@ -56,17 +56,6 @@
 
                                             <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
 
-                                            <div class = "row">
-                                                <div class="form-group">
-                                                <select id="reWorkSelect" class="form-check">
-                                                    <option value="" th:text="#{sys_select}"></option>
-                                                    <option th:each="regApp: ${regAppList}" th:text="*{regApp.id}" th:value="*{regApp.id}"></option>
-                                                </select>
-
-                                                <button class="btn btn-primary form-btn" id="reWorkButton" th:text="#{sys_submit}"></button>
-                                                </div>
-                                            </div>
-
                                             <div class="row" >
                                                 <div class="form-group col-md-12 text-center" >
                                                     <div class="custom-control custom-radio custom-control-inline">
@@ -184,7 +173,6 @@
         var getOkedNameLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationGetOkedName}]];
         var sendSMSCodeLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationSendSMSCode}]];
         var confirmSMSCodeLink = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationGetSMSCode}]];
-        var reworkRegApplication = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationReWork}]];
         var oked_name_text = [[#{sys_oked_name}]];
         var oked_not_name_text = [[#{sys_not_oked_name}]];
         var leInfoUrlGnk = [[${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).GetLegalEntityByTin}]];
@@ -564,32 +552,6 @@
                 }
             }, 1000);
         }
-
-        $('#reWorkButton').click(function (){
-            let reWorkSubmits = $('#reWorkSelect').val();
-            console.log(reWorkSubmits);
-
-            if (reWorkSubmits) {
-                $.ajax({
-                    url: reworkRegApplication,
-                    data: {
-                        reId: $('#reWorkSelect').val(),
-                        id: regApplicationId
-                    },
-                    type: 'get',
-                    dataType: 'json',
-                    cache: true,
-                    success: function (response){
-                        if(response){
-                            location.reload(true);
-                        }
-                    }
-                });
-            }
-
-            console.log("button clicked")
-        });
-
 
 
     </script>

@@ -295,9 +295,8 @@ public class FileServiceImpl implements FileService {
 
 
     private void createAndSetNextUploadFolder() {
-//        String newCurrentDir = globalConfigs.getUploadedFilesFolder()
-//                + "/" + uploadFolderYMFormat.format(new Date());
-        String newCurrentDir = "/home/muhammad_amin/Downloads/uploadsjava";
+        String newCurrentDir = globalConfigs.getUploadedFilesFolder()
+                + "/" + uploadFolderYMFormat.format(new Date());
         java.io.File root = new java.io.File(newCurrentDir);
         if (!root.exists() || !root.isDirectory()) {
             root.mkdirs();
