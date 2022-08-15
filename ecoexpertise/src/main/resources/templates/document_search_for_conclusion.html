@@ -79,10 +79,6 @@
                                                         <th class="w-50"th:text="${regApplication.applicant.tin}"></th>
                                                     </tr>
                                                     <tr>
-                                                        <th class="w-50" th:text="#{sys_pinfl_individual}"></th>
-                                                        <th class="w-50" th:text="${regApplication.applicant.pinfl}"></th>
-                                                    </tr>
-                                                    <tr>
                                                         <th class="w-50" th:text="#{sys_about.name}"></th>
                                                         <th class="w-50" th:text="${regApplication.name}"></th>
                                                     </tr>
@@ -115,110 +111,13 @@
                                                         <th class="w-50" th:unless="${invoice!=null}"></th>
                                                     </tr>
 
-                                                    <tr>
-                                                        <th colspan="2" th:text="#{sys_authenticated_by_etsp}"></th>
-                                                    </tr>
-
                                                 </table>
                                             </div>
                                         </div>
                                         <div class="form-group  text-center" style="border: 1px dashed #b7c5d4;width: 95%; padding: 40px 20px;margin: 0 auto" id="contract">
 <!--                                            <p style="font-weight: bold" th:utext="#{text1}"></p>-->
                                             <div style="text-align: justify" th:if="${offer.tagName!=null}" th:utext="#{${offer.tagName}}"></div>
-                                            <div class="row">
-                                                <div class="col-sm">
-                                                    <table class="table-bordered" th:utext = "#{sys_expertise_contract}">
 
-<!--                                                        <tr>-->
-<!--                                                            <th colspan="2"> Podpisan ETSP kluchom</th>-->
-<!--                                                        </tr>-->
-<!--                                                        </thead>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>address</th>-->
-<!--                                                            <td> amir temur</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>tel</th>-->
-<!--                                                            <td>+998 99 798 45 46</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>р/с:</th>-->
-<!--                                                            <td>2021 0000 0001 1801 4007</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>Bank</th>-->
-<!--                                                            <td>в «Узсаноаткурилишбанк»-->
-<!--                                                                Яшнабадский филиал-->
-<!--                                                            </td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>МФО:</th>-->
-<!--                                                            <td>00432</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>город:</th>-->
-<!--                                                            <td>Ташкент</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>ИНН:</th>-->
-<!--                                                            <td>200934834</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>ОКЭД:</th>-->
-<!--                                                            <td>71200</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th colspan="2"> <span th:text="#{sys_authenticated_by_etsp}"></span></th>-->
-<!--                                                        </tr>-->
-                                                    </table>
-                                                </div>
-                                                <div class="col-sm">
-                                                    <table class="table-bordered">
-                                                        <thead>
-                                                        <tr>
-                                                            <th colspan="2">
-                                                                <span th:text="#{sys.client.info}"></span>
-                                                            </th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tr>
-                                                            <th th:text="#{sys_address}"></th>
-                                                            <td th:text="${regApplication.applicant.address}"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th th:text="#{sys_phone}"></th>
-                                                            <td th:text="${regApplication.applicant.phone}"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th><span th:text="#{sys_client_bank.account}"></span></th>
-                                                            <td><span th:text="${regApplication.applicant.bankAccount}"></span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th><span th:text="#{sys_client_bank.name}"></span></th>
-                                                            <td><span th:text="${regApplication.applicant.bankName}"></span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th><span th:text="#{sys_client_mfo}"></span></th>
-                                                            <td><span th:text="${regApplication.applicant.mfo}"></span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th><span th:text="#{sys_client_region}"></span></th>
-                                                            <td><span th:text="${@soatoServiceImpl.getById(regApplication.applicant.regionId).name} "></span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th><span th:text="#{sys_client_tin}"></span></th>
-                                                            <td><span th:text="${regApplication.applicant.tin}"></span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th><span th:text="#{sys_client_oked}"></span></th>
-                                                            <td><span th:text="${regApplication.applicant.oked}"></span></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th colspan="2"> <span th:text="#{sys_authenticated_by_etsp}"></span></th>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
                                         </div>
 
                                     </div>

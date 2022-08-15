@@ -77,6 +77,8 @@ public class ConclusionCompleteController {
     private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
     private final RestTemplate restTemplate;
     private final RegApplicationService applicationService;
+    private final DocumentRepoService documentRepoService;
+
 
     private final SendingDataService sendingDataService;
 
@@ -99,7 +101,7 @@ public class ConclusionCompleteController {
             ConclusionService conclusionService,
             NotificationService notificationService,
             SmsSendService smsSendService,
-            DocumentEditorService documentEditorService, FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, RestTemplate restTemplate, RegApplicationService applicationService, SendingDataService sendingDataService) {
+            DocumentEditorService documentEditorService, FileService fileService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService, RestTemplate restTemplate, RegApplicationService applicationService, DocumentRepoService documentRepoService, SendingDataService sendingDataService) {
         this.regApplicationService = regApplicationService;
         this.soatoService = soatoService;
         this.userService = userService;
@@ -120,6 +122,7 @@ public class ConclusionCompleteController {
         this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
         this.restTemplate = restTemplate;
         this.applicationService = applicationService;
+        this.documentRepoService = documentRepoService;
         this.sendingDataService = sendingDataService;
     }
 
@@ -319,7 +322,7 @@ public class ConclusionCompleteController {
             MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
             Set<Integer> materialsInt = regApplication.getMaterials();
             Integer next =materialsInt.size()>0? materialsInt.iterator().next():0;
-            if ((next == 8 || next == 5 || next == 6 || next == 7 ) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
+//            if ((next == 8 || next == 5 || next == 6 || next == 7 ) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
                 if (conclusionService.getById(conclusion.getId()).getConclusionWordFileId() != null) {
                     file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
                     String filePath = file.getPath();
@@ -332,16 +335,19 @@ public class ConclusionCompleteController {
                     originalFileName = pdfFile.getName();
                     input_file = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
                     file = fileService.filesave(pdfFile, user);
+
                 }
-
-
+                byte[] byteImage = documentRepoService.getQRImage(conclusion.getDocumentRepoId());
+                byte[] deliverphoto = new byte[input_file.length + byteImage.length];
+                System.arraycopy(input_file, 0, deliverphoto, 0, input_file.length);
+                System.arraycopy(byteImage, 0, deliverphoto, input_file.length, byteImage.length);
                 ContentDisposition contentDisposition = ContentDisposition
                         .builder("form-data")
                         .name("file")
                         .filename(originalFileName)
                         .build();
                 fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
-                HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
+                HttpEntity<byte[]> fileEntity = new HttpEntity<>(deliverphoto, fileMap);
                 SendingData sendingData = new SendingData();
                 MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
                 body.add("file", fileEntity);
@@ -353,7 +359,7 @@ public class ConclusionCompleteController {
                 logger.info("response_entity"+requestEntity);
                 try {
                     ResponseEntity<String> response = restTemplate.exchange(
-                            "http://84.54.83.68:8087/api/expertise",
+                            "http://localhost:8085/get_post",
                             HttpMethod.POST,
                             requestEntity,
                             String.class);
@@ -371,15 +377,18 @@ public class ConclusionCompleteController {
                     sendingData.setCreatedAt(new Date());
                     sendingData.setRegApplicationId(regApplication.getId());
                 } catch (ResourceAccessException e) {
+
                     regApplication.setDeliveryStatus((short) 0);
                     sendingData.setDeliveryStatus((short) 0);
+                    sendingData.setCreatedAt(new Date());
+                    sendingData.setRegApplicationId(regApplication.getId());
                     sendingData.setErrors(e.getMessage());
                     regApplicationService.update(regApplication);
                     logger.error("data not send to Fond ");
                 }
                 sendingDataService.save(sendingData);
             }
-        }
+//        }
 
         //sendApi
 

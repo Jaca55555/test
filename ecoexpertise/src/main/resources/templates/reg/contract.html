@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <object th:include="fragments/includes_top :: top" th:remove="tag"></object>
+    <object th:include="fragments/includes_top :: top" th:remove="tag" ></object>
     <!-- smart-wizard css -->
     <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard.min.css">
     <link rel="stylesheet" href="/static/plugins/smart-wizard/css/smart_wizard_theme_dots.min.css">
@@ -12,260 +12,139 @@
 
 </head>
 <body class="layout-6" style="overflow:auto;">
-<!-- [ Pre-loader ] start -->
-<div class="loader-bg">
-    <div class="loader-track">
-        <div class="loader-fill"></div>
+    <!-- [ Pre-loader ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
     </div>
-</div>
-<!-- [ Pre-loader ] End -->
+    <!-- [ Pre-loader ] End -->
 
-<object th:include="fragments/navigation_menu :: menu" th:remove="tag"></object>
+    <object th:include="fragments/navigation_menu :: menu" th:remove="tag" ></object>
 
-<object th:include="fragments/header :: head" th:remove="tag"></object>
+    <object th:include="fragments/header :: head" th:remove="tag" ></object>
 
-<!-- [ Main Content ] start -->
-<div class="pcoded-main-container" style="overflow:auto;">
-    <div class="pcoded-wrapper">
-        <div class="pcoded-content">
-            <div class="pcoded-inner-content">
-                <div class="main-body">
-                    <div class="page-wrapper">
-                        <!-- [ Main Content ] start -->
-                        <div class="row">
-                            <!-- [ sample-page ] start -->
-                            <div class="col-sm-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5>
-                                            <span th:text="#{reg_application.number}"></span>&nbsp;
-                                            <span th:text="${regApplication.id}"></span>
-                                        </h5>
-                                    </div>
-                                    <div class="card-body">
+    <!-- [ Main Content ] start -->
+    <div class="pcoded-main-container" style="overflow:auto;">
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+                                <!-- [ sample-page ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 >
+                                                <span th:text="#{reg_application.number}"></span>&nbsp;
+                                                <span th:text="${regApplication.id}"></span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body">
 
-                                        <object th:include="reg/step_wizard :: wizard" th:remove="tag"></object>
+                                            <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
 
-                                        <div class="row">
-                                            <button class="btn btn-primary pl-5 pr-5" id="contract_print_btn">
-                                                <i class="feather icon-printer"></i>
-                                                <span th:text="#{sys_print}"> print</span>
-                                            </button>
+                                            <div class="row" >
+                                                <button class="btn btn-primary pl-5 pr-5" id="contract_print_btn">
+                                                    <i class="feather icon-printer"></i>
+                                                    <span th:text="#{sys_print}"> print</span>
+                                                </button>
 
-                                            <form style="width: 90%;margin: 0 auto;padding-top: 30px"
-                                                  th:action="${action_url}" method="post" th:object="${regApplication}"
-                                                  data-parsley-validate="">
-                                                <div class="form-group  text-center"
-                                                     style="border: 1px dashed #b7c5d4;width: 95%;overflow-y: scroll; height:400px; padding: 40px 20px;margin: 0 auto"
-                                                     id="contract">
-                                                    <div style="text-align: justify"
-                                                         th:utext="#{${offer.tagName}}"></div>
+                                                    <form style="width: 90%;margin: 0 auto;padding-top: 30px" th:action="${action_url}" method="post" th:object="${regApplication}" data-parsley-validate="" >
+                                                        <div class="form-group  text-center" style="border: 1px dashed #b7c5d4;width: 95%;overflow-y: scroll; height:400px; padding: 40px 20px;margin: 0 auto" id="contract">
+                                                        <div style="text-align: justify"  th:utext="#{${offer.tagName}}"></div>
 
-                                                    <div class="row">
-                                                        <div class="col-sm">
-                                                            <table class="table-bordered" th:utext="#{'contract_'+ ${offer.tagName}}">
-                                                                <!--                                                        <thead>-->
-                                                                <!--                                                        <tr>-->
-                                                                <!--                                                            <th colspan="2"> Podpisan ETSP kluchom</th>-->
-                                                                <!--                                                        </tr>-->
-                                                                <!--                                                        </thead>-->
-                                                                <!--                                                        <tr>-->
-                                                                <!--                                                            <th>address</th>-->
-                                                                <!--                                                            <td> amir temur</td>-->
-                                                                <!--                                                        </tr>-->
-                                                                <!--                                                        <tr>-->
-                                                                <!--                                                            <th>tel</th>-->
-                                                                <!--                                                            <td>+998 99 798 45 46</td>-->
-                                                                <!--                                                        </tr>-->
-                                                                <!--                                                        <tr>-->
-                                                                <!--                                                            <th>р/с:</th>-->
-                                                                <!--                                                            <td>2021 0000 0001 1801 4007</td>-->
-                                                                <!--                                                        </tr>-->
-                                                                <!--                                                        <tr>-->
-                                                                <!--                                                            <th>Bank</th>-->
-                                                                <!--                                                            <td>в «Узсаноаткурилишбанк»-->
-                                                                <!--                                                                Яшнабадский филиал-->
-                                                                <!--                                                            </td>-->
-                                                                <!--                                                        </tr>-->
-                                                                <!--                                                        <tr>-->
-                                                                <!--                                                            <th>МФО:</th>-->
-                                                                <!--                                                            <td>00432</td>-->
-                                                                <!--                                                        </tr>-->
-                                                                <!--                                                        <tr>-->
-                                                                <!--                                                            <th>город:</th>-->
-                                                                <!--                                                            <td>Ташкент</td>-->
-                                                                <!--                                                        </tr>-->
-                                                                <!--                                                        <tr>-->
-                                                                <!--                                                            <th>ИНН:</th>-->
-                                                                <!--                                                            <td>200934834</td>-->
-                                                                <!--                                                        </tr>-->
-                                                                <!--                                                        <tr>-->
-                                                                <!--                                                            <th>ОКЭД:</th>-->
-                                                                <!--                                                            <td>71200</td>-->
-                                                                <!--                                                        </tr>-->
-                                                                <!--                                                        <tr>-->
-                                                                <!--                                                            <th colspan="2"> <span th:text="#{sys_authenticated_by_etsp}"></span></th>-->
-                                                                <!--                                                        </tr>-->
-                                                            </table>
+                                                        <div class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
+                                                            <img th:if="${offer.documentRepoId!=null}" th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImageOffer + '?id=' + @offerServiceImpl.getById(regApplication.offerId).documentRepoId+'&rid='+regApplication.id}" class="qr-code" />
                                                         </div>
-                                                        <div class="col-sm">
-                                                            <table class="table table-bordered">
-                                                                <thead>
-                                                                <tr>
-                                                                    <th colspan="2">
-                                                                        <span th:text="#{sys.client.info}"></span>
-                                                                    </th>
-                                                                </tr>
-                                                                </thead>
-                                                                <tr>
-                                                                    <th th:text="#{sys_address}"></th>
-                                                                    <td th:text="${client.address}"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th th:text="#{sys_phone}"></th>
-                                                                    <td th:text="${client.phone}"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th><span th:text="#{sys_client_bank.account}"></span></th>
-                                                                    <td><span th:text="${client.bankAccount}"></span></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th><span th:text="#{sys_client_bank.name}"></span></th>
-                                                                    <td><span th:text="${client.bankName}"></span></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th><span th:text="#{sys_client_mfo}"></span></th>
-                                                                    <td><span th:text="${client.mfo}"></span></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th><span th:text="#{sys_client_region}"></span></th>
-                                                                    <td><span th:text="${@soatoServiceImpl.getById(client.regionId).name} "></span></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th><span th:text="#{sys_client_tin}"></span></th>
-                                                                    <td><span th:text="${client.tin}"></span></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th><span th:text="#{sys_client_oked}"></span></th>
-                                                                    <td><span th:text="${client.oked}"></span></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th colspan="2"> <span th:text="#{sys_authenticated_by_etsp}"></span></th>
-                                                                </tr>
-                                                            </table>
                                                         </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="container-fluid mt-lg-3"
-                                                             th:if="${regApplication.offerId!=null}">
-                                                            <img th:if="${offer.documentRepoId!=null}"
-                                                                 th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImageOffer + '?id=' + @offerServiceImpl.getById(regApplication.offerId).documentRepoId+'&rid='+regApplication.id}"
-                                                                 class="qr-code"/>
+                                                        <div id="checkInput" th:if="${regApplication.offerId==null}">
+                                                            <div class="custom-control custom-checkbox mb-3 mt-4" style="text-align: center">
+                                                                <input type="checkbox" class="custom-control-input" id="confirm" required="">
+                                                                <label class="custom-control-label " for="confirm"><u style="font-weight: bold; color: black" th:text="#{reg_application.agreeAccept}"> </u></label>
+                                                            </div>
+                                                            <div class="custom-control text-center" >
+                                                                <button type="submit" class="btn btn-primary disabled" id="confirmButton" th:text="#{reg_application.digitalSignature}"> </button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-
-                                                </div>
-                                                <div id="checkInput" th:if="${regApplication.offerId==null}">
-                                                    <div class="custom-control custom-checkbox mb-3 mt-4"
-                                                         style="text-align: center">
-                                                        <input type="checkbox" class="custom-control-input" id="confirm"
-                                                               required="">
-                                                        <label class="custom-control-label " for="confirm"><u
-                                                                style="font-weight: bold; color: black"
-                                                                th:text="#{reg_application.agreeAccept}"> </u></label>
-                                                    </div>
-                                                    <div class="custom-control text-center">
-                                                        <button type="submit" class="btn btn-primary disabled"
-                                                                id="confirmButton"
-                                                                th:text="#{reg_application.digitalSignature}"></button>
-                                                    </div>
-                                                </div>
-                                                <div id="confirmAction" class="container-fluid mt-lg-3"
-                                                     th:if="${regApplication.offerId!=null}">
-                                                    <div class="row col-12">
-                                                        <div class="col-md-7  text-left " style="color: #2f9c0a;">
+                                                        <div id="confirmAction" class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
+                                                            <div class="row col-12">
+                                                                <div class="col-md-7  text-left " style="color: #2f9c0a;">
                                                                     <span class="hei-50 wid-50 d-inline-block mr-4">
-                                                                        <img src="/static/images/check.png"
-                                                                             style="width: 100%; height: 100%">
+                                                                        <img src="/static/images/check.png" style="width: 100%; height: 100%">
                                                                     </span>
-                                                            <span class="f-20 font-weight-bold"
-                                                                  style="vertical-align: middle"
-                                                                  th:text="#{reg_application.digitalSignatureComplete}"> Документ успешно подписан и принят на обработку </span>
+                                                                    <span class="f-20 font-weight-bold" style="vertical-align: middle" th:text="#{reg_application.digitalSignatureComplete}"> Документ успешно подписан и принят на обработку </span>
 
-                                                            <p style="color: black;margin-top: 15px;"><span
-                                                                    th:text="#{reg_application.numberOffer}">Номер подт. оферты №</span>
-                                                                <span th:text="${regApplication.contractNumber}">392</span>,
-                                                                <span th:text="${#dates.format(regApplication.contractDate, 'dd.MM.yyyy')}">«3» Май 2019 </span>
-                                                                <span th:text="#{sys_year}">г.</span></p>
+                                                                    <p style="color: black;margin-top: 15px;"><span th:text="#{reg_application.numberOffer}">Номер подт. оферты №</span> <span th:text="${regApplication.contractNumber}">392</span>, <span th:text="${#dates.format(regApplication.contractDate, 'dd.MM.yyyy')}">«3» Май 2019 </span>  <span th:text="#{sys_year}">г.</span> </p>
+                                                                </div>
+                                                                <div class="col-md-3 text-right">
+<!--                                                                    <a type="button" class="btn btn-secondary" th:href="${'/reg/application/contract/offer_download?offer_id='+offer.id}" th:text="#{reg_application.downloadOffer}">Скачать электронную версию договора</a>-->
+                                                                </div>
+<!--                                                                <div class="clearfix"></div>-->
+                                                                <div class="col-md-2 text-right mt-4 mr-0">
+                                                                    <button type="submit" class="btn btn-primary pl-lg-5 pr-lg-5" >
+                                                                        <span th:text="#{sys_next}"></span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-md-3 text-right">
-                                                            <!--                                                                    <a type="button" class="btn btn-secondary" th:href="${'/reg/application/contract/offer_download?offer_id='+offer.id}" th:text="#{reg_application.downloadOffer}">Скачать электронную версию договора</a>-->
-                                                        </div>
-                                                        <!--                                                                <div class="clearfix"></div>-->
-                                                        <div class="col-md-2 text-right mt-4 mr-0">
-                                                            <button type="submit"
-                                                                    class="btn btn-primary pl-lg-5 pr-lg-5">
-                                                                <span th:text="#{sys_next}"></span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <input type="hidden" name="id" th:value="${regApplication.id}">
-                                                <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}"
-                                                       th:value="${_csrf.token}"/>
-                                            </form>
+                                                        <input type="hidden" name="id" th:value="${regApplication.id}" >
+                                                        <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                                    </form>
 
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- [ sample-page ] end -->
                             </div>
-                            <!-- [ sample-page ] end -->
+                            <!-- [ Main Content ] end -->
                         </div>
-                        <!-- [ Main Content ] end -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- [ Main Content ] end -->
-<object th:include="fragments/includes_bottom :: bottom" th:remove="tag"></object>
-<script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
-<script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
-<script src="/static/plugins/ViewerJS/viewer.js"></script>
-<script type="text/javascript" src="/static/plugins/printThis.js"></script>
-<script th:inline="javascript">
-    $('#confirm').on('click', function () {
-        if ($('#confirm').is(':checked')) {
-            $('#confirmButton').removeClass('disabled');
-        } else {
-            $('#confirmButton').addClass('disabled');
-        }
-    });
-    $('#contract_print_btn').on('click', function () {
-        $("#contract").printThis({
-            debug: false,               // show the iframe for debugging
-            importCSS: true,            // import parent page css
-            importStyle: true,         // import style tags
-            printContainer: false,       // print outer container/$.selector
-            loadCSS: "/static/plugins/bootstrap/bootstrap.min.css",                // path to additional css file - use an array [] for multiple
-            pageTitle: "",              // add title to print page
-            removeInline: false,        // remove inline styles from print elements
-            removeInlineSelector: "*",  // custom selectors to filter inline styles. removeInline must be true
-            printDelay: 333,            // variable print delay
-            header: null,               // prefix to html
-            footer: null,               // postfix to html
-            base: false,                // preserve the BASE tag or accept a string for the URL
-            formValues: true,           // preserve input/form values
-            canvas: true,              // copy canvas content
-            doctypeString: '',       // enter a different doctype for older markup
-            removeScripts: true,       // remove script tags from print content
-            copyTagClasses: false,      // copy classes from the html & body tag
-            beforePrintEvent: null,     // function for printEvent in iframe
-            beforePrint: null,          // function called before iframe is filled
-            afterPrint: null            // function called before iframe is removed
+    <!-- [ Main Content ] end -->
+    <object th:include="fragments/includes_bottom :: bottom" th:remove="tag" ></object>
+    <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+    <script src="/static/plugins/smart-wizard/js/jquery.smartWizard.min.js"></script>
+    <script src="/static/plugins/ViewerJS/viewer.js"></script>
+    <script type="text/javascript" src="/static/plugins/printThis.js"></script>
+    <script th:inline="javascript">
+        $('#confirm').on('click',function () {
+            if ($('#confirm').is(':checked')) {
+                $('#confirmButton').removeClass('disabled');
+            } else {
+                $('#confirmButton').addClass('disabled');
+            }
         });
-    });
-</script>
+        $('#contract_print_btn').on('click',function () {
+            $("#contract").printThis({
+                debug: false,               // show the iframe for debugging
+                importCSS: true,            // import parent page css
+                importStyle: true,         // import style tags
+                printContainer: false,       // print outer container/$.selector
+                loadCSS: "/static/plugins/bootstrap/bootstrap.min.css",                // path to additional css file - use an array [] for multiple
+                pageTitle: "",              // add title to print page
+                removeInline: false,        // remove inline styles from print elements
+                removeInlineSelector: "*",  // custom selectors to filter inline styles. removeInline must be true
+                printDelay: 333,            // variable print delay
+                header: null,               // prefix to html
+                footer: null,               // postfix to html
+                base: false,                // preserve the BASE tag or accept a string for the URL
+                formValues: true,           // preserve input/form values
+                canvas: true,              // copy canvas content
+                doctypeString: '',       // enter a different doctype for older markup
+                removeScripts: true,       // remove script tags from print content
+                copyTagClasses: false,      // copy classes from the html & body tag
+                beforePrintEvent: null,     // function for printEvent in iframe
+                beforePrint: null,          // function called before iframe is filled
+                afterPrint: null            // function called before iframe is removed
+            });
+        });
+    </script>
 </body>
 </html>
