@@ -25,7 +25,7 @@ public class TestingController {
     ) {
 
         fileService.uploadFile(file,1,"test uchun","test uchun desc");
-        System.out.println("HHHHHHHHHH");
+        System.out.println("file.type"+file.getName());
 
 
         System.out.println("param="+data);

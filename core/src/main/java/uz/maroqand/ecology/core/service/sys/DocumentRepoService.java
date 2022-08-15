@@ -15,5 +15,6 @@ public interface DocumentRepoService {
     DocumentRepo getDocumentByUuid(String uuid);
 
     DocumentRepo create(DocumentRepoType type, Integer applicationId);
+    byte[] getQRImage(Integer id);
 
 }
