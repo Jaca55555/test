@@ -1,8 +1,10 @@
 package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import com.lowagie.text.DocumentException;
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -322,34 +324,42 @@ public class ConclusionCompleteController {
             MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
             Set<Integer> materialsInt = regApplication.getMaterials();
             Integer next =materialsInt.size()>0? materialsInt.iterator().next():0;
-//            if ((next == 8 || next == 5 || next == 6 || next == 7 ) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
+            if ((next == 8 || next == 5 || next == 6 || next == 7 ) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
                 if (conclusionService.getById(conclusion.getId()).getConclusionWordFileId() != null) {
                     file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
                     String filePath = file.getPath();
                     originalFileName = file.getName();
                     input_file = Files.readAllBytes(Paths.get(filePath + originalFileName));
                 } else {
-                    String htmlText = conclusionService.getById(regApplication.getConclusionId()).getHtmlText();
-                    String XHtmlText = htmlText.replaceAll("&nbsp;", "&#160;");
+                    StringBuilder sb = new StringBuilder(conclusionService.getById(regApplication.getConclusionId()).getHtmlText());
+
+                    byte[] byteImage = documentRepoService.getQRImage(conclusion.getDocumentRepoId());
+                    sb.append("<img src=\"data:image/png;base64,");
+                    sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(byteImage, false)));
+                    sb.append("\">");
+
+                    String XHtmlText = sb.toString().replaceAll("&nbsp;", "&#160;");
                     java.io.File pdfFile = fileService.renderPdf(XHtmlText);
                     originalFileName = pdfFile.getName();
                     input_file = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
                     file = fileService.filesave(pdfFile, user);
 
                 }
-                byte[] byteImage = documentRepoService.getQRImage(conclusion.getDocumentRepoId());
-                byte[] deliverphoto = new byte[input_file.length + byteImage.length];
-                System.arraycopy(input_file, 0, deliverphoto, 0, input_file.length);
-                System.arraycopy(byteImage, 0, deliverphoto, input_file.length, byteImage.length);
                 ContentDisposition contentDisposition = ContentDisposition
                         .builder("form-data")
                         .name("file")
                         .filename(originalFileName)
                         .build();
                 fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
-                HttpEntity<byte[]> fileEntity = new HttpEntity<>(deliverphoto, fileMap);
-                SendingData sendingData = new SendingData();
+                HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
                 MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+
+//                Set<File> documentFiles = regApplication.getDocumentFiles();
+//                for(File file1:documentFiles){
+//                    HttpEntity<byte[]> documentFile = new HttpEntity<>(Files.readAllBytes(Paths.get(file1.getPath())), fileMap);
+//                    body.add("document",documentFile);
+//                }
+                SendingData sendingData = new SendingData();
                 body.add("file", fileEntity);
                 body.add("data", RegApplicationDTO.fromEntity(regApplication, conclusionService, fileService));
                 sendingData.setDataSend(body.toString());
@@ -359,7 +369,7 @@ public class ConclusionCompleteController {
                 logger.info("response_entity"+requestEntity);
                 try {
                     ResponseEntity<String> response = restTemplate.exchange(
-                            "http://localhost:8085/get_post",
+                            "http://84.54.83.68:8087/api/expertise",
                             HttpMethod.POST,
                             requestEntity,
                             String.class);
@@ -377,7 +387,6 @@ public class ConclusionCompleteController {
                     sendingData.setCreatedAt(new Date());
                     sendingData.setRegApplicationId(regApplication.getId());
                 } catch (ResourceAccessException e) {
-
                     regApplication.setDeliveryStatus((short) 0);
                     sendingData.setDeliveryStatus((short) 0);
                     sendingData.setCreatedAt(new Date());
@@ -388,7 +397,7 @@ public class ConclusionCompleteController {
                 }
                 sendingDataService.save(sendingData);
             }
-//        }
+        }
 
         //sendApi
 
