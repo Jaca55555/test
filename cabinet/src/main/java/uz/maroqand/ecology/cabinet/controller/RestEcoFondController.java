@@ -17,14 +17,17 @@ import uz.maroqand.ecology.core.entity.expertise.Conclusion;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
 import uz.maroqand.ecology.core.entity.expertise.RegApplicationLog;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.SendingData;
 import uz.maroqand.ecology.core.service.expertise.ConclusionService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationLogService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.FileService;
+import uz.maroqand.ecology.core.service.sys.SendingDataService;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -36,15 +39,17 @@ public class RestEcoFondController {
 
     private final RegApplicationService regApplicationService;
     private final ConclusionService conclusionService;
+    private final SendingDataService sendingDataService;
     private final FileService fileService;
     private final RestTemplate restTemplate;
     private final RegApplicationLogService regApplicationLogService;
 
 
 
-    public RestEcoFondController(RegApplicationService regApplicationService, ConclusionService conclusionService, FileService fileService, RestTemplate restTemplate, RegApplicationLogService regApplicationLogService) {
+    public RestEcoFondController(RegApplicationService regApplicationService, ConclusionService conclusionService, SendingDataService sendingDataService, FileService fileService, RestTemplate restTemplate, RegApplicationLogService regApplicationLogService) {
         this.regApplicationService = regApplicationService;
         this.conclusionService = conclusionService;
+        this.sendingDataService = sendingDataService;
         this.fileService = fileService;
         this.restTemplate = restTemplate;
         this.regApplicationLogService = regApplicationLogService;
@@ -64,7 +69,7 @@ public class RestEcoFondController {
 
                 // This nested HttpEntiy is important to create the correct
                 // Content-Disposition entry with metadata "name" and "filename"
-                File file;
+                File file=null;
                 byte[] input_file;
                 String originalFileName;
                 MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
@@ -97,8 +102,11 @@ public class RestEcoFondController {
                     HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
 
                     MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+                    SendingData sendingData = new SendingData();
                     body.add("file", fileEntity);
                     body.add("data", RegApplicationDTO.fromEntity(regApplication, conclusionService, fileService));
+                    sendingData.setDataSend(body.toString());
+                    sendingData.setFileId(file!=null? file.getId(): null);
                     logger.info("body=="+body);
                     HttpEntity<MultiValueMap<String, Object>> requestEntity =
                             new HttpEntity<>(body, headers);
@@ -116,19 +124,28 @@ public class RestEcoFondController {
                         logger.info("data send to Fond ");
                         if(value){
                             regApplication.setDeliveryStatus((short) 1);
+                            sendingData.setDeliveryStatus((short) 1);
                         }else{
                             regApplication.setDeliveryStatus((short) 0);
+                            sendingData.setDeliveryStatus((short) 0);
 
                         }
                         regApplicationService.update(regApplication);
+                        sendingData.setCreatedAt(new Date());
+                        sendingData.setRegApplicationId(regApplication.getId());
 
 
                     } catch (HttpServerErrorException e) {
                         logger.error("error="+e.getMessage(), e);
                         regApplication.setDeliveryStatus((short) 0);
+                        sendingData.setDeliveryStatus((short) 0);
+                        sendingData.setCreatedAt(new Date());
+                        sendingData.setRegApplicationId(regApplication.getId());
+                        sendingData.setErrors(e.getMessage());
                         regApplicationService.update(regApplication);
                         logger.error("data not send to Fond ");
                     }
+                    sendingDataService.save(sendingData);
                 }
             }
         }

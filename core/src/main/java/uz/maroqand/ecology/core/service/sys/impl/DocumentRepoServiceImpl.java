@@ -70,7 +70,7 @@ public class DocumentRepoServiceImpl implements DocumentRepoService {
         String url = "https://cb.eco-service.uz/repository/get-document";
 
         try {
-            BitMatrix bitMatrix = writer.encode(url+"/"+"14d9c83c-5543-4e4b-ad08-551376fab66e", BarcodeFormat.QR_CODE, width, height);
+            BitMatrix bitMatrix = writer.encode(url+"/"+documentRepo.getUuid(), BarcodeFormat.QR_CODE, width, height);
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
                     image.setRGB(i, j, bitMatrix.get(i, j) ? black : white); // set pixel one by one
