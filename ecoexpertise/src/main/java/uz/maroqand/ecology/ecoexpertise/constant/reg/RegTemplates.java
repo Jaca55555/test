@@ -9,6 +9,7 @@ public class RegTemplates {
     public static final String RegApplicationAbout = RegApplication + "/about";
     public static final String RegApplicationWaiting = RegApplication + "/waiting";
     public static final String RegApplicationContract = RegApplication + "/contract";
+    public static final String RegApplicationChecking = RegApplication + "/checking";
     public static final String RegApplicationPrepayment = RegApplication + "/prepayment";
     public static final String RegApplicationPayment = RegApplication + "/payment";
     public static final String RegApplicationStatus = RegApplication + "/status";

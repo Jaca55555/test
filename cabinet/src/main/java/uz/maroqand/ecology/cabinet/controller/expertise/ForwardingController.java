@@ -126,7 +126,7 @@ public class ForwardingController {
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                user.getRole().getId()!=16?user.getOrganizationId():null,
+                (user.getRole().getId()==16|| userService.isAdmin())?null:user.getOrganizationId(),
                 LogType.Forwarding,
                 null,
                 null,

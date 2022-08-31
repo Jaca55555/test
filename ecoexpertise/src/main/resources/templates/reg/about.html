@@ -263,7 +263,7 @@
                                                                 <div class="col-md-12 text-center" id="alert-isSave1" >
                                                                 </div>
 
-                                                                <form id="boiler_form1" action="">
+<!--                                                                <form id="boiler_form1" action="">-->
                                                                     <table class="table  table-striped" id="boiler-table1">
                                                                         <thead>
                                                                         <tr>
@@ -317,7 +317,7 @@
 
                                                                         </div>
                                                                         <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
-                                                                            <input id="amount_boiler1" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
+                                                                            <input id="amount_boiler1" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
 
                                                                         </div>
 
@@ -340,7 +340,7 @@
                                                                     <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
                                                                     <input type="hidden" id="_csrf1" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-                                                                </form>
+<!--                                                                </form>-->
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
@@ -382,7 +382,7 @@
                                                                 <div class="col-md-12 text-center" id="alert-isSave2" >
                                                                 </div>
 
-                                                                <form id="boiler_form2" action="">
+<!--                                                                <form id="boiler_form2" action="">-->
                                                                     <table class="table  table-striped" id="boiler-table2">
                                                                         <thead>
                                                                         <tr>
@@ -410,8 +410,6 @@
                                                                         </tbody>
                                                                     </table>
 
-
-
                                                                     <div class="w-100 d-flex justify-content-start row ">
                                                                         <div class="pt-3 mr-5 ml-5 pl-5 " style="width: 31%;">
                                                                             <div class="form-group">
@@ -431,7 +429,7 @@
                                                                             </select>
                                                                         </div>
                                                                         <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
-                                                                            <input id="amount_boiler2" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
+                                                                            <input id="amount_boiler2"  class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
 
                                                                         </div>
 
@@ -454,7 +452,7 @@
                                                                     <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
                                                                     <input type="hidden" id="_csrf2" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-                                                                </form>
+<!--                                                                </form>-->
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
@@ -496,7 +494,7 @@
                                                                 <div class="col-md-12 text-center" id="alert-isSave3" >
                                                                 </div>
 
-                                                                <form id="boiler_form3" action="">
+<!--                                                                <form id="boiler_form3" action="">-->
                                                                     <table class="table  table-striped" id="boiler-table3">
                                                                         <thead>
                                                                         <tr>
@@ -545,7 +543,7 @@
                                                                             </select>
                                                                         </div>
                                                                         <div class="  pt-3 ml-4 mr-5" style="width: 14%;">
-                                                                            <input id="amount_boiler3" name="amount_boiler" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
+                                                                            <input id="amount_boiler3" class="form-control" type="text" required="" data-parsley-type="number" maxlength="10">
 
                                                                         </div>
 
@@ -568,7 +566,7 @@
                                                                     <input type="hidden" name="regCategory_id" th:value="${regApplication.id}" />
                                                                     <input type="hidden" id="_csrf3" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-                                                                </form>
+<!--                                                                </form>-->
                                                             </div>
                                                         </div>
                                                         <div class="modal-footer">
@@ -2438,7 +2436,7 @@
                     `</select>`+
                     ``);}
             if ($idn==4){
-                $(this).html("").append("<input id='amount_boiler1' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
+                $(this).html("").append("<input id='amount_boiler1'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
             }
 
         });
@@ -2541,7 +2539,7 @@
             }
 
             if ($idn==4){
-                $(this).html("").append("<input id='amount_boiler2' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
+                $(this).html("").append("<input id='amount_boiler2'   class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
             }
         });
     });
@@ -2653,7 +2651,7 @@
             }
 
             if ($idn==4){
-                $(this).html("").append("<input id='amount_boiler3' name='amount_boiler'  class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
+                $(this).html("").append("<input id='amount_boiler3'   class='form-control' type='text'  required='' data-parsley-type='number' maxlength='5' value=\""+txt+"\"/>");
             }
         });
     });

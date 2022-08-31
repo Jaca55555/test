@@ -44,7 +44,8 @@
                                                                     <img src="/static/images/icon/file.svg" alt="">
                                                                 </div>
                                                                 <div class="info">
-<!--                                                                    <div class="title-count text-right" th:if="NOT ${@userServiceImpl.isAdmin()}" th:text="${@regApplicationLogServiceImpl.getLogCount(0)}">0</div>-->
+<!--                                                                    <div class="title-count text-right"  th:text="${@regApplicationLogServiceImpl.getLogCount(0)}">0</div>-->
+                                                                    <div class="title-count text-right"  th:text="${@regApplicationServiceImpl.countNewRegApplication()}">0</div>
                                                                     <div class="subtitle text-right" th:utext="#{sys_dashboard.newApplication}">Количество новых заявок </div>
                                                                 </div>
                                                             </div>
@@ -60,7 +61,7 @@
                                                                     <img src="/static/images/icon/warning.svg" alt="">
                                                                 </div>
                                                                 <div class="info">
-                                                                    <div class="title-count text-right">0</div>
+                                                                    <div class="title-count text-right"  th:text="${@regApplicationServiceImpl.countDeadlineRegApplication()}">0</div>
                                                                     <div class="subtitle text-right" th:utext="#{sys_dashboard.expiringApplicationCount}">Количество заявок истекающие сроки </div>
                                                                 </div>
                                                             </div>

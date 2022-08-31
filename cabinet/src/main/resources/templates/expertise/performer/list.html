@@ -127,6 +127,13 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label" th:text="#{conclusion.category}">:</label><br/>
+                                                    <select id="regApplicationCategoryType" class="form-control">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="regApp : ${categoryList}" th:value="${regApp}" th:text="${@helperService.getTranslation(regApp.getName(),#locale)}"></option>
+                                                    </select>
+                                                </div>
 
                                                 <div class="form-group col-sm-12 text-right">
                                                     <a class="btn btn-primary text-white" onclick="getDatatableConnect(0);return false;">
@@ -300,7 +307,11 @@
             pageLength: 25,
             lengthMenu: [ [25, 500, 1000], [25, 500, 1000] ],
             order: [[5, 'desc']],
-            dom: 'lrtip',
+                dom: 'Blrtip',
+                buttons: [
+                    'excel'
+                ],
+                stateSave: true,
                 stateSave: true,
             ajax : function (dataToSend, callback, settings) {
                 var api = this.api();
@@ -321,6 +332,7 @@
                 dataToSend.deadlineDateBegin = $('#deadlineDateBegin').val();
                 dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
                 dataToSend.status = $('#status').val();
+                dataToSend.category=$('#regApplicationCategoryType').val();
                 dataToSend.statusing = filterTab;
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];
@@ -338,7 +350,7 @@
                 {data: 3, orderable:false},
                 {data: 4, name: 'category'},
                 {data: 5, name: 'registrationDate'},
-                {render: renderDeadlineDateColumn, name: 'deadlineDate',visible:false},
+                {render: renderDeadlineDateColumn,orderable: false},
                 {data: 7, render:renderAgreementStatusColumn, orderable:false},
                 {data: 9, render:renderLogStatusColumn, orderable:false},
                 {render: renderActionsColumn, orderable: false}
