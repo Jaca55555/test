@@ -27,7 +27,6 @@ public class RegUrls {
 
     public static final String RegApplicationWaiting = RegApplication + "/waiting";
     public static final String RegApplicationContract = RegApplication + "/contract";
-    public static final String RegApplicationChecking = RegApplication + "/checking";
     public static final String RegApplicationContractConfirm = RegApplication + "/contract/confirm";
     public static final String RegApplicationContractOfferDownload = RegApplication + "/contract/offer_download";
 

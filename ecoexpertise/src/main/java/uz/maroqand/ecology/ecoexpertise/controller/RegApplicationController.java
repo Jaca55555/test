@@ -207,7 +207,8 @@ public class RegApplicationController {
                     regApplication.getApplicant()!=null?regApplication.getApplicant().getName():" ",
                     regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():" ",
                     invoice != null && invoice.getInvoice()!=null?invoice.getInvoice(): " ",
-                    regApplication.getName()
+                    regApplication.getName(),
+                    regApplication.getDocumentFiles()
             });
         }
         result.put("data",convenientForJSONArray);
@@ -635,9 +636,9 @@ public class RegApplicationController {
             regApplication.setStatus(RegApplicationStatus.CheckSent);
         }
 
-        regApplication.setStep(RegApplicationStep.ChECKING);
+        regApplication.setStep(RegApplicationStep.WAITING);
         regApplicationService.update(regApplication);
-        return "redirect:" + RegUrls.RegApplicationChecking + "?id=" + id;
+        return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationWaiting,method = RequestMethod.GET)
@@ -697,83 +698,6 @@ public class RegApplicationController {
 
         return "redirect:" + RegUrls.RegApplicationContract + "?id=" + id;
     }
-
-    @RequestMapping(value = RegUrls.RegApplicationChecking)
-    public String viewPage(
-            @RequestParam(name = "id") Integer id,
-            Model model
-    ){
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if(regApplication == null){
-            /* toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");*/
-            regApplication = regApplicationService.getByIdAndUserTin(id,user);
-            if (regApplication==null){
-                return "redirect:" + RegUrls.RegApplicationList;
-            }
-        }
-
-        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
-            return "redirect:" + RegUrls.RegApplicationFourCategoryContract + "?id=" + id;
-        }
-
-        if (regApplication.getConfirmLogId()!=null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getConfirmLogId());
-            if(regApplicationLog.getStatus()!=LogStatus.Approved){
-                toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kutilyabdi.");
-                return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
-            }
-        }
-        if (regApplication.getConfirmLogId()==null){
-            toastrService.create(user.getId(), ToastrType.Warning, "Ruxsat yo'q.","Kiritilgan ma'lumotlar tasdiqlanishi kerak.");
-            return "redirect:" + RegUrls.RegApplicationWaiting + "?id=" + id;
-        }
-
-        if (regApplication.getPerformerLogId()!=null){
-            RegApplicationLog regApplicationLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-            if(regApplicationLog.getStatus() != LogStatus.Modification){
-                return "redirect:" + RegUrls.RegApplicationStatus + "?id=" + id;
-            }
-        }
-
-
-        Client applicant = clientService.getById(regApplication.getApplicantId());
-        switch (applicant.getType()){
-            case Individual:
-                model.addAttribute("individual", new IndividualDto(applicant)); break;
-            case LegalEntity:
-                model.addAttribute("legalEntity", new LegalEntityDto(applicant)) ;break;
-            case ForeignIndividual:
-                model.addAttribute("foreignIndividual", new ForeignIndividualDto(applicant)); break;
-            case IndividualEnterprise:
-                model.addAttribute("individualEntrepreneur", new IndividualEntrepreneurDto(applicant)); break;
-        }
-
-        Coordinate coordinate = coordinateRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplication.getId());
-        if(coordinate != null){
-            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinate.getId());
-            model.addAttribute("coordinate", coordinate);
-            model.addAttribute("coordinateLatLongList", coordinateLatLongList);
-        }
-
-        RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
-        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
-            regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
-        }
-        model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
-
-        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
-        model.addAttribute("applicant", applicant);
-        model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
-
-        List<RegApplicationLog> regApplicationLogList = regApplicationLogService.getByRegApplicationId(regApplication.getId());
-        model.addAttribute("regApplication",regApplication);
-        model.addAttribute("regApplicationLogList",regApplicationLogList);
-        return RegTemplates.RegApplicationChecking;
-    }
-
-
-
 
     @RequestMapping(value = RegUrls.RegApplicationContract,method = RequestMethod.GET)
     public String getContractPage(
@@ -894,14 +818,6 @@ public class RegApplicationController {
 
         return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
     }
-
-
-
-
-
-
-
-
 
     @RequestMapping(value = RegUrls.RegApplicationPrepayment)
     public String getPrepaymentPage(

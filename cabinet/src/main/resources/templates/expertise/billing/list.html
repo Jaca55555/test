@@ -50,7 +50,7 @@
                                         <div class="card-header" id="headingOne">
                                             <h5 class="mb-0"><a href="#!" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="collapsed" th:text="#{invoice.filters}">Collapsible Group Item #1</a></h5>
                                         </div>
-                                        <div id="collapseOne" class="card-body collapse" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
+                                        <div id="collapseOne" class="card-body collapse show" aria-labelledby="headingOne" data-parent="#accordionExample" style="">
                                             <form id="regIndividual" method="post" class="row">
                                                 <div class="form-group col-sm-2">
                                                     <label class="control-label"  th:text="#{sys_date_from}"></label><br/>
@@ -108,13 +108,18 @@
                                                         <option th:value="${subRegion.id}" th:text="${subRegion.getNameTranslation(#locale)}" th:each="subRegion : ${subRegionsList}" th:class="${'sr-'+subRegion.parentId}"></option>
                                                     </select>
                                                 </div>
+                                                <div class="form-group col-sm-2">
+                                                    <label for="organizationId" class="col-form-label" th:text="#{mgmt_position.organization}"></label>
+                                                    <select class="form-control singleSelect" id="organizationId" name="organizationId" required="">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.name}"></option>
+                                                    </select>
+                                                </div>
                                                 <div class="form-group col-sm-3">
                                                     <label for="regApplication" class="control-label" th:text="#{reg_application.id}">ИНН</label>
                                                     <input type="number" class="form-control"  id="regApplication" data-parsley-type="integer">
                                                 </div>
-                                                <div class="clearfix"></div>
-
-                                                <div class="col-sm-12 text-right">
+                                                <div class="col-sm-7 text-right">
                                                     <label class="control-label">&nbsp;</label><br/>
                                                     <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-info"><i class="feather icon-search"></i>
                                                         <span th:text="#{sys_search}">Поиск</span>
@@ -553,6 +558,7 @@
                 dataToSend.tin = $("#tin").val();
                 dataToSend.contract = $("#contract").val();
                 dataToSend.regApplication = $("#regApplication").val();
+                dataToSend.organizationId = $("#organizationId").val();
                 dataToSend._csrf = $("#global_csrf").val();
 
                 var order = api != undefined ? api.order() : [[1, 'desc']];

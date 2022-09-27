@@ -169,6 +169,7 @@ public class ForwardingController {
     @GetMapping(ExpertiseUrls.ForwardingView)
     public String getForwardingViewPage(
             @RequestParam(name = "id")Integer regApplicationId,
+            @RequestParam(name = "failed", required = false) Integer failed,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -179,7 +180,7 @@ public class ForwardingController {
 
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
-
+        model.addAttribute("failed", failed);
         model.addAttribute("regApplicationLog", regApplicationLogService.getById(regApplication.getForwardingLogId()));
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
@@ -261,7 +262,13 @@ public class ForwardingController {
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ForwardingList;
         }
+        List<RegApplicationLog> forwardingLogList = regApplicationLogService.getByRegApplicationIdAndType(id,LogType.Agreement);
+        System.out.println("forwardingLogList.size()"+forwardingLogList.size());
+        System.out.println("forwardingLogList.size()"+forwardingLogList.isEmpty());
+        if(forwardingLogList.isEmpty()){
+            return "redirect:"+ExpertiseUrls.ForwardingView + "?id="+id+"&failed=1";
 
+        }
         User performer = userService.findById(performerId);
         if (performer== null){
             return "redirect:" + ExpertiseUrls.ForwardingList;

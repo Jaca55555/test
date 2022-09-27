@@ -189,8 +189,18 @@ public class EDSLoginController {
             List<User> userList = userRepository.findByTin(tin);
             logger.info("Pinfl: {}", userEds.getPinfl());
             List<User> userListPinfl = userRepository.findAllByPinfl(userEds.getPinfl());
+            List<User> userListLeTin = userRepository.findAllByLeTin(userEds.getLeTin());
             if(userListPinfl.size()>0){
-                user.setUsername(userEds.getPinfl()+"_"+userListPinfl.size());
+                if(userEds.getPinfl()!=null){
+                    user.setUsername(userEds.getPinfl()+"_"+userListPinfl.size());
+                }else {
+                    if(userListLeTin.size()>0){
+                        user.setUsername(userEds.getLeTin().toString()+"_"+userListLeTin.size());
+                    }else {
+                        user.setUsername(userEds.getLeTin().toString());
+
+                    }
+                }
             }else {
                 user.setUsername(userEds.getPinfl());
             }

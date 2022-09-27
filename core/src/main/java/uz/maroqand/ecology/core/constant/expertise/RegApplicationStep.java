@@ -5,7 +5,6 @@ public enum RegApplicationStep {
     ABOUT,
     WAITING,
     CONTRACT,
-    ChECKING,
     PAYMENT,
     STATUS
 }

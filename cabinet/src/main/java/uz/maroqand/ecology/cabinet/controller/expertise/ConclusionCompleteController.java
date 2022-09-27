@@ -143,6 +143,34 @@ public class ConclusionCompleteController {
         return ExpertiseTemplates.ConclusionCompleteList;
     }
 
+    @RequestMapping(value = ExpertiseUrls.CheckConclusionNumber, produces = "application/json",method = RequestMethod.POST)
+    @ResponseBody
+    public HashMap<String, Object> getUsernameCheck(
+            @RequestParam(name = "docRegNumber", defaultValue = "", required = false) String regNumber,
+            @RequestParam(name = "id", required = false) Integer documentId
+    ) {
+        System.out.println("username="+regNumber + " userId=" + documentId);
+        Conclusion conclusion1=null;
+        if (documentId!=null){
+            conclusion1 = conclusionService.getById(documentId);
+        }
+        HashMap<String, Object> result = new HashMap<>();
+        Integer nameStatus ;
+
+        Conclusion document = conclusionService.findByConclusionNumber(regNumber);
+        System.out.println("document1"+conclusion1);
+        if(document==null){
+            nameStatus = 0;
+        }else {
+            nameStatus = 1;
+        }
+
+
+        result.put("nameStatus", nameStatus);
+        result.put("username", regNumber);
+        return result;
+    }
+
     @RequestMapping(value = ExpertiseUrls.ConclusionCompleteListAjax,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public HashMap<String,Object> getConclusionCompleteListAjax(

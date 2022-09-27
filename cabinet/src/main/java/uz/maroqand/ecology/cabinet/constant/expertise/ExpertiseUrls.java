@@ -293,6 +293,7 @@ public class ExpertiseUrls {
     public static final String ExpertiseRegApplicationList = ExpertiseRegApplication + "/list";
     public static final String ExpertiseRegApplicationListAjax = ExpertiseRegApplication + "/list_ajax";
     public static final String ExpertiseGetByUserId = ExpertiseRegApplication+"get_user";
+    public static final String CheckConclusionNumber = ExpertiseRegApplication+"/check_conclusion_number";
 
     private static final String ExpertiseRegApplicationMonitoring = ExpertiseReg + "/mntr/application";
     public static final String ExpertiseRegApplicationMonitoringList = ExpertiseRegApplicationMonitoring + "/list";

@@ -29,6 +29,7 @@ import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.ActivityService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.expertise.RequirementService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
@@ -52,9 +53,10 @@ public class BillingController {
     private final RegApplicationService regApplicationService;
     private final ActivityService activityService;
     private final ToastrService toastrService;
+    private final OrganizationService organizationService;
 
     @Autowired
-    public BillingController(InvoiceService invoiceService, HelperService helperService, UserService userService, SoatoService soatoService, PaymentService paymentService, ClientService clientService, RequirementService requirementService, RegApplicationService regApplicationService, ActivityService activityService, ToastrService toastrService){
+    public BillingController(InvoiceService invoiceService, HelperService helperService, UserService userService, SoatoService soatoService, PaymentService paymentService, ClientService clientService, RequirementService requirementService, RegApplicationService regApplicationService, ActivityService activityService, ToastrService toastrService, OrganizationService organizationService){
         this.invoiceService = invoiceService;
         this.helperService = helperService;
         this.userService = userService;
@@ -65,6 +67,7 @@ public class BillingController {
         this.regApplicationService = regApplicationService;
         this.activityService = activityService;
         this.toastrService = toastrService;
+        this.organizationService = organizationService;
     }
 
     @RequestMapping(ExpertiseUrls.BillingList)
@@ -73,6 +76,7 @@ public class BillingController {
         model.addAttribute("subRegionsList", soatoService.getSubRegions());
         model.addAttribute("isAdmin",userService.isAdmin());
         model.addAttribute("nol_url",ExpertiseUrls.BillingInvoiceIsNol);
+        model.addAttribute("organizationList", organizationService.getList());
         return ExpertiseTemplates.BillingList;
     }
 
@@ -92,6 +96,7 @@ public class BillingController {
             @RequestParam(name = "contract", required = false) String contract,
             @RequestParam(name = "regApplication", required = false) Integer regApplication,
             @RequestParam(name = "subRegionId", required = false) Integer subRegionId,
+            @RequestParam(name = "organizationId", required = false) Integer organizationId,
             Pageable pageable
     ){
         System.out.println("tin=======");
@@ -133,7 +138,7 @@ public class BillingController {
                 detail,
                 regionId,
                 subRegionId,
-                userService.isAdmin() || user.getRole().getId()==16 || user.getRole().getId()==23 ? null:user.getOrganizationId(),
+                organizationId!=null? organizationId: (userService.isAdmin() || user.getRole().getId()==16 || user.getRole().getId()==23 ? null:user.getOrganizationId()),
                 TinParser.trimIndividualsTinToNull(tin),
                 pageable
         );
