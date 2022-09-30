@@ -73,6 +73,9 @@ public class Offer {
     @Column(name = "tag_name")
     private String tagName;
 
+    @Column(name = "tag_short_name")
+    private String tagShortName;
+
     @Column(name = "document_repo_id")
     private Integer documentRepoId;
 

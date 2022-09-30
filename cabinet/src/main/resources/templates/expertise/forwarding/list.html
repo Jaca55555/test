@@ -103,6 +103,20 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-sm-3">
+                                                    <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                    <select id="organizationId" class="form-control">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-sm-3">
+                                                    <label class="control-label" th:text="#{conclusion.category}">:</label><br/>
+                                                    <select id="regApplicationCategoryType" class="form-control">
+                                                        <option value="" th:text="#{sys_select}"></option>
+                                                        <option th:each="regApp : ${regApplicationCategoryType}" th:value="${regApp}" th:text="${@helperService.getTranslation(regApp.getName(),#locale)}"></option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-sm-3">
                                                     <label for="objectId" class="control-label" th:text="#{sys_about.objectExpertise}"></label>
                                                     <select id="objectId" class="form-control">
                                                         <option value="" th:text="#{sys_select}"></option>
@@ -321,6 +335,7 @@
                 dataToSend.regDateEnd = $('#regDateEnd').val();
                 dataToSend.activityId = $('#activityId').val();
                 dataToSend.objectId = $('#objectId').val();
+                dataToSend.category=$('#regApplicationCategoryType').val();
                 dataToSend.deadlineDateBegin = $('#deadlineDateBegin').val();
                 dataToSend.deadlineDateEnd = $('#deadlineDateEnd').val();
                 dataToSend.status = $('#status').val();

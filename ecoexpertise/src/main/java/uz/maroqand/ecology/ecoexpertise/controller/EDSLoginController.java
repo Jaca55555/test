@@ -129,10 +129,10 @@ public class EDSLoginController {
         }
 
         //2-yur litso INN si keladi.
-        if (matcher.find()) {
-            logger.info("Pinfl: {}", matcher.group(1));
-            pinfl = matcher.group(1);
-        }
+//        if (matcher.find()) {
+//            logger.info("Pinfl: {}", matcher.group(1));
+//            pinfl = matcher.group(1);
+//        }
 
 
 
@@ -140,6 +140,7 @@ public class EDSLoginController {
          * Insert userIdGov
          * */
         UserEds userEds = new UserEds();
+
         String[] res = subjectName.split(",");
         for (String currentRes : res) {
             String[] r = currentRes.split("=");

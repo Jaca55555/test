@@ -110,6 +110,7 @@ public class AgreementCompleteController {
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
         model.addAttribute("statusList", logStatusList);
+        model.addAttribute("regApplicationCategoryType", Category.getCategoryList());
         return ExpertiseTemplates.AgreementCompleteList;
     }
 

@@ -155,6 +155,7 @@ public class ConclusionController {
         Set<RegApplicationStatus> statuses = new HashSet<>();
         statuses.add(RegApplicationStatus.Approved);
         statuses.add(RegApplicationStatus.NotConfirmed);
+        statuses.add(RegApplicationStatus.Modification);
         filterDto.setStatusForReg(statuses);
         filterDto.setConclusionOnline(Boolean.FALSE);
         System.out.println(filterDto);

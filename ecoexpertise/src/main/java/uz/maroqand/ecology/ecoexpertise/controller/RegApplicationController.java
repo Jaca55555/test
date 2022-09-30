@@ -753,7 +753,8 @@ public class RegApplicationController {
             offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
             model.addAttribute("action_url", RegUrls.RegApplicationContractConfirm);
         }
-
+        model.addAttribute("client",regApplication.getApplicant());
+        model.addAttribute("offerBool",regApplication.getOfferId()!=null);
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("offer", offer);
         model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal());
@@ -1003,6 +1004,8 @@ public class RegApplicationController {
         model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
         model.addAttribute("offer", offer);
         model.addAttribute("invoice", invoice);
+        model.addAttribute("client",regApplication.getApplicant());
+        model.addAttribute("offerBool",regApplication.getOfferId()!=null);
         model.addAttribute("facture", factureService.getById(regApplication.getFactureId()));
         model.addAttribute("factureProductList", factureService.getByFactureId(regApplication.getFactureId()));
         model.addAttribute("regApplication", regApplication);

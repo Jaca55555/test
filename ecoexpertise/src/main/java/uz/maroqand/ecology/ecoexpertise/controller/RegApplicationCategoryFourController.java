@@ -178,13 +178,13 @@ public class RegApplicationCategoryFourController {
             @RequestParam(name = "id") Integer id
     ) {
         User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+        RegApplication regApplication = regApplicationService.getById(id);
         if(regApplication == null){
-            regApplication = regApplicationService.getByIdAndUserTin(id,user);
-            if (regApplication==null){
-                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
-                return RegListRedirect;
-            }
+//            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+//            if (regApplication==null){
+//                toastrService.create(user.getId(), ToastrType.Error, "Ruxsat yo'q.","Ariza boshqa foydalanuvchiga tegishli.");
+//                return RegListRedirect;
+//            }
         }
 
         if (regApplication.getRegApplicationCategoryType()==null || regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.oneToTree)){
