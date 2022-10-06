@@ -44,50 +44,7 @@
                                             <!--                                            </div>-->
                                             <div class="row">
                                                 <div class="col-sm">
-                                                    <table class="table-bordered"  th:utext="#{'contract_'+ ${offer.tagName}}">
-<!--                                                        <thead>-->
-<!--                                                        <tr>-->
-<!--                                                            <th colspan="2"> Podpisan ETSP kluchom</th>-->
-<!--                                                        </tr>-->
-<!--                                                        </thead>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>address</th>-->
-<!--                                                            <td> amir temur</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>tel</th>-->
-<!--                                                            <td>+998 99 798 45 46</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>р/с:</th>-->
-<!--                                                            <td>2021 0000 0001 1801 4007</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>Bank</th>-->
-<!--                                                            <td>в «Узсаноаткурилишбанк»-->
-<!--                                                                Яшнабадский филиал-->
-<!--                                                            </td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>МФО:</th>-->
-<!--                                                            <td>00432</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>город:</th>-->
-<!--                                                            <td>Ташкент</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>ИНН:</th>-->
-<!--                                                            <td>200934834</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th>ОКЭД:</th>-->
-<!--                                                            <td>71200</td>-->
-<!--                                                        </tr>-->
-<!--                                                        <tr>-->
-<!--                                                            <th colspan="2"> <span th:text="#{sys_authenticated_by_etsp}"></span></th>-->
-<!--                                                        </tr>-->
-                                                    </table>
+                                                    <div style="text-align: justify"  th:if="${offer.tagShortName!=null}" th:utext="#{${offer.tagShortName}}"></div>
                                                 </div>
                                                 <div class="col-sm">
                                                     <table class="table-bordered">
