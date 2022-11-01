@@ -17,5 +17,6 @@ public class Common {
     private static String pattern = "######.###";
     public static  DecimalFormat decimalFormat = new DecimalFormat(pattern);
     public static final String RESPONSE_OK = "OK";
+    public static final String TemporaryExcelFiles = "excels/";
 
 }

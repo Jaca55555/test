@@ -121,4 +121,6 @@ public class ExpertiseTemplates {
     public static final String AgreeList = Agree + "/list";
     public static final String AgreeView = Agree + "/view";
 
+    public static final String OrderedDocsList = Prefix +"/ordered_docs/list";
+    public static final String MntrOrderedDocsList = Prefix + "/ordered_docs/mntr_list";
 }

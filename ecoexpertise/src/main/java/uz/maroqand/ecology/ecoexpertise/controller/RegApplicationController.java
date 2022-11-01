@@ -863,60 +863,60 @@ public class RegApplicationController {
     }
 
 
-    @RequestMapping(value = RegUrls.RegApplicationPaymentSendSms)
-    @ResponseBody
-    public Map<String,Object> sendSmsPayment(
-            @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "telephone") String telephone,
-            @RequestParam(name = "cardNumber") String cardNumber,
-            @RequestParam(name = "cardMonth") String cardMonth,
-            @RequestParam(name = "cardYear") String cardYear
-    ) {
-        System.out.println("id=" + id);
-        System.out.println("telephone=" + telephone);
-        System.out.println("cardNumber=" + cardNumber);
-        System.out.println("cardMonth=" + cardMonth);
-        System.out.println("cardYear=" + cardYear);
-        String failUrl = RegUrls.RegApplicationPaymentSendSms;
-        String successUrl = RegUrls.RegApplicationPaymentConfirmSms;
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if (regApplication==null){
-            regApplication = regApplicationService.getByIdAndUserTin(id,user);
-        }
-        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+//    @RequestMapping(value = RegUrls.RegApplicationPaymentSendSms)
+//    @ResponseBody
+//    public Map<String,Object> sendSmsPayment(
+//            @RequestParam(name = "id") Integer id,
+//            @RequestParam(name = "telephone") String telephone,
+//            @RequestParam(name = "cardNumber") String cardNumber,
+//            @RequestParam(name = "cardMonth") String cardMonth,
+//            @RequestParam(name = "cardYear") String cardYear
+//    ) {
+//        System.out.println("id=" + id);
+//        System.out.println("telephone=" + telephone);
+//        System.out.println("cardNumber=" + cardNumber);
+//        System.out.println("cardMonth=" + cardMonth);
+//        System.out.println("cardYear=" + cardYear);
+//        String failUrl = RegUrls.RegApplicationPaymentSendSms;
+//        String successUrl = RegUrls.RegApplicationPaymentConfirmSms;
+//        User user = userService.getCurrentUserFromContext();
+//        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+//        if (regApplication==null){
+//            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+//        }
+//        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+//
+//        return paymentService.sendSmsPaymentAndGetResponseMap(
+//                invoice,
+//                telephone,
+//                cardNumber,
+//                cardMonth,
+//                cardYear,
+//                successUrl,
+//                failUrl
+//        );
+//    }
 
-        return paymentService.sendSmsPaymentAndGetResponseMap(
-                invoice,
-                telephone,
-                cardNumber,
-                cardMonth,
-                cardYear,
-                successUrl,
-                failUrl
-        );
-    }
-
-    @RequestMapping(value = RegUrls.RegApplicationPaymentConfirmSms)
-    @ResponseBody
-    public Map<String, Object> confirmSmsPayment(
-            @RequestParam(name = "id") Integer applicationId,
-            @RequestParam(name = "trId") Integer trId,
-            @RequestParam(name = "paymentId") Integer paymentId,
-            @RequestParam(name = "confirmSms") String confirmSms
-    ) {
-        String successUrl = RegUrls.RegApplicationStatus+ "?id=" + applicationId;
-        String failUrl = RegUrls.RegApplicationPaymentConfirmSms;
-
-        return paymentService.confirmSmsAndGetResponseAsMap(
-                applicationId,
-                paymentId,
-                trId,
-                confirmSms,
-                successUrl,
-                failUrl
-        );
-    }
+//    @RequestMapping(value = RegUrls.RegApplicationPaymentConfirmSms)
+//    @ResponseBody
+//    public Map<String, Object> confirmSmsPayment(
+//            @RequestParam(name = "id") Integer applicationId,
+//            @RequestParam(name = "trId") Integer trId,
+//            @RequestParam(name = "paymentId") Integer paymentId,
+//            @RequestParam(name = "confirmSms") String confirmSms
+//    ) {
+//        String successUrl = RegUrls.RegApplicationStatus+ "?id=" + applicationId;
+//        String failUrl = RegUrls.RegApplicationPaymentConfirmSms;
+//
+//        return paymentService.confirmSmsAndGetResponseAsMap(
+//                applicationId,
+//                paymentId,
+//                trId,
+//                confirmSms,
+//                successUrl,
+//                failUrl
+//        );
+//    }
 
     @RequestMapping(value = RegUrls.RegApplicationPaymentFree)
     public String getPaymentFreeMethod(

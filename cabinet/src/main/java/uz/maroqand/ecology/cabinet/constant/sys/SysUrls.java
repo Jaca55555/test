@@ -34,4 +34,5 @@ public class SysUrls {
     public static final String GetCaptcha = Repository + "/captcha";
     public static final String SelectLang = Prefix + "/select_lang";
 
+    public static final String RegApplicationExcel = Prefix + "/regApplication_excel";
 }

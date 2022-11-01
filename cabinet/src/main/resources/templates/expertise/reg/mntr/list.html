@@ -123,6 +123,10 @@
                                                             <span th:text="#{sys_search}">Search</span>
                                                         </a>
                                                     </div>
+                                                    <a onclick="getDatatableExcelConnect();return false;" id="excelExport" class="btn btn-info btn-sm">
+                                                        <i class="fa fa-cloud-download"></i>
+                                                        <span th:text="#{sys_excel_download}"></span>
+                                                    </a>
                                                 </form>
                                             </div>
                                         </div>
@@ -185,6 +189,26 @@
         }
     </script>
     <script th:inline="javascript">
+
+        var excelAjaxRequestLink = [[${T(uz.sspm.NNO.constant.sys.SysUrls).RegApplicationExcel}]];
+        var sysExcelDownload = [[#{sys_excel_download}]];
+
+
+        function getDatatableExcelConnect(){
+            $("#excelExport").html('<i class="fa fa-spinner fa-pulse  fa-fw"></i> <span>Loading...</span>');
+
+            var dataToSend = {};
+            dataToSend.beginDate = $("#dateBegin").val();
+            dataToSend.endDate = $("#dateEnd").val();
+            dataToSend.registryDepartment = $('#registryDepartment').val();
+            dataToSend.regionId = $('#regionId').val();
+
+            $.get(excelAjaxRequestLink, dataToSend, function(data){
+                if (data.message != undefined) alert(data.message);
+                $("#excelExport").html('<i class="fa fa-cloud-download"></i> <span >'+sysExcelDownload+'</span>');
+            });
+
+        }
         /*<![CDATA[*/
         var dataDatatableSelector;
         var thead;

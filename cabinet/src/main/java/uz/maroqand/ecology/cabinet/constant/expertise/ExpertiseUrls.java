@@ -7,6 +7,8 @@ package uz.maroqand.ecology.cabinet.constant.expertise;
  */
 public class ExpertiseUrls {
     private static final String Prefix = "/expertise";
+
+    private static final String OrderDocs = Prefix + "/order";
     private static final String  ExpertiseReg = Prefix + "/reg";
 
     public static final String InvoiceModification = Prefix + "/invoice_modification";
@@ -318,4 +320,9 @@ public class ExpertiseUrls {
     public static final String AgreeListAjax = Agree + "/list_ajax";
     public static final String AgreeView = Agree + "/view";
     public static final String AgreeSee = Agree + "/see";
+    public static final String OrderedDocsList = OrderDocs + "/list";
+    public static final String OrderedDocsListAjax  = OrderDocs + "/list_ajax";
+    public static final String OrderedDocsDownload = OrderDocs + "/download";
+    public static final String MonitoringOrderedDocs = OrderDocs + "/monitoring";
+    public static final String MonitoringOrderedDocsListAjax = OrderDocs + "/monitoring_ajax";
 }

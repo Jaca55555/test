@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <object th:include="fragments/includes_top :: head" th:remove="tag" />
+</head>
+<body class="sidebar-mini rtl" >
+        <div th:replace="fragments/header :: header"></div>
+        <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+        <div th:replace="fragments/main_menu :: main_menu"></div>
+
+        <main class="app-content">
+            <div class="tile mb-4">
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h3 class="mb-3 line-head" id="buttons">
+                                <i class="fa fa-th-list"></i>
+                                <span th:text="#{sys_ordered_docs_list}"></span>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-striped dataTable" id="example1">
+                            <thead>
+                            <tr>
+                                <th>№</th>
+                                <th th:text="#{sys_documentOrders.type}">ИНН</th>
+                                <th th:text="#{sys_documentOrders.registeredAt}">ОПФ</th>
+                                <th th:text="#{sys_documentOrders.status}"></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+<!-- /page content -->
+ <div th:include="fragments/includes_bottom :: includes_bottom" th:remove="tag"/>
+
+
+<!--/* CONFIRM DELETE MODAL */-->
+        <script th:src="@{/static/datatables/jquery.dataTables.min.js}"></script>
+        <script th:src="@{/static/datatables/dataTables.bootstrap.min.js}"></script>
+        <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+<script th:inline="javascript">
+    var legalEntitiesAjaxRequestLink = [[${ajax_link}]];
+    var downloadLink = [[${download_link}]];
+
+    function getCurrentLanguage() {
+        return [[__${#locale}__]];
+    }
+    var statusPending = [[#{sys_documentOrders.statusPending}]];
+    var statusInProgress = [[#{sys_documentOrders.statusInProgress}]];
+    var statusSuccessful = [[#{sys_documentOrders.statusSuccessful}]];
+    var statusFailed = [[#{sys_documentOrders.statusFailed}]];
+    var sys_download = [[#{sys_download}]];
+</script>
+ <script th:inline="none">
+    //<![CDATA[
+    var legalEntitiesDatatableSelector;
+    var thead;
+
+    function renderStatusColumn(data, type, row, meta) {
+        var html='';
+        switch (data) {
+            case 0:
+                html = '<span class="label label-default">' + statusPending + '</span>';
+                break;
+            case 1:
+                html = '<span class="label label-info">' + statusInProgress + '</span>';
+                break;
+            case 2:
+                html = '<span class="label label-success">' + statusSuccessful + '</span>';
+                break;
+            case 3:
+                html = '<span class="label label-danger">' + statusFailed + '</span>';
+                break;
+        }
+        return html;
+    }
+
+    function renderDownloadColumn(data, type, row, meta) {
+        if(data && row[3]==2) {
+            var currentDownloadLink = downloadLink + '?id=' + row[0];
+            return '<a class="btn btn-xs btn-default" href="' + currentDownloadLink + '"><i class="fa fa-download"></i> ' + sys_download + '</a>';
+        } else {
+            return'';
+        }
+    }
+
+    function datatableConnect(){
+        legalEntitiesDatatableSelector.DataTable({
+            processing: true,
+            serverSide: true,
+            scrollX: true,
+            pageLength: 25,
+            order: [[0, 'desc']],
+            dom: 'lrtip',
+            columns: [
+                {data: 0, name: 'id'},
+                {data: 1, name: 'type'},
+                {data: 2, name: 'registeredAt'},
+                {render: renderStatusColumn, name: 'status'},
+                {render: renderDownloadColumn, orderable: false},
+            ],
+
+            ajax : function (dataToSend, callback, settings) {
+                var api = this.api();
+                var jqTable = $(api.table().node());
+
+                dataToSend.page = api != undefined ? api.page() : 0;
+                dataToSend.size = api != undefined ? api.page.len() : 25;
+
+                var order = api != undefined ? api.order() : [[1, 'desc']];
+                dataToSend.sort = dataToSend.columns[order[0][0]].name + ',' + order[0][1];
+
+                $.get(legalEntitiesAjaxRequestLink, dataToSend, function(data){
+                    callback(data);
+                });
+            },
+            language: {
+                'url': '/static/datatables/lang_' + getCurrentLanguage() + '.json'
+            }
+        });
+        legalEntitiesDatatableSelector.css('width', '100%');
+    }
+
+    $(document).ready(function () {
+        legalEntitiesDatatableSelector = $('#example1');
+        thead = legalEntitiesDatatableSelector.html();
+        datatableConnect();
+    });
+
+    $('#example1').css("width", "100%");
+    //]]>
+</script>
+
+</body>
+</html>

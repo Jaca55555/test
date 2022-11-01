@@ -1944,61 +1944,61 @@ public class RegApplicationCategoryFourController {
         return ExpertiseTemplates.ExpertiseRegApplicationFourCategoryPrepayment;
     }
 
-    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms)
-    @ResponseBody
-    public Map<String,Object> sendSmsPayment(
-            @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "telephone") String telephone,
-            @RequestParam(name = "cardNumber") String cardNumber,
-            @RequestParam(name = "cardMonth") String cardMonth,
-            @RequestParam(name = "cardYear") String cardYear
-    ) {
-        System.out.println("id=" + id);
-        System.out.println("telephone=" + telephone);
-        System.out.println("cardNumber=" + cardNumber);
-        System.out.println("cardMonth=" + cardMonth);
-        System.out.println("cardYear=" + cardYear);
-        String failUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms;
-        String successUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentConfirmSms;
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        if (regApplication==null){
-            regApplication = regApplicationService.getByIdAndUserTin(id,user);
-        }
-        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+//    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms)
+//    @ResponseBody
+//    public Map<String,Object> sendSmsPayment(
+//            @RequestParam(name = "id") Integer id,
+//            @RequestParam(name = "telephone") String telephone,
+//            @RequestParam(name = "cardNumber") String cardNumber,
+//            @RequestParam(name = "cardMonth") String cardMonth,
+//            @RequestParam(name = "cardYear") String cardYear
+//    ) {
+//        System.out.println("id=" + id);
+//        System.out.println("telephone=" + telephone);
+//        System.out.println("cardNumber=" + cardNumber);
+//        System.out.println("cardMonth=" + cardMonth);
+//        System.out.println("cardYear=" + cardYear);
+//        String failUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentSendSms;
+//        String successUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentConfirmSms;
+//        User user = userService.getCurrentUserFromContext();
+//        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+//        if (regApplication==null){
+//            regApplication = regApplicationService.getByIdAndUserTin(id,user);
+//        }
+//        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+//
+//        return paymentService.sendSmsPaymentAndGetResponseMap(
+//                invoice,
+//                telephone,
+//                cardNumber,
+//                cardMonth,
+//                cardYear,
+//                successUrl,
+//                failUrl
+//        );
+//    }
 
-        return paymentService.sendSmsPaymentAndGetResponseMap(
-                invoice,
-                telephone,
-                cardNumber,
-                cardMonth,
-                cardYear,
-                successUrl,
-                failUrl
-        );
-    }
 
-
-    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentConfirmSms)
-    @ResponseBody
-    public Map<String, Object> confirmSmsPayment(
-            @RequestParam(name = "id") Integer applicationId,
-            @RequestParam(name = "trId") Integer trId,
-            @RequestParam(name = "paymentId") Integer paymentId,
-            @RequestParam(name = "confirmSms") String confirmSms
-    ) {
-        String successUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus+ "?id=" + applicationId;
-        String failUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentConfirmSms;
-
-        return paymentService.confirmSmsAndGetResponseAsMap(
-                applicationId,
-                paymentId,
-                trId,
-                confirmSms,
-                successUrl,
-                failUrl
-        );
-    }
+//    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentConfirmSms)
+//    @ResponseBody
+//    public Map<String, Object> confirmSmsPayment(
+//            @RequestParam(name = "id") Integer applicationId,
+//            @RequestParam(name = "trId") Integer trId,
+//            @RequestParam(name = "paymentId") Integer paymentId,
+//            @RequestParam(name = "confirmSms") String confirmSms
+//    ) {
+//        String successUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryStatus+ "?id=" + applicationId;
+//        String failUrl = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentConfirmSms;
+//
+//        return paymentService.confirmSmsAndGetResponseAsMap(
+//                applicationId,
+//                paymentId,
+//                trId,
+//                confirmSms,
+//                successUrl,
+//                failUrl
+//        );
+//    }
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationFourCategoryPaymentFree)
     public String getPaymentFreeMethod(
             @RequestParam(name = "id",required = false) Integer id

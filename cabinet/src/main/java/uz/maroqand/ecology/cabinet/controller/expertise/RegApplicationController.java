@@ -712,52 +712,52 @@ public class RegApplicationController {
         return ExpertiseTemplates.ExpertiseRegApplicationPrepayment;
     }
 
-    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationPaymentSendSms)
-    @ResponseBody
-    public Map<String,Object> sendExpertiseRegApplicationPaymentSendSms(
-            @RequestParam(name = "id") Integer id,
-            @RequestParam(name = "telephone") String telephone,
-            @RequestParam(name = "cardNumber") String cardNumber,
-            @RequestParam(name = "cardMonth") String cardMonth,
-            @RequestParam(name = "cardYear") String cardYear
-    ) {
-        String failUrl = ExpertiseUrls.ExpertiseRegApplicationPaymentSendSms;
-        String successUrl = ExpertiseUrls.ExpertiseRegApplicationPaymentConfirmSms;
-        User user = userService.getCurrentUserFromContext();
-        RegApplication regApplication = regApplicationService.getById(id, user.getId());
-        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+//    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationPaymentSendSms)
+//    @ResponseBody
+//    public Map<String,Object> sendExpertiseRegApplicationPaymentSendSms(
+//            @RequestParam(name = "id") Integer id,
+//            @RequestParam(name = "telephone") String telephone,
+//            @RequestParam(name = "cardNumber") String cardNumber,
+//            @RequestParam(name = "cardMonth") String cardMonth,
+//            @RequestParam(name = "cardYear") String cardYear
+//    ) {
+//        String failUrl = ExpertiseUrls.ExpertiseRegApplicationPaymentSendSms;
+//        String successUrl = ExpertiseUrls.ExpertiseRegApplicationPaymentConfirmSms;
+//        User user = userService.getCurrentUserFromContext();
+//        RegApplication regApplication = regApplicationService.getById(id, user.getId());
+//        Invoice invoice = invoiceService.getInvoice(regApplication.getInvoiceId());
+//
+//        return paymentService.sendSmsPaymentAndGetResponseMap(
+//                invoice,
+//                telephone,
+//                cardNumber,
+//                cardMonth,
+//                cardYear,
+//                successUrl,
+//                failUrl
+//        );
+//    }
 
-        return paymentService.sendSmsPaymentAndGetResponseMap(
-                invoice,
-                telephone,
-                cardNumber,
-                cardMonth,
-                cardYear,
-                successUrl,
-                failUrl
-        );
-    }
-
-    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationPaymentConfirmSms)
-    @ResponseBody
-    public Map<String, Object> expertiseRegApplicationPaymentConfirmSms(
-            @RequestParam(name = "id") Integer applicationId,
-            @RequestParam(name = "trId") Integer trId,
-            @RequestParam(name = "paymentId") Integer paymentId,
-            @RequestParam(name = "confirmSms") String confirmSms
-    ) {
-        String successUrl = ExpertiseUrls.ExpertiseRegApplicationStatus+ "?id=" + applicationId;
-        String failUrl = ExpertiseUrls.ExpertiseRegApplicationPaymentConfirmSms;
-
-        return paymentService.confirmSmsAndGetResponseAsMap(
-                applicationId,
-                paymentId,
-                trId,
-                confirmSms,
-                successUrl,
-                failUrl
-        );
-    }
+//    @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationPaymentConfirmSms)
+//    @ResponseBody
+//    public Map<String, Object> expertiseRegApplicationPaymentConfirmSms(
+//            @RequestParam(name = "id") Integer applicationId,
+//            @RequestParam(name = "trId") Integer trId,
+//            @RequestParam(name = "paymentId") Integer paymentId,
+//            @RequestParam(name = "confirmSms") String confirmSms
+//    ) {
+//        String successUrl = ExpertiseUrls.ExpertiseRegApplicationStatus+ "?id=" + applicationId;
+//        String failUrl = ExpertiseUrls.ExpertiseRegApplicationPaymentConfirmSms;
+//
+//        return paymentService.confirmSmsAndGetResponseAsMap(
+//                applicationId,
+//                paymentId,
+//                trId,
+//                confirmSms,
+//                successUrl,
+//                failUrl
+//        );
+//    }
 
     @RequestMapping(value = ExpertiseUrls.ExpertiseRegApplicationPaymentFree)
     public String expertiseRegApplicationPaymentFree(

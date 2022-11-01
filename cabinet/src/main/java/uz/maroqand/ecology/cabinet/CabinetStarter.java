@@ -15,6 +15,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import uz.maroqand.ecology.cabinet.config.WebMVCConfigs;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
+import uz.maroqand.ecology.core.constant.order.DocumentOrderType;
+import uz.maroqand.ecology.core.service.DocumentOrdersService;
+import uz.maroqand.ecology.core.service.RegApplicationExcelService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.ToastrService;
 import uz.maroqand.ecology.docmanagement.service.DocumentHelperService;
@@ -46,6 +49,16 @@ public class CabinetStarter {
         DatabaseMessageSource messageSource = (DatabaseMessageSource) webMVCConfigs.messageSource();
         HelperService.setTranslationsSource(messageSource);
         DocumentHelperService.setTranslationsSource(messageSource);
+
+        DocumentOrdersService documentOrdersService = applicationContext.getBean(DocumentOrdersService.class);
+
+        RegApplicationExcelService reportOnActivitiesService  = applicationContext.getBean(RegApplicationExcelService.class);
+        documentOrdersService.registerPerformer(DocumentOrderType.RegApplication, reportOnActivitiesService);
+        documentOrdersService.registerPerformer(DocumentOrderType.NonprofitType, reportOnActivitiesService);
+        documentOrdersService.registerPerformer(DocumentOrderType.NonprofitName, reportOnActivitiesService);
+        documentOrdersService.startWorkingOnOrders();
+
+
 
         ToastrService toastrService = applicationContext.getBean(ToastrService.class);
         toastrService.initialization();
