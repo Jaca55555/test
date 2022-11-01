@@ -76,7 +76,7 @@ public class OrderedDocumentsController {
             System.out.println();
             convenientForJSONArray.add(new Object[]{
                     documentOrder.getId(),
-                    databaseMessageSource.resolveCodeSimply("sys_documentOrders.type" + documentOrder.getType().name(), locale),
+                   null,
                     documentOrder.getRegisteredAt() != null ? Common.uzbekistanDateAndTimeFormat.format(documentOrder.getRegisteredAt()) : "",
                     documentOrder.getStatus().ordinal(),
                     documentOrdersService.isDownloadable(documentOrder)

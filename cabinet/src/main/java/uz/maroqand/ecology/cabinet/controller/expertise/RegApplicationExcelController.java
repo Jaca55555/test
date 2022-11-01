@@ -2,6 +2,7 @@ package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,7 +17,7 @@ import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.Date;
 import java.util.Map;
-
+@Controller
 public class RegApplicationExcelController {
 
     private final UserService userService;
@@ -58,7 +59,7 @@ public class RegApplicationExcelController {
         RegApplicationExcelOrder documentOrder = new RegApplicationExcelOrder();
         documentOrder.setBeginDate(dateBegin);
         documentOrder.setEndDate(dateEnd);
-
+        System.out.println("documentOrder"+documentOrder);
 
         boolean queued = documentOrdersService.orderDocument(documentOrder, user, locale);
         return documentOrdersService.getFrontendResponseForOrder(queued,locale);

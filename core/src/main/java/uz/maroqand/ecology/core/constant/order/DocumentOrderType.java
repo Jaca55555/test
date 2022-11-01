@@ -7,14 +7,14 @@ package uz.maroqand.ecology.core.constant.order;
  */
 public enum DocumentOrderType {
 
-    //Department
+    //Arizalar
     RegApplication,
 
     //NNT turi
-    NonprofitType,
+    Invoice,
 
-    //NNT nomi
-    NonprofitName
+    //To'lovlar jurnali
+    Payment
 
 
 }

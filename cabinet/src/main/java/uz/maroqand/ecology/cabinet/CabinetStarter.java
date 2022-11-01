@@ -54,9 +54,11 @@ public class CabinetStarter {
 
         RegApplicationExcelService reportOnActivitiesService  = applicationContext.getBean(RegApplicationExcelService.class);
         documentOrdersService.registerPerformer(DocumentOrderType.RegApplication, reportOnActivitiesService);
-        documentOrdersService.registerPerformer(DocumentOrderType.NonprofitType, reportOnActivitiesService);
-        documentOrdersService.registerPerformer(DocumentOrderType.NonprofitName, reportOnActivitiesService);
+        documentOrdersService.registerPerformer(DocumentOrderType.Invoice, reportOnActivitiesService);
+        documentOrdersService.registerPerformer(DocumentOrderType.Payment, reportOnActivitiesService);
         documentOrdersService.startWorkingOnOrders();
+
+
 
 
 
