@@ -82,7 +82,7 @@ public class DocumentOrdersService {
         keepWorking = false;
     }
 
-    public boolean orderDocument(DocumentOrderParams orderedDocumentData, User author, String locale) {
+    public boolean orderDocument(DocumentOrderParams orderedDocumentData,DocumentOrderType type, User author, String locale) {
         if (!usersToOrdersMap.containsKey(author.getId())) usersToOrdersMap.put(author.getId(), 0);
         if (usersToOrdersMap.get(author.getId()) > 0) {
             //Aktiv zakazi bor
@@ -93,7 +93,7 @@ public class DocumentOrdersService {
         DocumentOrder documentOrder = new DocumentOrder();
         documentOrder.setOrderedBy(author);
         documentOrder.setRegisteredAt(new Date());
-        documentOrder.setType(orderedDocumentData.getType());
+        documentOrder.setType(type);
         documentOrder.setStatus(DocumentOrderStatus.Pending);
         documentOrder.setParams(gson.toJson(orderedDocumentData));
         documentOrder.setLocale(locale);

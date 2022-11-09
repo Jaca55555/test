@@ -14,7 +14,10 @@ public enum DocumentOrderType {
     Invoice,
 
     //To'lovlar jurnali
-    Payment
+    Payment,
+    Other,
+    Performer,
+    Deadline
 
 
 }

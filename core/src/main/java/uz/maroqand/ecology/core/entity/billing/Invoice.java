@@ -40,7 +40,7 @@ public class Invoice {
     private String payerName;
 
     /*  payee       */
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payee_id", updatable = false, insertable = false)
     private Organization payee;
 

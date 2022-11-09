@@ -15,7 +15,9 @@ import org.hibernate.annotations.TypeDefs;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.sys.File;
+import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.sys.Soato;
+import uz.maroqand.ecology.core.entity.user.User;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -68,9 +70,9 @@ public class RegApplication {
     private RegApplicationCategoryType regApplicationCategoryType;
 
     //Объект экспертизы
-    /*@OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "object_id", insertable = false, updatable = false)
-    private ObjectExpertise object;*/
+    private ObjectExpertise object;
 
     @Column(name = "object_id")
     private Integer objectId;
@@ -183,9 +185,9 @@ public class RegApplication {
     private Integer invoiceId;
 
     //Ko'rib chiquvchi tashkilot
-    /*@OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "review_id", insertable = false, updatable = false)
-    private Organization review;*/
+    private Organization review;
 
     @Column(name = "review_id")
     private Integer reviewId;
@@ -195,9 +197,9 @@ public class RegApplication {
     private Integer logIndex;
 
     //Исполнитель
-    /*@OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "performer_id", insertable = false, updatable = false)
-    private User performer;*/
+    private User performer;
 
     @Column(name = "performer_id")
     private Integer performerId;

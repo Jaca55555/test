@@ -6,6 +6,8 @@
     <!-- Bootstrap datetimepicker css -->
     <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
     <link rel="stylesheet" th:href="@{/static/modal-window-effects/css/md-modal.css}">
+    <link rel="stylesheet" href="/static/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.min.css">
+
     <style>
         .table td, .table th{
             white-space: pre-line;
@@ -52,13 +54,13 @@
                                             </div>
                                             <div class="form-group col-sm-3">
                                                 <label class="control-label" th:text="#{appeal.dateEnd}">:</label><br/>
-                                                <input type="text" id="dateEnd" class="form-control datepicker" autocomplete="off" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
+                                                <input type="text" id="dateEnd" class="form-control datepicker"  autocomplete="off" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
                                             </div>
                                             <div class="form-group col-sm-3">
                                                 <label th:text="#{appeal.type}">English</label>
                                                 <select class="form-control" id="type">
                                                     <option value="" th:text="#{sys_select_appeal_type}" selected="selected"></option>
-                                                    <option th:each="type : ${appealTypeList}" th:value="${type.getId()}" th:text="${type.getName()}"></option>
+                                                    <option th:each="type : ${appealTypeList}" th:value="${type}" th:text="${type}"></option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-sm-3">
@@ -76,14 +78,18 @@
                                                 <input type="text" class="form-control" id="title" placeholder="title" autocomplete="off">
                                             </div>
 
-                                            <div class="form-group col-sm-3">
-                                                <label class="control-label">&nbsp;</label></br>
-                                                <div>
-                                                    <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-outline-primary"><i class="feather icon-search"></i>
-                                                        <span th:text="#{sys_search}">Поиск</span>
-                                                    </a>
-                                                </div>
-                                            </div>
+<!--                                            <div class="form-group col-sm-3">-->
+<!--                                                <label class="control-label">&nbsp;</label></br>-->
+<!--                                                <div>-->
+<!--                                                    <a href="#" onclick="getDatatableConnect();return false;" class="btn btn-outline-primary"><i class="feather icon-search"></i>-->
+<!--                                                        <span th:text="#{sys_search}">Поиск</span>-->
+<!--                                                    </a>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+                                            <a onclick="getDatatableExcelConnect();return false;" id="excelExport" class="btn btn-info btn-sm">
+                                                <i class="fa fa-cloud-download"></i>
+                                                <span th:text="#{sys_excel_download}"></span>
+                                            </a>
                                         </div>
 
                                         <div class="table-responsive break-word" id="result" >
@@ -118,10 +124,14 @@
 <script type="text/javascript"  src="/static/datatables/jquery.spring-friendly.min.js"></script>
 <script type="text/javascript" src="/static/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="/static/js/form.js?v=28122016"></script>
+
 <script th:inline="javascript">
     var legalEntitiesAjaxRequestLink = [[${ajax_link}]];
     var downloadLink = [[${download_link}]];
 
+
+    var excelAjaxRequestLink = [[${T(uz.maroqand.ecology.cabinet.constant.sys.SysUrls).RegApplicationExcel}]];
+    var sysExcelDownload = [[#{sys_excel_download}]];
     function getCurrentLanguage() {
         return [[__${#locale}__]];
     }
@@ -130,11 +140,96 @@
     var statusSuccessful = [[#{sys_documentOrders.statusSuccessful}]];
     var statusFailed = [[#{sys_documentOrders.statusFailed}]];
     var sys_download = [[#{sys_download}]];
+    var sysExcelDownload = [[#{sys_excel_download}]];
+
+
+
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: "dd.mm.yyyy",
+            todayHighlight: true,
+            autoclose: true
+        });
+
+
+        var today = new Date();
+
+        $("#dateEnd").datepicker("setDate", today)
+
+        var oneMonthAgo = today.setMonth(today.getMonth()-1)
+
+
+        var birth = new Date(oneMonthAgo).toLocaleDateString("UTC");
+        var arrDateBirth = birth.split("/");
+        var birthFormatter="";
+
+        for (let i = 0; i < arrDateBirth.length; i++) {
+            if (i==0){
+                birthFormatter = arrDateBirth[i];
+            }else{
+                birthFormatter += "."+ arrDateBirth[i];
+            }
+        }
+
+        $("#dateBegin").datepicker("setDate", birthFormatter)
+
+
+    });
+
+    function convertDateFormatter (date) {
+        const [month, day, year] = date.split(".")
+        const convertedDate = new Date(+year, +month - 1, +day);
+        return convertedDate
+    }
+
+    function isDatesRangeThreeMonth (a, b) {
+        const aMill = a.getTime()
+        const bMill = b.getTime()
+        const range = (bMill-aMill)/1000/86400
+        console.log(range);
+        if (range < 0 || range > 91 ) {
+            return  false
+        } else  {
+            return true
+        }
+    }
+
+    function getDatatableExcelConnect(){
+        $("#excelExport").html('<i class="fa fa-spinner fa-pulse  fa-fw"></i> <span>Loading...</span>');
+
+        var dataToSend = {};
+
+
+        dataToSend.dateBegin = $("#dateBegin").val();
+        dataToSend.dateEnd = $("#dateEnd").val();
+        console.log("type",$("#type").val());
+        dataToSend.type = $("#type").val();
+        const isSend = isDatesRangeThreeMonth(
+            convertDateFormatter($("#dateBegin").val()),
+            convertDateFormatter($("#dateEnd").val())
+        )
+
+        console.log(isSend)
+        if (isSend) {
+            $.get(excelAjaxRequestLink, dataToSend, function(data){
+                if (data.message != undefined) alert(data.message);
+                $("#excelExport").html('<i class="fa fa-cloud-download"></i> <span >'+sysExcelDownload+'</span>');
+            });
+        } else {
+            alert("3 oylik farq")
+        }
+
+    }
+
+
+
 </script>
  <script th:inline="none">
     //<![CDATA[
     var legalEntitiesDatatableSelector;
     var thead;
+
+
 
     function renderStatusColumn(data, type, row, meta) {
         var html='';
@@ -202,9 +297,20 @@
     }
 
     $(document).ready(function () {
-        legalEntitiesDatatableSelector = $('#example1');
+        legalEntitiesDatatableSelector = $('#data-table');
         thead = legalEntitiesDatatableSelector.html();
         datatableConnect();
+
+
+
+
+
+
+
+
+
+
+
     });
 
     $('#example1').css("width", "100%");

@@ -77,7 +77,7 @@ public class User {
     private Integer organizationId;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organization_id", insertable = false, updatable = false)
     private Organization organization;
 
@@ -91,7 +91,7 @@ public class User {
     private Department department;
 
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "position_id", updatable = false, insertable = false)
     private Position position;
 

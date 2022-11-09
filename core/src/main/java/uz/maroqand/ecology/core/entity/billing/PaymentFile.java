@@ -24,7 +24,7 @@ public class PaymentFile {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "payment_id", updatable = false, insertable = false)
     private Payment payment;
 

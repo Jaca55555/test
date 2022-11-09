@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
+import uz.maroqand.ecology.core.constant.order.DocumentOrderType;
 import uz.maroqand.ecology.core.entity.DocumentOrder;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.DocumentOrdersRepository;
@@ -54,6 +55,7 @@ public class OrderedDocumentsController {
     public String getOrderedDocsListPage(Model model) {
         model.addAttribute("ajax_link", ExpertiseUrls.OrderedDocsListAjax);
         model.addAttribute("download_link", ExpertiseUrls.OrderedDocsDownload);
+        model.addAttribute("appealTypeList", DocumentOrderType.values());
         return ExpertiseTemplates.OrderedDocsList;
     }
 
@@ -76,7 +78,7 @@ public class OrderedDocumentsController {
             System.out.println();
             convenientForJSONArray.add(new Object[]{
                     documentOrder.getId(),
-                   null,
+                    documentOrder.getType()!=null ?documentOrder.getType().name():"",
                     documentOrder.getRegisteredAt() != null ? Common.uzbekistanDateAndTimeFormat.format(documentOrder.getRegisteredAt()) : "",
                     documentOrder.getStatus().ordinal(),
                     documentOrdersService.isDownloadable(documentOrder)

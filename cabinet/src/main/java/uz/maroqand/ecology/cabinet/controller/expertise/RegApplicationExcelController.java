@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.core.constant.order.DocumentOrderType;
 import uz.maroqand.ecology.core.constant.order.RegApplicationExcelOrder;
 import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -33,6 +34,7 @@ public class RegApplicationExcelController {
     public Map<String,Object> reportTotalNonprofitTypeExcelList(
             @RequestParam(name = "dateBegin", defaultValue = "", required = false) String dateBeginStr,
             @RequestParam(name = "dateEnd", defaultValue = "", required = false) String dateEndStr,
+            @RequestParam(name = "type", defaultValue = "", required = false)DocumentOrderType type,
             Model model
     ) {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -45,7 +47,7 @@ public class RegApplicationExcelController {
         if(dateBeginStr!=null){
             dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
         }else{
-            dateBegin = DateParser.TryParse("01.01.2018", Common.uzbekistanDateFormat);
+            dateBegin = DateParser.TryParse("01.01.2022", Common.uzbekistanDateFormat);
         }
 
         Date dateEnd ;
@@ -61,7 +63,7 @@ public class RegApplicationExcelController {
         documentOrder.setEndDate(dateEnd);
         System.out.println("documentOrder"+documentOrder);
 
-        boolean queued = documentOrdersService.orderDocument(documentOrder, user, locale);
+        boolean queued = documentOrdersService.orderDocument(documentOrder,type, user, locale);
         return documentOrdersService.getFrontendResponseForOrder(queued,locale);
     }
 }
