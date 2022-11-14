@@ -19,24 +19,24 @@ public interface PaymentService {
 
     List<Payment> getByInvoiceId(Integer id);
     Payment getById(Integer id);
-//    Map<String,Object> sendSmsPaymentAndGetResponseMap(
-//            Invoice invoice,
-//            String telephone,
-//            String cardNumber,
-//            String cardMonth,
-//            String cardYear,
-//            String successUrl,
-//            String failUrl
-//    );
+    Map<String,Object> sendSmsPaymentAndGetResponseMap(
+            Invoice invoice,
+            String telephone,
+            String cardNumber,
+            String cardMonth,
+            String cardYear,
+            String successUrl,
+            String failUrl
+    );
 
-//    Map<String, Object> confirmSmsAndGetResponseAsMap(
-//            Integer applicationId,
-//            Integer paymentId,
-//            Integer tempTransId,
-//            String confirmSms,
-//            String successUrl,
-//            String failUrl
-//    );
+    Map<String, Object> confirmSmsAndGetResponseAsMap(
+            Integer applicationId,
+            Integer paymentId,
+            Integer tempTransId,
+            String confirmSms,
+            String successUrl,
+            String failUrl
+    );
 
     Payment save(Payment payment);
 

@@ -19,6 +19,7 @@ import uz.maroqand.ecology.core.entity.DocumentOrder;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.DocumentOrdersRepository;
 import uz.maroqand.ecology.core.service.DocumentOrdersService;
+import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 
@@ -40,6 +41,8 @@ public class OrderedDocumentsController {
 
     @Autowired
     private DocumentOrdersService documentOrdersService;
+    @Autowired
+    private HelperService helperService;
 
     @Autowired
     private UserService usersService;
@@ -78,10 +81,12 @@ public class OrderedDocumentsController {
             System.out.println();
             convenientForJSONArray.add(new Object[]{
                     documentOrder.getId(),
-                    documentOrder.getType()!=null ?documentOrder.getType().name():"",
+                    documentOrder.getType()!=null ? helperService.getTranslation("order_type."+documentOrder.getType().name().toLowerCase(),locale) :"",
                     documentOrder.getRegisteredAt() != null ? Common.uzbekistanDateAndTimeFormat.format(documentOrder.getRegisteredAt()) : "",
                     documentOrder.getStatus().ordinal(),
-                    documentOrdersService.isDownloadable(documentOrder)
+                    documentOrdersService.isDownloadable(documentOrder),
+                    documentOrder.getOrderedBy().getFName(),
+                    documentOrder.getOrderedBy().getOrganization().getNameTranslation(locale)
             });
         }
 

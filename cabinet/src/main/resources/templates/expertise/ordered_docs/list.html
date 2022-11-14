@@ -99,6 +99,8 @@
                                                     <th>№</th>
                                                     <th th:text="#{sys_documentOrders.type}">ИНН</th>
                                                     <th th:text="#{sys_documentOrders.registeredAt}">ОПФ</th>
+                                                    <th th:text="#{sys_documentOrders.orderedBy}">ОПФ</th>
+                                                    <th th:text="#{sys_documentOrders.orderedByorg}">ОПФ</th>
                                                     <th th:text="#{sys_documentOrders.status}"></th>
                                                     <th></th>
                                                 </tr>
@@ -233,7 +235,7 @@
 
     function renderStatusColumn(data, type, row, meta) {
         var html='';
-        switch (data) {
+        switch (row[3]) {
             case 0:
                 html = '<span class="label label-default">' + statusPending + '</span>';
                 break;
@@ -271,6 +273,8 @@
                 {data: 0, name: 'id'},
                 {data: 1, name: 'type'},
                 {data: 2, name: 'registeredAt'},
+                {data: 5, name: 'orderedBy'},
+                {data: 6, name: 'orderedByOrg'},
                 {render: renderStatusColumn, name: 'status'},
                 {render: renderDownloadColumn, orderable: false},
             ],
