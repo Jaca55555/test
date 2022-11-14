@@ -16,7 +16,43 @@
     </style>
 </head>
 <body th:fragment="status">
-
+<div class="modal fade" id="modalFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Fayllar</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="task-attachment" th:if="${regApplication.documentFiles}">
+                    <h5 class="mt-lg-3"  th:text="#{regApplication.documentFiles}">Добавить сканированная копия заключения</h5>
+                    <ul class="media-list p-0">
+                        <li class="media d-flex m-b-15" th:each="documentFile :${regApplication.documentFiles}">
+                            <div class="m-r-20 file-attach">
+                                <i class="mdi mdi-file-pdf f-28 text-muted"></i>
+                            </div>
+                            <div class="media-body">
+                                <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationFileDownload + '?file_id=' + documentFile.id}" class="m-b-5 d-block text-secondary">
+                                    <span th:text="${documentFile.name}">Письмо КМК-234 от 23.01.2019 г.pdf</span>
+                                </a>
+                                <div class="text-muted">
+                                    <span th:text="*{#numbers.formatDecimal(documentFile.size/1000.0, 1, 'WHITESPACE', 1, 'POINT')}">1.2</span>
+                                    <span th:text="#{documentFile.KB}">KB</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
     <!--initial-->
     <div class="col-md-12 text-center text-success" th:if="${regApplication.status!=null && regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Process}">
         <span class="hei-75 wid-75 d-inline-block mr-4">
@@ -80,7 +116,11 @@
         </ul>
     </div>
     </div>
-
+    <div class="w-100  d-flex justify-content-start " >
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFile">
+            Fayllar
+        </button>
+    </div>
 
     <!--Modification-->
     <div class="col-md-12 text-center" th:if="${regApplication.status!=null &&  regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification && regApplication.regApplicationCategoryType==T(uz.maroqand.ecology.core.entity.expertise.RegApplicationCategoryType).oneToTree}">

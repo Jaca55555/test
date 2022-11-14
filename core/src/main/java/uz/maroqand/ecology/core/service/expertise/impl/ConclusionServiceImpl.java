@@ -90,6 +90,10 @@ public class ConclusionServiceImpl implements ConclusionService {
         return conclusionRepository.findByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplicationId);
     }
 
+    @Override
+    public Conclusion findByConclusionNumber(String regNumber) {
+        return conclusionRepository.findTop1ByNumberAndDeletedFalseOrderByIdDesc(regNumber);
+    }
 
     @Override
     public Page<Conclusion> findFiltered(Integer reviewId, Integer id, Date dateBegin, Date dateEnd, Integer tin,Integer regionId,Integer subRegionId, String name, Category category,Integer regApplicationId, Pageable pageable) {

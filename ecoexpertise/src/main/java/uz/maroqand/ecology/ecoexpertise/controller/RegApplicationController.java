@@ -88,6 +88,7 @@ public class RegApplicationController {
     private Logger logger = LogManager.getLogger(RegApplicationController.class);
     private final GlobalConfigs globalConfigs;
     private final SubstanceService substanceService;
+    private final RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService;
 
     @Autowired
     public RegApplicationController(
@@ -120,7 +121,7 @@ public class RegApplicationController {
             ConclusionService conclusionService,
             DocumentRepoService documentRepoService,
             NotificationService notificationService,
-            FactureService factureService, GlobalConfigs globalConfigs, SubstanceService substanceService) {
+            FactureService factureService, GlobalConfigs globalConfigs, SubstanceService substanceService, RegApplicationCategoryFourAdditionalService regApplicationCategoryFourAdditionalService) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.soatoService = soatoService;
@@ -155,6 +156,7 @@ public class RegApplicationController {
         this.factureService = factureService;
         this.globalConfigs = globalConfigs;
         this.substanceService = substanceService;
+        this.regApplicationCategoryFourAdditionalService = regApplicationCategoryFourAdditionalService;
     }
 
     @RequestMapping(value = RegUrls.RegApplicationList)
@@ -173,6 +175,9 @@ public class RegApplicationController {
         FilterDto filterDto = new FilterDto();
         filterDto.setByLeTin(user.getLeTin());
         filterDto.setByTin(user.getTin());
+//        filterDto.setPin(user.getPinfl());
+//        logger.info("filterDto:{}",filterDto);
+
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
                 null,
@@ -202,7 +207,8 @@ public class RegApplicationController {
                     regApplication.getApplicant()!=null?regApplication.getApplicant().getName():" ",
                     regApplication.getApplicant()!=null?regApplication.getApplicant().getTin():" ",
                     invoice != null && invoice.getInvoice()!=null?invoice.getInvoice(): " ",
-                    regApplication.getName()
+                    regApplication.getName(),
+                    regApplication.getDocumentFiles()
             });
         }
         result.put("data",convenientForJSONArray);
@@ -747,7 +753,8 @@ public class RegApplicationController {
             offer = offerService.getOffer(regApplication.getBudget(),regApplication.getReviewId());
             model.addAttribute("action_url", RegUrls.RegApplicationContractConfirm);
         }
-
+        model.addAttribute("client",regApplication.getApplicant());
+        model.addAttribute("offerBool",regApplication.getOfferId()!=null);
         model.addAttribute("regApplication", regApplication);
         model.addAttribute("offer", offer);
         model.addAttribute("step_id", RegApplicationStep.CONTRACT.ordinal());
@@ -997,6 +1004,8 @@ public class RegApplicationController {
         model.addAttribute("commentList", commentService.getByRegApplicationIdAndType(regApplication.getId(), CommentType.CHAT));
         model.addAttribute("offer", offer);
         model.addAttribute("invoice", invoice);
+        model.addAttribute("client",regApplication.getApplicant());
+        model.addAttribute("offerBool",regApplication.getOfferId()!=null);
         model.addAttribute("facture", factureService.getById(regApplication.getFactureId()));
         model.addAttribute("factureProductList", factureService.getByFactureId(regApplication.getFactureId()));
         model.addAttribute("regApplication", regApplication);

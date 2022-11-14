@@ -181,7 +181,59 @@
     });
 
 
+
+
     $(document).ready(function () {
+
+        (function () {
+            var keystoppedTimer = null;
+            var keystoppedInputs = document.getElementsByTagName('input');
+            for (var i = 0, l = keystoppedInputs.length; i < l; i++) {
+                keystoppedInputs[i].addEventListener('keydown', function (event) {
+                    clearTimeout(keystoppedTimer);
+                    keystoppedTimer = setTimeout(function () {
+                        event.target.dispatchEvent(new Event('keystopped'));
+                    }, 600);
+                }, false);
+            }
+        }());
+        document.getElementById('number').addEventListener('keystopped', function (event) {
+            checkRegistrationNumber();
+            console.log("hello world")
+        }, false);
+
+        function checkRegistrationNumber() {
+            $("#usernameStatus").html('<div class="spinner-border spinner-border-sm" role="status">\n' +
+                '                                                <span class="sr-only">Loading...</span>\n' +
+                '                                            </div>');
+            $.ajax({
+                url: [[${T(uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls).CheckConclusionNumber}]],
+                data: {
+                    docRegNumber: $('#number').val(),
+                    id: $('#conclusionId').val(),
+                    _csrf: $('#global_csrf').val()
+                },
+                type: 'post',
+                dataType: 'json',
+                success: function (response) {
+                    console.log(response);
+                    var val;
+                    if (response.nameStatus == 0) {
+                        val = '<span style="color: #1d9d74;"> <i class="feather icon-thumbs-up" style="font-size: 1rem;"></i> Avval foydalanilmagan</span>';
+                    }  else {
+                        val = '<span style="color: #721c24"> <i class="feather icon-x" style="font-size: 1rem;"></i> Ro`yhatga olish raqami avval kiritilgan   </span>';
+                    }
+                    $("#usernameStatus").html(val);
+                },
+                error: function () {
+                }
+            });
+        }
+
+
+
+
+
         var hash = window.location.hash;
         if (hash.length === 0) {
             hash = '#applicant';

@@ -63,7 +63,8 @@ public class PaymentFileController {
 
     @RequestMapping(BillingUrls.PaymentFileList)
     public String billingList(Model model){
-
+        model.addAttribute("isAdmin",userService.isAdmin());
+        model.addAttribute("organizationList",organizationService.getList());
         return BillingTemplates.PaymentFileList;
     }
 
@@ -74,7 +75,7 @@ public class PaymentFileController {
             @RequestParam(name = "dateEnd", required = false) String dateEndStr,
             @RequestParam(name = "invoice", required = false) String invoice,
             @RequestParam(name = "paymentId", required = false) Integer paymentId,
-
+            @RequestParam(name = "organizationId", required = false) Integer organizationId,
             @RequestParam(name = "payerTin", required = false) Integer payerTin,
             @RequestParam(name = "payerName", required = false) String payerName,
             @RequestParam(name = "detail", required = false) String detail,
@@ -95,7 +96,11 @@ public class PaymentFileController {
         Date dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
         String account = null;
+        String filterAccount = null;
         String oldAccount = null;
+        if(organizationId!=null) {
+            filterAccount = organizationService.getById(organizationId).getAccount();
+        }
         if (user.getOrganizationId()!=null){
             Organization organization = organizationService.getById(user.getOrganizationId());
             if (organization!=null && organization.getAccount()!=null
@@ -116,7 +121,7 @@ public class PaymentFileController {
                 detail,
                 bankMfo,
                 isComplete,
-                user.getRole().getId()!=23 ? account:null,
+                filterAccount!=null? filterAccount :(user.getRole().getId()!=23 ? account:null),
                 user.getRole().getId()!=23 ? oldAccount:null,
                 pageable
         );

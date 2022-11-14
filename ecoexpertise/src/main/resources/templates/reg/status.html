@@ -168,6 +168,56 @@
                                             </ul>
                                             <div class="form-group  text-center" style="border: 1px dashed #b7c5d4;width: 95%;overflow-y: scroll; height:400px; padding: 40px 20px;margin: 0 auto; display: none" id="contract">
                                                 <div style="text-align: justify"  th:utext="#{${offer.tagName}}"></div>
+                                                <div class="row">
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <div style="text-align: justify"  th:if="${offer.tagShortName!=null}" th:utext="#{${offer.tagShortName}}"></div>
+                                                    </div>
+                                                    <div class="col-md-6 col-sm-12">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                            <tr>
+                                                                <th colspan="2" scope="col" th:text="#{client}"></th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            <tr>
+                                                                <th scope="row" th:text="#{sys_address}">1</th>
+                                                                <td th:text="${client.address}">Mark</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row" th:text="#{sys_phone}">1</th>
+                                                                <td th:text="${client.phone}">Mark</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row" th:text="#{H/R}">1</th>
+                                                                <td th:text="${client.bankAccount}">Mark</td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <th scope="row" th:text="#{sys_bank}">1</th>
+                                                                <td th:text="${client.bankName}" >Mark</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row" th:text="#{bank_code}">1</th>
+                                                                <td  th:text="${client.mfo}">Mark</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row" th:text="#{tin}">1</th>
+                                                                <td th:text="${client.tin}">Mark</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th scope="row" th:text="#{ifut}">1</th>
+                                                                <td th:text="${client.oked}">Mark</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th th:if="${offerBool}" colspan="2" scope="col" th:text="#{sys_signed}"></th>
+                                                                <th th:unless="${offerBool}" colspan="2" scope="col" th:text="#{sys_unsigned}"></th>
+                                                            </tr>
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
 
                                                 <div class="container-fluid mt-lg-3" th:if="${regApplication.offerId!=null}">
                                                     <img th:if="${offer.documentRepoId!=null}" th:src="${T(uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls).GetQRImageOffer + '?id=' + @offerServiceImpl.getById(regApplication.offerId).documentRepoId+'&rid='+regApplication.id}" class="qr-code" />

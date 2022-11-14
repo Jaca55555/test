@@ -73,6 +73,8 @@ public class MainController {
         return "login";
     }
 
+
+
     @RequestMapping("/dashboard")
     public String getDashboardPage(@RequestParam (name = "lang",required = false) String lang) {
         User user = userService.getCurrentUserFromContext();

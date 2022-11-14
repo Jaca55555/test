@@ -95,6 +95,13 @@
                                                         </select>
                                                     </div>
                                                     <div class="form-group col-sm-3">
+                                                        <label class="control-label" th:text="#{conclusion.category}">:</label><br/>
+                                                        <select id="regApplicationCategoryType" class="form-control">
+                                                            <option value="" th:text="#{sys_select}"></option>
+                                                            <option th:each="regApp : ${regApplicationCategoryType}" th:value="${regApp}" th:text="${@helperService.getTranslation(regApp.getName(),#locale)}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group col-sm-3">
                                                         <label for="objectId" class="control-label" th:text="#{sys_about.objectExpertise}"></label>
                                                         <select id="objectId" class="form-control">
                                                             <option value="" th:text="#{sys_select}"></option>
@@ -248,6 +255,8 @@
                     dataToSend.dateBegin = $('#dateBegin').val();
                     dataToSend.dateEnd = $('#dateEnd').val();
                     dataToSend.statusing = 0;
+                    dataToSend.category=$('#regApplicationCategoryType').val();
+
 
                     dataToSend._csrf = $("#global_csrf").val();
                     dataToSend.sort = api.order().length > 0 ? dataToSend.columns[ api.order()[0][0] ].name + ',' + api.order()[0][1] : "id,DESC";

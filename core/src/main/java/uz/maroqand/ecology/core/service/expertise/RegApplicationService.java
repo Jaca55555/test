@@ -46,6 +46,8 @@ public interface RegApplicationService {
     RegApplication sendRegApplicationAfterPayment(RegApplication regApplication, User user, Invoice invoice, String locale);
 
     RegApplication cancelApplicationByInvoiceId(Integer invoiceId);
+    Integer countDeadlineRegApplication();
+    Integer countNewRegApplication();
 
     List<RegApplication> getListByPerformerId(Integer performerId);
 

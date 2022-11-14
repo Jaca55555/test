@@ -322,6 +322,47 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
+    public Integer countDeadlineRegApplication() {
+        User user   = userService.getCurrentUserFromContext();
+        Set<Integer> organizationIds = new HashSet<>();
+        organizationIds.add(user.getOrganizationId());
+        Calendar c = Calendar.getInstance();
+        Date date = new Date();
+            c.setTime(date);
+            c.add(Calendar.DATE,5);    // shu kunning o'zi ham qo'shildi
+            Date expireDate = c.getTime();
+
+        Calendar c1 = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE,0);    // shu kunning o'zi ham qo'shildi
+        Date deadlinedata = c.getTime();
+
+        //        List<RegApplication> regApplicationList = regApplicationRepository.findAllByReviewIdAndStatusAndDeletedFalse(user.getOrganizationId(),RegApplicationStatus.Process);
+//        Integer result=0;
+//        for(RegApplication regApplication:regApplicationList){
+//            Date deadline = regApplication.getDeadlineDate();
+//            Calendar c = Calendar.getInstance();
+//            Date date = new Date();
+//            c.setTime(date);
+//            c.add(Calendar.DATE,3);    // shu kunning o'zi ham qo'shildi
+//            Date expireDate = c.getTime();
+////                Invoice yaratilganiga 90 kundan oshgan
+//            if (deadline.before(expireDate)){
+//               result++;
+//            }
+//        }
+        return countByCategoryAndStatusAndRegionId(null, deadlinedata,expireDate,null,organizationService.getById(user.getOrganizationId()).getRegionId(),organizationIds);
+    }
+
+    @Override
+    public Integer countNewRegApplication() {
+        User user   = userService.getCurrentUserFromContext();
+        Set<Integer> organizationIds = new HashSet<>();
+        organizationIds.add(user.getOrganizationId());
+        return regApplicationRepository.countByCategoryAndStatusAndRegionId(null,null,null,RegApplicationStatus.CheckSent,organizationService.getById(user.getOrganizationId()).getRegionId(),organizationIds);
+    }
+
+    @Override
     public List<RegApplication> getListByPerformerId(Integer performerId) {
         return regApplicationRepository.findAllByPerformerIdAndDeletedFalseOrderByIdDesc(performerId);
     }
@@ -465,6 +506,10 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 if (filterDto.getTin() != null) {
                     predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
                 }
+
+//                if (filterDto.getPin() != null) {
+//                    predicates.add(criteriaBuilder.equal(root.join("applicant").get("pinfl"),filterDto.getPin()));
+//                }
                 if (StringUtils.trimToNull(filterDto.getName()) != null) {
                     predicates.add(criteriaBuilder.like(root.join("applicant").<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName().toUpperCase()) + "%"));
                 }

@@ -129,10 +129,10 @@ public class EDSLoginController {
         }
 
         //2-yur litso INN si keladi.
-        if (matcher.find()) {
-            logger.info("Pinfl: {}", matcher.group(1));
-            pinfl = matcher.group(1);
-        }
+//        if (matcher.find()) {
+//            logger.info("Pinfl: {}", matcher.group(1));
+//            pinfl = matcher.group(1);
+//        }
 
 
 
@@ -140,6 +140,7 @@ public class EDSLoginController {
          * Insert userIdGov
          * */
         UserEds userEds = new UserEds();
+
         String[] res = subjectName.split(",");
         for (String currentRes : res) {
             String[] r = currentRes.split("=");
@@ -189,8 +190,18 @@ public class EDSLoginController {
             List<User> userList = userRepository.findByTin(tin);
             logger.info("Pinfl: {}", userEds.getPinfl());
             List<User> userListPinfl = userRepository.findAllByPinfl(userEds.getPinfl());
+            List<User> userListLeTin = userRepository.findAllByLeTin(userEds.getLeTin());
             if(userListPinfl.size()>0){
-                user.setUsername(userEds.getPinfl()+"_"+userListPinfl.size());
+                if(userEds.getPinfl()!=null){
+                    user.setUsername(userEds.getPinfl()+"_"+userListPinfl.size());
+                }else {
+                    if(userListLeTin.size()>0){
+                        user.setUsername(userEds.getLeTin().toString()+"_"+userListLeTin.size());
+                    }else {
+                        user.setUsername(userEds.getLeTin().toString());
+
+                    }
+                }
             }else {
                 user.setUsername(userEds.getPinfl());
             }

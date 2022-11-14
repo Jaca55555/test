@@ -170,23 +170,35 @@ public class EmployeeController {
         List<RegApplication> regApplicationList = regApplicationPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationList.size());
         for (RegApplication regApplication : regApplicationList){
-            Client client = clientService.getById(regApplication.getApplicantId());
-            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-            RegApplicationLog forwardingLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
+//            Client client = clientService.getById(regApplication.getApplicantId());
+//            RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
+//            RegApplicationLog forwardingLog = regApplicationLogService.getById(regApplication.getForwardingLogId());
 
             convenientForJSONArray.add(new Object[]{
+//                    regApplication.getId(),
+//                    client.getTin(),
+//                    client.getName(),
+//                    regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
+//                    regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
+//                    regApplication.getRegistrationDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
+//                    regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
+//                    performerLog!=null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(),locale):"",
+//                    performerLog!=null ? performerLog.getStatus().getId():"",
+//                    forwardingLog.getStatus()!=null? helperService.getTranslation(forwardingLog.getStatus().getForwardingName(),locale):"",
+//                    forwardingLog.getStatus()!=null? forwardingLog.getStatus().getId():"",
+//                    regApplicationService.beforeOrEqualsTrue(regApplication)
                     regApplication.getId(),
-                    client.getTin(),
-                    client.getName(),
-                    regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
-                    regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
-                    regApplication.getRegistrationDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                    regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    performerLog!=null ? helperService.getTranslation(performerLog.getStatus().getPerformerName(),locale):"",
-                    performerLog!=null ? performerLog.getStatus().getId():"",
-                    forwardingLog.getStatus()!=null? helperService.getTranslation(forwardingLog.getStatus().getForwardingName(),locale):"",
-                    forwardingLog.getStatus()!=null? forwardingLog.getStatus().getId():"",
-                    regApplicationService.beforeOrEqualsTrue(regApplication)
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
             });
         }
 

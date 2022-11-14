@@ -136,6 +136,7 @@ public class PerformerController {
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
         model.addAttribute("statusList", logStatusList);
+        model.addAttribute("categoryList",Category.getCategoryList());
         return ExpertiseTemplates.PerformerList;
     }
 
@@ -151,7 +152,7 @@ public class PerformerController {
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                user.getOrganizationId(),
+                userService.isAdmin() ? null : user.getOrganizationId(),
                 LogType.Performer,
                 userService.isAdmin() ? null : user.getId(),
                 null,

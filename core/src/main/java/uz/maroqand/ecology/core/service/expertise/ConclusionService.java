@@ -27,4 +27,5 @@ public interface ConclusionService {
 
     List<Conclusion> getByRegApplicationId(Integer regApplicationId);
 
+    Conclusion findByConclusionNumber(String regNumber);
 }

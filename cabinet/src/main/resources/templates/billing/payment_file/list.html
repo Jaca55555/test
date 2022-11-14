@@ -76,6 +76,13 @@
                                                     <span><span th:text="#{sys_date}">Дата</span>: <span id="date">27.06.2019</span></span>
                                                 </div>
                                             </div>
+                                            <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                <select id="organizationId" class="form-control">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                </select>
+                                            </div>
 
                                             <div class="col-md-12 row" style="font-size: 12px;color:#73869A; margin-bottom: 50px;">
                                                 <div class="col-md-4">

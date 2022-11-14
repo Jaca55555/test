@@ -92,6 +92,7 @@ public class RegApplicationMonitoringController {
         model.addAttribute("activityList", activityService.getList());
         model.addAttribute("statusList", logStatusList);
         model.addAttribute("isAdmin", userService.isAdmin());
+        model.addAttribute("regApplicationCategoryType", Category.getCategoryList());
         return ExpertiseTemplates.ExpertiseRegApplicationMonitoringList;
     }
 

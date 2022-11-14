@@ -46,4 +46,5 @@ public class FilterDto {
     private Category category;
 
     private Integer statusing;
+    private String pin;
 }

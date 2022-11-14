@@ -111,6 +111,7 @@ public class ForwardingController {
         model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
         model.addAttribute("activityList",activityService.getList());
         model.addAttribute("statusList", logStatusList);
+        model.addAttribute("regApplicationCategoryType", Category.getCategoryList());
         return ExpertiseTemplates.ForwardingList;
     }
 
@@ -126,7 +127,7 @@ public class ForwardingController {
 
         Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
-                user.getRole().getId()!=16?user.getOrganizationId():null,
+                (user.getRole().getId()==16|| userService.isAdmin())?null:user.getOrganizationId(),
                 LogType.Forwarding,
                 null,
                 null,
@@ -169,6 +170,7 @@ public class ForwardingController {
     @GetMapping(ExpertiseUrls.ForwardingView)
     public String getForwardingViewPage(
             @RequestParam(name = "id")Integer regApplicationId,
+            @RequestParam(name = "failed", required = false) Integer failed,
             Model model
     ) {
         User user = userService.getCurrentUserFromContext();
@@ -179,7 +181,7 @@ public class ForwardingController {
 
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
-
+        model.addAttribute("failed", failed);
         model.addAttribute("regApplicationLog", regApplicationLogService.getById(regApplication.getForwardingLogId()));
         model.addAttribute("performerLog", regApplicationLogService.getById(regApplication.getPerformerLogId()));
         model.addAttribute("agreementLogList", regApplicationLogService.getByIds(regApplication.getAgreementLogs()));
@@ -261,7 +263,13 @@ public class ForwardingController {
         if (regApplication == null){
             return "redirect:" + ExpertiseUrls.ForwardingList;
         }
+        List<RegApplicationLog> forwardingLogList = regApplicationLogService.getByRegApplicationIdAndType(id,LogType.Agreement);
+        System.out.println("forwardingLogList.size()"+forwardingLogList.size());
+        System.out.println("forwardingLogList.size()"+forwardingLogList.isEmpty());
+        if(forwardingLogList.isEmpty()){
+            return "redirect:"+ExpertiseUrls.ForwardingView + "?id="+id+"&failed=1";
 
+        }
         User performer = userService.findById(performerId);
         if (performer== null){
             return "redirect:" + ExpertiseUrls.ForwardingList;

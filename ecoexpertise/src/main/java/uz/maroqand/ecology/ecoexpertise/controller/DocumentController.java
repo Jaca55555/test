@@ -96,6 +96,8 @@ public class DocumentController {
             model.addAttribute("objectExpertise",objectExpertise);
             model.addAttribute("regApplication",regApplication);
             model.addAttribute("offer",offer);
+            model.addAttribute("client",regApplication.getApplicant());
+            model.addAttribute("offerBool",regApplication.getOfferId()!=null);
             model.addAttribute("organization",organizationService.getById(regApplication.getReviewId()).getName());
             }
 
