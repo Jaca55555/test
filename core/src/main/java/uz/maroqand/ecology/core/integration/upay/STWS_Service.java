@@ -26,7 +26,7 @@ public class STWS_Service
         URL url = null;
         WebServiceException e = null;
         try {
-            url = new URL("http://91.212.89.86:9212/STAPI/STWS?wsdl");
+            url = new URL("https://api.upay.uz/STAPI/STWS?wsdl");
         } catch (MalformedURLException ex) {
             e = new WebServiceException(ex);
         }

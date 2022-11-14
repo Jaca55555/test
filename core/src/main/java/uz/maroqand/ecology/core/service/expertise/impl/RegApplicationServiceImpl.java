@@ -459,14 +459,14 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 }
 
 
-//                    if(filterDto.getContractNumber()!=null && !filterDto.getContractNumber().isEmpty()){
-//                        predicates.add(criteriaBuilder.like(root.get("contractNumber"),"%" + StringUtils.trimToNull(filterDto.getContractNumber()) + "%"));
-//                    }
+                    if(filterDto.getContractNumber()!=null && !Objects.equals(filterDto.getContractNumber(), "")){
+                        predicates.add(criteriaBuilder.like(root.get("contractNumber"),"%" + StringUtils.trimToNull(filterDto.getContractNumber()) + "%"));
+                    }
                 if (filterDto.getTin() != null) {
                     predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
                 }
                 if (StringUtils.trimToNull(filterDto.getName()) != null) {
-                    predicates.add(criteriaBuilder.like(root.join("applicant").<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
+                    predicates.add(criteriaBuilder.like(root.join("applicant").<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName().toUpperCase()) + "%"));
                 }
                 if (filterDto.getApplicationId() != null) {
                     predicates.add(criteriaBuilder.equal(root.get("id"), filterDto.getApplicationId()));
@@ -486,6 +486,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 if (StringUtils.trimToNull(filterDto.getName()) != null) {
                     predicates.add(criteriaBuilder.like(root.<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
                 }
+                if(filterDto.getRegApplicationStatus()!=null){
+                    predicates.add(criteriaBuilder.equal(root.get("status"), filterDto.getRegApplicationStatus()));
+
+                }
+
                 if (filterDto.getStatusing() == null){
                     if (logType != null && (filterDto.getStatus() != null || filterDto.getRegApplicationStatus() != null)) {
                         switch (logType) {
