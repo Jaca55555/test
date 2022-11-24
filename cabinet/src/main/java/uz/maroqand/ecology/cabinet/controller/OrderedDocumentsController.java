@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseTemplates;
 import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.config.DatabaseMessageSource;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.order.DocumentOrderType;
 import uz.maroqand.ecology.core.entity.DocumentOrder;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.repository.DocumentOrdersRepository;
 import uz.maroqand.ecology.core.service.DocumentOrdersService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -46,6 +48,8 @@ public class OrderedDocumentsController {
 
     @Autowired
     private UserService usersService;
+    @Autowired
+    private OrganizationService organizationService;
 
 
     private static DatabaseMessageSource databaseMessageSource;
@@ -59,6 +63,9 @@ public class OrderedDocumentsController {
         model.addAttribute("ajax_link", ExpertiseUrls.OrderedDocsListAjax);
         model.addAttribute("download_link", ExpertiseUrls.OrderedDocsDownload);
         model.addAttribute("appealTypeList", DocumentOrderType.values());
+        model.addAttribute("organizationList",organizationService.getList());
+        model.addAttribute("regApplicationCategoryType", Category.getCategoryList());
+
         return ExpertiseTemplates.OrderedDocsList;
     }
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.constant.expertise.*;
@@ -408,6 +409,13 @@ public class RegApplicationServiceImpl implements RegApplicationService {
             Pageable pageable
     ) {
         return regApplicationRepository.findAll(getFilteringSpecification(filterDto, reviewId, logType, performerId, userId, regApplicationInputType), pageable);
+    }
+
+    @Override
+    public Page<RegApplication> findFilteredExcel(FilterDto filterDto, Integer reviewId, LogType logType, Integer performerId, Integer userId, RegApplicationInputType regApplicationInputType, Pageable pageable) {
+        return regApplicationRepository.findAll(getFilteringSpecification(filterDto, reviewId, logType, performerId, userId, regApplicationInputType), pageable);
+
+
     }
 
     @Override

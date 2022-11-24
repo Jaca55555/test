@@ -10,13 +10,14 @@ import uz.maroqand.ecology.core.dto.api.Response;
 import uz.maroqand.ecology.core.dto.api.ResponsePay;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.Payment;
+import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
+import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -28,12 +29,13 @@ public class APIController {
     private final Logger logger = LogManager.getLogger(APIController.class);
 
     private static final String AUTH_KEY = "A347E44AC8752BA7ED33A1C36300DEW0";
-
+    private final PaymentFileService paymentFileService;
 
     private final InvoiceService invoiceService;
     private final PaymentService paymentService;
 
-    public APIController(InvoiceService invoiceService, PaymentService paymentService) {
+    public APIController(PaymentFileService paymentFileService, InvoiceService invoiceService, PaymentService paymentService) {
+        this.paymentFileService = paymentFileService;
         this.invoiceService = invoiceService;
         this.paymentService = paymentService;
     }
@@ -139,7 +141,7 @@ public class APIController {
 
         Double amount = null;
         try {
-            amount = Double.parseDouble(upayPaymentAmount);
+            amount = Double.parseDouble(upayPaymentAmount)/1.01;
         } catch (Exception e){ e.printStackTrace(); }
 
 
@@ -174,6 +176,32 @@ public class APIController {
         payment.setInvoiceId(invoice.getId());
         paymentService.save(payment);
 
+        PaymentFile paymentFile = new PaymentFile();
+        paymentFile.setReceiverInn(invoice.getPayeeTin());
+        paymentFile.setPayerName(invoice.getPayerName());
+        paymentFile.setInvoice(invoice.getInvoice());
+        paymentFile.setPaymentDate(new Date());
+//        paymentFile.setReceiverName(invoice.get);
+
+//        paymentFile.setBankAccount(invoice.getPayeeAccount());
+//        paymentFile.setBankMfo(invoice.getPayeeMfo());
+
+
+        paymentFile.setReceiverAccount(invoice.getPayeeAccount());
+        paymentFile.setReceiverMfo(invoice.getPayeeMfo());
+
+
+//        paymentFile.setBankId(paymentNew.getId());
+        paymentFile.setAmount(amount);
+
+
+        paymentFile.setAmountOriginal(upayPaymentAmount);
+        paymentFile.setDocumentNumber(upayTransId);
+//        Date date = DateParser.TryParse(paymentNew.getPayment_date(),Common.uzbekistanDateAndTimeFormatBank);
+//        paymentFile.setPaymentDate(time);
+        paymentFile.setDetails(personalAccount + " raqamli invoicega Upay orqali " +amount+ " to'landi");
+        paymentFileService.create(paymentFile);
+        invoiceService.checkInvoiceStatus(invoice);
         response.setStatus("0");
         response.setMessage("Платеж принят");
         return response;

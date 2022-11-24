@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.order.DocumentOrderType;
 import uz.maroqand.ecology.core.constant.order.RegApplicationExcelOrder;
 import uz.maroqand.ecology.cabinet.constant.sys.SysUrls;
@@ -34,7 +35,9 @@ public class RegApplicationExcelController {
     public Map<String,Object> reportTotalNonprofitTypeExcelList(
             @RequestParam(name = "dateBegin", defaultValue = "", required = false) String dateBeginStr,
             @RequestParam(name = "dateEnd", defaultValue = "", required = false) String dateEndStr,
+            @RequestParam(name = "reviewId", defaultValue = "", required = false) Integer reviewId,
             @RequestParam(name = "type", defaultValue = "", required = false)DocumentOrderType type,
+            @RequestParam(name = "category", defaultValue = "", required = false) Category category,
             Model model
     ) {
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
@@ -61,6 +64,8 @@ public class RegApplicationExcelController {
         RegApplicationExcelOrder documentOrder = new RegApplicationExcelOrder();
         documentOrder.setBeginDate(dateBegin);
         documentOrder.setEndDate(dateEnd);
+        documentOrder.setReviewId(reviewId);
+        documentOrder.setCategory(category);
         System.out.println("documentOrder"+documentOrder);
 
         boolean queued = documentOrdersService.orderDocument(documentOrder,type, user, locale);

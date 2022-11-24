@@ -56,17 +56,17 @@
 
                                             <object th:include="reg/step_wizard :: wizard" th:remove="tag" ></object>
 
-                                            <div class = "row">
-                                                <div class="col-5 mx-auto">
-                                                <select id="reWorkSelect" class="form-control">
-                                                    <option value="" th:text="#{sys_select}"></option>
-                                                    <option th:each="regApp: ${regAppList}" th:text="*{regApp.id}" th:value="*{regApp.id}"></option>
-                                                </select>
-                                                </div>
-                                                <div class="col-2 mx-auto">
-                                                <button class="btn btn-primary" id="reWorkButton" th:text="#{sys_submit}"></button>
-                                                </div>
-                                            </div>
+<!--                                            <div class = "row">-->
+<!--                                                <div class="col-5 mx-auto">-->
+<!--                                                <select id="reWorkSelect" class="form-control">-->
+<!--                                                    <option value="" th:text="#{sys_select}"></option>-->
+<!--                                                    <option th:each="regApp: ${regAppList}" th:text="*{regApp.id}" th:value="*{regApp.id}"></option>-->
+<!--                                                </select>-->
+<!--                                                </div>-->
+<!--                                                <div class="col-2 mx-auto">-->
+<!--                                                <button class="btn btn-primary" id="reWorkButton" th:text="#{sys_submit}"></button>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
 
                                             <div class="row" >
                                                 <div class="form-group col-md-12 text-center" >

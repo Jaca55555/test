@@ -13,8 +13,8 @@ import uz.maroqand.ecology.core.integration.upay.ConfirmPayment;
 import uz.maroqand.ecology.core.integration.upay.ConfirmPaymentResponse;
 import uz.maroqand.ecology.core.integration.upay.Prepayment;
 import uz.maroqand.ecology.core.integration.upay.PrepaymentResponse;
+import uz.maroqand.ecology.core.repository.billing.InvoiceRepository;
 import uz.maroqand.ecology.core.repository.billing.PaymentRepository;
-import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.billing.WSClient;
 import uz.maroqand.ecology.core.util.FixedSymbolOperation;
@@ -35,15 +35,17 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final WSClient wsClient;
+    private final InvoiceRepository invoiceRepository;
 
     private Logger logger = LogManager.getLogger(PaymentServiceImpl.class);
     private final String UPAY_RESPONSE_OK = "OK";
     private Gson gson = new Gson();
 
     @Autowired
-    public PaymentServiceImpl(PaymentRepository paymentRepository, WSClient wsClient) {
+    public PaymentServiceImpl(PaymentRepository paymentRepository, WSClient wsClient, InvoiceRepository invoiceRepository) {
         this.paymentRepository = paymentRepository;
         this.wsClient = wsClient;
+        this.invoiceRepository = invoiceRepository;
     }
 
     public Payment pay(Integer invoiceId, Double amount, Date paymentDate, String detail, PaymentType paymentType){
@@ -94,7 +96,7 @@ public class PaymentServiceImpl implements PaymentService {
         if (cardNumber != null && cardNumber.length() == 16) {
             logBuilder.append("cardNumber : **** ").append(cardNumber.substring(12)).append("\n");
         }
-        logger.debug(logBuilder.toString());
+        logger.info("logBuilder:{}", logBuilder.toString());
 
         Payment payment = upayPrePayment(invoice, cardNumber, telephone, cardMonth, cardYear);
 
@@ -124,22 +126,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         Map<String, Object> resultJson = new HashMap<>();
 
-        if(confirmSms.equals("111111")){
-            resultJson.put("res", 2);
-            resultJson.put("action_url", successUrl);
-            resultJson.put("message", "Успешно");
-            resultJson.put("id", applicationId);
-            resultJson.put("resultMessage", "Success");
 
-            Payment payment = paymentRepository.getOne(paymentId);
-            payment.setStatus(PaymentStatus.Success);
-            payment.setUpayTransId("111111");
-            payment.setPaymentPerformedTime("111111");
-            payment.setType(PaymentType.UPAY);
-            payment.setMessage("Успешно");
-            payment = paymentRepository.saveAndFlush(payment);
-
-        }else {
             Payment payment = upayConfirmPayment(paymentId, tempTransId, trimmedConfirmSms);
             if (payment.getStatus().equals(PaymentStatus.Success)) {
                 resultJson.put("res", 2);
@@ -151,8 +138,8 @@ public class PaymentServiceImpl implements PaymentService {
             resultJson.put("message", payment.getMessage());
             resultJson.put("id", applicationId);
             resultJson.put("resultMessage", payment.getStatus().name());
-        }
 
+        logger.info("resultJson:{}",resultJson);
         return resultJson;
     }
 
@@ -181,13 +168,26 @@ public class PaymentServiceImpl implements PaymentService {
         request.setPhoneNumber(phone);
         request.setCardExpireDate(exDate);
         request.setPersonalAccount(invoice.getInvoice());
+        Double paymentAmount = 0.0;
+        List<Payment> paymentList = getByInvoiceId(invoice.getId());
+        for (Payment payment1:paymentList){
+            if(payment1.getStatus().equals(PaymentStatus.Success)){
+                paymentAmount += payment1.getAmount();
+            }
+        }
 
-        Double totalAmount = payment.getAmount();
+
+
+
+        Double totalAmount = (invoice.getAmount()-paymentAmount)*1.01;
         String totalAmountString = String.valueOf(totalAmount);
         request.setPaymentAmount(totalAmountString);
+//       request.setPaymentAmount("1000");
 
+
+        logger.info("cardNumber: {} phone:{} exDate:{}, invoice:{}, paymentAmount{}",request.getCardNumber(),request.getPhoneNumber(),request.getCardExpireDate(),request.getPersonalAccount(),totalAmountString);
         PrepaymentResponse.Return response = wsClient.prepayment(request);
-
+        logger.info("result:{} description: {} code: {}",response.getResult(),response.getResult().getDescription(),response.getResult().getCode());
         Long preConfirmTransactionId = 0L;
         PrepaymentResponse.Return.Result result = response.getResult();
         if (result.getCode().equals(UPAY_RESPONSE_OK)){
@@ -207,10 +207,11 @@ public class PaymentServiceImpl implements PaymentService {
 
     private Payment upayConfirmPayment(Integer paymentId, Integer tempTransId, String confirmSms) {
         Payment payment = paymentRepository.getOne(paymentId);
-
-        if (PaymentStatus.Success.equals(payment.getStatus())) {
-            return payment;
-        }
+        logger.info("upayConfirmPayment ishlayapti");
+        logger.info("paymentId:{} tempTranId:{} confirmSms:{}",paymentId,tempTransId,confirmSms);
+//        if (PaymentStatus.Success.equals(payment.getStatus())) {
+//            return payment;
+//        }
         logger.debug("upay confirm payment");
         logger.debug("  tempTransId = "+tempTransId);
         logger.debug("  confirmSms = "+confirmSms);
@@ -218,6 +219,7 @@ public class PaymentServiceImpl implements PaymentService {
         ConfirmPayment.ConfirmPaymentRequest request = new ConfirmPayment.ConfirmPaymentRequest();
         request.setTransactionId(Long.valueOf(tempTransId));
         request.setOneTimePassword(confirmSms);
+        logger.info("request-paymentId:{} request-tempTranId:{} request-confirmSms:{}",paymentId,request.getTransactionId(),request.getOneTimePassword());
 
         ConfirmPaymentResponse.Return response = wsClient.confirmPayment(request);
         logger.debug("  response = "+gson.toJson(response));

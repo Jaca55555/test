@@ -6,7 +6,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.order.DocumentOrderType;
 import uz.maroqand.ecology.core.constant.order.RegApplicationExcelOrder;
@@ -16,6 +18,7 @@ import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
+import uz.maroqand.ecology.core.entity.sys.Soato;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
@@ -24,6 +27,7 @@ import uz.maroqand.ecology.core.service.expertise.ConclusionService;
 import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
+import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
@@ -45,8 +49,9 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
     private final ObjectExpertiseService objectExpertiseService;
     private final OrganizationService organizationService;
     private final ConclusionService conclusionService;
+    private final SoatoService soatoService;
 
-    public RegApplicationExcelService(RegApplicationService regApplicationService, HelperService helperService, UserService userService, InvoiceService invoiceService, ClientService clientService, PaymentFileService paymentFileService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ConclusionService conclusionService) {
+    public RegApplicationExcelService(RegApplicationService regApplicationService, HelperService helperService, UserService userService, InvoiceService invoiceService, ClientService clientService, PaymentFileService paymentFileService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ConclusionService conclusionService, SoatoService soatoService) {
         this.regApplicationService = regApplicationService;
         this.helperService = helperService;
         this.userService = userService;
@@ -56,6 +61,7 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
         this.objectExpertiseService = objectExpertiseService;
         this.organizationService = organizationService;
         this.conclusionService = conclusionService;
+        this.soatoService = soatoService;
     }
 
     @Override
@@ -137,16 +143,17 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
             FilterDto filterDto = new FilterDto();
             filterDto.setDateBegin(Common.uzbekistanDateFormat.format(excelOrder.getBeginDate()));
             filterDto.setDateEnd(Common.uzbekistanDateFormat.format(excelOrder.getEndDate()));
+            filterDto.setCategory(excelOrder.getCategory());
             int page = 0;
             User user = order.getOrderedBy();
-            Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+            Page<RegApplication> regApplicationPage = regApplicationService.findFilteredExcel(
                     filterDto,
-                    user.getOrganizationId(),
+                    excelOrder.getReviewId()!=null? excelOrder.getReviewId() : user.getOrganizationId(),
                     null,
                     null,
                     null,
                     null,
-                    PageRequest.of(page, 100));
+                    PageRequest.of(page, 10000,Sort.by("registrationDate").descending()));
 
             for(RegApplication regApplication:regApplicationPage){
                 Row documentRow = sheet.createRow(i++);
@@ -267,19 +274,20 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
             FilterDto filterDto = new FilterDto();
             filterDto.setDateBegin(Common.uzbekistanDateFormat.format(excelOrder.getBeginDate()));
             filterDto.setDateEnd(Common.uzbekistanDateFormat.format(excelOrder.getEndDate()));
+            filterDto.setCategory(excelOrder.getCategory());
             Set<RegApplicationStatus> regApplicationStatusSet = new HashSet<>();
             regApplicationStatusSet.add(RegApplicationStatus.Process);
             filterDto.setStatusForReg(regApplicationStatusSet);
             int page = 0;
             User user = order.getOrderedBy();
-            Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+            Page<RegApplication> regApplicationPage = regApplicationService.findFilteredExcel(
                     filterDto,
-                    user.getOrganizationId(),
+                    excelOrder.getReviewId()!=null? excelOrder.getReviewId() : user.getOrganizationId(),
                     null,
                     null,
                     null,
                     null,
-                    PageRequest.of(page, 10000));
+                    PageRequest.of(page, 10000,Sort.by("registrationDate").descending()));
 
             for(RegApplication regApplication:regApplicationPage){
                 Row documentRow = sheet.createRow(i++);
@@ -408,19 +416,20 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
             filterDto.setDateBegin(Common.uzbekistanDateFormat.format(excelOrder.getBeginDate()));
             filterDto.setDateEnd(Common.uzbekistanDateFormat.format(excelOrder.getEndDate()));
             filterDto.setDeadlineDate(Common.uzbekistanDateFormat.format(new Date()));
+            filterDto.setCategory(excelOrder.getCategory());
             Set<RegApplicationStatus> regApplicationStatusSet = new HashSet<>();
             regApplicationStatusSet.add(RegApplicationStatus.Process);
             filterDto.setStatusForReg(regApplicationStatusSet);
             int page = 0;
             User user = order.getOrderedBy();
-            Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
+            Page<RegApplication> regApplicationPage = regApplicationService.findFilteredExcel(
                     filterDto,
-                    user.getOrganizationId(),
+                    excelOrder.getReviewId()!=null? excelOrder.getReviewId() : user.getOrganizationId(),
                     null,
                     null,
                     null,
                     null,
-                    PageRequest.of(page, 10000));
+                    PageRequest.of(page, 10000, Sort.by("registrationDate").descending()));
 
             for(RegApplication regApplication:regApplicationPage){
                 Row documentRow = sheet.createRow(i++);
@@ -558,7 +567,7 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
                     null,
                     null,
                     null,
-                    user.getRole().getId()==16 || user.getRole().getId()==23 ? null:user.getOrganizationId(),
+                    excelOrder.getReviewId()!=null? excelOrder.getReviewId() : user.getOrganizationId(),
                     null,
                     PageRequest.of(page, 10000));
             for(Invoice invoice:invoicePage){
@@ -709,8 +718,9 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
                     null,
                     null,
                     null,
-                    null,
-                    null,
+                    excelOrder.getReviewId()!=null? organizationService.getById(excelOrder.getReviewId()).getAccount(): organizationService.getById(user.getOrganizationId()).getAccount(),
+                    excelOrder.getReviewId()!=null? organizationService.getById(excelOrder.getReviewId()).getOldAccount(): organizationService.getById(user.getOrganizationId()).getOldAccount(),
+
                     PageRequest.of(page, 10000));
 
             for(PaymentFile paymentFile:paymentFilePage){
@@ -801,16 +811,16 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
             if (locale == null) {
                 locale = "uz";
             }
-            XSSFSheet sheet = workbook.createSheet("Arizalar ro'yhat");
-
-            sheet.setColumnWidth(0, 6 * 256);
+            XSSFSheet sheet = workbook.createSheet("Arizalar ro'yhati");
+            Row row = sheet.createRow(3);
+            Cell cell = row.createCell(4);
+            sheet.setColumnWidth(0, 20 * 256);
             sheet.setColumnWidth(1, 8 * 256);
-            sheet.setColumnWidth(2, 10 * 256);
-            sheet.setColumnWidth(3, 15 * 256);
-            sheet.setColumnWidth(4, 20 * 256);
-            sheet.setColumnWidth(5, 20 * 256);
-            sheet.setColumnWidth(6, 15 * 256);
-            sheet.setColumnWidth(7, 25 * 256);
+            sheet.setColumnWidth(2, 8 * 256);
+            sheet.setColumnWidth(3, 8 * 256);
+            sheet.setColumnWidth(4, 8 * 256);
+            sheet.setColumnWidth(5, 8 * 256);
+
 
 
             CellStyle style = workbook.createCellStyle();//Create style
@@ -849,25 +859,66 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
 
 
             List<String> traslateTag = new LinkedList<>(Arrays.asList(
-                    "ID",//0
-                    "registration_number",//1
-                    "registration_date",//2
-                    "doc.regDate",//3
-                    "doc.organization",//4
-                    "doc_content",//5
-                    "sys_document.performer",//6
-                    "sys_document.performer",//7
-                    "sys_document.performer",//8
-                    "sys_document.performer",//9
-                    "sys_document.performer",//10
-                    "sys_document.task_comment",//11
-                    "sys_document.task_comment"//12
+                    "sys_region",//0
+                    "front.all_statistic_title",//1
+                    "task_status.inProgress",//2
+                    "sys_performerStatus.approved",//3
+                    "sys_performerStatus.denied",//4
+                    "sys_confirmStatus.modification"//5
+
             ));
             for (int cellIndex = 0; cellIndex < traslateTag.size(); cellIndex++) {
                 titleRow.createCell(cellIndex).setCellValue(helperService.getTranslation(traslateTag.get(cellIndex),locale));
                 titleRow.getCell(cellIndex).setCellStyle(styleBorder);
             }
+            int page = 0;
+            Page<Soato> soatoPage = soatoService.getFiltered(null,null,null,  PageRequest.of(page, 10000));
+            Set<Integer>organizationIds=new HashSet<>();
+            for (int k=1;k<=19;k++){
+                if(k==2){
+                    continue;
+                }
+
+                organizationIds.add(i);
+            }
+            for(Soato soato:soatoPage){
+
+
+
+                Row documentRow = sheet.createRow(i++);
+                //id
+                cell = documentRow.createCell(0);
+                cell.setCellValue(soato.getNameTranslation(order.getLocale()));
+                cell.setCellStyle(style);
+                //registrationNumber
+                cell = documentRow.createCell(1);
+                cell.setCellValue(soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(excelOrder.getCategory(), excelOrder.getBeginDate(),excelOrder.getEndDate(),null,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(excelOrder.getCategory(),excelOrder.getBeginDate(),excelOrder.getEndDate(), null,soato.getId(),organizationIds));
+                cell.setCellStyle(style);
+
+                //ekspertiza obyekti
+                cell = documentRow.createCell(2);
+                cell.setCellValue(soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(excelOrder.getCategory(),excelOrder.getBeginDate(),excelOrder.getEndDate(), RegApplicationStatus.Process,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(excelOrder.getCategory(),excelOrder.getBeginDate(),excelOrder.getEndDate(), RegApplicationStatus.Process,soato.getId(),organizationIds));
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(3);
+                cell.setCellValue(soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(excelOrder.getCategory(),excelOrder.getBeginDate(),excelOrder.getEndDate(), RegApplicationStatus.Approved,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(excelOrder.getCategory(),excelOrder.getBeginDate(),excelOrder.getEndDate(), RegApplicationStatus.Approved,soato.getId(),organizationIds));
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(4);
+                cell.setCellValue(soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(excelOrder.getCategory(),excelOrder.getBeginDate(),excelOrder.getEndDate(),  RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(excelOrder.getCategory(),excelOrder.getBeginDate(),excelOrder.getEndDate(), RegApplicationStatus.NotConfirmed,soato.getId(),organizationIds));
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(5);
+                cell.setCellValue(soato.getParentId()==null? regApplicationService.countByCategoryAndStatusAndRegionId(excelOrder.getCategory(),excelOrder.getBeginDate(),excelOrder.getEndDate(), RegApplicationStatus.Modification,soato.getId(),organizationIds):regApplicationService.countByCategoryAndStatusAndSubRegionId(excelOrder.getCategory(),excelOrder.getBeginDate(),excelOrder.getEndDate(),RegApplicationStatus.Modification,soato.getId(),organizationIds));
+                cell.setCellStyle(style);
+
+            }
+
         }
+
+
+
+
         String file = order.getFileName() + ".xls";
 
         FileOutputStream out = new FileOutputStream(file);

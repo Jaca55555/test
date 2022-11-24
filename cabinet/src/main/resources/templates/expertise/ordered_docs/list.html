@@ -57,26 +57,40 @@
                                                 <input type="text" id="dateEnd" class="form-control datepicker"  autocomplete="off" data-parsley-pattern="/^(\d{1,2})[.\/](\d{1,2})[.\/](\d{4})$/" />
                                             </div>
                                             <div class="form-group col-sm-3">
+                                                <label class="control-label" th:text="#{mntr_user.organization}">:</label><br/>
+                                                <select id="reviewId" class="form-control">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="organization : ${organizationList}" th:value="${organization.id}" th:text="${organization.getNameTranslation(#locale)}"></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-sm-3">
                                                 <label th:text="#{appeal.type}">English</label>
                                                 <select class="form-control" id="type">
                                                     <option value="" th:text="#{sys_select_appeal_type}" selected="selected"></option>
-                                                    <option th:each="type : ${appealTypeList}" th:value="${type}" th:text="${type}"></option>
+                                                    <option th:each="type : ${appealTypeList}" th:value="${type}" th:text="#{sys_report_+${#strings.toLowerCase(type)}}"></option>
                                                 </select>
                                             </div>
                                             <div class="form-group col-sm-3">
-                                                <label th:text="#{appeal.status}">English</label>
-                                                <select class="form-control" id="status">
-                                                    <option value="" th:text="#{sys_select_appeal_status}" selected="selected"></option>
-                                                    <option value="0" th:text="#{open}"></option>
-                                                    <option value="1" th:text="#{inProgress}"></option>
-                                                    <option value="2" th:text="#{closed}"></option>
+                                                <label class="control-label" th:text="#{conclusion.category}">:</label><br/>
+                                                <select id="regApplicationCategoryType" class="form-control">
+                                                    <option value="" th:text="#{sys_select}"></option>
+                                                    <option th:each="regApp : ${regApplicationCategoryType}" th:value="${regApp}" th:text="${@helperService.getTranslation(regApp.getName(),#locale)}"></option>
                                                 </select>
                                             </div>
+<!--                                            <div class="form-group col-sm-3">-->
+<!--                                                <label th:text="#{appeal.status}">English</label>-->
+<!--                                                <select class="form-control" id="status">-->
+<!--                                                    <option value="" th:text="#{sys_select_appeal_status}" selected="selected"></option>-->
+<!--                                                    <option value="0" th:text="#{open}"></option>-->
+<!--                                                    <option value="1" th:text="#{inProgress}"></option>-->
+<!--                                                    <option value="2" th:text="#{closed}"></option>-->
+<!--                                                </select>-->
+<!--                                            </div>-->
 
-                                            <div class="form-group col-sm-3">
-                                                <label for="title" th:text="#{appeal.title}">id</label>
-                                                <input type="text" class="form-control" id="title" placeholder="title" autocomplete="off">
-                                            </div>
+<!--                                            <div class="form-group col-sm-3">-->
+<!--                                                <label for="title" th:text="#{appeal.title}">id</label>-->
+<!--                                                <input type="text" class="form-control" id="title" placeholder="title" autocomplete="off">-->
+<!--                                            </div>-->
 
 <!--                                            <div class="form-group col-sm-3">-->
 <!--                                                <label class="control-label">&nbsp;</label></br>-->
@@ -86,7 +100,7 @@
 <!--                                                    </a>-->
 <!--                                                </div>-->
 <!--                                            </div>-->
-                                            <a onclick="getDatatableExcelConnect();return false;" id="excelExport" class="btn btn-info btn-sm">
+                                            <a onclick="getDatatableExcelConnect();return false;" id="excelExport" class="btn col-md-1 m-4 btn-info">
                                                 <i class="fa fa-cloud-download"></i>
                                                 <span th:text="#{sys_excel_download}"></span>
                                             </a>
@@ -204,6 +218,8 @@
 
         dataToSend.dateBegin = $("#dateBegin").val();
         dataToSend.dateEnd = $("#dateEnd").val();
+        dataToSend.reviewId = $("#reviewId").val();
+        dataToSend.category = $("#regApplicationCategoryType").val();
         console.log("type",$("#type").val());
         dataToSend.type = $("#type").val();
         const isSend = isDatesRangeThreeMonth(
