@@ -90,12 +90,16 @@
         <input type="hidden" name="trId" id="trId" />
         <input type="hidden" name="paymentId" id="paymentId" th:value="${paymentId}"/>
         <div class="row mb-3">
+            <div class="col-md-6 offset-3 d-flex justify-content-end align-items-center">
+                Powerd by <a href="https://fast.upay.uz"> <img style="width:70px; height:auto;" src="https://brand.upay.uz/assets/images/logo/logo-horizontal-black-colored.png" alt="upay logo" class="ml-2"> </a>
+            </div>
             <div class="col-md-6 offset-3 ">
                 <button type="submit" id="confirmation-button" class="btn btn-primary float-left pl-lg-5 pr-lg-5">
                     <i class="mdi mdi-clock f-16"></i><span th:text="#{sys_send}"></span>
                 </button>
             </div>
         </div>
+
     </form>
 </div>
 <!-- /top navigation -->
