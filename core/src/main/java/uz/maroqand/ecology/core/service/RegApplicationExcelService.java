@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.order.DocumentOrderType;
 import uz.maroqand.ecology.core.constant.order.RegApplicationExcelOrder;
@@ -22,10 +21,9 @@ import uz.maroqand.ecology.core.entity.sys.Soato;
 import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
+import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.client.ClientService;
-import uz.maroqand.ecology.core.service.expertise.ConclusionService;
-import uz.maroqand.ecology.core.service.expertise.ObjectExpertiseService;
-import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
@@ -41,6 +39,7 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
 
     private Gson gson = new Gson();
     private final RegApplicationService regApplicationService;
+    private final ProjectDeveloperService projectDeveloperService;
     private final HelperService helperService;
     private final UserService userService;
     private final InvoiceService invoiceService;
@@ -50,9 +49,12 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
     private final OrganizationService organizationService;
     private final ConclusionService conclusionService;
     private final SoatoService soatoService;
+    private final MaterialService materialService;
+    private final PaymentService paymentService;
 
-    public RegApplicationExcelService(RegApplicationService regApplicationService, HelperService helperService, UserService userService, InvoiceService invoiceService, ClientService clientService, PaymentFileService paymentFileService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ConclusionService conclusionService, SoatoService soatoService) {
+    public RegApplicationExcelService(RegApplicationService regApplicationService, ProjectDeveloperService projectDeveloperService, HelperService helperService, UserService userService, InvoiceService invoiceService, ClientService clientService, PaymentFileService paymentFileService, ObjectExpertiseService objectExpertiseService, OrganizationService organizationService, ConclusionService conclusionService, SoatoService soatoService, MaterialService materialService, PaymentService paymentService) {
         this.regApplicationService = regApplicationService;
+        this.projectDeveloperService = projectDeveloperService;
         this.helperService = helperService;
         this.userService = userService;
         this.invoiceService = invoiceService;
@@ -62,6 +64,8 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
         this.organizationService = organizationService;
         this.conclusionService = conclusionService;
         this.soatoService = soatoService;
+        this.materialService = materialService;
+        this.paymentService = paymentService;
     }
 
     @Override
@@ -185,6 +189,154 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
 
                 cell = documentRow.createCell(6);
                 cell.setCellValue(regApplication.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(regApplication.getCreatedAt()):"");
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(7);
+                cell.setCellValue(helperService.getTranslation(regApplication.getStatus().getName(),locale));
+                cell.setCellStyle(style);
+
+
+
+
+
+            }
+        }
+        if (order.getType().equals(DocumentOrderType.General)){
+
+            RegApplicationExcelOrder excelOrder = gson.fromJson(order.getParams(),RegApplicationExcelOrder.class);
+            String locale = order.getLocale();
+            if (locale == null) {
+                locale = "uz";
+            }
+            XSSFSheet sheet = workbook.createSheet(helperService.getTranslation("sys_reg_applications",locale));
+            Row row = sheet.createRow(3);
+            Cell cell = row.createCell(4);
+
+            sheet.setColumnWidth(0, 6 * 256);
+            sheet.setColumnWidth(1, 8 * 256);
+            sheet.setColumnWidth(2, 20 * 256);
+            sheet.setColumnWidth(3, 12 * 256);
+            sheet.setColumnWidth(4, 40 * 256);
+            sheet.setColumnWidth(5, 15 * 256);
+            sheet.setColumnWidth(6, 15 * 256);
+            sheet.setColumnWidth(7, 25 * 256);
+            sheet.setColumnWidth(8, 25 * 256);
+            sheet.setColumnWidth(9, 25 * 256);
+            sheet.setColumnWidth(10, 25 * 256);
+            sheet.setColumnWidth(11, 25 * 256);
+            sheet.setColumnWidth(12, 25 * 256);
+            sheet.setColumnWidth(13, 25 * 256);
+            sheet.setColumnWidth(14, 25 * 256);
+
+
+            CellStyle style = workbook.createCellStyle();//Create style
+
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            style.setBorderTop(BorderStyle.MEDIUM);
+            style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.index);
+            // and solid fill pattern produces solid grey cell fill
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            style.setBorderBottom(BorderStyle.MEDIUM);
+            style.setBorderLeft(BorderStyle.MEDIUM);
+            style.setBorderRight(BorderStyle.MEDIUM);
+            style.setWrapText(true);
+
+            //border MEDIUM
+            CellStyle styleBorder = workbook.createCellStyle();//Create style
+            Font font = workbook.createFont();//Create font
+            font.setBold(true);//Make font bold
+            styleBorder.setFont(font);
+            styleBorder.setAlignment(HorizontalAlignment.CENTER);
+            styleBorder.setVerticalAlignment(VerticalAlignment.CENTER);
+            styleBorder.setBorderTop(BorderStyle.MEDIUM);
+            styleBorder.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.index);
+            // and solid fill pattern produces solid grey cell fill
+            styleBorder.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            styleBorder.setBorderBottom(BorderStyle.MEDIUM);
+            styleBorder.setBorderLeft(BorderStyle.MEDIUM);
+            styleBorder.setBorderRight(BorderStyle.MEDIUM);
+            styleBorder.setWrapText(true);
+
+            int i = 0;
+            int j=1;
+            Row titleRow = sheet.createRow(i++);
+//        titleRow.setRowStyle(style);
+
+
+            List<String> traslateTag = new LinkedList<>(Arrays.asList(
+                    "ID",//0
+                    "reg_application.id",//1
+                    "coordinate.object_expertise",//2
+                    "sys_category",//3
+                    "organization.id",//4
+                    "sys_client_tin",//5
+                    "reg_application_log.createdAt",//6
+                    "sys_documentOrders.status",//7
+                    "ID",//8
+                    "reg_application.id",//9
+                    "coordinate.object_expertise",//10
+                    "sys_category",//11
+                    "organization.id",//12
+                    "sys_client_tin",//13
+                    "reg_application_log.createdAt"
+            ));
+            for (int cellIndex = 0; cellIndex < traslateTag.size(); cellIndex++) {
+                titleRow.createCell(cellIndex).setCellValue(helperService.getTranslation(traslateTag.get(cellIndex),locale));
+                titleRow.getCell(cellIndex).setCellStyle(styleBorder);
+            }
+            FilterDto filterDto = new FilterDto();
+            filterDto.setDateBegin(Common.uzbekistanDateFormat.format(excelOrder.getBeginDate()));
+            filterDto.setDateEnd(Common.uzbekistanDateFormat.format(excelOrder.getEndDate()));
+            filterDto.setCategory(excelOrder.getCategory());
+            int page = 0;
+            User user = order.getOrderedBy();
+            Page<RegApplication> regApplicationPage = regApplicationService.findFilteredExcel(
+                    filterDto,
+                    excelOrder.getReviewId()!=null? excelOrder.getReviewId() : user.getOrganizationId(),
+                    null,
+                    null,
+                    null,
+                    null,
+                    PageRequest.of(page, 10000,Sort.by("registrationDate").descending()));
+
+            for(RegApplication regApplication:regApplicationPage){
+                Row documentRow = sheet.createRow(i++);
+                //id
+                cell = documentRow.createCell(0);
+                cell.setCellValue(j++);
+                cell.setCellStyle(style);
+                //registrationNumber
+                cell = documentRow.createCell(1);
+                cell.setCellValue(regApplication.getId());
+                cell.setCellStyle(style);
+
+                //ekspertiza obyekti
+                cell = documentRow.createCell(2);
+                cell.setCellValue(regApplication.getName());
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(3);
+                cell.setCellValue(helperService.getMaterialShortNames(regApplication.getMaterials(),locale));
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(4);
+                cell.setCellValue(regApplication.getId());
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(5);
+                cell.setCellValue(projectDeveloperService.getById(regApplication.getDeveloperId()).getName());
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(6);
+                cell.setCellValue(regApplication.getApplicant().getName());
+                cell.setCellStyle(style);
+                cell = documentRow.createCell(7);
+                cell.setCellValue(regApplication.getCategory()!=null ? helperService.getCategory(regApplication.getCategory().getId(),locale):"");
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(8);
+                cell.setCellValue(invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()!=null ? Common.uzbekistanDateFormat.format(invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()):"");
                 cell.setCellStyle(style);
 
                 cell = documentRow.createCell(7);

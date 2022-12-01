@@ -15,4 +15,6 @@ public class Response {
     private String amount;
     private String paidAmount;
     private String residualAmount;
+    private String orgAccount;
+    private String mfo;
 }

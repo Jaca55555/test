@@ -92,7 +92,8 @@ public class APIController {
         response.setAmount(Common.decimalFormat.format(invoice.getAmount()));
         response.setPaidAmount(Common.decimalFormat.format(invoice.getAmount()-residualAmount));
         response.setResidualAmount(Common.decimalFormat.format(residualAmount));
-
+        response.setOrgAccount(invoice.getPayeeAccount());
+        response.setMfo(invoice.getPayeeMfo());
 
         response.setStatus("0");
         response.setMessage("Успешно");

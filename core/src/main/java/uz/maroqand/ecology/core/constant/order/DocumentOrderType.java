@@ -17,7 +17,8 @@ public enum DocumentOrderType {
     Payment,
     Other,
     Performer,
-    Deadline
+    Deadline,
+    General
 
 
 }
