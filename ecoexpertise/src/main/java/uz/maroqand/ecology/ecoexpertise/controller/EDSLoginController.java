@@ -211,7 +211,7 @@ public class EDSLoginController {
         user.setMiddlename("");
         user.setEmail(userEds.getEmail());
         user.setPhone("");
-
+//        user.setSerialNumber(verifyPkcs7Dto.getCertificateSerialNumber());
         user.setTin(userEds.getTin());
         user.setLeTin(userEds.getLeTin());
         user.setPinfl(userEds.getPinfl());

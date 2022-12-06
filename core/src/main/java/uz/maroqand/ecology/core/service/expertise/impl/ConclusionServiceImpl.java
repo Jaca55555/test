@@ -91,6 +91,11 @@ public class ConclusionServiceImpl implements ConclusionService {
     }
 
     @Override
+    public Conclusion getTop1ByRegApplicationId(Integer regApplicationId) {
+        return conclusionRepository.findTop1ByRegApplicationIdAndDeletedFalseOrderByIdDesc(regApplicationId);
+    }
+
+    @Override
     public Conclusion findByConclusionNumber(String regNumber) {
         return conclusionRepository.findTop1ByNumberAndDeletedFalseOrderByIdDesc(regNumber);
     }

@@ -331,17 +331,41 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
                 cell = documentRow.createCell(6);
                 cell.setCellValue(regApplication.getApplicant().getName());
                 cell.setCellStyle(style);
+
                 cell = documentRow.createCell(7);
                 cell.setCellValue(regApplication.getCategory()!=null ? helperService.getCategory(regApplication.getCategory().getId(),locale):"");
                 cell.setCellStyle(style);
+
 
                 cell = documentRow.createCell(8);
                 cell.setCellValue(invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()!=null ? Common.uzbekistanDateFormat.format(invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()):"");
                 cell.setCellStyle(style);
 
-                cell = documentRow.createCell(7);
-                cell.setCellValue(helperService.getTranslation(regApplication.getStatus().getName(),locale));
+                cell = documentRow.createCell(9);
+                cell.setCellValue(invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()!=null ? invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount().toString():"");
                 cell.setCellStyle(style);
+
+                cell = documentRow.createCell(10);
+                cell.setCellValue(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()):"");
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(11);
+                cell.setCellValue(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()!=null ? conclusionService.getByRegApplicationIdLast(regApplication.getId()).getNumber():"");
+                cell.setCellStyle(style);
+
+
+                cell = documentRow.createCell(12);
+                cell.setCellValue("");
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(13);
+                cell.setCellValue(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()!=null ? conclusionService.getByRegApplicationIdLast(regApplication.getId()).getNumber():"");
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(14);
+                cell.setCellValue(regApplication.getReview().getName());
+                cell.setCellStyle(style);
+
 
 
 

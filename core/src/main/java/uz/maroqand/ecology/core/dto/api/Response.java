@@ -16,5 +16,10 @@ public class Response {
     private String paidAmount;
     private String residualAmount;
     private String orgAccount;
+    private String orgName;
     private String mfo;
+    private Integer payerTin;
+    private String invoice;
+    private Integer regApplicationId;
+    private String paymentDetails;
 }

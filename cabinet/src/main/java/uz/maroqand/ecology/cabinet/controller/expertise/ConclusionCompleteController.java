@@ -2,6 +2,7 @@ package uz.maroqand.ecology.cabinet.controller.expertise;
 
 import com.lowagie.text.DocumentException;
 import org.apache.commons.codec.binary.StringUtils;
+import org.apache.http.entity.ContentType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -26,6 +27,7 @@ import uz.maroqand.ecology.cabinet.constant.expertise.ExpertiseUrls;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
+import uz.maroqand.ecology.core.dto.didox.*;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
@@ -315,115 +317,208 @@ public class ConclusionCompleteController {
         }
 
 
-        notificationService.create(
-                regApplication.getCreatedById(),
-                NotificationType.Expertise,
-                "sys_notification.new",
-                regApplication.getId(),
-                "sys_notification_message.finished",
-                "/reg/application/resume?id=" + regApplication.getId(),
-                user.getId()
-        );
+//        notificationService.create(
+//                regApplication.getCreatedById(),
+//                NotificationType.Expertise,
+//                "sys_notification.new",
+//                regApplication.getId(),
+//                "sys_notification_message.finished",
+//                "/reg/application/resume?id=" + regApplication.getId(),
+//                user.getId()
+//        );
+//
+//        notificationService.create(
+//                regApplication.getPerformerId(),
+//                NotificationType.Expertise,
+//                "sys_notification.performerInfo",
+//                regApplication.getId(),
+//                 "sys_notification_message.performer_confirm",
+//                "/reg/application/resume?id=" + regApplication.getId(),
+//                user.getId()
+//        );
 
-        notificationService.create(
-                regApplication.getPerformerId(),
-                NotificationType.Expertise,
-                "sys_notification.performerInfo",
-                regApplication.getId(),
-                 "sys_notification_message.performer_confirm",
-                "/reg/application/resume?id=" + regApplication.getId(),
-                user.getId()
-        );
+        //for didox //todo bu yerda didox qilinyapti
+        //product
+        Product product = new Product();
+        product.setOrdno(1);
+        product.setLgotaid("");
+        product.setCommittentname("");
+        product.setCommittenttin("");
+        product.setCommittentvatregcode("");
+        product.setName("qwrty");
+        product.setCatalogcode("04902999");
+        product.setCatalogname("Газеты, журналы и прочие периодические издания, иллюстрированные или неиллюстрированные, содержащие или не содержащие рекламный материал : ДРУГИЕ");
+        product.setBarcode("");
+        product.setMeasureid("1");
+        product.setCount(0);
+        product.setSumma("1000");
+        product.setDeliverysum("100");
+        product.setWithoutvat(true);
+        //product end
+        //Factura document
+        Facturadoc facturadoc = new Facturadoc();
+        facturadoc.setFacturano("DEV TEST issues 2");
+        facturadoc.setFacturadate("2021-05-07");
+        //Factura document end
 
+        //ContractDoc
+        Contractdoc contractdoc = new Contractdoc();
+        contractdoc.setContractdate("2021-05-07");
+        contractdoc.setContractno("DEV TEST issues 2");
+        //ContractDoc end
+        //Seller
+        Seller seller = new Seller();
+        seller.setName("WEBMEDIA INFORMATION");
+        seller.setVatregcode("326020089828");
+        seller.setAccount("29802000000001088001");
+        seller.setBankid("01075");
+        seller.setAddress("Яккасарайский рн, ул.Шото-Руставели , 53-Б ");
+        seller.setDirector("РУководитель");
+        seller.setAccountant("Гл бух");
+        //Seller end
+        //Buyer
+        Buyer buyer = new Buyer();
+        buyer.setName("WEBMEDIA INFORMATION");
+        buyer.setBranchcode("");
+        buyer.setBranchname("");
+        buyer.setVatregcode("326020089828");
+        buyer.setAccount("20208000400308125001");
+        buyer.setBankid("00974");
+        buyer.setAddress("Toshkent shahri, Yakkasaroy tumani, Sh.Rustaveli ko'chasi, 53b-uy");
+        //Buyer end
+        Productlist productList = new Productlist();
+        ArrayList products = new ArrayList();
+        productList.setProducts(products);
+        productList.setTin("207119963");
+        DocumentJson json  = new DocumentJson();
+        json.setProductlist(productList);
+        json.setBuyertin("302936161");
+        json.setBuyer(buyer);
+        json.setSeller(seller);
+        json.setContractdoc(contractdoc);
+        json.setFacturadoc(facturadoc);
+        json.setContractdoc(contractdoc);
+
+        HttpHeaders headersDidox = new HttpHeaders();
+        headersDidox.setContentType(MediaType.APPLICATION_JSON);
+        headersDidox.add("user_key", regApplicationService.getUserKey());
+        MultiValueMap<String, Object> bodyDidox = new LinkedMultiValueMap<>();
+        bodyDidox.add("Version", 1);
+        bodyDidox.add("didoxcontractid", "");
+        bodyDidox.add("FacturaType", 0);
+        bodyDidox.add("ProductList", productList);
+        bodyDidox.add("FacturaDoc",facturadoc);
+        bodyDidox.add("ContractDoc",contractdoc);
+        bodyDidox.add("Buyer", buyer);
+        bodyDidox.add("Seller", seller);
+        bodyDidox.add("SellerTin",207119963);
+        HttpEntity<MultiValueMap<String, Object>> requestEntityDidox =
+                new HttpEntity<>(bodyDidox, headersDidox);
+        logger.info("requestEntityDidox"+requestEntityDidox);
+
+        RestTemplate restTemplateDidox = new RestTemplate();
+        HttpEntity<Object> request = new HttpEntity<>(bodyDidox,headersDidox);
+        ResponseEntity<Object> responseDidox = null;
+
+        try {
+//            response = restTemplate.exchange("https://register.soliq.uz/reestr-api/create", HttpMethod.POST, request, Object.class);
+            responseDidox = restTemplateDidox.exchange("https://stage.didox.uz/v1/documents/001/create", HttpMethod.POST, request, Object.class);
+        } catch (Exception e) {
+        }
+        System.out.println(responseDidox);
+
+        //for didox //todo bu yerda didox qilinyapti
 
         //sendApi
-        if(conclusion!=null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
-            // This nested HttpEntiy is important to create the correct
-            // Content-Disposition entry with metadata "name" and "filename"
-            File file = null;
-            byte[] input_file;
-            String originalFileName;
-            RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationIdAndType(regApplication.getId(), LogType.Performer);
-            MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
-            Set<Integer> materialsInt = regApplication.getMaterials();
-            Integer next =materialsInt.size()>0? materialsInt.iterator().next():0;
-            if ((next == 8 || next == 5 || next == 6 || next == 7 ) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
-                if (conclusionService.getById(conclusion.getId()).getConclusionWordFileId() != null) {
-                    file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
-                    String filePath = file.getPath();
-                    originalFileName = file.getName();
-                    input_file = Files.readAllBytes(Paths.get(filePath + originalFileName));
-                } else {
-                    StringBuilder sb = new StringBuilder(conclusionService.getById(regApplication.getConclusionId()).getHtmlText());
-
-                    byte[] byteImage = documentRepoService.getQRImage(conclusion.getDocumentRepoId());
-                    sb.append("<img src=\"data:image/png;base64,");
-                    sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(byteImage, false)));
-                    sb.append("\">");
-
-                    String XHtmlText = sb.toString().replaceAll("&nbsp;", "&#160;");
-                    java.io.File pdfFile = fileService.renderPdf(XHtmlText);
-                    originalFileName = pdfFile.getName();
-                    input_file = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
-                    file = fileService.filesave(pdfFile, user);
-
-                }
-                ContentDisposition contentDisposition = ContentDisposition
-                        .builder("form-data")
-                        .name("file")
-                        .filename(originalFileName)
-                        .build();
-                fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
-                HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
-                MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-
-//                Set<File> documentFiles = regApplication.getDocumentFiles();
-//                for(File file1:documentFiles){
-//                    HttpEntity<byte[]> documentFile = new HttpEntity<>(Files.readAllBytes(Paths.get(file1.getPath())), fileMap);
-//                    body.add("document",documentFile);
+//        if(conclusion!=null) {
+//            HttpHeaders headers = new HttpHeaders();
+//            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+//
+//            // This nested HttpEntiy is important to create the correct
+//            // Content-Disposition entry with metadata "name" and "filename"
+//            File file = null;
+//            byte[] input_file;
+//            String originalFileName;
+//            RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationIdAndType(regApplication.getId(), LogType.Performer);
+//            MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
+//            Set<Integer> materialsInt = regApplication.getMaterials();
+//            Integer next =materialsInt.size()>0? materialsInt.iterator().next():0;
+//            if ((next == 8 || next == 5 || next == 6 || next == 7 ) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
+//                if (conclusionService.getById(conclusion.getId()).getConclusionWordFileId() != null) {
+//                    file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
+//                    String filePath = file.getPath();
+//                    originalFileName = file.getName();
+//                    input_file = Files.readAllBytes(Paths.get(filePath + originalFileName));
+//                } else {
+//                    StringBuilder sb = new StringBuilder(conclusionService.getById(regApplication.getConclusionId()).getHtmlText());
+//
+//                    byte[] byteImage = documentRepoService.getQRImage(conclusion.getDocumentRepoId());
+//                    sb.append("<img src=\"data:image/png;base64,");
+//                    sb.append(StringUtils.newStringUtf8(Base64.encodeBase64(byteImage, false)));
+//                    sb.append("\">");
+//
+//                    String XHtmlText = sb.toString().replaceAll("&nbsp;", "&#160;");
+//                    java.io.File pdfFile = fileService.renderPdf(XHtmlText);
+//                    originalFileName = pdfFile.getName();
+//                    input_file = Files.readAllBytes(Paths.get(pdfFile.getAbsolutePath()));
+//                    file = fileService.filesave(pdfFile, user);
+//
 //                }
-                SendingData sendingData = new SendingData();
-                body.add("file", fileEntity);
-                body.add("data", RegApplicationDTO.fromEntity(regApplication, conclusionService, fileService));
-                sendingData.setDataSend(body.toString());
-                sendingData.setFileId(file!=null? file.getId(): null);
-                HttpEntity<MultiValueMap<String, Object>> requestEntity =
-                        new HttpEntity<>(body, headers);
-                logger.info("response_entity"+requestEntity);
-                try {
-                    ResponseEntity<String> response = restTemplate.exchange(
-                            "http://84.54.83.68:8087/api/expertise",
-                            HttpMethod.POST,
-                            requestEntity,
-                            String.class);
-                    boolean value = response.getStatusCode().is2xxSuccessful();
-                    System.out.println(response);
-                    logger.info("data send to Fond ");
-                    if(value){
-                        regApplication.setDeliveryStatus((short) 1);
-                        sendingData.setDeliveryStatus((short) 1);
-                    }else{
-                        regApplication.setDeliveryStatus((short) 0);
-                        sendingData.setDeliveryStatus((short) 0);
-                    }
-                    regApplicationService.update(regApplication);
-                    sendingData.setCreatedAt(new Date());
-                    sendingData.setRegApplicationId(regApplication.getId());
-                } catch (ResourceAccessException e) {
-                    regApplication.setDeliveryStatus((short) 0);
-                    sendingData.setDeliveryStatus((short) 0);
-                    sendingData.setCreatedAt(new Date());
-                    sendingData.setRegApplicationId(regApplication.getId());
-                    sendingData.setErrors(e.getMessage());
-                    regApplicationService.update(regApplication);
-                    logger.error("data not send to Fond ");
-                }
-                sendingDataService.save(sendingData);
-            }
-        }
+//                ContentDisposition contentDisposition = ContentDisposition
+//                        .builder("form-data")
+//                        .name("file")
+//                        .filename(originalFileName)
+//                        .build();
+//                fileMap.add(HttpHeaders.CONTENT_DISPOSITION, contentDisposition.toString());
+//                HttpEntity<byte[]> fileEntity = new HttpEntity<>(input_file, fileMap);
+//                MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+//
+////                Set<File> documentFiles = regApplication.getDocumentFiles();
+////                for(File file1:documentFiles){
+////                    HttpEntity<byte[]> documentFile = new HttpEntity<>(Files.readAllBytes(Paths.get(file1.getPath())), fileMap);
+////                    body.add("document",documentFile);
+////                }
+//
+//
+//                SendingData sendingData = new SendingData();
+//                body.add("file", fileEntity);
+//                body.add("data", RegApplicationDTO.fromEntity(regApplication, conclusionService, fileService));
+//                sendingData.setDataSend(body.toString());
+//                sendingData.setFileId(file!=null? file.getId(): null);
+//                HttpEntity<MultiValueMap<String, Object>> requestEntity =
+//                        new HttpEntity<>(body, headers);
+//                logger.info("response_entity"+requestEntity);
+//                try {
+//                    ResponseEntity<String> response = restTemplate.exchange(
+//                            "http://84.54.83.68:8087/api/expertise",
+//                            HttpMethod.POST,
+//                            requestEntity,
+//                            String.class);
+//                    boolean value = response.getStatusCode().is2xxSuccessful();
+//                    System.out.println(response);
+//                    logger.info("data send to Fond ");
+//                    if(value){
+//                        regApplication.setDeliveryStatus((short) 1);
+//                        sendingData.setDeliveryStatus((short) 1);
+//                    }else{
+//                        regApplication.setDeliveryStatus((short) 0);
+//                        sendingData.setDeliveryStatus((short) 0);
+//                    }
+//                    regApplicationService.update(regApplication);
+//                    sendingData.setCreatedAt(new Date());
+//                    sendingData.setRegApplicationId(regApplication.getId());
+//                } catch (ResourceAccessException e) {
+//                    regApplication.setDeliveryStatus((short) 0);
+//                    sendingData.setDeliveryStatus((short) 0);
+//                    sendingData.setCreatedAt(new Date());
+//                    sendingData.setRegApplicationId(regApplication.getId());
+//                    sendingData.setErrors(e.getMessage());
+//                    regApplicationService.update(regApplication);
+//                    logger.error("data not send to Fond ");
+//                }
+//                sendingDataService.save(sendingData);
+//            }
+//        }
 
         //sendApi
 

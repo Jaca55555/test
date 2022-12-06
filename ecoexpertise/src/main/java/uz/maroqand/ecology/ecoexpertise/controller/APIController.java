@@ -14,6 +14,7 @@ import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
+import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
@@ -28,16 +29,19 @@ import java.util.Map;
 public class APIController {
     private final Logger logger = LogManager.getLogger(APIController.class);
 
-    private static final String AUTH_KEY = "A347E44AC8752BA7ED33A1C36300DEW0";
+//    private static final String AUTH_KEY = "A347E44AC8752BA7ED33A1C36300DEW0";
+    private static final String AUTH_KEY = "123456";
     private final PaymentFileService paymentFileService;
 
     private final InvoiceService invoiceService;
     private final PaymentService paymentService;
+    private final RegApplicationService regApplicationService;
 
-    public APIController(PaymentFileService paymentFileService, InvoiceService invoiceService, PaymentService paymentService) {
+    public APIController(PaymentFileService paymentFileService, InvoiceService invoiceService, PaymentService paymentService, RegApplicationService regApplicationService) {
         this.paymentFileService = paymentFileService;
         this.invoiceService = invoiceService;
         this.paymentService = paymentService;
+        this.regApplicationService = regApplicationService;
     }
 
     @RequestMapping(value = "/upay/check", method = RequestMethod.POST, produces = "application/json")
@@ -61,7 +65,6 @@ public class APIController {
         }
         logger.info("HeadersParams="+headersMap);
         logger.info("RequestParams="+parametersMap);
-
 
         logger.info("Auth:{}, PersonalAccount:{}", auth, personalAccount);
         Response response = new Response();
@@ -88,17 +91,23 @@ public class APIController {
         Double residualAmount = invoice.getAmount() - invoiceService.getPayAmount(invoice.getId());
 
         response.setClient(invoice.getPayerName());
+        response.setPayerTin(invoice.getClient().getTin());
+        response.setInvoice(invoice.getInvoice());
+        response.setRegApplicationId(regApplicationService.findByInvoiceIdAndDeletedFalse(invoice.getId()).getId());
+        response.setOrgName(invoice.getPayeeName());
         response.setTin(invoice.getPayeeTin().toString());
         response.setAmount(Common.decimalFormat.format(invoice.getAmount()));
         response.setPaidAmount(Common.decimalFormat.format(invoice.getAmount()-residualAmount));
         response.setResidualAmount(Common.decimalFormat.format(residualAmount));
         response.setOrgAccount(invoice.getPayeeAccount());
         response.setMfo(invoice.getPayeeMfo());
+        response.setPaymentDetails("00668~"+ invoice.getInvoice()+ "~" + regApplicationService.findByInvoiceIdAndDeletedFalse(invoice.getId()).getId() +"~"+ invoice.getPayerName()+ "~"+  invoice.getClient().getTin() +"~"+ invoice.getPayeeName());
 
         response.setStatus("0");
         response.setMessage("Успешно");
         return response;
     }
+
 
     @RequestMapping(value = "/upay/payment", method = RequestMethod.POST, produces = "application/json")
     @ResponseBody

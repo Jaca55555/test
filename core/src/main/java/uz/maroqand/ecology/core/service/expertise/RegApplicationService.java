@@ -25,6 +25,7 @@ public interface RegApplicationService {
 
     RegApplication create(User user, RegApplicationInputType inputType, RegApplicationCategoryType categoryType);
     RegApplication getByOfferId(Integer offerId);
+    RegApplication findByInvoiceIdAndDeletedFalse(Integer invoiceId);
     List<RegApplication> getByClientId(Integer id);
 
     List<RegApplication> getByClientIdDeletedFalse(Integer id);
@@ -48,6 +49,8 @@ public interface RegApplicationService {
     RegApplication cancelApplicationByInvoiceId(Integer invoiceId);
     Integer countDeadlineRegApplication();
     Integer countNewRegApplication();
+
+    String getUserKey();
 
     List<RegApplication> getListByPerformerId(Integer performerId);
 

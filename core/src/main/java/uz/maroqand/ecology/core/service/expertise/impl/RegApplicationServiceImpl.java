@@ -8,9 +8,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
+import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
@@ -88,6 +95,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     @Override
     public RegApplication getByOfferId(Integer offerId) {
         return regApplicationRepository.findByOfferIdAndDeletedFalse(offerId);
+    }
+
+    @Override
+    public RegApplication findByInvoiceIdAndDeletedFalse(Integer invoiceId) {
+        return regApplicationRepository.findByInvoiceIdAndDeletedFalse(invoiceId);
     }
 
     @Override
@@ -361,6 +373,30 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         Set<Integer> organizationIds = new HashSet<>();
         organizationIds.add(user.getOrganizationId());
         return regApplicationRepository.countByCategoryAndStatusAndRegionId(null,null,null,RegApplicationStatus.CheckSent,organizationService.getById(user.getOrganizationId()).getRegionId(),organizationIds);
+    }
+
+    @Override
+    public String getUserKey() {
+        LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)getResponse().getBody();
+        if(map!=null){
+            return  (String)map.get("token");
+        }
+        return null;
+    }
+
+    public ResponseEntity<Object> getResponse() {
+        RestTemplate restTemplate = new RestTemplate();
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("password", "Nodirbek1703");
+        HttpEntity<Object> request = new HttpEntity<>(body,null);
+        ResponseEntity<Object> response = null;
+
+        try {
+//            response = restTemplate.exchange("https://register.soliq.uz/reestr-api/create", HttpMethod.POST, request, Object.class);
+            response = restTemplate.exchange("https://stage.didox.uz/v1/auth/626119285/password/ru", HttpMethod.POST, request, Object.class);
+        } catch (Exception e) {
+        }
+        return response;
     }
 
     @Override
