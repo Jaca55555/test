@@ -221,6 +221,15 @@
                                                 </select>
                                             </div>
 
+                                            <div class="form-group col-sm-3">
+                                                <label for="paymentFileType" class="control-label" th:text="#{sys_payment_file.type}"></label>
+                                                <select id="paymentFileType" class="form-control">
+                                                    <option value="" th:text="#{sys_all}"></option>
+                                                    <option value="0" th:text="#{sys_payment_file.upay}"></option>
+                                                    <option value="1" th:text="#{sys_payment_file.bank}"></option>
+                                                </select>
+                                            </div>
+
                                             <div class="clearfix"></div>
 
                                             <div class="col-sm-12 text-right">

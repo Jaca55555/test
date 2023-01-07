@@ -3,6 +3,7 @@ package uz.maroqand.ecology.core.entity;
 
 
 
+import lombok.Data;
 import uz.maroqand.ecology.core.constant.order.DocumentOrderStatus;
 import uz.maroqand.ecology.core.constant.order.DocumentOrderType;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -16,6 +17,7 @@ import java.util.Date;
  * (ru)
  */
 @Entity
+@Data
 @Table(name = "sys_document_orders")
 public class DocumentOrder {
 
@@ -46,8 +48,11 @@ public class DocumentOrder {
     private Long size;
 
     @OneToOne
-    @JoinColumn(name = "ordered_by")
+    @JoinColumn(name = "ordered_by",insertable = false,updatable = false)
     private User orderedBy;
+
+    @Column(name = "ordered_by")
+    private Integer userId;
 
     @Column(name = "registered_at", columnDefinition = "timestamp without time zone")
     private Date registeredAt;
@@ -68,7 +73,7 @@ public class DocumentOrder {
         this.fileName = other.fileName != null ? other.fileName : this.fileName;
         this.locale = other.locale != null ? other.locale : this.locale;
         this.size = other.size != null ? other.size : this.size;
-        this.orderedBy = other.orderedBy != null ? other.orderedBy : this.orderedBy;
+        this.userId = other.userId != null ? other.userId : this.userId;
         this.registeredAt = other.registeredAt != null ? other.registeredAt : this.registeredAt;
         this.deleted = other.deleted != null ? other.deleted : this.deleted;
         this.startedAt = other.startedAt != null ? other.startedAt : this.startedAt;

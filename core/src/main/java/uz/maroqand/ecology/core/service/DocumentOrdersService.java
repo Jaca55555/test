@@ -91,7 +91,7 @@ public class DocumentOrdersService {
         usersToOrdersMap.put(author.getId(), usersToOrdersMap.get(author.getId()) + 1);
 
         DocumentOrder documentOrder = new DocumentOrder();
-        documentOrder.setOrderedBy(author);
+        documentOrder.setUserId(author.getId());
         documentOrder.setRegisteredAt(new Date());
         documentOrder.setType(type);
         documentOrder.setStatus(DocumentOrderStatus.Pending);

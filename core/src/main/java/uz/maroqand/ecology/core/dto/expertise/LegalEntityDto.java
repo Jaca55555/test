@@ -31,6 +31,7 @@ public class LegalEntityDto {
     private String legalEntityMfo;
     private String legalEntityBankName;
     private String legalEntityBankAccount;
+    private String legalEntityOwnAccount;
 
     public LegalEntityDto(){}
 
@@ -54,6 +55,7 @@ public class LegalEntityDto {
         this.legalEntityMfo = applicant.getMfo();
         this.legalEntityBankName = applicant.getBankName();
         this.legalEntityBankAccount = applicant.getBankAccount();
+        this.legalEntityOwnAccount = applicant.getOwnAccount();
     }
 
 }

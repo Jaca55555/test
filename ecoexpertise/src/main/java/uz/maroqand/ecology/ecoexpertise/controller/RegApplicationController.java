@@ -7,18 +7,21 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.constant.user.ToastrType;
+import uz.maroqand.ecology.core.dto.didox_response.Data;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.dto.gnk.GnkResponseObject;
+import uz.maroqand.ecology.core.entity.Didox;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.client.OKED;
@@ -993,6 +996,37 @@ public class RegApplicationController {
         if (invoice.getStatus()!=InvoiceStatus.Success && invoice.getStatus()!=InvoiceStatus.PartialSuccess){
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
+
+//
+////        Didox
+//        RestTemplate restTemplateDidox = new RestTemplate();
+//        HttpHeaders headersDidoxConfirm = new HttpHeaders();
+//        headersDidoxConfirm.setContentType(MediaType.APPLICATION_JSON);
+//        headersDidoxConfirm.add("user-key", regApplicationService.getUserKey());
+//        HttpEntity<Object> requestDidoxConfirm = new HttpEntity<>(headersDidoxConfirm);
+//        ResponseEntity<Object> responseDidoxConfirm = null;
+//        if(regApplication.getDidoxId()!=null){
+//            responseDidoxConfirm = restTemplateDidox.exchange("https://api.didox.uz/v1/documents/"+regApplication.getDidoxId()+"?owner=1", HttpMethod.GET, requestDidoxConfirm, Object.class);
+//            logger.info("responseDidoxConfirm:{}",responseDidoxConfirm);
+//            LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)responseDidoxConfirm.getBody();
+//            if(map!=null){
+//                LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>)map.get("data");
+//                if(dataMap!=null){
+//                    LinkedHashMap<String, Object> documentMap = (LinkedHashMap<String, Object>)dataMap.get("document");
+//                    if(documentMap!=null){
+//                        Integer status = (Integer) documentMap.get("status");
+//                        logger.info("status:{}",status);
+//                        model.addAttribute("didoxStatus",status);
+//                        if(status==3){
+//                            regApplication.setDidoxStatus(DidoxStatus.Signed);
+//                            regApplicationService.update(regApplication);
+//                        }
+//                    }
+//                }
+//
+//            }
+//        }
+
 
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
         model.addAttribute("conclusion", conclusion);

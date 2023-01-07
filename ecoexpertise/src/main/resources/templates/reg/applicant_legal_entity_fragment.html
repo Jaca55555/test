@@ -188,6 +188,15 @@
             </div>
         </div>
 
+        <div class="form-group row" >
+            <div class="col-md-3 text-right">
+                <label class="col-form-label" th:text="#{sys_own_account}">Расчетный счет (Основной);</label>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control"  id="legalEntityOwnAccount"  name="legalEntityOwnAccount" th:value="${legalEntity.legalEntityOwnAccount}" >
+            </div>
+        </div>
+
         <input type="hidden" name="applicantType" value="LegalEntity">
         <input type="hidden" name="id" th:value="${regApplication.id}">
         <input type="hidden" id="_csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>

@@ -2,6 +2,7 @@ package uz.maroqand.ecology.core.service.billing;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import uz.maroqand.ecology.core.constant.billing.PaymentType;
 import uz.maroqand.ecology.core.entity.billing.PaymentFile;
 
 import java.util.Date;
@@ -40,6 +41,7 @@ public interface PaymentFileService {
             Boolean isComplete,
             String account,
             String oldAccount,
+            PaymentType type,
             Pageable pageable
     );
 }

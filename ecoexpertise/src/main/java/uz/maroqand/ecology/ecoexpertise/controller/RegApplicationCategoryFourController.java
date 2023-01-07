@@ -3,11 +3,12 @@ package uz.maroqand.ecology.ecoexpertise.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import uz.maroqand.ecology.core.config.GlobalConfigs;
 import uz.maroqand.ecology.core.constant.billing.InvoiceStatus;
@@ -2260,6 +2261,39 @@ public class RegApplicationCategoryFourController {
         if (invoice.getStatus()!=InvoiceStatus.Success && invoice.getStatus()!=InvoiceStatus.PartialSuccess){
             return "redirect:" + RegUrls.RegApplicationFourCategoryPrepayment + "?id=" + id;
         }
+
+
+//        Didox
+//        RestTemplate restTemplateDidox = new RestTemplate();
+//        HttpHeaders headersDidoxConfirm = new HttpHeaders();
+//        headersDidoxConfirm.setContentType(MediaType.APPLICATION_JSON);
+//        headersDidoxConfirm.add("user-key", regApplicationService.getUserKey());
+//        HttpEntity<Object> requestDidoxConfirm = new HttpEntity<>(headersDidoxConfirm);
+//        ResponseEntity<Object> responseDidoxConfirm = null;
+//        if(regApplication.getDidoxId()!=null){
+//            responseDidoxConfirm = restTemplateDidox.exchange("https://api.didox.uz/v1/documents/"+regApplication.getDidoxId()+"?owner=1", HttpMethod.GET, requestDidoxConfirm, Object.class);
+//
+//            LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)responseDidoxConfirm.getBody();
+//            if(map!=null){
+//                LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>)map.get("data");
+//                if(dataMap!=null){
+//                    LinkedHashMap<String, Object> documentMap = (LinkedHashMap<String, Object>)dataMap.get("document");
+//                    if(documentMap!=null){
+//                        Integer status = (Integer) documentMap.get("status");
+//
+//                        model.addAttribute("didoxStatus",status);
+//                        if(status==3){
+//                            regApplication.setDidoxStatus(DidoxStatus.Signed);
+//                            regApplicationService.update(regApplication);
+//                        }
+//                    }
+//                }
+//
+//            }
+//        }
+
+
+
 
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
         model.addAttribute("conclusion", conclusion);

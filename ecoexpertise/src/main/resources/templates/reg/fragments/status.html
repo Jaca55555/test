@@ -85,41 +85,55 @@
     </div>
 
     <!--Files-->
-    <div class="col-md-12 text-justify" th:if="${regApplication.conclusionOnline and regApplication.status!=null and (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
-        <div class="text-right">
-            <button class="btn btn-primary btn-sm" onclick="$('#conclusion-for-print').printThis();">
-                <i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span>
+    <div>
+
+        <div class="col-md-12 text-center text-danger" th:if="${(didoxStatus==2 or didoxStatus==0) and (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}" >
+            <div class="alert alert-danger" role="alert" th:text="#{didox_info}" ></div>
+        </div>
+
+
+        <div class="col-md-12 text-center text-danger" th:if="${didoxStatus==2 and (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}" >
+            <div class="alert alert-danger" role="alert" th:text="#{didox_warning_client}" ></div>
+        </div>
+        <div class="col-md-12 text-center text-danger" th:if="${didoxStatus==0 and (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}" >
+            <div class="alert alert-danger" role="alert" th:text="#{didox_warning_eco}" ></div>
+        </div>
+        <div class="col-md-12 text-justify" th:if="${(didoxStatus==3 or didoxStatus==null) and regApplication.conclusionOnline and regApplication.status!=null and (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
+            <div class="text-right">
+                <button class="btn btn-primary btn-sm" onclick="$('#conclusion-for-print').printThis();">
+                    <i class="mdi mdi-printer f-20"></i><span th:text="#{sys_print}"></span>
+                </button>
+            </div>
+            <div style="border: 1px solid #c5c5c4;">
+                <object th:include="reg/fragments/conclusion :: conclusion" th:remove="tag"></object>
+            </div>
+        </div>
+        <div class="col-md-12 text-justify" th:if="${(didoxStatus==3 or didoxStatus==null) and regApplication.status!=null and (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
+            <div class="col-md-12 task-attachment" th:if="${performerLog!=null && #lists.size(performerLog.documentFiles)>0}">
+                <h5  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
+                <ul class="media-list p-0">
+                    <li class="media d-flex m-b-15" th:each="documentFile :${performerLog.documentFiles}">
+                        <div class="m-r-20 file-attach">
+                            <i class="mdi mdi-file-pdf f-28 text-muted"></i>
+                        </div>
+                        <div class="media-body">
+                            <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationConclusionDownload + '?id=' + regApplication.id + '&fileId=' + documentFile.id}" class="m-b-5 d-block text-secondary">
+                                <span th:text="${documentFile.name}">Письмо КМК-234 от 23.01.2019 г.pdf</span>
+                            </a>
+                            <div class="text-muted">
+                                <span th:text="*{#numbers.formatDecimal(documentFile.size/1000.0, 1, 'WHITESPACE', 1, 'POINT')}">1.2</span>
+                                <span th:text="#{documentFile.KB}">KB</span>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="w-100  d-flex justify-content-start " >
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFile">
+                Fayllar
             </button>
         </div>
-        <div style="border: 1px solid #c5c5c4;">
-            <object th:include="reg/fragments/conclusion :: conclusion" th:remove="tag"></object>
-        </div>
-    </div>
-    <div class="col-md-12 text-justify" th:if="${ regApplication.status!=null and (regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Modification || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).Approved || regApplication.status==T(uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus).NotConfirmed)}">
-    <div class="col-md-12 task-attachment" th:if="${performerLog!=null && #lists.size(performerLog.documentFiles)>0}">
-        <h5  th:text="#{sys_performer.conclusionFiles}">Добавить сканированная копия заключения</h5>
-        <ul class="media-list p-0">
-            <li class="media d-flex m-b-15" th:each="documentFile :${performerLog.documentFiles}">
-                <div class="m-r-20 file-attach">
-                    <i class="mdi mdi-file-pdf f-28 text-muted"></i>
-                </div>
-                <div class="media-body">
-                    <a th:href="${T(uz.maroqand.ecology.ecoexpertise.constant.reg.RegUrls).RegApplicationConclusionDownload + '?id=' + regApplication.id + '&fileId=' + documentFile.id}" class="m-b-5 d-block text-secondary">
-                        <span th:text="${documentFile.name}">Письмо КМК-234 от 23.01.2019 г.pdf</span>
-                    </a>
-                    <div class="text-muted">
-                        <span th:text="*{#numbers.formatDecimal(documentFile.size/1000.0, 1, 'WHITESPACE', 1, 'POINT')}">1.2</span>
-                        <span th:text="#{documentFile.KB}">KB</span>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </div>
-    </div>
-    <div class="w-100  d-flex justify-content-start " >
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalFile">
-            Fayllar
-        </button>
     </div>
 
     <!--Modification-->

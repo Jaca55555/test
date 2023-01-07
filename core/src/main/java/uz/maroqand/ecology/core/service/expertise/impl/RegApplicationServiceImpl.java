@@ -384,16 +384,21 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return null;
     }
 
+    @Override
+    public Integer countRegApplicationByPerformerIdAndRegistrationDateBetween(Integer userId, Date beginDate, Date endDate) {
+        return null;
+    }
+
     public ResponseEntity<Object> getResponse() {
         RestTemplate restTemplate = new RestTemplate();
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("password", "Nodirbek1703");
+        body.add("password", "200934834");
         HttpEntity<Object> request = new HttpEntity<>(body,null);
         ResponseEntity<Object> response = null;
 
         try {
 //            response = restTemplate.exchange("https://register.soliq.uz/reestr-api/create", HttpMethod.POST, request, Object.class);
-            response = restTemplate.exchange("https://stage.didox.uz/v1/auth/626119285/password/ru", HttpMethod.POST, request, Object.class);
+            response = restTemplate.exchange("https://api.didox.uz/v1/auth/200934834/password/ru", HttpMethod.POST, request, Object.class);
         } catch (Exception e) {
         }
         return response;
@@ -402,6 +407,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     @Override
     public List<RegApplication> getListByPerformerId(Integer performerId) {
         return regApplicationRepository.findAllByPerformerIdAndDeletedFalseOrderByIdDesc(performerId);
+    }
+
+    @Override
+    public Integer countByPerformerIdAndCategory(Integer performerId, Category category) {
+        return regApplicationRepository.countByPerformerIdAndCategoryAndDeletedFalse(performerId,category);
     }
 
     public RegApplication getById(Integer id, Integer createdBy) {

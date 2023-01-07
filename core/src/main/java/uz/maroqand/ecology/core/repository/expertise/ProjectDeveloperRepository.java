@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
 
+import java.util.Optional;
+
 /**
  * Created by Utkirbek Boltaev on 14.06.2019.
  * (uz)
@@ -12,5 +14,5 @@ import uz.maroqand.ecology.core.entity.expertise.ProjectDeveloper;
 @Repository
 public interface ProjectDeveloperRepository extends JpaRepository<ProjectDeveloper, Integer> {
 
-
+    Optional<ProjectDeveloper> findById(Integer id);
 }

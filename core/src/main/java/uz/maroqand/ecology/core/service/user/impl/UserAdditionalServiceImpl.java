@@ -31,8 +31,8 @@ public class UserAdditionalServiceImpl implements UserAdditionalService {
         UserAdditional userAdditional = new UserAdditional();
         userAdditional.setRegisteredDate(new Date());
         userAdditional.setUserId(user.getId());
-        userAdditionalRepository.save(userAdditional);
-        return userAdditional.getId();
+//        userAdditionalRepository.save(userAdditional);
+       return null;
     }
 
     @Override

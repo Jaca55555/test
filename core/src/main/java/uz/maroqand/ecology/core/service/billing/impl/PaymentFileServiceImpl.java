@@ -93,9 +93,10 @@ public class PaymentFileServiceImpl implements PaymentFileService {
             Boolean isComplete,
             String account,
             String oldAccount,
+            PaymentType type,
             Pageable pageable
     ) {
-        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete,account,oldAccount),pageable);
+        return paymentFileRepository.findAll(getFilteringSpecification(dateBegin,dateEnd,invoice,paymentId,payerTin,payerName,details,bankMfo,isComplete,account,oldAccount,type),pageable);
     }
 
     private static Specification<PaymentFile> getFilteringSpecification(
@@ -109,8 +110,8 @@ public class PaymentFileServiceImpl implements PaymentFileService {
             final String bankMfo,
             final Boolean isComplete,
             final String account,
-            final String oldAccount
-
+            final String oldAccount,
+            final PaymentType type
             ) {
         return new Specification<PaymentFile>() {
             @Override
@@ -128,6 +129,9 @@ public class PaymentFileServiceImpl implements PaymentFileService {
                 if(dateBegin == null && dateEnd != null){
                     predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("createdAt"), dateEnd));
                 }
+                if(type!=null){
+                    predicates.add(criteriaBuilder.equal(root.get("payment").get("type"), type));
+                }
 
                 if(invoice != null){
                     predicates.add(criteriaBuilder.equal(root.get("invoice"), invoice));
@@ -139,6 +143,9 @@ public class PaymentFileServiceImpl implements PaymentFileService {
                 if(payerTin != null){
                     predicates.add(criteriaBuilder.equal(root.get("payerTin"), payerTin));
                 }
+
+//                    predicates.add(criteriaBuilder.notEqual(root.get("payerTin"), 203709707));
+
                 if(payerName != null){
                     predicates.add(criteriaBuilder.like(root.get("payerName"), "%" + payerName + "%"));
                 }
@@ -156,11 +163,9 @@ public class PaymentFileServiceImpl implements PaymentFileService {
                         predicates.add(criteriaBuilder.isNull(root.get("paymentId")));
                     }
                 }
-
                 if((account != null&& !account.isEmpty()) || (oldAccount != null)){
                     predicates.add(criteriaBuilder.or(criteriaBuilder.like(root.get("receiverAccount"), "%"+account+"%"), criteriaBuilder.like(root.get("receiverAccount"), "%"+oldAccount+"%")) );
                 }
-
                 Predicate overAll = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
                 return overAll;
             }

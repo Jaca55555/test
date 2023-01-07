@@ -15,6 +15,7 @@ import uz.maroqand.ecology.core.service.billing.InvoiceService;
 import uz.maroqand.ecology.core.service.billing.PaymentFileService;
 import uz.maroqand.ecology.core.service.billing.PaymentService;
 import uz.maroqand.ecology.core.service.expertise.RegApplicationService;
+import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
@@ -29,16 +30,18 @@ import java.util.Map;
 public class APIController {
     private final Logger logger = LogManager.getLogger(APIController.class);
 
-//    private static final String AUTH_KEY = "A347E44AC8752BA7ED33A1C36300DEW0";
-    private static final String AUTH_KEY = "123456";
+    private static final String AUTH_KEY = "A347E44AC8752BA7ED33A1C36300DEW0";
+//    private static final String AUTH_KEY = "123456";
     private final PaymentFileService paymentFileService;
+    private final OrganizationService organizationService;
 
     private final InvoiceService invoiceService;
     private final PaymentService paymentService;
     private final RegApplicationService regApplicationService;
 
-    public APIController(PaymentFileService paymentFileService, InvoiceService invoiceService, PaymentService paymentService, RegApplicationService regApplicationService) {
+    public APIController(PaymentFileService paymentFileService, OrganizationService organizationService, InvoiceService invoiceService, PaymentService paymentService, RegApplicationService regApplicationService) {
         this.paymentFileService = paymentFileService;
+        this.organizationService = organizationService;
         this.invoiceService = invoiceService;
         this.paymentService = paymentService;
         this.regApplicationService = regApplicationService;
@@ -101,7 +104,7 @@ public class APIController {
         response.setResidualAmount(Common.decimalFormat.format(residualAmount));
         response.setOrgAccount(invoice.getPayeeAccount());
         response.setMfo(invoice.getPayeeMfo());
-        response.setPaymentDetails("00668~"+ invoice.getInvoice()+ "~" + regApplicationService.findByInvoiceIdAndDeletedFalse(invoice.getId()).getId() +"~"+ invoice.getPayerName()+ "~"+  invoice.getClient().getTin() +"~"+ invoice.getPayeeName());
+        response.setPaymentDetails("00668~0~" +invoice.getClient().getTin() +"~"+  invoice.getInvoice()+ "~" + regApplicationService.findByInvoiceIdAndDeletedFalse(invoice.getId()).getId() +"~"+ invoice.getPayerName()+ "  "+  invoice.getPayeeName());
 
         response.setStatus("0");
         response.setMessage("Успешно");
@@ -191,6 +194,7 @@ public class APIController {
         paymentFile.setPayerName(invoice.getPayerName());
         paymentFile.setInvoice(invoice.getInvoice());
         paymentFile.setPaymentDate(new Date());
+        paymentFile.setReceiverName(invoice.getPayeeName());
 //        paymentFile.setReceiverName(invoice.get);
 
 //        paymentFile.setBankAccount(invoice.getPayeeAccount());
@@ -209,7 +213,7 @@ public class APIController {
         paymentFile.setDocumentNumber(upayTransId);
 //        Date date = DateParser.TryParse(paymentNew.getPayment_date(),Common.uzbekistanDateAndTimeFormatBank);
 //        paymentFile.setPaymentDate(time);
-        paymentFile.setDetails(personalAccount + " raqamli invoicega Upay orqali " +amount+ " to'landi");
+        paymentFile.setDetails("00668~0~" +invoice.getClient().getTin() +"~"+  invoice.getInvoice()+ "~" + regApplicationService.findByInvoiceIdAndDeletedFalse(invoice.getId()).getId() +"~"+ invoice.getPayerName()+ "  "+  invoice.getPayeeName());
         paymentFileService.create(paymentFile);
         invoiceService.checkInvoiceStatus(invoice);
         response.setStatus("0");

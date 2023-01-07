@@ -31,7 +31,11 @@
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <div class="row ">
                     <div class="col-md-12 text-center">
-                        <button type="submit" class="btn btn-primary" th:text="#{sys_confirm}" >Возврат</button>
+                        <button type="submit" class="btn btn-primary" th:text="#{sys_confirm}" id="confirmBtnWithLoader" >
+                            <div class="spinner-border text-light d-none" role="status" style="width:1rem; height: 1rem">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            Возврат</button>
                     </div>
                 </div>
             </div>

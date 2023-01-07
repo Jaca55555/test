@@ -33,6 +33,7 @@ public interface RegApplicationRepository extends DataTablesRepository<RegApplic
     List<RegApplication> findByApplicantId(Integer id);
 
     List<RegApplication> findByApplicantIdAndDeletedFalse(Integer id);
+    @Query(value = "SELECT * from reg_application r where r.delivery_status=0 order by r.id ASC limit 100",nativeQuery = true)
     List<RegApplication> findAllByDeliveryStatusAndDeletedFalse(Short deliveryStatus);
 
     List<RegApplication> findByInvoiceId(Integer invoiceId);
@@ -74,4 +75,5 @@ public interface RegApplicationRepository extends DataTablesRepository<RegApplic
 
     List<RegApplication> findAllByReviewIdAndStatusAndDeletedFalse(Integer organizationId, RegApplicationStatus process);
 
+    Integer countByPerformerIdAndCategoryAndDeletedFalse(Integer performerId, Category category);
 }

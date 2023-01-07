@@ -13,4 +13,6 @@ public class Buyer{
     public String address;
     public String director;
     public String accountant;
+    public Integer vatregstatus;
+    public String taxgap;
 }

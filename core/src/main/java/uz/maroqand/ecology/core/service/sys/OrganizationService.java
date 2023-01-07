@@ -11,6 +11,7 @@ public interface OrganizationService {
 
     Organization getById(Integer id);
     Organization getByRegionId(Integer id);
+    Organization findByAccount(String account);
     Organization getByTin(Integer tin);
     List<Organization> getList();
 

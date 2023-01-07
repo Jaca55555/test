@@ -80,7 +80,7 @@ public class PaymentFileController {
             @RequestParam(name = "payerName", required = false) String payerName,
             @RequestParam(name = "detail", required = false) String detail,
             @RequestParam(name = "bankMfo", required = false) String bankMfo,
-
+            @RequestParam(name = "type", required = false) PaymentType type,
             @RequestParam(name = "isComplete", required = false) Boolean isComplete,
             @RequestParam(name = "datefileter", required = false) Integer datefileter,
             Pageable pageable
@@ -123,6 +123,7 @@ public class PaymentFileController {
                 isComplete,
                 filterAccount!=null? filterAccount :(user.getRole().getId()!=23 ? account:null),
                 user.getRole().getId()!=23 ? oldAccount:null,
+                type,
                 pageable
         );
 
@@ -279,7 +280,7 @@ public class PaymentFileController {
             @RequestParam(name = "payerName", required = false) String payerName,
             @RequestParam(name = "detail", required = false) String detail,
             @RequestParam(name = "bankMfo", required = false) String bankMfo,
-
+            @RequestParam(name = "type", required = false) PaymentType type,
             @RequestParam(name = "isComplete", required = false) Boolean isComplete,
             Pageable pageable
     ){
@@ -310,6 +311,7 @@ public class PaymentFileController {
                 isComplete,
                 account,
                 null,
+                type,
                 pageable
         );
 

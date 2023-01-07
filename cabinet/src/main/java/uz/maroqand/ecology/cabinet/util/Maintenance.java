@@ -274,7 +274,7 @@ public class Maintenance {
     }
 
     public static void closeModificationRegApplications( RegApplicationService regApplicationService){
-                    regApplicationService.cancelModification();
+//                    regApplicationService.cancelModification();
 
     }
     public static void closeModificationTime(RegApplicationLogService regApplicationLogService,RegApplicationService regApplicationService){

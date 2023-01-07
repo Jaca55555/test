@@ -38,6 +38,11 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    public Organization findByAccount(String account) {
+        return organizationRepository.findByAccount(account);
+    }
+
+    @Override
     public Organization getByTin(Integer tin) {
         return organizationRepository.findByTin(tin);
     }
@@ -53,7 +58,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         organization.setLastNumber(organization.getLastNumber()+1);
         organizationRepository.save(organization);
 
-        String number = organization.getLastNumber()+"-"+"/22";
+        String number = organization.getLastNumber()+"-"+"/23";
         return number;
     }
 

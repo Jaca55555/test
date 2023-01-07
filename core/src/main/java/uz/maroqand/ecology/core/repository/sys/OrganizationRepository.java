@@ -22,4 +22,6 @@ public interface OrganizationRepository extends JpaRepository<Organization, Inte
     Organization findByTin(Integer tin);
 
     Page<Organization> findAll(Specification<Organization> filteringSpecification, Pageable pageable);
+
+    Organization findByAccount(String account);
 }

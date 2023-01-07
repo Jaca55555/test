@@ -18,7 +18,8 @@ public enum DocumentOrderType {
     Other,
     Performer,
     Deadline,
-    General
+    General,
+    TaskPerformer
 
 
 }

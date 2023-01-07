@@ -29,4 +29,7 @@ public interface DocumentOrdersRepository extends JpaRepository<DocumentOrder, I
 
     Page<DocumentOrder> findByDeletedFalseAndRegisteredAtBeforeOrderByIdAsc(Date yesterday, Pageable pageRequest);
 
+    Page<DocumentOrder> findByDeletedFalseOrderByIdDesc(Integer id, Pageable pageable);
+
+    Page<DocumentOrder> findByUserIdAndDeletedFalseOrderByIdDesc(Integer id, Pageable pageable);
 }

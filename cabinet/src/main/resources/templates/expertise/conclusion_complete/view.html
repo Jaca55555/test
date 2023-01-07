@@ -181,9 +181,20 @@
     });
 
 
+    $("#doc_task").submit(function(){
+        $("#confirmBtnWithLoader").attr("disabled", "true")
+        $("#confirmBtnWithLoader").children(".spinner-border").removeClass("d-none")
+    });
+
+
 
 
     $(document).ready(function () {
+
+
+
+
+
 
         (function () {
             var keystoppedTimer = null;

@@ -63,7 +63,8 @@ public class RestEcoFondController {
             logger.info("reg_application_id"+regApplication.getId());
             Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
 
-            if(conclusion!=null) {
+            if(conclusion!=null && conclusionService.getById(regApplication.getConclusionId()) != null) {
+                logger.info("conclusionId:{}",conclusion.getId());
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
@@ -76,8 +77,8 @@ public class RestEcoFondController {
                 Set<Integer> materialsInt = regApplication.getMaterials();
                 int next =materialsInt.size()>0? materialsInt.iterator().next():0;
                 RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationIdAndType(regApplication.getId(), LogType.Performer);
-
-                if ((next == 8 || next == 5 || next == 6 || next == 7 ) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
+                logger.info("regApplicationLogStatus:{}",regApplicationLog.getStatus());
+                if ((next == 8 || next == 5 || next == 6 || next == 7 ) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==0) {
                     if (conclusionService.getById(conclusion.getId()).getConclusionWordFileId() != null) {
                         file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
                         String filePath = file.getPath();
@@ -85,7 +86,7 @@ public class RestEcoFondController {
                         input_file = Files.readAllBytes(Paths.get(filePath + originalFileName));
                     } else {
                         logger.info("buyerda text fayl yuboradi");
-                        String htmlText = conclusionService.getById(regApplication.getConclusionId()).getHtmlText();
+                        String htmlText = conclusionService.getById(regApplication.getConclusionId())!=null ? conclusionService.getById(regApplication.getConclusionId()).getHtmlText():"";
                         String XHtmlText = htmlText.replaceAll("&nbsp;", "&#160;");
                         java.io.File pdfFile = fileService.renderPdf(XHtmlText);
                         originalFileName = pdfFile.getName();

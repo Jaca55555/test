@@ -60,6 +60,7 @@ public class RegApplication {
     @Column(name = "applicant_type")
     @Enumerated(EnumType.ORDINAL)
     private ApplicantType applicantType;
+
     @Column(name = "input_type")
     @Enumerated(EnumType.ORDINAL)
     private RegApplicationInputType inputType;
@@ -343,4 +344,10 @@ public class RegApplication {
     @Type(type = "jsonb")
     @Column(name = "boiler_groups", columnDefinition = "jsonb")
     private List<BoilerGroupEnum> boilerGroups;
+
+    @Column(name = "didox_id")
+    private String didoxId;
+
+    @Column(name = "didox_status")
+    private DidoxStatus didoxStatus;
 }

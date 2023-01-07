@@ -141,6 +141,8 @@ public class Client {
     //Расчетный счет (Основной)
     @Column(name = "bank_account")
     private String bankAccount;
+    @Column(name = "own_account")
+    private String ownAccount;
 
     //ariza yuborsa yoki arizasi bor bo'lsa active bo'ladi va client register da chiqadi
     @Column(name = "active",columnDefinition = "boolean DEFAULT false")

@@ -17,4 +17,5 @@ public interface MaterialRepository extends JpaRepository<Material, Integer>, Jp
 
     List<Material> findByDeletedFalse();
 
+    Material findByIdAndDeletedFalse(Integer id);
 }

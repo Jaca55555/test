@@ -62,7 +62,7 @@ public class GnkService {
             result = Authorized_Get(url_getIndividualInfo + tin.toString(), GnkResponseObject.class);
         }catch (Exception e){e.printStackTrace();}
 
-        logger.info("GNK response result=", result);
+        logger.info("GNK response result: {}", result);
 
         if(result!=null && result.getRoot()!=null){
             for (GnkRootResponseObject object: result.getRoot()){

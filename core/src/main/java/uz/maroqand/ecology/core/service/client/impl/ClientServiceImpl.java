@@ -58,12 +58,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<Client> getByListTin(Integer tin) {
-        return clientRepository.findByTinAndDeletedFalse(tin);
+        return clientRepository.findAllByTinAndDeletedFalse(tin);
     }
 
     @Override
     public List<Client> getByListPinfl(String pinfl) {
-        return clientRepository.findByPinflAndDeletedFalse(pinfl);
+        return clientRepository.findAllByPinflAndDeletedFalse(pinfl);
     }
 
     @Override
@@ -103,6 +103,7 @@ public class ClientServiceImpl implements ClientService {
         client.setMfo(legalEntityDto.getLegalEntityMfo());
         client.setBankName(legalEntityDto.getLegalEntityBankName());
         client.setBankAccount(legalEntityDto.getLegalEntityBankAccount());
+        client.setOwnAccount(legalEntityDto.getLegalEntityOwnAccount());
 
         client.setUpdateAt(new Date());
         client.setUpdateById(user.getId());

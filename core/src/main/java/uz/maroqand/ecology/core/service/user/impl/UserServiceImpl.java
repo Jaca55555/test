@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import uz.maroqand.ecology.core.component.UserDetailsImpl;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
 import uz.maroqand.ecology.core.constant.user.Permissions;
+import uz.maroqand.ecology.core.dto.id_egov.IdGovResponseDto;
+import uz.maroqand.ecology.core.dto.id_egov.UserType;
 import uz.maroqand.ecology.core.entity.sys.Organization;
 import uz.maroqand.ecology.core.entity.user.Department;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -387,4 +389,26 @@ public class UserServiceImpl implements UserService {
         return encoder;
     }
 
+    @Override
+    public User create(IdGovResponseDto idGovResponse, Integer leTin, String leName, UserType userType) {
+        User user = new User();
+        user.setPinfl(idGovResponse.getPin());
+        if(idGovResponse.getTin()!=null && !Objects.equals(idGovResponse.getTin(), "")){
+            user.setTin(Integer.parseInt(idGovResponse.getTin()));
+        }
+
+        user.setFirstname(idGovResponse.getFirst_name());
+        user.setLastname(idGovResponse.getSur_name());
+        user.setMiddlename(idGovResponse.getMid_name());
+//        user.setLeName(leName);
+//        user.setLeTin(leTin);
+//        user.setEnabled(true);
+//        user.setDateRegistered(new Date());
+//        user.setUsername(idGovResponse.getUser_id());
+//        user.setPhoto(idGovResponse.getPhoto());
+//        user.setPassportSerial(idGovResponse.getPport_no());
+        user.setEmail(idGovResponse.getEmail());
+        user = userRepository.save(user);
+        return user;
+    }
 }

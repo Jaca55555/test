@@ -59,6 +59,7 @@ public class CabinetStarter {
         documentOrdersService.registerPerformer(DocumentOrderType.Other, reportOnActivitiesService);
         documentOrdersService.registerPerformer(DocumentOrderType.Performer, reportOnActivitiesService);
         documentOrdersService.registerPerformer(DocumentOrderType.Deadline, reportOnActivitiesService);
+        documentOrdersService.registerPerformer(DocumentOrderType.General, reportOnActivitiesService);
         documentOrdersService.startWorkingOnOrders();
 
 

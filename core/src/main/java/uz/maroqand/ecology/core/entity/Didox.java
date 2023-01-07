@@ -30,6 +30,9 @@ public class Didox {
     @Column(name = "deleted",columnDefinition = "boolean DEFAULT false")
     private Boolean deleted = false;
 
+    @Column(name = "reg_application_id")
+    private Integer regApplicationId;
+
     @Column(name="created_at", columnDefinition = "timestamp without time zone")
     private Date createdAt;
 

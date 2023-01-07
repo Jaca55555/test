@@ -36,9 +36,8 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    @Cacheable(value = "getMaterialById", key = "{#id}",condition="#id!= null",unless="#result == ''")
     public Material getById(Integer id){
-        return materialRepository.getOne(id);
+        return materialRepository.findByIdAndDeletedFalse(id);
     }
 
     @Override

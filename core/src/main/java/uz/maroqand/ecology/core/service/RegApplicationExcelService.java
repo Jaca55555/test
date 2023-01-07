@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import uz.maroqand.ecology.core.constant.expertise.Category;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.constant.order.DocumentOrderType;
 import uz.maroqand.ecology.core.constant.order.RegApplicationExcelOrder;
@@ -278,8 +279,7 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
                     "coordinate.object_expertise",//10
                     "sys_category",//11
                     "organization.id",//12
-                    "sys_client_tin",//13
-                    "reg_application_log.createdAt"
+                    "sys_client_tin"//13
             ));
             for (int cellIndex = 0; cellIndex < traslateTag.size(); cellIndex++) {
                 titleRow.createCell(cellIndex).setCellValue(helperService.getTranslation(traslateTag.get(cellIndex),locale));
@@ -307,62 +307,65 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
                 cell.setCellValue(j++);
                 cell.setCellStyle(style);
                 //registrationNumber
-                cell = documentRow.createCell(1);
-                cell.setCellValue(regApplication.getId());
-                cell.setCellStyle(style);
 
                 //ekspertiza obyekti
-                cell = documentRow.createCell(2);
+                cell = documentRow.createCell(1);
                 cell.setCellValue(regApplication.getName());
                 cell.setCellStyle(style);
 
-                cell = documentRow.createCell(3);
-                cell.setCellValue(helperService.getMaterialShortNames(regApplication.getMaterials(),locale));
+                cell = documentRow.createCell(2);
+                StringBuilder materials= new StringBuilder();
+                for(Integer m:regApplication.getMaterials()){
+                    System.out.println("m="+m);
+                    materials.append(materialService.getById(m)!=null? materialService.getById(m).getNameShortTranslation(locale):"");
+                }
+                cell.setCellValue(materials.toString());
                 cell.setCellStyle(style);
 
-                cell = documentRow.createCell(4);
+                cell = documentRow.createCell(3);
                 cell.setCellValue(regApplication.getId());
                 cell.setCellStyle(style);
 
-                cell = documentRow.createCell(5);
-                cell.setCellValue(projectDeveloperService.getById(regApplication.getDeveloperId()).getName());
+                cell = documentRow.createCell(4);
+                cell.setCellValue(regApplication.getDeveloperId()!=null ?  projectDeveloperService.getById(regApplication.getDeveloperId()).getName():"");
+//                cell.setCellValue("");
                 cell.setCellStyle(style);
 
-                cell = documentRow.createCell(6);
+                cell = documentRow.createCell(5);
                 cell.setCellValue(regApplication.getApplicant().getName());
                 cell.setCellStyle(style);
 
-                cell = documentRow.createCell(7);
+                cell = documentRow.createCell(6);
                 cell.setCellValue(regApplication.getCategory()!=null ? helperService.getCategory(regApplication.getCategory().getId(),locale):"");
                 cell.setCellStyle(style);
 
 
+                cell = documentRow.createCell(7);
+                cell.setCellValue(invoiceService.getInvoice(regApplication.getInvoiceId())!=null && invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()!=null ? Common.uzbekistanDateFormat.format(invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()):"");
+                cell.setCellStyle(style);
+
                 cell = documentRow.createCell(8);
-                cell.setCellValue(invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()!=null ? Common.uzbekistanDateFormat.format(invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()):"");
+                cell.setCellValue(invoiceService.getInvoice(regApplication.getInvoiceId())!=null && invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()!=null ? invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount().toString():"");
                 cell.setCellStyle(style);
 
                 cell = documentRow.createCell(9);
-                cell.setCellValue(invoiceService.getInvoice(regApplication.getInvoiceId()).getClosedDate()!=null ? invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount().toString():"");
+                cell.setCellValue(conclusionService.getByRegApplicationIdLast(regApplication.getId())!=null && conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()):"");
                 cell.setCellStyle(style);
 
                 cell = documentRow.createCell(10);
-                cell.setCellValue(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()!=null ? Common.uzbekistanDateFormat.format(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()):"");
+                cell.setCellValue(conclusionService.getByRegApplicationIdLast(regApplication.getId())!=null &&  conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()!=null ? conclusionService.getByRegApplicationIdLast(regApplication.getId()).getNumber():"");
                 cell.setCellStyle(style);
+
 
                 cell = documentRow.createCell(11);
-                cell.setCellValue(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()!=null ? conclusionService.getByRegApplicationIdLast(regApplication.getId()).getNumber():"");
-                cell.setCellStyle(style);
-
-
-                cell = documentRow.createCell(12);
                 cell.setCellValue("");
                 cell.setCellStyle(style);
 
-                cell = documentRow.createCell(13);
-                cell.setCellValue(conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()!=null ? conclusionService.getByRegApplicationIdLast(regApplication.getId()).getNumber():"");
+                cell = documentRow.createCell(12);
+                cell.setCellValue(conclusionService.getByRegApplicationIdLast(regApplication.getId())!=null &&  conclusionService.getByRegApplicationIdLast(regApplication.getId()).getCreatedAt()!=null ? conclusionService.getByRegApplicationIdLast(regApplication.getId()).getNumber():"");
                 cell.setCellStyle(style);
 
-                cell = documentRow.createCell(14);
+                cell = documentRow.createCell(13);
                 cell.setCellValue(regApplication.getReview().getName());
                 cell.setCellStyle(style);
 
@@ -800,6 +803,121 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
 
         }
             }
+        else if (order.getType().equals(DocumentOrderType.TaskPerformer)) {
+            RegApplicationExcelOrder excelOrder = gson.fromJson(order.getParams(),RegApplicationExcelOrder.class);
+            String locale = order.getLocale();
+            if (locale == null) {
+                locale = "uz";
+            }
+            XSSFSheet sheet = workbook.createSheet(helperService.getTranslation("invoice_list",locale));
+            Row row = sheet.createRow(3);
+            Cell cell = row.createCell(4);
+
+            sheet.setColumnWidth(0, 6 * 256);
+            sheet.setColumnWidth(1, 8 * 256);
+            sheet.setColumnWidth(2, 18 * 256);
+            sheet.setColumnWidth(3, 15 * 256);
+            sheet.setColumnWidth(4, 20 * 256);
+            sheet.setColumnWidth(5, 20 * 256);
+            sheet.setColumnWidth(6, 15 * 256);
+            sheet.setColumnWidth(7, 25 * 256);
+
+
+            CellStyle style = workbook.createCellStyle();//Create style
+
+            style.setAlignment(HorizontalAlignment.CENTER);
+            style.setVerticalAlignment(VerticalAlignment.CENTER);
+            style.setBorderTop(BorderStyle.MEDIUM);
+            style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.index);
+            // and solid fill pattern produces solid grey cell fill
+            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            style.setBorderBottom(BorderStyle.MEDIUM);
+            style.setBorderLeft(BorderStyle.MEDIUM);
+            style.setBorderRight(BorderStyle.MEDIUM);
+            style.setWrapText(true);
+
+            //border MEDIUM
+            CellStyle styleBorder = workbook.createCellStyle();//Create style
+            Font font = workbook.createFont();//Create font
+            font.setBold(true);//Make font bold
+            styleBorder.setFont(font);
+            styleBorder.setAlignment(HorizontalAlignment.CENTER);
+            styleBorder.setVerticalAlignment(VerticalAlignment.CENTER);
+            styleBorder.setBorderTop(BorderStyle.MEDIUM);
+            styleBorder.setFillForegroundColor(IndexedColors.GREY_50_PERCENT.index);
+            // and solid fill pattern produces solid grey cell fill
+            styleBorder.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            styleBorder.setBorderBottom(BorderStyle.MEDIUM);
+            styleBorder.setBorderLeft(BorderStyle.MEDIUM);
+            styleBorder.setBorderRight(BorderStyle.MEDIUM);
+            styleBorder.setWrapText(true);
+
+            int i = 0;
+            int j=1;
+            Row titleRow = sheet.createRow(i++);
+//        titleRow.setRowStyle(style);
+
+
+            List<String> traslateTag = new LinkedList<>(Arrays.asList(
+                    "ID",//0
+                    "sys_performer",//1
+                    "sys_category",//2
+                    "sys_category1",//3
+                    "sys_category2",//4
+                    "sys_category3",//5
+                    "sys_category4",//6
+                    "sys_categoryAll"
+            ));
+            for (int cellIndex = 0; cellIndex < traslateTag.size(); cellIndex++) {
+                titleRow.createCell(cellIndex).setCellValue(helperService.getTranslation(traslateTag.get(cellIndex),locale));
+                titleRow.getCell(cellIndex).setCellStyle(styleBorder);
+            }
+            FilterDto filterDto = new FilterDto();
+            filterDto.setDateBegin(Common.uzbekistanDateFormat.format(excelOrder.getBeginDate()));
+            filterDto.setDateEnd(Common.uzbekistanDateFormat.format(excelOrder.getEndDate()));
+            int page = 0;
+            User user = order.getOrderedBy();
+            List<User> performerList = userService.getEmployeesPerformerForForwarding(userService.getCurrentUserFromContext().getOrganizationId());
+            for(User performer:performerList){
+
+                Row documentRow = sheet.createRow(i++);
+                //id
+                cell = documentRow.createCell(0);
+                cell.setCellValue(j++);
+                cell.setCellStyle(style);
+                //registrationNumber
+                cell = documentRow.createCell(1);
+                cell.setCellValue(performer.getFName());
+                cell.setCellStyle(style);
+
+                //ekspertiza obyekti
+
+                cell = documentRow.createCell(2);
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), null));
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(3);
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category1));
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(4);
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category2));
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(5);
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category3));
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(6);
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category4));
+                cell.setCellStyle(style);
+
+                cell = documentRow.createCell(7);
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.CategoryAll));
+                cell.setCellStyle(style);
+
+            }
+        }
         else if (order.getType().equals(DocumentOrderType.Payment)){
             RegApplicationExcelOrder excelOrder = gson.fromJson(order.getParams(),RegApplicationExcelOrder.class);
             String locale = order.getLocale();
@@ -896,6 +1014,7 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
                     null,
                     excelOrder.getReviewId()!=null? organizationService.getById(excelOrder.getReviewId()).getAccount(): organizationService.getById(user.getOrganizationId()).getAccount(),
                     excelOrder.getReviewId()!=null? organizationService.getById(excelOrder.getReviewId()).getOldAccount(): organizationService.getById(user.getOrganizationId()).getOldAccount(),
+                    null,
 
                     PageRequest.of(page, 10000));
 

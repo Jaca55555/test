@@ -3,6 +3,8 @@ package uz.maroqand.ecology.core.service.user;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import uz.maroqand.ecology.core.constant.expertise.LogType;
+import uz.maroqand.ecology.core.dto.id_egov.IdGovResponseDto;
+import uz.maroqand.ecology.core.dto.id_egov.UserType;
 import uz.maroqand.ecology.core.entity.user.User;
 
 import java.util.HashMap;
@@ -85,4 +87,6 @@ public interface UserService {
     Integer getUserDepartmentId(Integer userId);
 
     Integer getUserRegionId(User user);
+
+    User create(IdGovResponseDto idGovResponse, Integer leTin, String leName, UserType userType);
 }

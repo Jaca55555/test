@@ -76,7 +76,7 @@ public class OrderedDocumentsController {
     ) {
         User user = usersService.getCurrentUserFromContext();
 
-        Page<DocumentOrder> ordersPage = documentOrdersRepository.findByDeletedFalseAndOrderedByIdOrderByIdDesc(user.getId(), pageable);
+        Page<DocumentOrder> ordersPage = documentOrdersRepository.findByUserIdAndDeletedFalseOrderByIdDesc(user.getId(), pageable);
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", ordersPage.getTotalElements()); //Total elements

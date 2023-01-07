@@ -28,7 +28,7 @@ public class ProjectDeveloperServiceImpl implements ProjectDeveloperService {
         if(id==null){
             return new ProjectDeveloper();
         }
-        return projectDeveloperRepository.getOne(id);
+        return projectDeveloperRepository.findById(id).orElse(null);
     }
 
     @Override
