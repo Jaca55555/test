@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum CabinetType {
-    BACK_OFFICE("e-ngo_uz", "ngo_minjust_uz", "ZAdqXmvG42ut863TbKJBDdnt");
+    BACK_OFFICE("ekoekspertiza_uz", "ekoekspertiza_uz", "Jp0h5U0fZ3xdy9ifJG4DansF");
 
     //UzJqmfISjtaXD9rW2O7sT4gB
 

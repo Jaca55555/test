@@ -1,7 +1,6 @@
 package uz.maroqand.ecology.ecoexpertise.controller;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,23 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import uz.maroqand.ecology.core.component.UserDetailsImpl;
-import uz.maroqand.ecology.core.constant.sys.IdGovUzResponseParams;
 import uz.maroqand.ecology.core.dto.id_egov.*;
 import uz.maroqand.ecology.core.entity.user.User;
-import uz.maroqand.ecology.core.entity.user.UserIdGov;
 import uz.maroqand.ecology.core.repository.user.UserIdGovRepository;
 import uz.maroqand.ecology.core.repository.user.UserRepository;
 import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
-import uz.maroqand.ecology.core.util.HttpRequestHelper;
 import uz.maroqand.ecology.core.util.TinParser;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,15 +36,12 @@ import java.util.Map;
 @Controller
 public class IdGovUzAuthController {
 
-    private static final String AuthorizationUrl = "https://sso.gov.uz:8443/sso/oauth/Authorization.do";
-    private static final String LogoutUrl = "https://sso.gov.uz:8443/sso/svc/tk/SLO.do";
-    private static final String ClientId = "davekoekspertiza_uz";
+    private static final String AuthorizationUrl = "https://sso.egov.uz/sso/oauth/Authorization.do";
+    private static final String LogoutUrl = "https://sso.egov.uz:8443/sso/svc/tk/SLO.do";
+    private static final String ClientId = "ekoekspertiza_uz";
     private static final String Scope = "davekoekspertiza_uz";
     private static final String ClientSecret = "XbzKDhhq8+3tDnuU/e02bA==";
     private static final String RedirectUrl = "https://eco-service.uz" + SysUrls.IdGovUzAccessToken;
-
-    @Autowired
-    private IdGovService idGovService;
 
     private final Logger logger = LogManager.getLogger(IdGovUzAuthController.class);
     private final SimpleDateFormat idGovUzDateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -58,13 +49,15 @@ public class IdGovUzAuthController {
     private UserIdGovRepository userIdGovRepository;
     private UserRepository userRepository;
     private final UserService userService;
+    private final IdGovService idGovService;
     private UserAdditionalService userAdditionalService;
 
     @Autowired
-    public IdGovUzAuthController(UserIdGovRepository userIdGovRepository, UserRepository userRepository, UserService userService, UserAdditionalService userAdditionalService) {
+    public IdGovUzAuthController(UserIdGovRepository userIdGovRepository, UserRepository userRepository, UserService userService, IdGovService idGovService, UserAdditionalService userAdditionalService) {
         this.userIdGovRepository = userIdGovRepository;
         this.userRepository = userRepository;
         this.userService = userService;
+        this.idGovService = idGovService;
         this.userAdditionalService = userAdditionalService;
     }
 
@@ -110,6 +103,7 @@ public class IdGovUzAuthController {
         String pin = idGovResponse.getPin();
         Integer leTin = null;
         String leName = "";
+        Integer tin = Integer.parseInt( idGovResponse.getTin() );
         if (idGovResponse.getLegal_info() != null && idGovResponse.getLegal_info().size() > 0) {
             try {
                 IdGovLEResponseDto legalInfo = idGovResponse.getLegal_info().stream().filter(IdGovLEResponseDto::getIs_basic).findFirst().orElse(null);
@@ -125,19 +119,19 @@ public class IdGovUzAuthController {
 
         UserType userType = leTin != null ? UserType.LEGAL_ENTITY : UserType.INDIVIDUAL;
         User user;
-//        if (leTin != null) {
-//            user = userRepository.findByTinAndLeTin(TinParser.trimIndividualsTinToNull(userIdGov.getTin()), TinParser.trimIndividualsTinToNull(userIdGov.getLegalEntityTIN()));
-//        } else {
-//            user = userRepository.findByTinAndLeTinIsNull(TinParser.trimIndividualsTinToNull(userIdGov.getTin()));
-//        }
-//
-//        if (user == null) {
-//            user = userService.create(idGovResponse, leTin, leName, userType);
-//            logger.info("create user:{} ", user);
-//        }else {
-//            userService.update(idGovResponse, leTin, leName, userType,user.getId());
-//            logger.info("update user:{} ", user);
-//        }
+        if (leTin != null) {
+            user = userService.getByTin(pin, leTin);
+        } else {
+            user = userService.getByPin(pin,tin);
+        }
+
+        if (user == null) {
+            user = userService.create(idGovResponse, leTin, leName, userType);
+            logger.info("create user:{} ", user);
+        }else {
+            userService.update(idGovResponse, leTin, leName, userType,user.getId());
+            logger.info("update user:{} ", user);
+        }
 
         /*
          * Insert userIdGov
@@ -195,11 +189,11 @@ public class IdGovUzAuthController {
 //            return "redirect:"+"/login?notValidated";
 //        }
 
-//        UserDetailsImpl userDetails = new UserDetailsImpl(user);
+        UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
-//        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        logger.info("Logging in with user: {} {}", user.getId(), user.getUsername());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        logger.info("Logging in with user: {} {}", user.getId(), user.getUsername());
 
         return "redirect:"+"/dashboard";
     }

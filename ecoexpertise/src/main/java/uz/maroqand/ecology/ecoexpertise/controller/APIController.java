@@ -195,6 +195,7 @@ public class APIController {
         paymentFile.setInvoice(invoice.getInvoice());
         paymentFile.setPaymentDate(new Date());
         paymentFile.setReceiverName(invoice.getPayeeName());
+        paymentFile.setPaymentId(payment.getId());
 //        paymentFile.setReceiverName(invoice.get);
 
 //        paymentFile.setBankAccount(invoice.getPayeeAccount());

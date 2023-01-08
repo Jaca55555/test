@@ -225,8 +225,7 @@
                                                 <label for="paymentFileType" class="control-label" th:text="#{sys_payment_file.type}"></label>
                                                 <select id="paymentFileType" class="form-control">
                                                     <option value="" th:text="#{sys_all}"></option>
-                                                    <option value="0" th:text="#{sys_payment_file.upay}"></option>
-                                                    <option value="1" th:text="#{sys_payment_file.bank}"></option>
+                                                    <option th:each="type : ${paymentTypes}" th:value="${type}" th:text="#{sys_payment_file. + ${type}} "></option>
                                                 </select>
                                             </div>
 
@@ -410,6 +409,8 @@
                 dataToSend.payerName = $("#payerName").val();
                 dataToSend.detail = $("#detail").val();
                 dataToSend.bankMfo = $("#bankMfo").val();
+                dataToSend.type = $("#paymentFileType").val();
+
 
                 dataToSend.isComplete = $("#isComplete").val();
 

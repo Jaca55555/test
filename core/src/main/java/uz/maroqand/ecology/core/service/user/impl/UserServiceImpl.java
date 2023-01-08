@@ -120,6 +120,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void update(IdGovResponseDto idGovResponse, Integer leTin, String leName, UserType userType, Integer userId) {
+        User user = findById(userId);
+        user.setPinfl(idGovResponse.getPin());
+        if(idGovResponse.getTin()!=null && !Objects.equals(idGovResponse.getTin(), "")){
+            user.setTin(Integer.parseInt(idGovResponse.getTin()));
+        }
+        user.setFirstname(idGovResponse.getFirst_name());
+        user.setLastname(idGovResponse.getSur_name());
+        user.setMiddlename(idGovResponse.getMid_name());
+//        user.setLeName(leName);
+        user.setLeTin(leTin);
+//        user.setPassportSerial(idGovResponse.getPport_no());
+        user.setEmail(idGovResponse.getEmail());
+        userRepository.save(user);
+    }
+
+    @Override
     public User findById(Integer id, Integer organizationId) {
         return userRepository.findByIdAndOrganizationId(id, organizationId);
     }
@@ -400,15 +417,23 @@ public class UserServiceImpl implements UserService {
         user.setFirstname(idGovResponse.getFirst_name());
         user.setLastname(idGovResponse.getSur_name());
         user.setMiddlename(idGovResponse.getMid_name());
-//        user.setLeName(leName);
-//        user.setLeTin(leTin);
-//        user.setEnabled(true);
-//        user.setDateRegistered(new Date());
-//        user.setUsername(idGovResponse.getUser_id());
-//        user.setPhoto(idGovResponse.getPhoto());
-//        user.setPassportSerial(idGovResponse.getPport_no());
+        user.setLeTin(leTin);
+        user.setEnabled(true);
+        user.setDateRegistered(new Date());
+        user.setUsername(idGovResponse.getUser_id());
         user.setEmail(idGovResponse.getEmail());
+        user.setLastEvent(new Date());
         user = userRepository.save(user);
         return user;
     }
+    @Override
+    public User getByTin(String pin, Integer leTin) {
+        return userRepository.findByPinflAndLeTin(pin, leTin);
+    }
+
+    @Override
+    public User getByPin(String pin,Integer tin) {
+        return userRepository.findByPinflAndTinAndLeTinIsNull(pin,tin);
+    }
+
 }

@@ -54,4 +54,9 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 
     User findByTelegramUserIdAndEnabledTrue(Integer telegramUserId);
 
+    User findByPinflAndLeTin(String pin, Integer leTin);
+
+    User findByPinflAndLeTinIsNull(String pin);
+
+    User findByPinflAndTinAndLeTinIsNull(String pin, Integer tin);
 }

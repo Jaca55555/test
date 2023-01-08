@@ -359,7 +359,7 @@ public class ConclusionCompleteController {
             product.setCatalogcode("11603001001000000");
             product.setCatalogname("Услуги по проведению экологической экспертизы");
             product.setBarcode("");
-            product.setPackagecode("196447");
+            product.setPackagecode("1506727");
             product.setPackagename("dona");
             product.setCount("1");
             if(!regApplication.getBudget()&&(regApplication.getRequirementId()==5||regApplication.getRequirementId()==6||regApplication.getRequirementId()==7||regApplication.getRequirementId()==8)) {

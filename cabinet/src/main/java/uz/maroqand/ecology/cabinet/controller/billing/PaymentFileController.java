@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.cabinet.controller.billing;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,7 @@ import uz.maroqand.ecology.core.service.sys.OrganizationService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
+import uz.maroqand.ecology.core.util.HttpRequestHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,6 +53,9 @@ public class PaymentFileController {
     private final OrganizationService organizationService;
     private final RegApplicationService regApplicationService;
 
+    private static final Logger logger = LogManager.getLogger(PaymentFileController.class);
+
+
     @Autowired
     public PaymentFileController(PaymentFileService paymentFileService, InvoiceService invoiceService, ClientService clientService, PaymentService paymentService, UserService userService, OrganizationService organizationService, RegApplicationService regApplicationService) {
         this.paymentFileService = paymentFileService;
@@ -65,6 +71,7 @@ public class PaymentFileController {
     public String billingList(Model model){
         model.addAttribute("isAdmin",userService.isAdmin());
         model.addAttribute("organizationList",organizationService.getList());
+        model.addAttribute("paymentTypes",PaymentType.values());
         return BillingTemplates.PaymentFileList;
     }
 
@@ -85,6 +92,7 @@ public class PaymentFileController {
             @RequestParam(name = "datefileter", required = false) Integer datefileter,
             Pageable pageable
     ){
+        logger.info("type:{}",type);
         User user = userService.getCurrentUserFromContext();
         dateBeginStr = StringUtils.trimToNull(dateBeginStr);
         dateEndStr = StringUtils.trimToNull(dateEndStr);
@@ -265,6 +273,8 @@ public class PaymentFileController {
     public String billingAllList(Model model){
         model.addAttribute("isAdmin",userService.isAdmin());
         model.addAttribute("organizationList",organizationService.getList());
+        model.addAttribute("paymentTypes",PaymentType.values());
+
         return BillingTemplates.PaymentFileAllList;
     }
 
@@ -294,6 +304,7 @@ public class PaymentFileController {
         if(organizationId!=null) {
             account = organizationService.getById(organizationId).getAccount();
         }
+
         Date dateBegin = DateParser.TryParse(dateBeginStr, Common.uzbekistanDateFormat);
         Date dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
 //        organizationService.getById(1).getAccount();

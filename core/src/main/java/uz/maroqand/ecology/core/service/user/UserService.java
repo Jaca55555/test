@@ -34,6 +34,7 @@ public interface UserService {
     User findById(Integer id);
 
     User update(User user);
+    void update(IdGovResponseDto idGovResponse,Integer leTin,String leName,UserType userType,Integer userId);
 //    User getByTin(User user);
 
     User findById(Integer id, Integer organizationId);
@@ -89,4 +90,8 @@ public interface UserService {
     Integer getUserRegionId(User user);
 
     User create(IdGovResponseDto idGovResponse, Integer leTin, String leName, UserType userType);
+
+    User getByTin(String pin, Integer leTin);
+
+    User getByPin(String pin,Integer tin);
 }
