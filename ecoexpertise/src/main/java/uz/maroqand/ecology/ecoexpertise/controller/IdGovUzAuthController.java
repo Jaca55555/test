@@ -15,16 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import uz.maroqand.ecology.core.component.UserDetailsImpl;
 import uz.maroqand.ecology.core.dto.id_egov.*;
 import uz.maroqand.ecology.core.entity.user.User;
+import uz.maroqand.ecology.core.entity.user.UserIdGov;
 import uz.maroqand.ecology.core.repository.user.UserIdGovRepository;
-import uz.maroqand.ecology.core.repository.user.UserRepository;
-import uz.maroqand.ecology.core.service.user.UserAdditionalService;
 import uz.maroqand.ecology.core.service.user.UserService;
-import uz.maroqand.ecology.core.util.TinParser;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysTemplates;
 import uz.maroqand.ecology.ecoexpertise.constant.sys.SysUrls;
 
-import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,25 +38,21 @@ public class IdGovUzAuthController {
     private static final String LogoutUrl = "https://sso.egov.uz:8443/sso/svc/tk/SLO.do";
     private static final String ClientId = "ekoekspertiza_uz";
     private static final String Scope = "davekoekspertiza_uz";
-    private static final String ClientSecret = "XbzKDhhq8+3tDnuU/e02bA==";
     private static final String RedirectUrl = "https://eco-service.uz" + SysUrls.IdGovUzAccessToken;
 
     private final Logger logger = LogManager.getLogger(IdGovUzAuthController.class);
-    private final SimpleDateFormat idGovUzDateFormat = new SimpleDateFormat("yyyyMMdd");
+    private final SimpleDateFormat idGovUzDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    private UserIdGovRepository userIdGovRepository;
-    private UserRepository userRepository;
+
+    private final UserIdGovRepository userIdGovRepository;
     private final UserService userService;
     private final IdGovService idGovService;
-    private UserAdditionalService userAdditionalService;
 
     @Autowired
-    public IdGovUzAuthController(UserIdGovRepository userIdGovRepository, UserRepository userRepository, UserService userService, IdGovService idGovService, UserAdditionalService userAdditionalService) {
+    public IdGovUzAuthController(UserIdGovRepository userIdGovRepository,  UserService userService, IdGovService idGovService) {
         this.userIdGovRepository = userIdGovRepository;
-        this.userRepository = userRepository;
         this.userService = userService;
         this.idGovService = idGovService;
-        this.userAdditionalService = userAdditionalService;
     }
 
     @RequestMapping(SysUrls.IdGovUzLogin)
@@ -81,15 +75,14 @@ public class IdGovUzAuthController {
     }
 
     @RequestMapping(SysUrls.IdGovUzLogout)
-    public String logoutFromIdGovUz(HttpServletRequest request) {
+    public String logoutFromIdGovUz() {
         SecurityContextHolder.clearContext();
         return "redirect:" + LogoutUrl + "?id=" + ClientId;
     }
 
     @RequestMapping(value = SysUrls.IdGovUzAccessToken, method = RequestMethod.GET)
     public String submitIdGovUzLoginPage(
-            @RequestParam("code") String code,
-            HttpServletRequest request
+            @RequestParam("code") String code
     ) {
 
         CabinetType cabinetType = CabinetType.BACK_OFFICE;
@@ -136,10 +129,19 @@ public class IdGovUzAuthController {
         /*
          * Insert userIdGov
          * */
-//        UserIdGov userIdGov = new UserIdGov();
-//        userIdGov.setUsername(username);
-//        userIdGov.setAccessToken(accessToken);
-//        userIdGov.setRefreshToken(refreshToken);
+        UserIdGov userIdGov = new UserIdGov();
+        userIdGov.setUsername(idGovResponse.getUser_id());
+        userIdGov.setAccessToken(idGovToken.getAccess_token());
+        userIdGov.setRefreshToken(idGovToken.getRefresh_token());
+        userIdGov.setIsValidatedUsingEDS(true);
+        userIdGov.setPassportNumber(idGovResponse.getPport_no());
+//        userIdGov.setPassportIssueDate(idGovResponse.getPport_issue_date());
+        userIdGov.setPassportIssuePlace(idGovResponse.getPport_issue_place());
+        userIdGov.setPassportPIN(idGovResponse.getPin());
+        userIdGov.setFirstname(idGovResponse.getFirst_name());
+        userIdGov.setMiddlename(idGovResponse.getMid_name());
+        userIdGov.setLastname(idGovResponse.getSur_name());
+        userIdGov.setBirthPlace(idGovResponse.getBirth_place());
 
 
 
@@ -175,9 +177,9 @@ public class IdGovUzAuthController {
 //        user = userRepository.saveAndFlush(user);
 
 
-//        userIdGov.setUserId(user.getId());
-//        userIdGov.setCreatedAt(new Date());
-//        userIdGovRepository.save(userIdGov);
+        userIdGov.setUserId(user.getId());
+        userIdGov.setCreatedAt(new Date());
+        userIdGovRepository.save(userIdGov);
 //
 //        /*
 //        * Authorization user
@@ -198,9 +200,9 @@ public class IdGovUzAuthController {
         return "redirect:"+"/dashboard";
     }
 
-    private String IGUSentWrongData(String receivedData) {
-        logger.error("id.gov.uz sent wrong data: " + receivedData);
-        return "redirect:" + "/login?errorIdGov";
-    }
+//    private String IGUSentWrongData(String receivedData) {
+//        logger.error("id.gov.uz sent wrong data: " + receivedData);
+//        return "redirect:" + "/login?errorIdGov";
+//    }
 
 }

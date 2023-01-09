@@ -363,17 +363,17 @@ public class ConclusionCompleteController {
             product.setPackagename("dona");
             product.setCount("1");
             if(!regApplication.getBudget()&&(regApplication.getRequirementId()==5||regApplication.getRequirementId()==6||regApplication.getRequirementId()==7||regApplication.getRequirementId()==8)) {
-                product.setSumma(invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12 + "");
-                product.setVatsum(invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12 * 0.12 + "");
-                product.setDeliverysumwithvat(invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() + "");
-                product.setDeliverysum(invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12 + "");
+                product.setSumma(String.format("%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12)  + "");
+                product.setVatsum(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12 * 0.12) + "");
+                product.setDeliverysumwithvat(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount()) + "");
+                product.setDeliverysum(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12) + "");
                 product.setVatrate("12");
             }else {
-                product.setSumma(invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12 + "");
+                product.setSumma(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12) + "");
                 product.setVatrate("12");
-                product.setVatsum(invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12 * 0.12 + "");
-                product.setDeliverysumwithvat(invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() + "");
-                product.setDeliverysum(invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12 + "");
+                product.setVatsum(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12 * 0.12) + "");
+                product.setDeliverysumwithvat(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount()) + "");
+                product.setDeliverysum(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12) + "");
 
 
             }
