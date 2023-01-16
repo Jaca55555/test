@@ -54,7 +54,7 @@ public interface RegApplicationService {
     Integer countRegApplicationByPerformerIdAndRegistrationDateBetween(Integer userId,Date beginDate,Date endDate);
 
     List<RegApplication> getListByPerformerId(Integer performerId);
-    Integer countByPerformerIdAndCategory(Integer performerId , Category category);
+    Integer countByPerformerIdAndCategory(Integer performerId, Category category,Date beginDate,Date endDate);
 
     RegApplication getById(Integer id, Integer createdBy);
 

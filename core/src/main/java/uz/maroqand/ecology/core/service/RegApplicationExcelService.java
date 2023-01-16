@@ -1,6 +1,8 @@
 package uz.maroqand.ecology.core.service;
 
 import com.google.gson.Gson;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -30,6 +32,7 @@ import uz.maroqand.ecology.core.service.sys.SoatoService;
 import uz.maroqand.ecology.core.service.sys.impl.HelperService;
 import uz.maroqand.ecology.core.service.user.UserService;
 import uz.maroqand.ecology.core.util.Common;
+import uz.maroqand.ecology.core.util.HttpRequestHelper;
 
 import java.io.FileOutputStream;
 import java.text.NumberFormat;
@@ -40,6 +43,9 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
 
     private Gson gson = new Gson();
     private final RegApplicationService regApplicationService;
+
+    private static final Logger logger = LogManager.getLogger(RegApplicationExcelService.class);
+
     private final ProjectDeveloperService projectDeveloperService;
     private final HelperService helperService;
     private final UserService userService;
@@ -814,7 +820,7 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
             Cell cell = row.createCell(4);
 
             sheet.setColumnWidth(0, 6 * 256);
-            sheet.setColumnWidth(1, 8 * 256);
+            sheet.setColumnWidth(1, 18 * 256);
             sheet.setColumnWidth(2, 18 * 256);
             sheet.setColumnWidth(3, 15 * 256);
             sheet.setColumnWidth(4, 20 * 256);
@@ -866,7 +872,7 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
                     "sys_category2",//4
                     "sys_category3",//5
                     "sys_category4",//6
-                    "sys_categoryAll"
+                    "sys_categoryAll"//7
             ));
             for (int cellIndex = 0; cellIndex < traslateTag.size(); cellIndex++) {
                 titleRow.createCell(cellIndex).setCellValue(helperService.getTranslation(traslateTag.get(cellIndex),locale));
@@ -876,8 +882,9 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
             filterDto.setDateBegin(Common.uzbekistanDateFormat.format(excelOrder.getBeginDate()));
             filterDto.setDateEnd(Common.uzbekistanDateFormat.format(excelOrder.getEndDate()));
             int page = 0;
-            User user = order.getOrderedBy();
-            List<User> performerList = userService.getEmployeesPerformerForForwarding(userService.getCurrentUserFromContext().getOrganizationId());
+
+            List<User> performerList = excelOrder.getReviewId()!=null ? userService.getEmployeesPerformerForForwarding(excelOrder.getReviewId()): userService.getEmployeesPerformer();
+            logger.info("permformerList:{}",performerList);
             for(User performer:performerList){
 
                 Row documentRow = sheet.createRow(i++);
@@ -891,29 +898,28 @@ public class RegApplicationExcelService implements DocumentOrderPerformer{
                 cell.setCellStyle(style);
 
                 //ekspertiza obyekti
-
                 cell = documentRow.createCell(2);
-                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), null));
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), null,excelOrder.getBeginDate(),excelOrder.getEndDate()));
                 cell.setCellStyle(style);
 
                 cell = documentRow.createCell(3);
-                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category1));
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category1,excelOrder.getBeginDate(),excelOrder.getEndDate()));
                 cell.setCellStyle(style);
 
                 cell = documentRow.createCell(4);
-                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category2));
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category2,excelOrder.getBeginDate(),excelOrder.getEndDate()));
                 cell.setCellStyle(style);
 
                 cell = documentRow.createCell(5);
-                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category3));
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category3,excelOrder.getBeginDate(),excelOrder.getEndDate()));
                 cell.setCellStyle(style);
 
                 cell = documentRow.createCell(6);
-                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category4));
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.Category4,excelOrder.getBeginDate(),excelOrder.getEndDate()));
                 cell.setCellStyle(style);
 
                 cell = documentRow.createCell(7);
-                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.CategoryAll));
+                cell.setCellValue(regApplicationService.countByPerformerIdAndCategory(performer.getId(), Category.CategoryAll,excelOrder.getBeginDate(),excelOrder.getEndDate()));
                 cell.setCellStyle(style);
 
             }

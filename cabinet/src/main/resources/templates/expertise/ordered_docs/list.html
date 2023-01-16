@@ -228,14 +228,12 @@
         )
 
         console.log(isSend)
-        if (isSend) {
+
             $.get(excelAjaxRequestLink, dataToSend, function(data){
                 if (data.message != undefined) alert(data.message);
                 $("#excelExport").html('<i class="fa fa-cloud-download"></i> <span >'+sysExcelDownload+'</span>');
             });
-        } else {
-            alert("3 oylik farq")
-        }
+
 
     }
 

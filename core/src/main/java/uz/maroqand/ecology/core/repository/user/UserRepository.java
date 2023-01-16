@@ -59,4 +59,6 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
     User findByPinflAndLeTinIsNull(String pin);
 
     User findByPinflAndTinAndLeTinIsNull(String pin, Integer tin);
+
+    List<User> findByIsPerformerTrueAndEnabledTrue();
 }

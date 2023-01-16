@@ -2,6 +2,8 @@ package uz.maroqand.ecology.core.service.expertise.impl;
 
 import com.google.gson.Gson;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +31,7 @@ import uz.maroqand.ecology.core.entity.user.User;
 import uz.maroqand.ecology.core.integration.sms.SmsSendOauth2Service;
 import uz.maroqand.ecology.core.repository.expertise.CoordinateLatLongRepository;
 import uz.maroqand.ecology.core.repository.expertise.RegApplicationRepository;
+import uz.maroqand.ecology.core.service.RegApplicationExcelService;
 import uz.maroqand.ecology.core.service.client.ClientService;
 import uz.maroqand.ecology.core.service.expertise.*;
 import uz.maroqand.ecology.core.service.sys.OrganizationService;
@@ -58,6 +61,9 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     private final CoordinateService coordinateService;
     private final BoilerCharacteristicsService boilerCharacteristicsService;
     private final Gson gson;
+
+    private static final Logger logger = LogManager.getLogger(RegApplicationExcelService.class);
+
 
     @Autowired
     public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository, SmsSendService smsSendService, SmsSendOauth2Service smsSendOauth2Service, UserService userService, RegApplicationLogService regApplicationLogService, ClientService clientService, OrganizationService organizationService, RequirementService requirementService, FactureService factureService, CoordinateLatLongRepository coordinateLatLongRepository, ProjectDeveloperService projectDeveloperService, ActivityService activityService, CoordinateService coordinateService, BoilerCharacteristicsService boilerCharacteristicsService, Gson gson) {
@@ -410,8 +416,14 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
-    public Integer countByPerformerIdAndCategory(Integer performerId, Category category) {
-        return regApplicationRepository.countByPerformerIdAndCategoryAndDeletedFalse(performerId,category);
+    public Integer countByPerformerIdAndCategory(Integer performerId, Category category,Date beginDate,Date endDate) {
+        logger.info("category:{}",category);
+        logger.info("perfomerCount:{}",regApplicationRepository.countByPerformerIdAndCategoryAndDeletedFalseAndRegistrationDateBetween(performerId,category,beginDate,endDate));
+        if (category!=null){
+            return regApplicationRepository.countByPerformerIdAndCategoryAndDeletedFalseAndRegistrationDateBetween(performerId,category,beginDate,endDate);
+        }else {
+            return regApplicationRepository.countByPerformerIdAndDeletedFalseAndRegistrationDateBetween(performerId,beginDate,endDate);
+        }
     }
 
     public RegApplication getById(Integer id, Integer createdBy) {

@@ -94,7 +94,7 @@ public class APIController {
         Double residualAmount = invoice.getAmount() - invoiceService.getPayAmount(invoice.getId());
 
         response.setClient(invoice.getPayerName());
-        response.setPayerTin(invoice.getClient().getTin());
+        response.setPayerTin(invoice.getClient().getTin()!=null ? invoice.getClient().getTin(): Integer.valueOf(invoice.getClient().getPinfl()));
         response.setInvoice(invoice.getInvoice());
         response.setRegApplicationId(regApplicationService.findByInvoiceIdAndDeletedFalse(invoice.getId()).getId());
         response.setOrgName(invoice.getPayeeName());

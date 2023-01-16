@@ -75,6 +75,7 @@ public interface UserService {
     List<User> getEmployeesForForwarding(Integer organizationId);
 
     List<User> getEmployeesPerformerForForwarding(Integer organizationId);
+    List<User> getEmployeesPerformer();
 
     List<User> getEmployeesAgreementForForwarding(Integer organizationId);
 

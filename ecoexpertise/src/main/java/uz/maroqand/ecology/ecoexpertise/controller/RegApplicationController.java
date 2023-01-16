@@ -997,35 +997,35 @@ public class RegApplicationController {
             return "redirect:" + RegUrls.RegApplicationPrepayment + "?id=" + id;
         }
 
-//
-////        Didox
-//        RestTemplate restTemplateDidox = new RestTemplate();
-//        HttpHeaders headersDidoxConfirm = new HttpHeaders();
-//        headersDidoxConfirm.setContentType(MediaType.APPLICATION_JSON);
-//        headersDidoxConfirm.add("user-key", regApplicationService.getUserKey());
-//        HttpEntity<Object> requestDidoxConfirm = new HttpEntity<>(headersDidoxConfirm);
-//        ResponseEntity<Object> responseDidoxConfirm = null;
-//        if(regApplication.getDidoxId()!=null){
-//            responseDidoxConfirm = restTemplateDidox.exchange("https://api.didox.uz/v1/documents/"+regApplication.getDidoxId()+"?owner=1", HttpMethod.GET, requestDidoxConfirm, Object.class);
-//            logger.info("responseDidoxConfirm:{}",responseDidoxConfirm);
-//            LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)responseDidoxConfirm.getBody();
-//            if(map!=null){
-//                LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>)map.get("data");
-//                if(dataMap!=null){
-//                    LinkedHashMap<String, Object> documentMap = (LinkedHashMap<String, Object>)dataMap.get("document");
-//                    if(documentMap!=null){
-//                        Integer status = (Integer) documentMap.get("status");
-//                        logger.info("status:{}",status);
-//                        model.addAttribute("didoxStatus",status);
-//                        if(status==3){
-//                            regApplication.setDidoxStatus(DidoxStatus.Signed);
-//                            regApplicationService.update(regApplication);
-//                        }
-//                    }
-//                }
-//
-//            }
-//        }
+
+//        Didox
+        RestTemplate restTemplateDidox = new RestTemplate();
+        HttpHeaders headersDidoxConfirm = new HttpHeaders();
+        headersDidoxConfirm.setContentType(MediaType.APPLICATION_JSON);
+        headersDidoxConfirm.add("user-key", regApplicationService.getUserKey());
+        HttpEntity<Object> requestDidoxConfirm = new HttpEntity<>(headersDidoxConfirm);
+        ResponseEntity<Object> responseDidoxConfirm = null;
+        if(regApplication.getDidoxId()!=null){
+            responseDidoxConfirm = restTemplateDidox.exchange("https://api.didox.uz/v1/documents/"+regApplication.getDidoxId()+"?owner=1", HttpMethod.GET, requestDidoxConfirm, Object.class);
+            logger.info("responseDidoxConfirm:{}",responseDidoxConfirm);
+            LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)responseDidoxConfirm.getBody();
+            if(map!=null){
+                LinkedHashMap<String, Object> dataMap = (LinkedHashMap<String, Object>)map.get("data");
+                if(dataMap!=null){
+                    LinkedHashMap<String, Object> documentMap = (LinkedHashMap<String, Object>)dataMap.get("document");
+                    if(documentMap!=null){
+                        Integer status = (Integer) documentMap.get("status");
+                        logger.info("status:{}",status);
+                        model.addAttribute("didoxStatus",status);
+                        if(status==3){
+                            regApplication.setDidoxStatus(DidoxStatus.Signed);
+                            regApplicationService.update(regApplication);
+                        }
+                    }
+                }
+
+            }
+        }
 
 
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());

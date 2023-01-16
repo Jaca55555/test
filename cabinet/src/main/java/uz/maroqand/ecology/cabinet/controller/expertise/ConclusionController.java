@@ -134,6 +134,7 @@ public class ConclusionController {
                     conclusion.getDeadlineDate() != null ? (conclusion.getDeadlineDate().compareTo(c.getTime())>=0?Boolean.TRUE:Boolean.FALSE): Boolean.TRUE,
                     regApplication!=null && regApplication.getApplicant()!=null?regApplication.getApplicant().getName():"",
                     regApplication!=null ? regApplication.getId():"",
+                    regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
             });
         }
 

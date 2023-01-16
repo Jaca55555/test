@@ -18,7 +18,10 @@ import uz.maroqand.ecology.core.util.Common;
 import uz.maroqand.ecology.core.util.DateParser;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 @Controller
 public class RegApplicationExcelController {
 
@@ -52,7 +55,7 @@ public class RegApplicationExcelController {
         }else{
             dateBegin = DateParser.TryParse("01.01.2022", Common.uzbekistanDateFormat);
         }
-
+        HashMap<String, Object> result = new HashMap<>();
         Date dateEnd ;
         if(dateEndStr!=null){
             dateEnd = DateParser.TryParse(dateEndStr, Common.uzbekistanDateFormat);
@@ -60,7 +63,14 @@ public class RegApplicationExcelController {
             dateEnd = new Date();
         }
 
+        long timeDiff = Math.abs(dateEnd.getTime() - dateBegin.getTime());
+        long daysDiff = TimeUnit.DAYS.convert(timeDiff, TimeUnit.MILLISECONDS);
+        System.out.println("The number of days between dates: " + daysDiff);
 
+        result.put("message", "3 oylik oraliqdan kam kiritishingiz majburiy");
+        if(daysDiff>91){
+            return result;
+        }
         RegApplicationExcelOrder documentOrder = new RegApplicationExcelOrder();
         documentOrder.setBeginDate(dateBegin);
         documentOrder.setEndDate(dateEnd);

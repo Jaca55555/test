@@ -285,6 +285,10 @@ public class ConclusionCompleteController {
         model.addAttribute("agreementLogList", agreementLogList);
         model.addAttribute("agreementCompleteLog", regApplicationLog);
         model.addAttribute("regApplicationLogList", regApplicationLogService.getByRegApplicationId(regApplication.getId()));
+
+        Calendar calendar = Calendar.getInstance();
+        Date maxDate = calendar.getTime();
+        model.addAttribute("maxDate",maxDate);
         return ExpertiseTemplates.ConclusionCompleteView;
     }
 
@@ -348,9 +352,13 @@ public class ConclusionCompleteController {
 
         //for didox //todo bu yerda didox qilinyapti
         //product
-        if(regApplication.getDidoxId()==null) {
 
 
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+        Date todayDate = calendar.getTime();
+
+        if(regApplication.getDidoxId()==null && conclusion.getDate().compareTo(todayDate)>0) {
             MinWage minWage = minWageService.getMinWage();
             Product product = new Product();
             product.setOrdno(1);
@@ -363,17 +371,17 @@ public class ConclusionCompleteController {
             product.setPackagename("dona");
             product.setCount("1");
             if(!regApplication.getBudget()&&(regApplication.getRequirementId()==5||regApplication.getRequirementId()==6||regApplication.getRequirementId()==7||regApplication.getRequirementId()==8)) {
-                product.setSumma(String.format("%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12)  + "");
-                product.setVatsum(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12 * 0.12) + "");
-                product.setDeliverysumwithvat(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount()) + "");
-                product.setDeliverysum(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12) + "");
+                product.setSumma(String.format(Locale.US,"%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12)  + "");
+                product.setVatsum(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12 * 0.12) + "");
+                product.setDeliverysumwithvat(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount()) + "");
+                product.setDeliverysum(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12) + "");
                 product.setVatrate("12");
             }else {
-                product.setSumma(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12) + "");
+                product.setSumma(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12) + "");
                 product.setVatrate("12");
-                product.setVatsum(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12 * 0.12) + "");
-                product.setDeliverysumwithvat(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount()) + "");
-                product.setDeliverysum(String.format("%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12) + "");
+                product.setVatsum(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12 * 0.12) + "");
+                product.setDeliverysumwithvat(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount()) + "");
+                product.setDeliverysum(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12) + "");
 
 
             }

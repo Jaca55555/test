@@ -324,6 +324,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> getEmployeesPerformer() {
+        return userRepository.findByIsPerformerTrueAndEnabledTrue();
+
+    }
+
+    @Override
     public List<User> getEmployeesAgreementForForwarding(Integer organizationId) {
         return userRepository.findByOrganizationIdAndIsAgreementTrueAndEnabledTrue(organizationId);
     }
@@ -423,6 +429,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(idGovResponse.getUser_id());
         user.setEmail(idGovResponse.getEmail());
         user.setLastEvent(new Date());
+        user.setPassword("       ");
         user = userRepository.save(user);
         return user;
     }

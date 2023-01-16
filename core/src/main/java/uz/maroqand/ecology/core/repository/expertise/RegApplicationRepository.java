@@ -75,5 +75,6 @@ public interface RegApplicationRepository extends DataTablesRepository<RegApplic
 
     List<RegApplication> findAllByReviewIdAndStatusAndDeletedFalse(Integer organizationId, RegApplicationStatus process);
 
-    Integer countByPerformerIdAndCategoryAndDeletedFalse(Integer performerId, Category category);
+    Integer countByPerformerIdAndCategoryAndDeletedFalseAndRegistrationDateBetween(Integer performerId, Category category,Date beginDate,Date endDate);
+    Integer countByPerformerIdAndDeletedFalseAndRegistrationDateBetween(Integer performerId, Date beginDate,Date endDate);
 }
