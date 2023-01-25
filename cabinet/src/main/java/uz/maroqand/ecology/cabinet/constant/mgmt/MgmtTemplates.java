@@ -48,12 +48,14 @@ public class MgmtTemplates {
     private static final String Word = Prefix + "/word";
     public static final String WordEditor = Word;
 
-//    Event News
+    //    Event News
     private static final String Event = Prefix + "/event";
     public static final String EventNewsList = Event + "/list";
     public static final String EventNewsView = Event + "/view";
     public static final String EventNewsCreate = Event + "/new";
 
+    private static final String Didox = Prefix + "/didox_data";
+    public static final String DidoxList = Didox + "/list";
 
 
 }

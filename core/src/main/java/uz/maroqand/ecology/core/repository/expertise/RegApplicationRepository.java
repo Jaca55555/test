@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import uz.maroqand.ecology.core.constant.expertise.Category;
+import uz.maroqand.ecology.core.constant.expertise.DidoxStatus;
 import uz.maroqand.ecology.core.constant.expertise.LogStatus;
 import uz.maroqand.ecology.core.constant.expertise.RegApplicationStatus;
 import uz.maroqand.ecology.core.entity.expertise.RegApplication;
@@ -33,6 +34,8 @@ public interface RegApplicationRepository extends DataTablesRepository<RegApplic
     List<RegApplication> findByApplicantId(Integer id);
 
     List<RegApplication> findByApplicantIdAndDeletedFalse(Integer id);
+    List<RegApplication> findByDidoxStatusAndDeletedFalse(DidoxStatus status);
+    List<RegApplication> getByDidoxStatusAndDeletedFalse(Integer id);
     @Query(value = "SELECT * from reg_application r where r.delivery_status=0 order by r.id ASC limit 100",nativeQuery = true)
     List<RegApplication> findAllByDeliveryStatusAndDeletedFalse(Short deliveryStatus);
 

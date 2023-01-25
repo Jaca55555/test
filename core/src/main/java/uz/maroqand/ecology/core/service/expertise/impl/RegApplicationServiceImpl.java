@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -19,7 +18,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import uz.maroqand.ecology.core.constant.expertise.*;
 import uz.maroqand.ecology.core.constant.sys.SmsSendStatus;
-import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
 import uz.maroqand.ecology.core.dto.sms.AuthTokenInfo;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
@@ -66,7 +64,15 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
 
     @Autowired
-    public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository, SmsSendService smsSendService, SmsSendOauth2Service smsSendOauth2Service, UserService userService, RegApplicationLogService regApplicationLogService, ClientService clientService, OrganizationService organizationService, RequirementService requirementService, FactureService factureService, CoordinateLatLongRepository coordinateLatLongRepository, ProjectDeveloperService projectDeveloperService, ActivityService activityService, CoordinateService coordinateService, BoilerCharacteristicsService boilerCharacteristicsService, Gson gson) {
+    public RegApplicationServiceImpl(RegApplicationRepository regApplicationRepository,
+                                     SmsSendService smsSendService, SmsSendOauth2Service smsSendOauth2Service,
+                                     UserService userService, RegApplicationLogService regApplicationLogService,
+                                     ClientService clientService, OrganizationService organizationService,
+                                     RequirementService requirementService, FactureService factureService,
+                                     CoordinateLatLongRepository coordinateLatLongRepository,
+                                     ProjectDeveloperService projectDeveloperService, ActivityService activityService,
+                                     CoordinateService coordinateService, BoilerCharacteristicsService boilerCharacteristicsService,
+                                     Gson gson) {
         this.regApplicationRepository = regApplicationRepository;
         this.smsSendService = smsSendService;
         this.smsSendOauth2Service = smsSendOauth2Service;
@@ -116,6 +122,11 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     @Override
     public List<RegApplication> getByClientIdDeletedFalse(Integer id) {
         return regApplicationRepository.findByApplicantIdAndDeletedFalse(id);
+    }
+
+    @Override
+    public List<RegApplication> getByDidoxStatusAndDeletedFalse(DidoxStatus status) {
+        return regApplicationRepository.findByDidoxStatusAndDeletedFalse(status);
     }
 
     @Override
@@ -299,6 +310,7 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return null;
     }
 
+
 //    @Override
 //    public List<RegApplicationDTO> listByTin(Integer tin) {
 //        Client client=clientService.getByTin(tin);
@@ -342,18 +354,18 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
     @Override
     public Integer countDeadlineRegApplication() {
-        User user   = userService.getCurrentUserFromContext();
+        User user = userService.getCurrentUserFromContext();
         Set<Integer> organizationIds = new HashSet<>();
         organizationIds.add(user.getOrganizationId());
         Calendar c = Calendar.getInstance();
         Date date = new Date();
-            c.setTime(date);
-            c.add(Calendar.DATE,5);    // shu kunning o'zi ham qo'shildi
-            Date expireDate = c.getTime();
+        c.setTime(date);
+        c.add(Calendar.DATE, 5);    // shu kunning o'zi ham qo'shildi
+        Date expireDate = c.getTime();
 
         Calendar c1 = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.DATE,0);    // shu kunning o'zi ham qo'shildi
+        c.add(Calendar.DATE, 0);    // shu kunning o'zi ham qo'shildi
         Date deadlinedata = c.getTime();
 
         //        List<RegApplication> regApplicationList = regApplicationRepository.findAllByReviewIdAndStatusAndDeletedFalse(user.getOrganizationId(),RegApplicationStatus.Process);
@@ -370,22 +382,22 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 //               result++;
 //            }
 //        }
-        return countByCategoryAndStatusAndRegionId(null, deadlinedata,expireDate,null,organizationService.getById(user.getOrganizationId()).getRegionId(),organizationIds);
+        return countByCategoryAndStatusAndRegionId(null, deadlinedata, expireDate, null, organizationService.getById(user.getOrganizationId()).getRegionId(), organizationIds);
     }
 
     @Override
     public Integer countNewRegApplication() {
-        User user   = userService.getCurrentUserFromContext();
+        User user = userService.getCurrentUserFromContext();
         Set<Integer> organizationIds = new HashSet<>();
         organizationIds.add(user.getOrganizationId());
-        return regApplicationRepository.countByCategoryAndStatusAndRegionId(null,null,null,RegApplicationStatus.CheckSent,organizationService.getById(user.getOrganizationId()).getRegionId(),organizationIds);
+        return regApplicationRepository.countByCategoryAndStatusAndRegionId(null, null, null, RegApplicationStatus.CheckSent, organizationService.getById(user.getOrganizationId()).getRegionId(), organizationIds);
     }
 
     @Override
     public String getUserKey() {
-        LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)getResponse().getBody();
-        if(map!=null){
-            return  (String)map.get("token");
+        LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) getResponse().getBody();
+        if (map != null) {
+            return (String) map.get("token");
         }
         return null;
     }
@@ -398,8 +410,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     public ResponseEntity<Object> getResponse() {
         RestTemplate restTemplate = new RestTemplate();
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("password", "200934834");
-        HttpEntity<Object> request = new HttpEntity<>(body,null);
+        body.add("password", "111111111");
+        HttpEntity<Object> request = new HttpEntity<>(body, null);
         ResponseEntity<Object> response = null;
 
         try {
@@ -416,13 +428,13 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
     @Override
-    public Integer countByPerformerIdAndCategory(Integer performerId, Category category,Date beginDate,Date endDate) {
-        logger.info("category:{}",category);
-        logger.info("perfomerCount:{}",regApplicationRepository.countByPerformerIdAndCategoryAndDeletedFalseAndRegistrationDateBetween(performerId,category,beginDate,endDate));
-        if (category!=null){
-            return regApplicationRepository.countByPerformerIdAndCategoryAndDeletedFalseAndRegistrationDateBetween(performerId,category,beginDate,endDate);
-        }else {
-            return regApplicationRepository.countByPerformerIdAndDeletedFalseAndRegistrationDateBetween(performerId,beginDate,endDate);
+    public Integer countByPerformerIdAndCategory(Integer performerId, Category category, Date beginDate, Date endDate) {
+        logger.info("category:{}", category);
+        logger.info("perfomerCount:{}", regApplicationRepository.countByPerformerIdAndCategoryAndDeletedFalseAndRegistrationDateBetween(performerId, category, beginDate, endDate));
+        if (category != null) {
+            return regApplicationRepository.countByPerformerIdAndCategoryAndDeletedFalseAndRegistrationDateBetween(performerId, category, beginDate, endDate);
+        } else {
+            return regApplicationRepository.countByPerformerIdAndDeletedFalseAndRegistrationDateBetween(performerId, beginDate, endDate);
         }
     }
 
@@ -566,9 +578,9 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 }
 
 
-                    if(filterDto.getContractNumber()!=null && !Objects.equals(filterDto.getContractNumber(), "")){
-                        predicates.add(criteriaBuilder.like(root.get("contractNumber"),"%" + StringUtils.trimToNull(filterDto.getContractNumber()) + "%"));
-                    }
+                if (filterDto.getContractNumber() != null && !Objects.equals(filterDto.getContractNumber(), "")) {
+                    predicates.add(criteriaBuilder.like(root.get("contractNumber"), "%" + StringUtils.trimToNull(filterDto.getContractNumber()) + "%"));
+                }
                 if (filterDto.getTin() != null) {
                     predicates.add(criteriaBuilder.equal(root.join("applicant").get("tin"), filterDto.getTin()));
                 }
@@ -597,12 +609,12 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                 if (StringUtils.trimToNull(filterDto.getName()) != null) {
                     predicates.add(criteriaBuilder.like(root.<String>get("name"), "%" + StringUtils.trimToNull(filterDto.getName()) + "%"));
                 }
-                if(filterDto.getRegApplicationStatus()!=null){
+                if (filterDto.getRegApplicationStatus() != null) {
                     predicates.add(criteriaBuilder.equal(root.get("status"), filterDto.getRegApplicationStatus()));
 
                 }
 
-                if (filterDto.getStatusing() == null){
+                if (filterDto.getStatusing() == null) {
                     if (logType != null && (filterDto.getStatus() != null || filterDto.getRegApplicationStatus() != null)) {
                         switch (logType) {
                             case Forwarding:
@@ -616,7 +628,7 @@ public class RegApplicationServiceImpl implements RegApplicationService {
                                 break;
                         }
                     }
-                }else {
+                } else {
                     if (logType != null) {
                         List<LogStatus> init = new ArrayList<>();
                         init.add(LogStatus.Initial);
@@ -638,7 +650,6 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
                 Date regDateBegin = DateParser.TryParse(filterDto.getRegDateBegin(), Common.uzbekistanDateFormat);
                 Date regDateEnd = DateParser.TryParse(filterDto.getRegDateEnd(), Common.uzbekistanDateFormat);
-
 
 
                 if (regDateBegin != null && regDateEnd == null) {
@@ -759,47 +770,47 @@ public class RegApplicationServiceImpl implements RegApplicationService {
     }
 
 
-    private RegApplication convertoRegToNewReg(RegApplication regApplication, RegApplication reRegApplication, User user){
+    private RegApplication convertoRegToNewReg(RegApplication regApplication, RegApplication reRegApplication, User user) {
 //        step 1 client
-        Client client = convertoClientToNewClient(regApplication.getApplicant()==null?new Client():regApplication.getApplicant(), reRegApplication.getApplicant(), user);
+        Client client = convertoClientToNewClient(regApplication.getApplicant() == null ? new Client() : regApplication.getApplicant(), reRegApplication.getApplicant(), user);
         regApplication.setApplicantId(client.getId());
 //        step 2 regApplication
 
-            Coordinate coordinates = coordinateService.getRegApplicationId(reRegApplication.getId());
-            if (coordinates != null) {
-                Coordinate coordinate = new Coordinate();
-                coordinate.setRegApplicationId(regApplication.getId());
-                coordinate.setClientId(coordinates.getClientId());
-                coordinate.setClientName(coordinates.getClientName());
-                coordinate.setRegionId(coordinates.getRegionId());
-                coordinate.setSubRegionId(coordinates.getSubRegionId());
-                coordinate.setName(coordinates.getName());
-                coordinate.setObjectRegionId(coordinates.getObjectRegionId());
-                coordinate.setObjectSubRegionId(coordinates.getObjectSubRegionId());
-                coordinate.setNumber(coordinates.getNumber());
-                coordinate.setLongitude(coordinates.getLongitude());
-                coordinate.setLatitude(coordinates.getLatitude());
-                coordinate = coordinateService.saveForEdit(coordinate);
+        Coordinate coordinates = coordinateService.getRegApplicationId(reRegApplication.getId());
+        if (coordinates != null) {
+            Coordinate coordinate = new Coordinate();
+            coordinate.setRegApplicationId(regApplication.getId());
+            coordinate.setClientId(coordinates.getClientId());
+            coordinate.setClientName(coordinates.getClientName());
+            coordinate.setRegionId(coordinates.getRegionId());
+            coordinate.setSubRegionId(coordinates.getSubRegionId());
+            coordinate.setName(coordinates.getName());
+            coordinate.setObjectRegionId(coordinates.getObjectRegionId());
+            coordinate.setObjectSubRegionId(coordinates.getObjectSubRegionId());
+            coordinate.setNumber(coordinates.getNumber());
+            coordinate.setLongitude(coordinates.getLongitude());
+            coordinate.setLatitude(coordinates.getLatitude());
+            coordinate = coordinateService.saveForEdit(coordinate);
 
-                List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinates.getId());
-                for (CoordinateLatLong coordinateLatLong: coordinateLatLongList){
-                    CoordinateLatLong coordinLatLang = new CoordinateLatLong();
-                    coordinLatLang.setCoordinateId(coordinate.getId());
-                    coordinLatLang.setLatitude(coordinateLatLong.getLatitude());
-                    coordinLatLang.setLongitude(coordinateLatLong.getLongitude());
-                    coordinateLatLongRepository.save(coordinLatLang);
-                }
+            List<CoordinateLatLong> coordinateLatLongList = coordinateLatLongRepository.getByCoordinateIdAndDeletedFalse(coordinates.getId());
+            for (CoordinateLatLong coordinateLatLong : coordinateLatLongList) {
+                CoordinateLatLong coordinLatLang = new CoordinateLatLong();
+                coordinLatLang.setCoordinateId(coordinate.getId());
+                coordinLatLang.setLatitude(coordinateLatLong.getLatitude());
+                coordinLatLang.setLongitude(coordinateLatLong.getLongitude());
+                coordinateLatLongRepository.save(coordinLatLang);
             }
+        }
 
-            if (reRegApplication.getDeveloperId()!=null) {
-                ProjectDeveloper projectDeveloper1 = projectDeveloperService.getById(reRegApplication.getDeveloperId());
-                ProjectDeveloper projectDeveloper = new ProjectDeveloper();
-                projectDeveloper.setName(projectDeveloper1.getName());
-                projectDeveloper.setTin(projectDeveloper1.getTin());
-                projectDeveloper.setOpfId(projectDeveloper1.getOpfId());
-                projectDeveloper = projectDeveloperService.save(projectDeveloper);
-                regApplication.setDeveloperId(projectDeveloper.getId());
-            }
+        if (reRegApplication.getDeveloperId() != null) {
+            ProjectDeveloper projectDeveloper1 = projectDeveloperService.getById(reRegApplication.getDeveloperId());
+            ProjectDeveloper projectDeveloper = new ProjectDeveloper();
+            projectDeveloper.setName(projectDeveloper1.getName());
+            projectDeveloper.setTin(projectDeveloper1.getTin());
+            projectDeveloper.setOpfId(projectDeveloper1.getOpfId());
+            projectDeveloper = projectDeveloperService.save(projectDeveloper);
+            regApplication.setDeveloperId(projectDeveloper.getId());
+        }
 
         regApplication.setReviewId(reRegApplication.getReviewId());
         regApplication.setRequirementId(reRegApplication.getRequirementId());
@@ -817,7 +828,7 @@ public class RegApplicationServiceImpl implements RegApplicationService {
 
         Set<BoilerCharacteristics> boilerList = reRegApplication.getBoilerCharacteristics();
         List<BoilerCharacteristics> boilerCharacterRegApp = new ArrayList<>();
-        for (BoilerCharacteristics boilerCharacteristics: boilerList) {
+        for (BoilerCharacteristics boilerCharacteristics : boilerList) {
             BoilerCharacteristics addSet = new BoilerCharacteristics();
             addSet.setName(boilerCharacteristics.getName());
             addSet.setType(boilerCharacteristics.getType());
@@ -836,8 +847,8 @@ public class RegApplicationServiceImpl implements RegApplicationService {
         return regApplication;
     }
 
-    private Client convertoClientToNewClient(Client client,Client reClient, User user){
-        switch (reClient.getType() != null? reClient.getType().getId(): 4 ){
+    private Client convertoClientToNewClient(Client client, Client reClient, User user) {
+        switch (reClient.getType() != null ? reClient.getType().getId() : 4) {
             case 0:
                 client.setType(ApplicantType.LegalEntity);
 

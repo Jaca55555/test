@@ -1,4 +1,4 @@
-package uz.maroqand.ecology.core.entity;
+package uz.maroqand.ecology.core.entity.sys;
 
 import lombok.Data;
 import uz.maroqand.ecology.core.constant.order.DocumentOrderStatus;
@@ -18,11 +18,12 @@ public class Didox {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = sequenceName)
     private Integer id;
 
+    @Column(columnDefinition = "TEXT")
+    private String params;
+
     @Enumerated(EnumType.ORDINAL)
     private DocumentOrderStatus status;
 
-    @Column(columnDefinition = "TEXT")
-    private String params;
 
     @Column(columnDefinition = "TEXT")
     private String response;

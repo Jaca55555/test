@@ -81,26 +81,26 @@ public class PositionController {
             e.printStackTrace();
         }
         tableHistoryService.create(
-          TableHistoryType.add,
-          TableHistoryEntity.Position,
-          position.getId(),
-          null,
+                TableHistoryType.add,
+                TableHistoryEntity.Position,
+                position.getId(),
+                null,
                 after,
-          "",
-          user.getId(),
-          user.getUserAdditionalId()
+                "",
+                user.getId(),
+                user.getUserAdditionalId()
         );
         return "redirect:" + AdminUrls.PositionList;
     }
 
     @RequestMapping(AdminUrls.PositionGet)
     @ResponseBody
-    public HashMap<String,Object> getPosition(@RequestParam(name = "id",required = true) Integer id){
-        HashMap<String,Object> result = new HashMap<>();
+    public HashMap<String, Object> getPosition(@RequestParam(name = "id", required = true) Integer id) {
+        HashMap<String, Object> result = new HashMap<>();
         Position position = positionService.getById(id);
-        result.put("id",position.getId());
-        result.put("name",position.getName());
-        result.put("nameRu",position.getNameRu());
+        result.put("id", position.getId());
+        result.put("name", position.getName());
+        result.put("nameRu", position.getNameRu());
         return result;
     }
 
@@ -153,16 +153,17 @@ public class PositionController {
     public String getPositionViewPage(
             @RequestParam(name = "id") Integer positionId,
             Model model
-    ){
+    ) {
         Position position = positionService.getById(positionId);
-        if (position==null){
+        if (position == null) {
             return "redirect:" + AdminUrls.PositionList;
         }
-        Type type = new TypeToken<List<Position>>(){}.getType();
-        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.Position,positionId);
+        Type type = new TypeToken<List<Position>>() {
+        }.getType();
+        List<HashMap<String, Object>> beforeAndAfterList = tableHistoryService.forAudit(type, TableHistoryEntity.Position, positionId);
 
-        model.addAttribute("position",position);
-        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        model.addAttribute("position", position);
+        model.addAttribute("beforeAndAfterList", beforeAndAfterList);
         return AdminTemplates.PositionView;
     }
 

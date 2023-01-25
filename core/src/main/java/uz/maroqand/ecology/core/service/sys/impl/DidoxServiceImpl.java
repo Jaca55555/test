@@ -3,7 +3,7 @@ package uz.maroqand.ecology.core.service.sys.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import uz.maroqand.ecology.core.entity.Didox;
+import uz.maroqand.ecology.core.entity.sys.Didox;
 import uz.maroqand.ecology.core.repository.DidoxRepository;
 import uz.maroqand.ecology.core.service.sys.DidoxService;
 @Service

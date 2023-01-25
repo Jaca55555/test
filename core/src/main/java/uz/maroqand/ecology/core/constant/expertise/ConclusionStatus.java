@@ -44,6 +44,7 @@ public enum ConclusionStatus {
         return conclusionStatusList;
     }
 
+
     public Integer getId() {
         return id;
     }

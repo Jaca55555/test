@@ -73,7 +73,7 @@ public class ScheduledTasks {
                 "/*****************************/\n"
         );
         System.out.println("--removeInvoice--");
-        Maintenance.removeInvoiceAndRemoveApplication(invoiceService,regApplicationService);
+        Maintenance.removeInvoiceAndRemoveApplication(invoiceService, regApplicationService);
 
         logger.info("\n" +
                 "/*****************************/\n" +
@@ -91,7 +91,7 @@ public class ScheduledTasks {
                 "/*****************************/\n"
         );
 
-        Maintenance.sendEcoFonds(conclusionService,regApplicationService,regApplicationLogService,restTemplate, fileService);
+        Maintenance.sendEcoFonds(conclusionService, regApplicationService, regApplicationLogService, restTemplate, fileService);
 
         logger.info("\n" +
                 "/*****************************/\n" +
@@ -126,7 +126,7 @@ public class ScheduledTasks {
                 "/*****************************/\n"
         );
 
-        Maintenance.closeModificationTime(regApplicationLogService,regApplicationService);
+        Maintenance.closeModificationTime(regApplicationLogService, regApplicationService);
         logger.info("\n" +
                 "/*****************************/\n" +
                 "/       CRON TASK FINISHED     /\n" +
@@ -178,7 +178,7 @@ public class ScheduledTasks {
                 "/*****************************/\n"
         );
         System.out.println("--sendTelegramMessage--");
-        Maintenance.sendAllDocumentCount(userService,documentTaskSubService,bot);
+        Maintenance.sendAllDocumentCount(userService, documentTaskSubService, bot);
 
         logger.info("\n" +
                 "/*****************************/\n" +
@@ -187,7 +187,6 @@ public class ScheduledTasks {
         );
 
     }
-
 
 
 }

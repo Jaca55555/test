@@ -19,6 +19,7 @@ public interface RequirementRepository extends JpaRepository<Requirement, Intege
     List<Requirement> findByObjectExpertiseIdAndCategory(Integer objectExpertiseId, Category category);
 
     List<Requirement> findByObjectExpertiseId(Integer objectExpertiseId);
+
     List<Requirement> findByCategory(Category category);
 
 }

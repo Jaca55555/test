@@ -58,7 +58,7 @@ public class DepartmentController {
 
     @RequestMapping(AdminUrls.DepartmentList)
     public String getDepartmentList(Model model) {
-        model.addAttribute("organizationList",organizationService.getList());
+        model.addAttribute("organizationList", organizationService.getList());
         model.addAttribute("add_url", AdminUrls.DepartmentNew);
         return AdminTemplates.DepartmentList;
     }
@@ -80,7 +80,7 @@ public class DepartmentController {
         nameEn = StringUtils.trimToNull(nameEn);
         nameRu = StringUtils.trimToNull(nameRu);
 
-        Page<Department>  departmentPage = departmentService.findFiltered(departmentId, organizationId, parentId, name, nameOz,nameEn,nameRu, pageable);
+        Page<Department> departmentPage = departmentService.findFiltered(departmentId, organizationId, parentId, name, nameOz, nameEn, nameRu, pageable);
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
         HashMap<String, Object> result = new HashMap<>();
         result.put("recordsTotal", departmentPage.getTotalElements()); //Total elements
@@ -89,7 +89,7 @@ public class DepartmentController {
         List<Department> departments = departmentPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(departments.size());
 
-        for(Department department : departments) {
+        for (Department department : departments) {
             convenientForJSONArray.add(new Object[]{
                     department.getId(),
                     department.getDocIndex(),
@@ -97,8 +97,8 @@ public class DepartmentController {
                     department.getNameOz(),
                     department.getNameEn(),
                     department.getNameRu(),
-                    department.getOrganizationId()!=null?helperService.getOrganizationName(department.getOrganizationId(),locale):"",
-                    department.getParentId()!=null?helperService.getDepartmentName(department.getParentId(),locale):""
+                    department.getOrganizationId() != null ? helperService.getOrganizationName(department.getOrganizationId(), locale) : "",
+                    department.getParentId() != null ? helperService.getDepartmentName(department.getParentId(), locale) : ""
             });
         }
 
@@ -108,9 +108,9 @@ public class DepartmentController {
 
     @RequestMapping(AdminUrls.DepartmentNew)
     public String departmentNew(Model model) {
-        Department department= new Department();
+        Department department = new Department();
         model.addAttribute("department", department);
-        model.addAttribute("organizationList",organizationService.getList());
+        model.addAttribute("organizationList", organizationService.getList());
         model.addAttribute("action_url", AdminUrls.DepartmentCreate);
         model.addAttribute("back_url", AdminUrls.DepartmentList);
         return AdminTemplates.DepartmentNew;
@@ -127,7 +127,7 @@ public class DepartmentController {
         }
 
         model.addAttribute("department", department);
-        model.addAttribute("organizationList",organizationService.getList());
+        model.addAttribute("organizationList", organizationService.getList());
         model.addAttribute("action_url", AdminUrls.DepartmentUpdate);
         model.addAttribute("back_url", AdminUrls.DepartmentList);
         return AdminTemplates.DepartmentNew;
@@ -151,7 +151,7 @@ public class DepartmentController {
         department1.setCreatedById(user.getId());
         department1.setDocIndex(department.getDocIndex());
         department1 = departmentService.save(department1);
-        String after="";
+        String after = "";
         try {
             after = objectMapper.writeValueAsString(department1);
         } catch (JsonProcessingException e) {
@@ -178,12 +178,12 @@ public class DepartmentController {
             Department department
     ) {
         User user = userService.getCurrentUserFromContext();
-        Department oldDepartment= departmentService.getById(departmentId);
+        Department oldDepartment = departmentService.getById(departmentId);
         if (oldDepartment == null) {
             return "redirect:" + AdminUrls.DepartmentList;
         }
 
-        String oldDepartmentStr="";
+        String oldDepartmentStr = "";
         try {
             oldDepartmentStr = objectMapper.writeValueAsString(oldDepartment);
         } catch (JsonProcessingException e) {
@@ -226,11 +226,11 @@ public class DepartmentController {
     @PostMapping(value = AdminUrls.DepartmentGetByOrganization)
     @ResponseBody
     public List<Department> getList(
-        @RequestParam("id")Integer organizationId
-    ){
+            @RequestParam("id") Integer organizationId
+    ) {
 
         Organization organization = organizationService.getById(organizationId);
-        if (organization==null) return null;
+        if (organization == null) return null;
 
         List<Department> departmentList = departmentService.getByOrganizationId(organization.getId());
         return departmentList;
@@ -240,16 +240,17 @@ public class DepartmentController {
     public String getDepartmentViewPage(
             @RequestParam(name = "id") Integer id,
             Model model
-    ){
+    ) {
         Department department = departmentService.getById(id);
-        if (department==null){
+        if (department == null) {
             return "redirect:" + AdminUrls.DepartmentList;
         }
-        Type type = new TypeToken<List<Department>>(){}.getType();
-        List<HashMap<String,Object>> beforeAndAfterList = tableHistoryService.forAudit(type,TableHistoryEntity.Department,id);
+        Type type = new TypeToken<List<Department>>() {
+        }.getType();
+        List<HashMap<String, Object>> beforeAndAfterList = tableHistoryService.forAudit(type, TableHistoryEntity.Department, id);
 
-        model.addAttribute("department",department);
-        model.addAttribute("beforeAndAfterList",beforeAndAfterList);
+        model.addAttribute("department", department);
+        model.addAttribute("beforeAndAfterList", beforeAndAfterList);
         return AdminTemplates.DepartmentView;
     }
 }

@@ -21,7 +21,6 @@ import uz.maroqand.ecology.core.constant.user.ToastrType;
 import uz.maroqand.ecology.core.dto.didox_response.Data;
 import uz.maroqand.ecology.core.dto.expertise.*;
 import uz.maroqand.ecology.core.dto.gnk.GnkResponseObject;
-import uz.maroqand.ecology.core.entity.Didox;
 import uz.maroqand.ecology.core.entity.billing.Invoice;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.client.OKED;

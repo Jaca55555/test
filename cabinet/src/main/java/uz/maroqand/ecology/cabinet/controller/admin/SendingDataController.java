@@ -28,7 +28,6 @@ public class SendingDataController {
     private final HelperService helperService;
 
 
-
     public SendingDataController(SendingDataService sendingDataService, FileService fileService, RegApplicationService regApplicationService, HelperService helperService) {
         this.sendingDataService = sendingDataService;
         this.fileService = fileService;
@@ -38,7 +37,7 @@ public class SendingDataController {
 
 
     @GetMapping(value = MgmtUrls.SendingDataList)
-    public String getList(){
+    public String getList() {
         return "mgmt/sending_data/list";
     }
 
@@ -53,24 +52,24 @@ public class SendingDataController {
         map.put("recordsTotal", list.getTotalElements()); //Total elements
         map.put("recordsFiltered", list.getTotalElements()); //Filtered elements
         List<Object[]> convenientForJSONArray = new ArrayList<>(list.getContent().size());
-        for (SendingData sendingData: list.getContent()){
+        for (SendingData sendingData : list.getContent()) {
 
             convenientForJSONArray.add(new Object[]{
-                    sendingData.getId(),
-                    sendingData.getDataSend(),
-                    sendingData.getCreatedAt()!=null? Common.uzbekistanDateFormat.format(sendingData.getCreatedAt()):"",
-                    sendingData.getFileId()!= null? sendingData.getFileId(): " ",
-                    sendingData.getRegApplicationId()!= null? sendingData.getRegApplicationId(): " ",
+                    sendingData.getId(),//0
+                    sendingData.getDataSend(),//1
+                    sendingData.getCreatedAt() != null ? Common.uzbekistanDateFormat.format(sendingData.getCreatedAt()) : "",
+                    sendingData.getFileId() != null ? sendingData.getFileId() : " ",
+                    sendingData.getRegApplicationId() != null ? sendingData.getRegApplicationId() : " ",
                     sendingData.getErrors(),
                     sendingData.getDeliveryStatus(),
-                    sendingData.getRegApplicationId()!=null?regApplicationService.getById(sendingData.getRegApplicationId()).getMaterials() != null ?helperService.getMaterialShortNames(regApplicationService.getById(sendingData.getRegApplicationId()).getMaterials(),locale):"":""
+                    sendingData.getRegApplicationId() != null ? regApplicationService.getById(sendingData.getRegApplicationId()).getMaterials()
+                            != null ? helperService.getMaterialShortNames(regApplicationService.getById(sendingData.getRegApplicationId()).getMaterials(), locale) : "" : ""
             });
         }
         map.put("data", convenientForJSONArray);
 
         return map;
     }
-
 
 
 }

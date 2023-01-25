@@ -1,7 +1,5 @@
 package uz.maroqand.ecology.core.constant.expertise;
 
-import uz.maroqand.ecology.core.entity.Didox;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,4 +45,5 @@ public enum DidoxStatus {
     public String getName() {
         return name;
     }
+
 }

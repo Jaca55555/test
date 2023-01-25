@@ -30,10 +30,10 @@ import uz.maroqand.ecology.core.constant.user.NotificationType;
 import uz.maroqand.ecology.core.dto.api.RegApplicationDTO;
 import uz.maroqand.ecology.core.dto.didox.*;
 import uz.maroqand.ecology.core.dto.expertise.FilterDto;
-import uz.maroqand.ecology.core.entity.Didox;
 import uz.maroqand.ecology.core.entity.billing.MinWage;
 import uz.maroqand.ecology.core.entity.client.Client;
 import uz.maroqand.ecology.core.entity.expertise.*;
+import uz.maroqand.ecology.core.entity.sys.Didox;
 import uz.maroqand.ecology.core.entity.sys.File;
 import uz.maroqand.ecology.core.entity.sys.SendingData;
 import uz.maroqand.ecology.core.entity.user.User;
@@ -143,34 +143,34 @@ public class ConclusionCompleteController {
         logStatusList.add(LogStatus.Approved);
         logStatusList.add(LogStatus.Resend);
 
-        model.addAttribute("regions",soatoService.getRegions());
-        model.addAttribute("subRegions",soatoService.getSubRegions());
-        model.addAttribute("objectExpertiseList",objectExpertiseService.getList());
-        model.addAttribute("activityList",activityService.getList());
+        model.addAttribute("regions", soatoService.getRegions());
+        model.addAttribute("subRegions", soatoService.getSubRegions());
+        model.addAttribute("objectExpertiseList", objectExpertiseService.getList());
+        model.addAttribute("activityList", activityService.getList());
         model.addAttribute("statusList", logStatusList);
         model.addAttribute("regApplicationCategoryType", Category.getCategoryList());
         return ExpertiseTemplates.ConclusionCompleteList;
     }
 
-    @RequestMapping(value = ExpertiseUrls.CheckConclusionNumber, produces = "application/json",method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.CheckConclusionNumber, produces = "application/json", method = RequestMethod.POST)
     @ResponseBody
     public HashMap<String, Object> getUsernameCheck(
             @RequestParam(name = "docRegNumber", defaultValue = "", required = false) String regNumber,
             @RequestParam(name = "id", required = false) Integer documentId
     ) {
-        System.out.println("username="+regNumber + " userId=" + documentId);
-        Conclusion conclusion1=null;
-        if (documentId!=null){
+        System.out.println("username=" + regNumber + " userId=" + documentId);
+        Conclusion conclusion1 = null;
+        if (documentId != null) {
             conclusion1 = conclusionService.getById(documentId);
         }
         HashMap<String, Object> result = new HashMap<>();
-        Integer nameStatus ;
+        Integer nameStatus;
 
         Conclusion document = conclusionService.findByConclusionNumber(regNumber);
-        System.out.println("document1"+conclusion1);
-        if(document==null){
+        System.out.println("document1" + conclusion1);
+        if (document == null) {
             nameStatus = 0;
-        }else {
+        } else {
             nameStatus = 1;
         }
 
@@ -180,15 +180,15 @@ public class ConclusionCompleteController {
         return result;
     }
 
-    @RequestMapping(value = ExpertiseUrls.ConclusionCompleteListAjax,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = ExpertiseUrls.ConclusionCompleteListAjax, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public HashMap<String,Object> getConclusionCompleteListAjax(
+    public HashMap<String, Object> getConclusionCompleteListAjax(
             FilterDto filterDto,
             Pageable pageable
-    ){
+    ) {
         User user = userService.getCurrentUserFromContext();
         String locale = LocaleContextHolder.getLocale().toLanguageTag();
-        HashMap<String,Object> result = new HashMap<>();
+        HashMap<String, Object> result = new HashMap<>();
 
         /*Page<RegApplication> regApplicationPage = regApplicationService.findFiltered(
                 filterDto,
@@ -212,33 +212,33 @@ public class ConclusionCompleteController {
 
         List<RegApplicationLog> regApplicationLogList = regApplicationLogPage.getContent();
         List<Object[]> convenientForJSONArray = new ArrayList<>(regApplicationLogList.size());
-        for (RegApplicationLog agreementCompleteLog : regApplicationLogList){
+        for (RegApplicationLog agreementCompleteLog : regApplicationLogList) {
             RegApplication regApplication = null;
-            if (agreementCompleteLog.getRegApplicationId()!=null){
+            if (agreementCompleteLog.getRegApplicationId() != null) {
                 regApplication = regApplicationService.getById(agreementCompleteLog.getRegApplicationId());
             }
-            Client client =null;
-            if (regApplication!=null && regApplication.getApplicantId()!=null){
+            Client client = null;
+            if (regApplication != null && regApplication.getApplicantId() != null) {
                 client = clientService.getById(regApplication.getApplicantId());
             }
             RegApplicationLog performerLog = null;
-            if (regApplication!=null && agreementCompleteLog.getIndex()!=null){
+            if (regApplication != null && agreementCompleteLog.getIndex() != null) {
                 performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, agreementCompleteLog.getIndex());
             }
             convenientForJSONArray.add(new Object[]{
-                    regApplication!=null?regApplication.getId():"",
-                    client!=null?client.getTin():"",
-                    client!=null?client.getName():"",
-                    regApplication!=null && regApplication.getMaterials() != null ?helperService.getMaterialShortNames(regApplication.getMaterials(),locale):"",
-                    regApplication!=null && regApplication.getCategory() != null ?helperService.getCategory(regApplication.getCategory().getId(),locale):"",
-                    regApplication!=null && regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()):"",
-                    regApplication!=null && regApplication.getDeadlineDate() != null ?Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()):"",
-                    (performerLog!=null && performerLog.getStatus() != null ) ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale):"",
-                    (performerLog!=null && performerLog.getStatus() != null ) ? performerLog.getStatus().getId():"",
-                    agreementCompleteLog.getStatus() !=null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale):"",
-                    agreementCompleteLog.getStatus() !=null ? agreementCompleteLog.getStatus().getId():"",
+                    regApplication != null ? regApplication.getId() : "",
+                    client != null ? client.getTin() : "",
+                    client != null ? client.getName() : "",
+                    regApplication != null && regApplication.getMaterials() != null ? helperService.getMaterialShortNames(regApplication.getMaterials(), locale) : "",
+                    regApplication != null && regApplication.getCategory() != null ? helperService.getCategory(regApplication.getCategory().getId(), locale) : "",
+                    regApplication != null && regApplication.getRegistrationDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getRegistrationDate()) : "",
+                    regApplication != null && regApplication.getDeadlineDate() != null ? Common.uzbekistanDateFormat.format(regApplication.getDeadlineDate()) : "",
+                    (performerLog != null && performerLog.getStatus() != null) ? helperService.getTranslation(performerLog.getStatus().getPerformerName(), locale) : "",
+                    (performerLog != null && performerLog.getStatus() != null) ? performerLog.getStatus().getId() : "",
+                    agreementCompleteLog.getStatus() != null ? helperService.getTranslation(agreementCompleteLog.getStatus().getAgreementName(), locale) : "",
+                    agreementCompleteLog.getStatus() != null ? agreementCompleteLog.getStatus().getId() : "",
                     agreementCompleteLog.getId(),
-                    regApplication!=null?regApplicationService.beforeOrEqualsTrue(regApplication):null
+                    regApplication != null ? regApplicationService.beforeOrEqualsTrue(regApplication) : null
             });
         }
 
@@ -247,35 +247,35 @@ public class ConclusionCompleteController {
         FilterDto filterDtoCount = new FilterDto();
         filterDto.setStatusing(1);
         result.put("initials", regApplicationLogService.findFilteredNumber(LogType.ConclusionComplete, null));
-        result.put("data",convenientForJSONArray);
+        result.put("data", convenientForJSONArray);
         return result;
     }
 
     @RequestMapping(ExpertiseUrls.ConclusionCompleteView)
     public String getConclusionCompleteViewPage(
-            @RequestParam(name = "id")Integer logId,
+            @RequestParam(name = "id") Integer logId,
             Model model
     ) {
         RegApplicationLog regApplicationLog = regApplicationLogService.getById(logId);
         Integer regApplicationId = regApplicationLog.getRegApplicationId();
         RegApplication regApplication = regApplicationService.getById(regApplicationId);
-        if (regApplication == null){
+        if (regApplication == null) {
             return "redirect:" + ExpertiseUrls.ConclusionCompleteList;
         }
 
         clientService.clientView(regApplication.getApplicantId(), model);
         coordinateService.coordinateView(regApplicationId, model);
-        model.addAttribute("invoice",invoiceService.getInvoice(regApplication.getInvoiceId()));
+        model.addAttribute("invoice", invoiceService.getInvoice(regApplication.getInvoiceId()));
         model.addAttribute("projectDeveloper", projectDeveloperService.getById(regApplication.getDeveloperId()));
-        model.addAttribute("regApplication",regApplication);
+        model.addAttribute("regApplication", regApplication);
         model.addAttribute("conclusion", conclusionService.getByRegApplicationIdLast(regApplication.getId()));
-        model.addAttribute("regApplicationLog",regApplicationLog);
+        model.addAttribute("regApplicationLog", regApplicationLog);
 
         RegApplicationLog performerLog = regApplicationLogService.getByIndex(regApplication.getId(), LogType.Performer, regApplicationLog.getIndex());
         List<RegApplicationLog> agreementLogList = regApplicationLogService.getAllByIndex(regApplication.getId(), LogType.Agreement, regApplicationLog.getIndex());
 
         RegApplicationCategoryFourAdditional regApplicationCategoryFourAdditional = null;
-        if (regApplication.getRegApplicationCategoryType()!=null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)){
+        if (regApplication.getRegApplicationCategoryType() != null && regApplication.getRegApplicationCategoryType().equals(RegApplicationCategoryType.fourType)) {
             regApplicationCategoryFourAdditional = regApplicationCategoryFourAdditionalService.getByRegApplicationId(regApplication.getId());
         }
         model.addAttribute("regApplicationCategoryFourAdditional", regApplicationCategoryFourAdditional);
@@ -288,42 +288,48 @@ public class ConclusionCompleteController {
 
         Calendar calendar = Calendar.getInstance();
         Date maxDate = calendar.getTime();
-        model.addAttribute("maxDate",maxDate);
+        model.addAttribute("maxDate", maxDate);
         return ExpertiseTemplates.ConclusionCompleteView;
     }
 
-    @RequestMapping(value = ExpertiseUrls.ConclusionCompleteAction,method = RequestMethod.POST)
+    @RequestMapping(value = ExpertiseUrls.ConclusionCompleteAction, method = RequestMethod.POST)
     public String confirmApplication(
-            @RequestParam(name = "id")Integer id,
-            @RequestParam(name = "logId")Integer logId,
-            @RequestParam(name = "number")String number,
-            @RequestParam(name = "date")String dateStr
+            @RequestParam(name = "id") Integer id,
+            @RequestParam(name = "logId") Integer logId,
+            @RequestParam(name = "number") String number,
+            @RequestParam(name = "date") String dateStr
     ) throws IOException, DocumentException, ParserConfigurationException, SAXException {
         User user = userService.getCurrentUserFromContext();
         RegApplication regApplication = regApplicationService.getById(id);
-        if (regApplication == null || regApplication.getConclusionCompleteLogId() == null || regApplication.getPerformerLogId() == null){
+        if (regApplication == null || regApplication.getConclusionCompleteLogId() == null || regApplication.getPerformerLogId() == null) {
             return "redirect:" + ExpertiseUrls.ConclusionCompleteList;
         }
 
         RegApplicationLog conclusionLog = regApplicationLogService.getById(regApplication.getConclusionCompleteLogId());
-        if (conclusionLog==null){
+        if (conclusionLog == null) {
             return "redirect:" + ExpertiseUrls.ConclusionCompleteList;
         }
 
         regApplicationLogService.update(conclusionLog, LogStatus.Approved, "", user.getId());
 
         RegApplicationLog performerLog = regApplicationLogService.getById(regApplication.getPerformerLogId());
-        switch (performerLog.getStatus()){
-            case Modification: regApplication.setStatus(RegApplicationStatus.Modification); break;
-            case Approved: regApplication.setStatus(RegApplicationStatus.Approved); break;
-            case Denied: regApplication.setStatus(RegApplicationStatus.NotConfirmed); break;
+        switch (performerLog.getStatus()) {
+            case Modification:
+                regApplication.setStatus(RegApplicationStatus.Modification);
+                break;
+            case Approved:
+                regApplication.setStatus(RegApplicationStatus.Approved);
+                break;
+            case Denied:
+                regApplication.setStatus(RegApplicationStatus.NotConfirmed);
+                break;
         }
         regApplicationService.update(regApplication);
 
         Conclusion conclusion = conclusionService.getByRegApplicationIdLast(regApplication.getId());
-        if (conclusion!=null){
+        if (conclusion != null) {
             conclusion.setNumber(number);
-            conclusion.setDate(DateParser.TryParse(dateStr,Common.uzbekistanDateFormat));
+            conclusion.setDate(DateParser.TryParse(dateStr, Common.uzbekistanDateFormat));
             conclusionService.save(conclusion);
             conclusionService.complete(conclusion.getId());
             documentEditorService.conclusionComplete(conclusion);
@@ -345,7 +351,7 @@ public class ConclusionCompleteController {
                 NotificationType.Expertise,
                 "sys_notification.performerInfo",
                 regApplication.getId(),
-                 "sys_notification_message.performer_confirm",
+                "sys_notification_message.performer_confirm",
                 "/reg/application/resume?id=" + regApplication.getId(),
                 user.getId()
         );
@@ -357,8 +363,8 @@ public class ConclusionCompleteController {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
         Date todayDate = calendar.getTime();
-
-        if(regApplication.getDidoxId()==null && conclusion.getDate().compareTo(todayDate)>0) {
+//      jahongir  RegApplication regApplication1 = regApplicationService.getById(id)
+        if (regApplication.getDidoxId() == null && conclusion.getDate().compareTo(todayDate) > 0) {
             MinWage minWage = minWageService.getMinWage();
             Product product = new Product();
             product.setOrdno(1);
@@ -370,18 +376,18 @@ public class ConclusionCompleteController {
             product.setPackagecode("1506727");
             product.setPackagename("dona");
             product.setCount("1");
-            if(!regApplication.getBudget()&&(regApplication.getRequirementId()==5||regApplication.getRequirementId()==6||regApplication.getRequirementId()==7||regApplication.getRequirementId()==8)) {
-                product.setSumma(String.format(Locale.US,"%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12)  + "");
-                product.setVatsum(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12 * 0.12) + "");
-                product.setDeliverysumwithvat(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount()) + "");
-                product.setDeliverysum(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12) + "");
+            if (!regApplication.getBudget() && (regApplication.getRequirementId() == 5 || regApplication.getRequirementId() == 6 || regApplication.getRequirementId() == 7 || regApplication.getRequirementId() == 8)) {
+                product.setSumma(String.format(Locale.US, "%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12) + "");
+                product.setVatsum(String.format(Locale.US, "%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12 * 0.12) + "");
+                product.setDeliverysumwithvat(String.format(Locale.US, "%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount()) + "");
+                product.setDeliverysum(String.format(Locale.US, "%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getAmount() / 1.12) + "");
                 product.setVatrate("12");
-            }else {
-                product.setSumma(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12) + "");
+            } else {
+                product.setSumma(String.format(Locale.US, "%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12) + "");
                 product.setVatrate("12");
-                product.setVatsum(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12 * 0.12) + "");
-                product.setDeliverysumwithvat(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount()) + "");
-                product.setDeliverysum(String.format(Locale.US, "%.2f",invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12) + "");
+                product.setVatsum(String.format(Locale.US, "%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12 * 0.12) + "");
+                product.setDeliverysumwithvat(String.format(Locale.US, "%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount()) + "");
+                product.setDeliverysum(String.format(Locale.US, "%.2f", invoiceService.getInvoice(regApplication.getInvoiceId()).getQty() * minWage.getAmount() / 1.12) + "");
 
 
             }
@@ -494,7 +500,7 @@ public class ConclusionCompleteController {
             HttpHeaders headersDidox = new HttpHeaders();
             headersDidox.setContentType(MediaType.APPLICATION_JSON);
             headersDidox.add("user-key", regApplicationService.getUserKey());
-            logger.info("userkey:{}",regApplicationService.getUserKey());
+            logger.info("userkey:{}", regApplicationService.getUserKey());
             HttpEntity<DocumentJson> requestEntityDidox =
                     new HttpEntity<>(json, headersDidox);
             logger.info("requestEntityDidox:{}", requestEntityDidox);
@@ -541,7 +547,9 @@ public class ConclusionCompleteController {
         //for didox //todo bu yerda didox qilinyapti
 
         //sendApi
-        if(conclusion!=null) {
+
+
+        if (conclusion != null) {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
@@ -553,8 +561,8 @@ public class ConclusionCompleteController {
             RegApplicationLog regApplicationLog = regApplicationLogService.getByRegApplcationIdAndType(regApplication.getId(), LogType.Performer);
             MultiValueMap<String, String> fileMap = new LinkedMultiValueMap<>();
             Set<Integer> materialsInt = regApplication.getMaterials();
-            Integer next =materialsInt.size()>0? materialsInt.iterator().next():0;
-            if ((next == 8 || next == 5 || next == 6 || next == 7 ) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus()==null) {
+            Integer next = materialsInt.size() > 0 ? materialsInt.iterator().next() : 0;
+            if ((next == 8 || next == 5 || next == 6 || next == 7) && regApplicationLog.getStatus() == LogStatus.Approved && regApplication.getDeliveryStatus() == null) {
                 if (conclusionService.getById(conclusion.getId()).getConclusionWordFileId() != null) {
                     file = fileService.findById(conclusionService.getById(regApplication.getConclusionId()).getConclusionWordFileId());
                     String filePath = file.getPath();
@@ -593,10 +601,10 @@ public class ConclusionCompleteController {
                 body.add("file", fileEntity);
                 body.add("data", RegApplicationDTO.fromEntity(regApplication, conclusionService, fileService));
                 sendingData.setDataSend(body.toString());
-                sendingData.setFileId(file!=null? file.getId(): null);
+                sendingData.setFileId(file != null ? file.getId() : null);
                 HttpEntity<MultiValueMap<String, Object>> requestEntity =
                         new HttpEntity<>(body, headers);
-                logger.info("response_entity"+requestEntity);
+                logger.info("response_entity" + requestEntity);
                 try {
                     ResponseEntity<String> response = restTemplate.exchange(
                             "http://84.54.83.68:8087/api/expertise",
@@ -606,10 +614,10 @@ public class ConclusionCompleteController {
                     boolean value = response.getStatusCode().is2xxSuccessful();
                     System.out.println(response);
                     logger.info("data send to Fond ");
-                    if(value){
+                    if (value) {
                         regApplication.setDeliveryStatus((short) 1);
                         sendingData.setDeliveryStatus((short) 1);
-                    }else{
+                    } else {
                         regApplication.setDeliveryStatus((short) 0);
                         sendingData.setDeliveryStatus((short) 0);
                     }
@@ -636,9 +644,7 @@ public class ConclusionCompleteController {
 //        smsSendService.sendSMS(client.getPhone(), " Arizangiz ko'rib chiqildi, ariza raqami ", regApplication.getId(), client.getName());
 
 
-
-
-        return "redirect:"+ExpertiseUrls.ConclusionCompleteView + "?id=" + logId + "#action";
+        return "redirect:" + ExpertiseUrls.ConclusionCompleteView + "?id=" + logId + "#action";
     }
 
 }
